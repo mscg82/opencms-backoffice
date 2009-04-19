@@ -8,7 +8,7 @@
       <stereoType></stereoType>
       <isAbstract>false</isAbstract>
       <constraint>
-        <x>921</x>
+        <x>938</x>
         <y>161</y>
         <width>-1</width>
         <height>-1</height>
@@ -230,34 +230,34 @@ current action and executes it.</content>
                                     <net.java.amateras.uml.editpart.ConnectionBendpoint>
                                       <weight>0.5</weight>
                                       <d1>
-                                        <width>0</width>
-                                        <height>63</height>
+                                        <width>-1</width>
+                                        <height>62</height>
                                       </d1>
                                       <d2>
-                                        <width>-505</width>
+                                        <width>-509</width>
                                         <height>8</height>
                                       </d2>
                                     </net.java.amateras.uml.editpart.ConnectionBendpoint>
                                     <net.java.amateras.uml.editpart.ConnectionBendpoint>
                                       <weight>0.5</weight>
                                       <d1>
-                                        <width>267</width>
+                                        <width>256</width>
                                         <height>63</height>
                                       </d1>
                                       <d2>
-                                        <width>-238</width>
+                                        <width>-252</width>
                                         <height>8</height>
                                       </d2>
                                     </net.java.amateras.uml.editpart.ConnectionBendpoint>
                                     <net.java.amateras.uml.editpart.ConnectionBendpoint>
                                       <weight>0.5</weight>
                                       <d1>
-                                        <width>267</width>
-                                        <height>192</height>
+                                        <width>256</width>
+                                        <height>197</height>
                                       </d1>
                                       <d2>
-                                        <width>-238</width>
-                                        <height>137</height>
+                                        <width>-252</width>
+                                        <height>142</height>
                                       </d2>
                                     </net.java.amateras.uml.editpart.ConnectionBendpoint>
                                     <net.java.amateras.uml.editpart.ConnectionBendpoint>
@@ -1398,11 +1398,11 @@ current action and executes it.</content>
                                                             <net.java.amateras.uml.editpart.ConnectionBendpoint>
                                                               <weight>0.5</weight>
                                                               <d1>
-                                                                <width>-1</width>
+                                                                <width>0</width>
                                                                 <height>-118</height>
                                                               </d1>
                                                               <d2>
-                                                                <width>296</width>
+                                                                <width>301</width>
                                                                 <height>137</height>
                                                               </d2>
                                                             </net.java.amateras.uml.editpart.ConnectionBendpoint>
@@ -1608,11 +1608,11 @@ current action and executes it.</content>
                                                       <net.java.amateras.uml.editpart.ConnectionBendpoint>
                                                         <weight>0.5</weight>
                                                         <d1>
-                                                          <width>0</width>
+                                                          <width>-1</width>
                                                           <height>112</height>
                                                         </d1>
                                                         <d2>
-                                                          <width>239</width>
+                                                          <width>246</width>
                                                           <height>-81</height>
                                                         </d2>
                                                       </net.java.amateras.uml.editpart.ConnectionBendpoint>
@@ -1666,8 +1666,8 @@ current action and executes it.</content>
                                                             <stereoType></stereoType>
                                                             <isAbstract>false</isAbstract>
                                                             <constraint>
-                                                              <x>2614</x>
-                                                              <y>1839</y>
+                                                              <x>2577</x>
+                                                              <y>1838</y>
                                                               <width>-1</width>
                                                               <height>-1</height>
                                                             </constraint>
@@ -1880,12 +1880,12 @@ current action and executes it.</content>
                                                             <net.java.amateras.uml.editpart.ConnectionBendpoint>
                                                               <weight>0.5</weight>
                                                               <d1>
-                                                                <width>-259</width>
-                                                                <height>0</height>
+                                                                <width>-252</width>
+                                                                <height>1</height>
                                                               </d1>
                                                               <d2>
-                                                                <width>332</width>
-                                                                <height>-104</height>
+                                                                <width>302</width>
+                                                                <height>-140</height>
                                                               </d2>
                                                             </net.java.amateras.uml.editpart.ConnectionBendpoint>
                                                             <net.java.amateras.uml.editpart.ConnectionBendpoint>
@@ -1920,8 +1920,8 @@ current action and executes it.</content>
                                                             <stereoType></stereoType>
                                                             <isAbstract>false</isAbstract>
                                                             <constraint>
-                                                              <x>2610</x>
-                                                              <y>2089</y>
+                                                              <x>2577</x>
+                                                              <y>2056</y>
                                                               <width>-1</width>
                                                               <height>-1</height>
                                                             </constraint>
@@ -3198,8 +3198,8 @@ current action and executes it.</content>
                                                                               <stereoType></stereoType>
                                                                               <isAbstract>false</isAbstract>
                                                                               <constraint>
-                                                                                <x>4633</x>
-                                                                                <y>2370</y>
+                                                                                <x>4656</x>
+                                                                                <y>2369</y>
                                                                                 <width>-1</width>
                                                                                 <height>-1</height>
                                                                               </constraint>
@@ -4198,10 +4198,15 @@ current action and executes it.</content>
                                                                 </listeners>
                                                               </net.java.amateras.uml.classdiagram.model.OperationModel>
                                                               <net.java.amateras.uml.classdiagram.model.OperationModel>
-                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-1" reference="../../../targetConnections/net.java.amateras.uml.classdiagram.model.CompositeModel/source/targetConnections/net.java.amateras.uml.classdiagram.model.RealizationModel/source/children/net.java.amateras.uml.classdiagram.model.OperationModel/visibility"/>
-                                                                <name>getValues</name>
-                                                                <type>Map&lt;String, RowValueBean&gt;</type>
-                                                                <params/>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-1"/>
+                                                                <name>TabbedContentRowBean</name>
+                                                                <type></type>
+                                                                <params>
+                                                                  <net.java.amateras.uml.classdiagram.model.Argument>
+                                                                    <name>resource</name>
+                                                                    <type>CmsResource</type>
+                                                                  </net.java.amateras.uml.classdiagram.model.Argument>
+                                                                </params>
                                                                 <isAbstract>false</isAbstract>
                                                                 <isStatic>false</isStatic>
                                                                 <backgroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.model.AnchorModel/target/backgroundColor"/>
@@ -4248,6 +4253,93 @@ current action and executes it.</content>
                                                                   </java.beans.PropertyChangeSupport>
                                                                 </listeners>
                                                               </net.java.amateras.uml.classdiagram.model.OperationModel>
+                                                              <net.java.amateras.uml.classdiagram.model.OperationModel>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-1" reference="../../../targetConnections/net.java.amateras.uml.classdiagram.model.CompositeModel/source/targetConnections/net.java.amateras.uml.classdiagram.model.RealizationModel/source/children/net.java.amateras.uml.classdiagram.model.OperationModel/visibility"/>
+                                                                <name>getValues</name>
+                                                                <type>Map&lt;String, RowValueBean&gt;</type>
+                                                                <params/>
+                                                                <isAbstract>false</isAbstract>
+                                                                <isStatic>false</isStatic>
+                                                                <backgroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.model.AnchorModel/target/backgroundColor"/>
+                                                                <foregroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.model.AnchorModel/target/foregroundColor"/>
+                                                                <showIcon>true</showIcon>
+                                                                <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
+                                                                <listeners serialization="custom">
+                                                                  <java.beans.PropertyChangeSupport>
+                                                                    <default>
+                                                                      <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
+                                                                      <source class="net.java.amateras.uml.classdiagram.model.OperationModel" reference="../../../.."/>
+                                                                    </default>
+                                                                    <null/>
+                                                                  </java.beans.PropertyChangeSupport>
+                                                                </listeners>
+                                                              </net.java.amateras.uml.classdiagram.model.OperationModel>
+                                                              <net.java.amateras.uml.classdiagram.model.AttributeModel>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-2"/>
+                                                                <name>resource</name>
+                                                                <type>CmsResource</type>
+                                                                <isStatic>false</isStatic>
+                                                                <backgroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.model.AnchorModel/target/backgroundColor"/>
+                                                                <foregroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.model.AnchorModel/target/foregroundColor"/>
+                                                                <showIcon>true</showIcon>
+                                                                <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
+                                                                <listeners serialization="custom">
+                                                                  <java.beans.PropertyChangeSupport>
+                                                                    <default>
+                                                                      <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
+                                                                      <source class="net.java.amateras.uml.classdiagram.model.AttributeModel" reference="../../../.."/>
+                                                                    </default>
+                                                                    <null/>
+                                                                  </java.beans.PropertyChangeSupport>
+                                                                </listeners>
+                                                              </net.java.amateras.uml.classdiagram.model.AttributeModel>
+                                                              <net.java.amateras.uml.classdiagram.model.OperationModel>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-1" reference="../../net.java.amateras.uml.classdiagram.model.OperationModel[2]/visibility"/>
+                                                                <name>getResource</name>
+                                                                <type>CmsResource</type>
+                                                                <params/>
+                                                                <isAbstract>false</isAbstract>
+                                                                <isStatic>false</isStatic>
+                                                                <backgroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.model.AnchorModel/target/backgroundColor"/>
+                                                                <foregroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.model.AnchorModel/target/foregroundColor"/>
+                                                                <showIcon>true</showIcon>
+                                                                <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
+                                                                <listeners serialization="custom">
+                                                                  <java.beans.PropertyChangeSupport>
+                                                                    <default>
+                                                                      <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
+                                                                      <source class="net.java.amateras.uml.classdiagram.model.OperationModel" reference="../../../.."/>
+                                                                    </default>
+                                                                    <null/>
+                                                                  </java.beans.PropertyChangeSupport>
+                                                                </listeners>
+                                                              </net.java.amateras.uml.classdiagram.model.OperationModel>
+                                                              <net.java.amateras.uml.classdiagram.model.OperationModel>
+                                                                <visibility class="net.java.amateras.uml.classdiagram.model.Visibility-1" reference="../../net.java.amateras.uml.classdiagram.model.OperationModel[2]/visibility"/>
+                                                                <name>setAttribute</name>
+                                                                <type>void</type>
+                                                                <params>
+                                                                  <net.java.amateras.uml.classdiagram.model.Argument>
+                                                                    <name>resource</name>
+                                                                    <type>CmsResource</type>
+                                                                  </net.java.amateras.uml.classdiagram.model.Argument>
+                                                                </params>
+                                                                <isAbstract>false</isAbstract>
+                                                                <isStatic>false</isStatic>
+                                                                <backgroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.model.AnchorModel/target/backgroundColor"/>
+                                                                <foregroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.model.AnchorModel/target/foregroundColor"/>
+                                                                <showIcon>true</showIcon>
+                                                                <parent class="net.java.amateras.uml.classdiagram.model.ClassModel" reference="../../.."/>
+                                                                <listeners serialization="custom">
+                                                                  <java.beans.PropertyChangeSupport>
+                                                                    <default>
+                                                                      <propertyChangeSupportSerializedDataVersion>2</propertyChangeSupportSerializedDataVersion>
+                                                                      <source class="net.java.amateras.uml.classdiagram.model.OperationModel" reference="../../../.."/>
+                                                                    </default>
+                                                                    <null/>
+                                                                  </java.beans.PropertyChangeSupport>
+                                                                </listeners>
+                                                              </net.java.amateras.uml.classdiagram.model.OperationModel>
                                                             </children>
                                                             <filterProperty/>
                                                             <backgroundColor reference="../../../../../../../../../../../../../../../../../../../../../../../../../sourceConnections/net.java.amateras.uml.model.AnchorModel/target/backgroundColor"/>
@@ -4269,12 +4361,12 @@ current action and executes it.</content>
                                                             <net.java.amateras.uml.editpart.ConnectionBendpoint>
                                                               <weight>0.5</weight>
                                                               <d1>
-                                                                <width>-245</width>
-                                                                <height>1</height>
+                                                                <width>-255</width>
+                                                                <height>-2</height>
                                                               </d1>
                                                               <d2>
-                                                                <width>347</width>
-                                                                <height>49</height>
+                                                                <width>305</width>
+                                                                <height>75</height>
                                                               </d2>
                                                             </net.java.amateras.uml.editpart.ConnectionBendpoint>
                                                             <net.java.amateras.uml.editpart.ConnectionBendpoint>
@@ -4579,11 +4671,11 @@ current action and executes it.</content>
                                                 <net.java.amateras.uml.editpart.ConnectionBendpoint>
                                                   <weight>0.5</weight>
                                                   <d1>
-                                                    <width>-1</width>
+                                                    <width>0</width>
                                                     <height>113</height>
                                                   </d1>
                                                   <d2>
-                                                    <width>-253</width>
+                                                    <width>-244</width>
                                                     <height>-80</height>
                                                   </d2>
                                                 </net.java.amateras.uml.editpart.ConnectionBendpoint>
@@ -4618,7 +4710,7 @@ current action and executes it.</content>
                                                 <stereoType></stereoType>
                                                 <isAbstract>true</isAbstract>
                                                 <constraint>
-                                                  <x>760</x>
+                                                  <x>742</x>
                                                   <y>1985</y>
                                                   <width>-1</width>
                                                   <height>-1</height>
@@ -4644,7 +4736,7 @@ method inside the&#x0D;
 getTabbedContents&#x0D;
 one.</old>
                                                       <constraint>
-                                                        <x>752</x>
+                                                        <x>734</x>
                                                         <y>1784</y>
                                                         <width>159</width>
                                                         <height>151</height>
@@ -4700,7 +4792,7 @@ one.</old>
                                                       <stereoType></stereoType>
                                                       <isAbstract>false</isAbstract>
                                                       <constraint>
-                                                        <x>759</x>
+                                                        <x>742</x>
                                                         <y>2127</y>
                                                         <width>-1</width>
                                                         <height>-1</height>
@@ -5020,11 +5112,11 @@ one.</old>
                                           <net.java.amateras.uml.editpart.ConnectionBendpoint>
                                             <weight>0.5</weight>
                                             <d1>
-                                              <width>-1</width>
+                                              <width>0</width>
                                               <height>-118</height>
                                             </d1>
                                             <d2>
-                                              <width>-195</width>
+                                              <width>-190</width>
                                               <height>137</height>
                                             </d2>
                                           </net.java.amateras.uml.editpart.ConnectionBendpoint>
