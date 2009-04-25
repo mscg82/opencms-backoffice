@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <display-name>test-quartz</display-name>
+    <servlet>
+        <description>Log4j initialization servlet</description>
+	    <servlet-name>log4j-init</servlet-name>
+	    <servlet-class>com.mscg.quartz.servlet.LoggingServlet</servlet-class>
+	    <init-param>
+		    <param-name>log4j-init-file</param-name>
+		    <param-value>WEB-INF/config/log4j.properties</param-value>
+	    </init-param>
+	    <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+	    <description>Configuration Loader</description>
+	    <display-name>Configuration Loader</display-name>
+	    <servlet-name>configuration-loader</servlet-name>
+	    <servlet-class>com.mscg.quartz.servlet.ConfigurationServlet</servlet-class>
+	    <load-on-startup>2</load-on-startup>
+    </servlet>
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>

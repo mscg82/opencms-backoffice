@@ -1,0 +1,8 @@
+<Context path="/test-quartz" docBase="test-quartz">
+
+    <Resource name="jdbc/quartzDS" auth="Container"
+      type="javax.sql.DataSource" maxActive="30" maxIdle="10" maxWait="200"
+      username="quartz" password="quartz" driverClassName="com.mysql.jdbc.Driver"
+      url="jdbc:mysql://localhost:3306/quartz?autoReconnect=true&amp;characterEncoding=UTF-8"/>
+
+</Context>
