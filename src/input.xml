@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TEST
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://mscg.test/xsd ../xmlbeans_xsd/prova.xsd"
+  xmlns="http://mscg.test/xsd" attr1="43" attr2="23.4532">
+    <el id="1">
+        <inEl1>Elemento interno 1-1</inEl1>
+        <inEl2>Elemento interno 1-2</inEl2>
+    </el>
+    <el id="2">
+        <inEl1>Elemento interno 2-1</inEl1>
+        <inEl2>Elemento interno 2-2</inEl2>
+    </el>
+    <el id="-3">
+        <inEl1>Elemento interno 3-1</inEl1>
+        <inEl2>aa</inEl2>
+    </el>
+</TEST>

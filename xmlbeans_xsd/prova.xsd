@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://mscg.test/xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://mscg.test/xsd" elementFormDefault="qualified">
+    <xs:complexType name="testType">
+    	<xs:sequence>
+    		<xs:element name="el" type="tns:innerElement" minOccurs="1" maxOccurs="unbounded"></xs:element>
+    	</xs:sequence>
+    	<xs:attribute name="attr1" type="xs:int" use="optional"></xs:attribute>
+    	<xs:attribute name="attr2" type="xs:double" use="optional"></xs:attribute>
+    	<xs:attribute name="attr3" type="xs:string"></xs:attribute>
+    </xs:complexType>
+    
+    <xs:complexType name="innerElement">
+        <xs:sequence>
+            <xs:element name="inEl1" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+            <xs:element name="inEl2" type="xs:string" minOccurs="0" maxOccurs="1"></xs:element>
+        </xs:sequence>
+        <xs:attribute name="id" type="xs:int" use="required"></xs:attribute>
+    </xs:complexType>
+
+    <xs:element name="TEST" type="tns:testType"></xs:element>
+
+</xs:schema>
