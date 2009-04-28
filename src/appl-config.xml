@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+	<dyndns>
+		<interface>
+			<protocol>http</protocol>
+			<server>mscg.s155.eatj.com</server>
+			<port></port>
+			<context>dyndns</context>
+			<methods>
+				<ipstorage>ipstorage</ipstorage>
+			</methods>
+		</interface>
+		<service>mscg</service>
+		<thread>
+			<timeout>300</timeout>
+		</thread>
+	</dyndns>
+</config>
