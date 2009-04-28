@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+	<dns>
+		<provider-class>com.mscg.dyndns.dnsfactory.memory.MemoryDnsProvider</provider-class>
+	</dns>
+</config>
