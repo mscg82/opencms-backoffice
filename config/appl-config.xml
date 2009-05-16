@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <auth-provider>
+        <class>com.mscg.authproviders.ConfigFileAuthProvider</class>
+        <hosts>
+            <host>
+                <name>ubuntuvbserver:3128</name>
+                <domain></domain>
+                <username>MscG</username>
+                <password>mscgpp82</password>
+            </host>
+            <host>
+                <name>tiquality-sviluppo.mashfrog.com:80</name>
+                <domain></domain>
+                <username>tiquality</username>
+                <password>RemoteUser01</password>
+            </host>
+            <host>
+                <name>62.173.184.8:80</name>
+                <domain>cem</domain>
+                <username>telecomxml</username>
+                <password>EwDm1DiH</password>
+            </host>
+        </hosts>
+        <max-requests>5</max-requests>
+    </auth-provider>
+</config>

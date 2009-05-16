@@ -31,24 +31,18 @@ package com.mscg;
  *
  */
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.NTCredentials;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScheme;
-import org.apache.commons.httpclient.auth.CredentialsNotAvailableException;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.auth.CredentialsProvider;
-import org.apache.commons.httpclient.auth.NTLMScheme;
-import org.apache.commons.httpclient.auth.RFC2617Scheme;
 import org.apache.commons.httpclient.methods.GetMethod;
+
+import com.mscg.config.ConfigLoader;
 
 /**
  * A simple example that uses HttpClient to perform interactive
@@ -57,8 +51,6 @@ import org.apache.commons.httpclient.methods.GetMethod;
  * @author Oleg Kalnichevski
  */
 public class InteractiveAuthenticationExample {
-
-	private BufferedReader in = null;
 
 	/**
      * Constructor for InteractiveAuthenticationExample.
@@ -70,6 +62,9 @@ public class InteractiveAuthenticationExample {
     public static void main(String[] args) throws Exception {
 
         InteractiveAuthenticationExample demo = new InteractiveAuthenticationExample();
+
+        ConfigLoader.initInstance();
+
         demo.doDemo(args);
     }
 
@@ -81,15 +76,21 @@ public class InteractiveAuthenticationExample {
 	        if(args.length == 4){
 	        	client.getHostConfiguration().setProxy(args[2], Integer.parseInt(args[3]));
 	        }
-	        client.getParams().setParameter(CredentialsProvider.PROVIDER, new ConsoleAuthPrompter());
-	        GetMethod httpget = new GetMethod(args[0]);
-	        httpget.setDoAuthentication(true);
 
 	        File outFile = new File(args[1]);
 	        OutputStream os = new FileOutputStream(outFile);
 	        InputStream is = null;
+	        GetMethod httpget = null;
 
 	        try {
+	        	Class authProviderClass = Class.forName((String) ConfigLoader.getInstance().get("auth-provider.class"));
+	        	CredentialsProvider provider = (CredentialsProvider)authProviderClass.getConstructor().newInstance();
+
+		        client.getParams().setParameter(CredentialsProvider.PROVIDER, provider);
+
+		        httpget = new GetMethod(args[0]);
+		        httpget.setDoAuthentication(true);
+
 	        	System.out.println("Downloading file...");
 	        	// execute the GET
 	            int status = client.executeMethod(httpget);
@@ -97,19 +98,24 @@ public class InteractiveAuthenticationExample {
 	            System.out.println("Response code:   " + status);
 	            System.out.println("Response status: " + httpget.getStatusLine().toString());
 
-	            is = httpget.getResponseBodyAsStream();
-	            byte buffer[] = new byte[4096];
-	            int byteRead = 0;
-	            int totalBytes = 0;
-	            do{
-	            	byteRead = is.read(buffer);
-	            	if(byteRead > 0){
-	            		os.write(buffer, 0, byteRead);
-	            		totalBytes += byteRead;
-	            	}
-	            } while(byteRead > 0);
+	            if(status != HttpStatus.SC_OK){
+	            	System.out.println("Cannot download file from server.");
+	            }
+	            else{
+		            is = httpget.getResponseBodyAsStream();
+		            byte buffer[] = new byte[4096];
+		            int byteRead = 0;
+		            int totalBytes = 0;
+		            do{
+		            	byteRead = is.read(buffer);
+		            	if(byteRead > 0){
+		            		os.write(buffer, 0, byteRead);
+		            		totalBytes += byteRead;
+		            	}
+		            } while(byteRead > 0);
 
-	            System.out.println("File downloaded successfully. " + totalBytes + " bytes transferred from server.");
+		            System.out.println("File downloaded successfully. " + totalBytes + " bytes transferred from server.");
+	            }
 
 	        } catch(Exception e){
 	        	e.printStackTrace();
@@ -120,8 +126,10 @@ public class InteractiveAuthenticationExample {
 	            	} catch(IOException e){ }
 	            }
 
-	            // release any connection resources used by the method
-	            httpget.releaseConnection();
+	        	if(httpget != null){
+		            // release any connection resources used by the method
+		            httpget.releaseConnection();
+	        	}
 
 	            try{
 	            	os.flush();
@@ -135,56 +143,6 @@ public class InteractiveAuthenticationExample {
     	else{
     		System.out.println("Usage: java -jar proxy-test.jar <complete_url_to_download> <outfile> [<proxy_server> <proxy_port>]");
     	}
-    }
-
-    private String readConsole() throws IOException {
-        return in.readLine();
-    }
-
-    public class ConsoleAuthPrompter implements CredentialsProvider {
-
-        public ConsoleAuthPrompter() {
-            super();
-            in = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public Credentials getCredentials(
-            final AuthScheme authscheme,
-            final String host,
-            int port,
-            boolean proxy)
-            throws CredentialsNotAvailableException
-        {
-            if (authscheme == null) {
-                return null;
-            }
-            try{
-                if (authscheme instanceof NTLMScheme) {
-                    System.out.println(host + ":" + port + " requires Windows authentication");
-                    System.out.print("Enter domain: ");
-                    String domain = readConsole();
-                    System.out.print("Enter username: ");
-                    String user = readConsole();
-                    System.out.print("Enter password: ");
-                    String password = readConsole();
-                    return new NTCredentials(user, password, host, domain);
-                } else
-                if (authscheme instanceof RFC2617Scheme) {
-                    System.out.println(host + ":" + port + " requires authentication with the realm '"
-                        + authscheme.getRealm() + "'");
-                    System.out.print("Enter username: ");
-                    String user = readConsole();
-                    System.out.print("Enter password: ");
-                    String password = readConsole();
-                    return new UsernamePasswordCredentials(user, password);
-                } else {
-                    throw new CredentialsNotAvailableException("Unsupported authentication scheme: " +
-                        authscheme.getSchemeName());
-                }
-            } catch (IOException e) {
-                throw new CredentialsNotAvailableException(e.getMessage(), e);
-            }
-        }
     }
 }
 
