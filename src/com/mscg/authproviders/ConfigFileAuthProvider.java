@@ -20,19 +20,11 @@ import com.mscg.config.ConfigLoader;
 public class ConfigFileAuthProvider implements CredentialsProvider {
 
 	private Map<String, CredentialBean> credentials;
-	private int maxRequests;
-	private int requests;
 
 	public ConfigFileAuthProvider() {
         super();
 
         Map<String, Object> configs = ConfigLoader.getInstance();
-
-        requests = 0;
-        maxRequests = 5;
-        try{
-        	maxRequests = Integer.parseInt((String)configs.get("auth-provider.max-requests"));
-        } catch(NumberFormatException e){}
 
         credentials = new HashMap<String, CredentialBean>();
 
@@ -94,12 +86,6 @@ public class ConfigFileAuthProvider implements CredentialsProvider {
 	    	if(credential == null){
 	    		throw new CredentialException("Credentials for host \"" + authscheme.getHost() + ":" +
 	    				authscheme.getPort() + "\" not availables.");
-	    	}
-	    	else{
-	    		requests++;
-	    		if(requests >= maxRequests)
-	    			throw new CredentialException("Credentials for host \"" + authscheme.getHost() + ":" +
-	    					authscheme.getPort() + " don't allow authentication.");
 	    	}
 
 	        if (authscheme.getScheme().equalsIgnoreCase(AuthPolicy.NTLM)) {

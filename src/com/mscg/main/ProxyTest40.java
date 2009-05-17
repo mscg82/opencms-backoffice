@@ -34,6 +34,7 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import com.mscg.config.ConfigLoader;
+import com.mscg.retry.FixedNumberRetryHandler;
 import com.mscg.scheme.NTLMSchemeFactory;
 
 /**
@@ -69,6 +70,7 @@ public class ProxyTest40 {
 		        ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, supportedSchemes);
 
 				client = new DefaultHttpClient(ccm, params);
+				client.setHttpRequestRetryHandler(new FixedNumberRetryHandler());
 
 				if(args.length == 4){
 					HttpHost proxy = new HttpHost(args[2], Integer.parseInt(args[3]), "http");
@@ -89,6 +91,7 @@ public class ProxyTest40 {
 		        File outFile = new File(args[1]);
 		        OutputStream os = null;
 		        InputStream is = null;
+		        HttpEntity entity = null;
 
 		        try{
 		        	os = new FileOutputStream(outFile);
@@ -102,7 +105,7 @@ public class ProxyTest40 {
 		            System.out.println("Response status: " + response.getStatusLine().toString());
 
 		            // Get hold of the response entity
-		            HttpEntity entity = response.getEntity();
+		            entity = response.getEntity();
 
 			        if(entity == null || code != HttpStatus.SC_OK){
 			        	System.out.println("Cannot download file from server.");
@@ -125,9 +128,9 @@ public class ProxyTest40 {
 		        } catch(Exception e){
 		        	e.printStackTrace();
 
-		        	if(httpget != null){
+		        	if(entity != null){
 			            // release any connection resources used by the method
-			            httpget.abort();
+			            entity.consumeContent();
 		        	}
 		        } finally {
 		        	if(is != null){
