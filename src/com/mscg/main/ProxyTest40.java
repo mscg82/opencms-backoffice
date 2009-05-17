@@ -158,7 +158,7 @@ public class ProxyTest40 {
 			}
 		}
 		else{
-			System.out.println("Usage: java -jar proxy-test.jar <complete_url_to_download> <outfile> [<proxy_server> <proxy_port>]");
+			System.out.println("Usage: java -jar proxy-test40.jar <complete_url_to_download> <outfile> [<proxy_server> <proxy_port>]");
 		}
 	}
 
