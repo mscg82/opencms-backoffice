@@ -80,7 +80,6 @@ public class ProxyTest40 {
 
 	        	 // Create local HTTP context
 	            HttpContext localContext = new BasicHttpContext();
-	            // Bind custom cookie store to the local context
 	            localContext.setAttribute(ClientContext.CREDS_PROVIDER, provider);
 
 				client.getAuthSchemes().register(AuthPolicy.NTLM, new NTLMSchemeFactory());
