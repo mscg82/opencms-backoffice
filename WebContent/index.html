@@ -1,0 +1,105 @@
+<html>
+    <head>
+        <title>Test Javascript</title>
+        <script type="text/javascript" src="js/linked-list.js"></script>
+        
+        <script type="text/javascript">
+            var list = new LinkedList();
+
+            function add() {
+                var el = document.getElementById('element').value;
+                list.add(el);
+                rebuildAfter();
+            }
+
+            function remove() {
+                list.extract();
+                rebuildAfter();
+            }
+
+            function pop() {
+                list.pop();
+                rebuildAfter();
+            }
+
+            function print() {
+                var txt = list.toString();
+                document.getElementById('list').innerHTML = txt;
+            }
+
+            function backPrint() {
+                var txt = '[';
+                for(var it = list.backIterator(); it.hasPrev(); ){
+                    var el = it.prev();
+                    txt += el;
+                    if(it.hasPrev())
+                        txt += ', ';
+                }
+                txt += ']';
+            	document.getElementById('list').innerHTML = txt;
+            }
+
+            function insertElAfter() {
+                var el = document.getElementById('elementAfter').value;
+                var index = new Number(document.getElementById('after').value);
+                var it = list.iterator();
+                for(var i = 0; i < index; i++){
+                    if(it.hasNext())
+                        it.next();
+                    else
+                        break;
+                }
+                it.insertAfter(el);
+                rebuildAfter();
+            }
+
+            function insertElBefore() {
+                var el = document.getElementById('elementBefore').value;
+                var index = new Number(document.getElementById('before').value);
+                var it = list.iterator();
+                for(var i = 0; i < index; i++){
+                    if(it.hasNext())
+                        it.next();
+                    else
+                        break;
+                }
+                it.insertBefore(el);
+                rebuildAfter();
+            }
+
+            function rebuildAfter() {
+            	var after = document.getElementById('after');
+            	var before = document.getElementById('before');
+            	var nodes = '';
+            	var i = 0;
+            	for(var it = list.iterator(); it.hasNext(); ){
+                	var el = it.next();
+                	nodes += '<option value="' + i + '">' + el + '</option>';
+                	i++;
+            	}
+            	after.innerHTML = nodes;
+            	before.innerHTML = nodes;
+            }
+
+            function sortNumber(a,b) {
+                return a - b;
+            }
+            
+            function sort(comparator) {
+                list.sort(comparator);
+                rebuildAfter();
+            }
+        </script>
+    </head>
+    <body>
+        List: <div style="border: 1px solid #000000; padding: 3px;" id="list">[]</div><br/>
+        El:<input type="text" id="element"/> <input type="button" value="Add" onclick="add(); print();"/> <br/>
+        <input type="button" value="Print" onclick="print();"/><input type="button" value="Back print" onclick="backPrint();"/><br/>
+        <input type="button" value="Remove" onclick="remove(); print();"/><br/>
+        <input type="button" value="Pop" onclick="pop(); print();"/><br/>
+        <input type="button" value="Sort" onclick="sort(); print();"/><br/>
+        <input type="button" value="Sort numbers" onclick="sort(sortNumber); print();"/><br/>
+        El:<input type="text" id="elementAfter"/> After:<select id="after"></select> <input type="button" value="Add after" onclick="insertElAfter(); print();"/> <br/>
+        El:<input type="text" id="elementBefore"/> Before:<select id="before"></select> <input type="button" value="Add before" onclick="insertElBefore(); print();"/> <br/>
+    </body>
+</html>
