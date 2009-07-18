@@ -1,6 +1,5 @@
 package com.mscg.test;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.ejb.Stateless;
@@ -18,16 +17,7 @@ import com.mscg.test.docs.StoreResponse;
 @Stateless
 @WebService
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-public class StoreService {
-
-	private static Map<String, Double> prices;
-
-	static{
-		prices = new HashMap<String, Double>();
-		prices.put("bread", 10.0d);
-		prices.put("milk", 3.5d);
-		prices.put("default", 20.34d);
-	}
+public class StoreService extends MasterStoreService{
 
 	public StoreService(){
 
