@@ -21,7 +21,7 @@
 
     <property environment="env"/>
     <property name="AXIS2_HOME" value="${env.AXIS2_HOME}"/>
-	<property name="wsdl.uri" value="http://127.0.0.1:8080/test-ws2/StoreService?wsdl"/>
+	<property name="wsdl.uri" value="http://portatile-hp:8080/test-ws2/StoreService?wsdl"/>
     <property name="lib.dir" value="lib"/>
 	<property name="src.dir" value="client_src"/>
 
