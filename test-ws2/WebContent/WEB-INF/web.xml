@@ -7,9 +7,17 @@
   <servlet-name>StoreService</servlet-name>
   <servlet-class>com.mscg.test.StoreService</servlet-class>
  </servlet>
+ <servlet>
+  <servlet-name>RPCStoreService</servlet-name>
+  <servlet-class>com.mscg.test.RPCStoreService</servlet-class>
+ </servlet>
  <servlet-mapping>
   <servlet-name>StoreService</servlet-name>
   <url-pattern>/StoreService/*</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>RPCStoreService</servlet-name>
+  <url-pattern>/RPCStoreService/*</url-pattern>
  </servlet-mapping>
  <welcome-file-list>
   <welcome-file>index.html</welcome-file>
