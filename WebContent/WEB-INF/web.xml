@@ -33,6 +33,35 @@
   <servlet-class>com.mscg.dyndns.servlet.IPReadServlet</servlet-class>
   <load-on-startup>4</load-on-startup>
  </servlet>
+ <servlet>
+  <description>Download Ping</description>
+  <display-name>Download Ping</display-name>
+  <servlet-name>downloadPing</servlet-name>
+  <servlet-class>com.mscg.dyndns.servlet.DownloadPingServlet</servlet-class>
+  <load-on-startup>5</load-on-startup>
+ </servlet>
+ <servlet>
+  <description>Upload Ping</description>
+  <display-name>Upload Ping</display-name>
+  <servlet-name>uploadPing</servlet-name>
+  <servlet-class>com.mscg.dyndns.servlet.UploadPingServlet</servlet-class>
+  <load-on-startup>6</load-on-startup>
+ </servlet>
+ <servlet>
+  <description>Dynamic jsp generation servlet</description>
+  <display-name>Dynamic jsp generation servlet</display-name>
+  <servlet-name>dynamicJsp</servlet-name>
+  <servlet-class>com.mscg.dyndns.servlet.DynamicJspGenerationServlet</servlet-class>
+  <init-param>
+    <param-name>repositoryBase</param-name>
+    <param-value>/WEB-INF/repository</param-value>
+  </init-param>
+  <init-param>
+    <param-name>workBase</param-name>
+    <param-value>/WEB-INF/jsp</param-value>
+  </init-param>
+  <load-on-startup>7</load-on-startup>
+ </servlet>
  <servlet-mapping>
   <servlet-name>ipstorage</servlet-name>
   <url-pattern>/ipstorage</url-pattern>
@@ -40,6 +69,18 @@
  <servlet-mapping>
   <servlet-name>ipread</servlet-name>
   <url-pattern>/ipread</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>downloadPing</servlet-name>
+  <url-pattern>/downloadPing</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>uploadPing</servlet-name>
+  <url-pattern>/uploadPing</url-pattern>
+ </servlet-mapping>
+ <servlet-mapping>
+  <servlet-name>dynamicJsp</servlet-name>
+  <url-pattern>/repository/*</url-pattern>
  </servlet-mapping>
  <welcome-file-list>
   <welcome-file>index.html</welcome-file>
