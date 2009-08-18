@@ -52,7 +52,8 @@ namespace log4cpp {
 		 * @param deleteListener A boolean switch to choose if the listener
 		 * must be deleted after it's unregistered. If the listener was not
 		 * registered to this appender, it won't be deleted.
-		 * @returns true if the listener was unregistered, false otherwise.
+		 * @returns <code>true</code> if the listener was unregistered,
+		 * <code>false</code> otherwise.
 		 */
 		virtual bool unregisterListener(LogEventListener *listener, bool deleteListener = false);
 

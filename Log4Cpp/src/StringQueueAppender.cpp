@@ -26,7 +26,7 @@ namespace log4cpp {
 
     void StringQueueAppender::_append(const LoggingEvent& event) {
         _queue.push(_getLayout().format(event));
-        if(_maxLines > 0 && _queue.size() > _maxLines){
+        if(_maxLines > 0 && (int)_queue.size() > _maxLines){
         	popMessage();
         }
     }
