@@ -77,7 +77,7 @@
 		<level value="debug"/>
     </logger>
     
-    <logger name="org.apache.commons">
+    <logger name="org.apache">
         <level value="debug"/>
     </logger>
     
