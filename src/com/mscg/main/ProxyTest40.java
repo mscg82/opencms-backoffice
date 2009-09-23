@@ -94,8 +94,6 @@ public class ProxyTest40 {
 		        HttpEntity entity = null;
 
 		        try{
-		        	os = new FileOutputStream(outFile);
-
 		        	System.out.println("Downloading file...");
 		        	// execute the GET
 		            HttpResponse response = client.execute(httpget, localContext);
@@ -111,7 +109,8 @@ public class ProxyTest40 {
 			        	System.out.println("Cannot download file from server.");
 			        }
 			        else{
-			            is = entity.getContent();
+			        	os = new FileOutputStream(outFile);
+			        	is = entity.getContent();
 			            byte buffer[] = new byte[4096];
 			            int byteRead = 0;
 			            int totalBytes = 0;
