@@ -41,7 +41,7 @@ public class JCIFSEngine implements NTLMEngine {
                 password,
                 domain,
                 username,
-                workstation, Type3Message.getDefaultFlags(t2m));
+                workstation);//, Type3Message.getDefaultFlags(t2m));
         return Base64.encode(t3m.toByteArray());
     }
 

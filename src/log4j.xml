@@ -102,7 +102,7 @@
     </logger>
     
     <logger name="org.apache.http.wire" additivity="false">
-        <level value="debug"/>
+        <level value="off"/>
         <appender-ref ref="WIRE_APP" />
     </logger>
     
