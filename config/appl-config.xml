@@ -26,4 +26,15 @@
         </hosts>
         <max-requests>5</max-requests>
     </auth-provider>
+    
+    <jcifs-properties>
+        <property>
+            <name>jcifs.smb.lmCompatibility</name>
+            <value>2</value>
+        </property>
+        <property>
+            <name>jcifs.smb.client.useExtendedSecurity</name>
+            <value>false</value>
+        </property>
+    </jcifs-properties>
 </config>
