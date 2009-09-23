@@ -13,6 +13,26 @@
 	    </layout>  
 	</appender>
 	
+	<appender name="WIRE_APP" class="org.apache.log4j.RollingFileAppender"> 
+        <param name="File" value="./logs/wire.log"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="500KB"/>
+        <param name="MaxBackupIndex" value="2"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{DATE} | %m%n"/>
+        </layout>  
+    </appender>
+    
+    <appender name="HEADERS_APP" class="org.apache.log4j.RollingFileAppender"> 
+        <param name="File" value="./logs/headers.log"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="500KB"/>
+        <param name="MaxBackupIndex" value="2"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{DATE} | %m%n"/>
+        </layout>  
+    </appender>
+	
 	<appender name="DEBUG_APP" class="org.apache.log4j.RollingFileAppender"> 
         <param name="File" value="./logs/debug.log"/>
         <param name="Append" value="true"/>
@@ -79,6 +99,16 @@
     
     <logger name="org.apache">
         <level value="debug"/>
+    </logger>
+    
+    <logger name="org.apache.http.wire" additivity="false">
+        <level value="debug"/>
+        <appender-ref ref="WIRE_APP" />
+    </logger>
+    
+    <logger name="org.apache.http.headers" additivity="false">
+        <level value="debug"/>
+        <appender-ref ref="HEADERS_APP" />
     </logger>
     
     <root> 
