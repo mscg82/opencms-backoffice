@@ -127,11 +127,6 @@ public class ProxyTest40 {
 			        }
 		        } catch(Exception e){
 		        	e.printStackTrace();
-
-		        	if(entity != null){
-			            // release any connection resources used by the method
-			            entity.consumeContent();
-		        	}
 		        } finally {
 		        	if(is != null){
 		            	try{
@@ -147,6 +142,11 @@ public class ProxyTest40 {
 			            try{
 			            	os.close();
 			            } catch(IOException e){ }
+		        	}
+
+		        	if(entity != null){
+			            // release any connection resources used by the method
+			            entity.consumeContent();
 		        	}
 
 		        }
