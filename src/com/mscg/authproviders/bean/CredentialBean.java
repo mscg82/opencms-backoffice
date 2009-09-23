@@ -90,6 +90,6 @@ public class CredentialBean {
 	 */
 	@Override
 	public String toString() {
-		return "{" + getHostName() + "=" + getDomain() + "\\" + getUsername() + ":" + getPassword();
+		return "{" + getHostName() + "=" + getDomain() + "\\" + getUsername() + ":" + getPassword() + "}";
 	}
 }
