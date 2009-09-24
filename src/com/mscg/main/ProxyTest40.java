@@ -87,6 +87,7 @@ public class ProxyTest40 {
 				client.getAuthSchemes().register(AuthPolicy.NTLM, new NTLMSchemeFactory());
 
 				HttpGet httpget = new HttpGet(args[0]);
+				httpget.addHeader("Accept-Language", "en");
 
 		        File outFile = new File(args[1]);
 		        OutputStream os = null;
