@@ -1,35 +1,40 @@
 package com.mashfrog.backoffice.project.beans.rowvalue;
 
-public class TitledRowValueBean implements com.mashfrog.backoffice.project.beans.rowvalue.RowValueBean {
+public class TitledRowValueBean implements RowValueBean {
     protected String title;
     protected String type;
     protected boolean enabled;
 
     public TitledRowValueBean(){
+    	this(null);
     }
 
     public TitledRowValueBean(String title){
+    	setTitle(title);
     }
 
     public String getTitle(){
-        return null;
+        return title;
     }
 
     public String getType(){
-        return null;
+        return type;
     }
 
     public boolean getEnabled(){
-        return false;
+        return enabled;
     }
 
     public void setTitle(String title){
+    	this.title = title;
     }
 
     public void setType(String type){
+    	this.type = type;
     }
 
     public void setEnabled(boolean enabled){
+    	this.enabled = enabled;
     }
 
 }

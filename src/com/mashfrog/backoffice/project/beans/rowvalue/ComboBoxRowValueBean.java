@@ -1,39 +1,48 @@
 package com.mashfrog.backoffice.project.beans.rowvalue;
 
-public class ComboBoxRowValueBean implements com.mashfrog.backoffice.project.beans.rowvalue.RowValueBean {
+import java.util.LinkedList;
+import java.util.List;
+
+public class ComboBoxRowValueBean implements RowValueBean {
     protected String label;
     protected List<ComboBoxValueBean> values;
     protected String type;
     protected boolean enabled;
 
     public ComboBoxRowValueBean(){
+    	values = new LinkedList<ComboBoxValueBean>();
     }
 
     public void addValue(String text, String value){
+    	addValue(new ComboBoxValueBean(text, value));
     }
 
     public void addValue(ComboBoxValueBean value){
+    	values.add(value);
     }
 
     public List<ComboBoxValueBean> getValues(){
-        return null;
+        return values;
     }
 
     public String getType(){
-        return null;
+        return type;
     }
 
     public boolean getEnabled(){
-        return false;
+        return enabled;
     }
 
     public void setValue(List<ComboBoxValueBean> values){
+    	this.values = values;
     }
 
     public void setType(String type){
+    	this.type = type;
     }
 
     public void setEnabled(boolean enabled){
+    	this.enabled = enabled;
     }
 
 }

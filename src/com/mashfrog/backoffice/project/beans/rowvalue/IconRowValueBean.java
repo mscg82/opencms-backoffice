@@ -1,19 +1,23 @@
 package com.mashfrog.backoffice.project.beans.rowvalue;
 
-public class IconRowValueBean extends com.mashfrog.backoffice.project.beans.rowvalue.TitledRowValueBean {
+public class IconRowValueBean extends TitledRowValueBean {
     protected String icon;
 
     public IconRowValueBean(){
+    	this(null, null);
     }
 
     public IconRowValueBean(String icon, String title){
+    	super(title);
+    	setIcon(icon);
     }
 
     public String getIcon(){
-        return null;
+        return icon;
     }
 
     public void setIcon(String icon){
+    	this.icon = icon;
     }
 
 }

@@ -80,6 +80,8 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
     }
 
     public void init(PageContext context, HttpServletRequest req, HttpServletResponse res){
+    	super.init(context, req, res);
+
     	pageContext = context;
     	request = req;
     	response = res;

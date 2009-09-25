@@ -5,23 +5,28 @@ public class ComboBoxValueBean {
     private String value;
 
     public ComboBoxValueBean(){
+    	this(null, null);
     }
 
     public ComboBoxValueBean(String text, String value){
+    	setText(text);
+    	setValue(value);
     }
 
     public String getText(){
-        return null;
+        return text;
     }
 
     public String getValue(){
-        return null;
+        return value;
     }
 
     public void setText(String text){
+    	this.text = text;
     }
 
     public void setValue(String value){
+    	this.value = value;
     }
 
 }

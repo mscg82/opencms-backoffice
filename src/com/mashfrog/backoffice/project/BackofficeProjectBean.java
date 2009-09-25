@@ -12,9 +12,9 @@ import org.opencms.main.CmsException;
 import com.mashfrog.backoffice.CmsBackofficeActionElement;
 import com.mashfrog.backoffice.actions.I_BackofficeAction;
 import com.mashfrog.backoffice.actions.constants.Constants;
+import com.mashfrog.backoffice.project.beans.BackOfficeLanguageBean;
 import com.mashfrog.backoffice.project.beans.CommandMenuBean;
 import com.mashfrog.backoffice.project.beans.ExportDestinationFolderBean;
-import com.mashfrog.backoffice.project.beans.LanguageBean;
 import com.mashfrog.backoffice.project.beans.NavigationMenuBean;
 import com.mashfrog.backoffice.project.beans.OSWorkflowBean;
 import com.mashfrog.backoffice.project.beans.RenderingBean;
@@ -30,7 +30,7 @@ public class BackofficeProjectBean {
     protected Map<String, I_BackofficeAction> actions;
     protected String projectId;
     protected String description;
-    protected Set<LanguageBean> languages;
+    protected Set<BackOfficeLanguageBean> languages;
     protected RenderingBean rendering;
     protected String basePath;
     protected String orgUnit;
@@ -114,7 +114,7 @@ public class BackofficeProjectBean {
         return galleriesPath;
     }
 
-    public Set<LanguageBean> getLanguages(){
+    public Set<BackOfficeLanguageBean> getLanguages(){
         return languages;
     }
 
