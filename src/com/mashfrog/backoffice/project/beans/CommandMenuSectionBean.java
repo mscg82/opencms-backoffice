@@ -27,4 +27,13 @@ public class CommandMenuSectionBean extends BaseCommandMenuBean {
     	this.items = items;
     }
 
+	@Override
+	public String toString() {
+		StringBuffer ret = new StringBuffer("    Items in section \"" + getLabel() + "\":\n");
+		for(CommandMenuItemBean item : items){
+			ret.append("        " + item.toString() + "\n");
+		}
+		return ret.toString();
+	}
+
 }

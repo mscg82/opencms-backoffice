@@ -33,4 +33,13 @@ public class CommandMenuBean {
     	return ret;
     }
 
+	@Override
+	public String toString() {
+		StringBuffer ret = new StringBuffer("Sections in menu:\n");
+		for(CommandMenuSectionBean section : sectionList){
+			ret.append(section.toString() + "\n");
+		}
+		return ret.toString();
+	}
+
 }

@@ -38,4 +38,9 @@ public class CommandMenuItemBean extends BaseCommandMenuBean {
     	this.icon = icon;
     }
 
+	@Override
+	public String toString() {
+		return "Label: " + getLabel() + "; Allowed groups: " + getGroups() + "; Allowed org. units: " + getOrgUnits();
+	}
+
 }

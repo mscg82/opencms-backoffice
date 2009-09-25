@@ -44,7 +44,9 @@ public class Util {
 		List<A_CmsResourceType> resourceTypes = module.getResourceTypes();
 
 		for(A_CmsResourceType type : resourceTypes){
-			if(type.getTypeName().equalsIgnoreCase(Constants.BACKOFFICE_RESOURCE_NAME)){
+			if(type.getTypeName().toLowerCase().startsWith(
+			   Constants.BACKOFFICE_RESOURCE_NAME.toLowerCase())){
+
 				ret = type.getTypeId();
 			}
 		}
