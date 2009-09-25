@@ -1,5 +1,12 @@
 package com.mashfrog.backoffice.actions.impl;
 
+import java.util.List;
+
+import org.opencms.file.CmsObject;
+
+import com.mashfrog.backoffice.CmsBackofficeActionElement;
+import com.mashfrog.backoffice.project.beans.TabbedContentBean;
+
 public class BackofficeBrowseResourceAction extends com.mashfrog.backoffice.actions.BackofficeNavMenuAction implements com.mashfrog.backoffice.actions.BackofficeTabbedContentAction {
     protected List<TabbedContentBean> contents;
 
