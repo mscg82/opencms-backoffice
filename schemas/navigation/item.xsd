@@ -1,0 +1,31 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
+    
+    <xsd:element name="Items" type="OpenCmsItems"/>
+    
+    <xsd:complexType name="OpenCmsItems">
+        <xsd:sequence>
+            <xsd:element name="Item" type="OpenCmsItem" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="OpenCmsItem">
+        <xsd:sequence>
+            <xsd:element name="url-function"        type="OpenCmsString" />
+            <xsd:element name="icon_path"           type="OpenCmsVfsFile" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="description"         type="OpenCmsString" />
+            <xsd:element name="group"               type="OpenCmsString" minOccurs="0" maxOccurs="unbounded"   />
+            <xsd:element name="orgUnit"             type="OpenCmsString" minOccurs="0" maxOccurs="unbounded"   />
+        </xsd:sequence>
+        <xsd:attribute name="language" type="OpenCmsLocale" use="optional"/>
+    </xsd:complexType>
+    <xsd:annotation>
+        <xsd:appinfo>
+            <layouts>
+                <layout element="group"      widget="GroupWidget" />
+                <layout element="orgUnit"    widget="OrgUnitWidget" />
+            </layouts>
+          </xsd:appinfo>
+    </xsd:annotation>
+</xsd:schema>

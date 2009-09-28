@@ -1,0 +1,33 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
+    <xsd:include schemaLocation="opencms://system/modules/it.mashfrog.backoffice.multilanguage/schemas/navigation/projectNavigationCombo.xsd"/>
+
+    <xsd:element name="NavMenus" type="OpenCmsNavigationMenus"/>
+    
+    <xsd:complexType name="OpenCmsNavigationMenus">
+        <xsd:sequence>
+            <xsd:element name="NavMenu" type="OpenCmsNavigationMenu" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="OpenCmsNavigationMenu">
+        <xsd:sequence>
+            <xsd:element name="maxLevel"  type="OpenCmsString"/>
+            <xsd:element name="fixedSize" type="OpenCmsBoolean" default="true"/>
+            <xsd:element name="navCombos" type="OpenCmsProjectNavigationCombo" minOccurs="1" maxOccurs="unbounded"/>
+        </xsd:sequence>
+        <xsd:attribute name="language" type="OpenCmsLocale" use="optional"/>
+    </xsd:complexType>
+    <xsd:annotation>
+        <xsd:appinfo>
+            <resourcebundle name="it.mashfrog.backoffice.multilanguage.workplace"/>
+            <validationrules>
+                <rule element="maxLevel" regex="\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
+            </validationrules>
+            <defaults>
+                <default element="maxLevel" value="3"/>
+            </defaults>
+        </xsd:appinfo>
+    </xsd:annotation>
+</xsd:schema>

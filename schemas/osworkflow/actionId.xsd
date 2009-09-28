@@ -1,0 +1,41 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
+	
+	<xsd:element name="ActionIds" type="OpenCmsActionIds"/>
+	
+	<xsd:complexType name="OpenCmsActionIds">
+		<xsd:sequence>
+			<xsd:element name="ActionId" type="OpenCmsActionId" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="OpenCmsActionId">
+		<xsd:sequence>
+			<xsd:element name="publishId" type="OpenCmsString" minOccurs="1" maxOccurs="unbounded"/>
+			<xsd:element name="unpublishId" type="OpenCmsString" minOccurs="1" maxOccurs="unbounded"/>
+			<xsd:element name="editId" type="OpenCmsString" minOccurs="1" maxOccurs="unbounded"/>
+			<xsd:element name="deleteId" type="OpenCmsString" minOccurs="1" maxOccurs="unbounded"/>
+			<xsd:element name="exportId" type="OpenCmsString"/>
+		</xsd:sequence>
+		<xsd:attribute name="language" type="OpenCmsLocale" use="optional"/>
+	</xsd:complexType>
+	<xsd:annotation>
+		<xsd:appinfo>
+			<resourcebundle name="it.mashfrog.backoffice.multilanguage.workplace"/>
+			<validationrules>
+				<rule element="publishId" regex="-?\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
+				<rule element="unpublishId" regex="-?\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
+				<rule element="editId" regex="-?\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
+				<rule element="deleteId" regex="-?\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
+				<rule element="exportId" regex="-?\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
+			</validationrules>
+			<defaults>
+				<default element="publishId" value="-1"/>
+				<default element="unpublishId" value="-1"/>
+				<default element="editId" value="-1"/>
+				<default element="deleteId" value="-1"/>
+			</defaults>
+  		</xsd:appinfo>
+	</xsd:annotation>
+</xsd:schema>

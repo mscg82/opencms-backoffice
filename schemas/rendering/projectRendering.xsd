@@ -1,0 +1,27 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+	<xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
+
+	<xsd:element name="ProjectRenderings" type="OpenCmsProjectRenderings"/>
+	
+	<xsd:complexType name="OpenCmsProjectRenderings">
+		<xsd:sequence>
+			<xsd:element name="ProjectRendering" type="OpenCmsProjectRendering" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="OpenCmsProjectRendering">
+		<xsd:sequence>
+			<xsd:element name="logo" 		type="OpenCmsVfsFile" 	minOccurs="0" maxOccurs="1"/>
+			<xsd:element name="css" 		type="OpenCmsVfsFile"   minOccurs="0" maxOccurs="unbounded" />
+			<xsd:element name="javascript"  type="OpenCmsVfsFile"   minOccurs="0" maxOccurs="unbounded" />
+		</xsd:sequence>
+		<xsd:attribute name="language" type="OpenCmsLocale" use="optional"/>
+	</xsd:complexType>
+	<xsd:annotation>
+		<xsd:appinfo>
+    			<mappings/>
+			<layouts/>
+		</xsd:appinfo>
+	</xsd:annotation>
+</xsd:schema>

@@ -1,0 +1,34 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
+    <xsd:include schemaLocation="opencms://system/modules/it.mashfrog.backoffice.multilanguage/schemas/navigation/item.xsd"/>
+
+    <xsd:element name="Sections" type="OpenCmsSections"/>
+    
+    <xsd:complexType name="OpenCmsSections">
+        <xsd:sequence>
+            <xsd:element name="Section" type="OpenCmsSection" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="OpenCmsSection">
+        <xsd:sequence>
+            <xsd:element name="name"             type="OpenCmsString" />
+            <xsd:element name="group"             type="OpenCmsString" minOccurs="0" maxOccurs="unbounded"   />
+            <xsd:element name="orgUnit"         type="OpenCmsString" minOccurs="0" maxOccurs="unbounded"   />
+            <xsd:element name="item"             type="OpenCmsItem"   minOccurs="1" maxOccurs="unbounded"   />
+        </xsd:sequence>
+        <xsd:attribute name="language" type="OpenCmsLocale" use="optional"/>
+    </xsd:complexType>
+    <xsd:annotation>
+        <xsd:appinfo>
+                <defaults>
+                <default  element="name"         value="Nome sezione" />            
+            </defaults>
+            <layouts>
+                <layout element="group"      widget="GroupWidget" />
+                <layout element="orgUnit"    widget="OrgUnitWidget" />
+            </layouts>
+          </xsd:appinfo>
+    </xsd:annotation>
+</xsd:schema>

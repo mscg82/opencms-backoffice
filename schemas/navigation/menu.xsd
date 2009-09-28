@@ -1,0 +1,24 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
+    <xsd:include schemaLocation="opencms://system/modules/it.mashfrog.backoffice.multilanguage/schemas/navigation/section.xsd"/>
+
+    <xsd:element name="Menus" type="OpenCmsMenus"/>
+    
+    <xsd:complexType name="OpenCmsMenus">
+        <xsd:sequence>
+            <xsd:element name="Menu" type="OpenCmsMenu" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="OpenCmsMenu">
+        <xsd:sequence>
+            <xsd:element name="section"             type="OpenCmsSection" minOccurs="1" maxOccurs="unbounded"   />
+        </xsd:sequence>
+        <xsd:attribute name="language" type="OpenCmsLocale" use="optional"/>
+    </xsd:complexType>
+    <xsd:annotation>
+        <xsd:appinfo>
+          </xsd:appinfo>
+    </xsd:annotation>
+</xsd:schema>
