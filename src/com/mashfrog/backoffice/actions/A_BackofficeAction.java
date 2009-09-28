@@ -6,6 +6,7 @@ import java.util.List;
 import org.opencms.file.CmsObject;
 
 import com.mashfrog.backoffice.CmsBackofficeActionElement;
+import com.mashfrog.backoffice.project.beans.ActionBean;
 
 public abstract class A_BackofficeAction implements I_BackofficeAction {
     protected List<String> allowedGroups;
@@ -22,7 +23,7 @@ public abstract class A_BackofficeAction implements I_BackofficeAction {
     	allowedGroups.add(allowedGroup);
     }
 
-    public abstract void execute(CmsBackofficeActionElement backofficeActionElement);
+    public abstract void execute();
 
     public List<String> getAllowedGroups(){
         return allowedGroups;
@@ -38,6 +39,10 @@ public abstract class A_BackofficeAction implements I_BackofficeAction {
 
     public String getJspPath(){
         return jspPath;
+    }
+
+    public void init(CmsBackofficeActionElement backofficeActionElement, ActionBean actionBean){
+
     }
 
     public abstract void setAdditonalConfigurationFilePath(String filePath, CmsObject cmsObject);

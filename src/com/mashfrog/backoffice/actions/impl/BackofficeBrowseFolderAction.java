@@ -4,13 +4,14 @@ import java.util.List;
 
 import org.opencms.file.CmsObject;
 
-import com.mashfrog.backoffice.CmsBackofficeActionElement;
+import com.mashfrog.backoffice.actions.BackofficeNavMenuAction;
+import com.mashfrog.backoffice.actions.BackofficeTabbedContentAction;
 import com.mashfrog.backoffice.project.beans.TabbedContentBean;
 
-public class BackofficeBrowseFolderAction extends com.mashfrog.backoffice.actions.BackofficeNavMenuAction implements com.mashfrog.backoffice.actions.BackofficeTabbedContentAction {
+public class BackofficeBrowseFolderAction extends BackofficeNavMenuAction implements BackofficeTabbedContentAction {
     protected List<TabbedContentBean> contents;
 
-    public void execute(CmsBackofficeActionElement backofficeActionElement){
+    public void execute(){
     }
 
     public void setAdditonalConfigurationFilePath(String filePath, CmsObject cmsObject){

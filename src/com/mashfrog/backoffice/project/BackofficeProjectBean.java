@@ -2,6 +2,7 @@ package com.mashfrog.backoffice.project;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,13 +17,14 @@ import org.opencms.main.CmsException;
 import org.opencms.main.CmsLog;
 
 import com.mashfrog.backoffice.CmsBackofficeActionElement;
-import com.mashfrog.backoffice.actions.I_BackofficeAction;
 import com.mashfrog.backoffice.actions.constants.Constants;
+import com.mashfrog.backoffice.project.beans.ActionBean;
 import com.mashfrog.backoffice.project.beans.BackOfficeLanguageBean;
 import com.mashfrog.backoffice.project.beans.CommandMenuBean;
 import com.mashfrog.backoffice.project.beans.CommandMenuItemBean;
 import com.mashfrog.backoffice.project.beans.CommandMenuSectionBean;
 import com.mashfrog.backoffice.project.beans.ExportDestinationFolderBean;
+import com.mashfrog.backoffice.project.beans.NavigationItemBean;
 import com.mashfrog.backoffice.project.beans.NavigationMenuBean;
 import com.mashfrog.backoffice.project.beans.OSWorkflowBean;
 import com.mashfrog.backoffice.project.beans.RenderingBean;
@@ -36,8 +38,7 @@ public class BackofficeProjectBean {
     protected CmsJspContentAccessBean contentAccess;
     protected long dateRead;
     protected String cmsResourcePath;
-    protected CmsBackofficeActionElement backofficeActionElement;
-    protected Map<String, I_BackofficeAction> actions;
+    protected Map<String, ActionBean> actions;
     protected String projectId;
     protected String description;
     protected String module;
@@ -60,7 +61,7 @@ public class BackofficeProjectBean {
     		projectFolder += "/";
 
         BackofficeProjectBean project = projects.get(projectFolder);
-        if(project == null || project.getDateRead() < project.getCmsResource().getDateLastModified()){
+        if(project == null || project.getDateRead() < project.getCmsResource(backofficeActionElement.getCmsObject()).getDateLastModified()){
         	project = new BackofficeProjectBean(backofficeActionElement, projectFolder);
         	projects.put(projectFolder, project);
         }
@@ -68,8 +69,6 @@ public class BackofficeProjectBean {
     }
 
     private BackofficeProjectBean(CmsBackofficeActionElement backofficeActionElement, String projectFolder) throws CmsException{
-
-    	this.backofficeActionElement = backofficeActionElement;
 
     	int backofficeType = Util.getBackofficeType(backofficeActionElement);
     	CmsResourceFilter filter = CmsResourceFilter.ALL.addRequireFile().addRequireType(backofficeType);
@@ -137,8 +136,23 @@ public class BackofficeProjectBean {
     	galleriesPath = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("galleriesPath")).getStringValue();
     	LOG.debug("Galleries path: " + galleriesPath);
 
+    	actions = new LinkedHashMap<String, ActionBean>();
+    	List<CmsJspContentAccessValueWrapper> actions = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("action");
+		if(actions != null){
+			for(CmsJspContentAccessValueWrapper action : actions){
+				String name = ((CmsJspContentAccessValueWrapper) action.getValue().get("name")).getStringValue();
+				String className = ((CmsJspContentAccessValueWrapper) action.getValue().get("className")).getStringValue();
+				String jspPath = ((CmsJspContentAccessValueWrapper) action.getValue().get("jspPath")).getStringValue();
+				String addConf = action.getValue().get("additionalConfigurationFile") != null ?
+						((CmsJspContentAccessValueWrapper) action.getValue().get("additionalConfigurationFile")).getStringValue() : null;
+				ActionBean actionBean = new ActionBean(className, jspPath, addConf);
+				this.actions.put(name, actionBean);
+			}
+		}
+		LOG.debug("Configured actions: " + this.actions);
+
     	commandMenu = new CommandMenuBean();
-    	node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("rendering");
+    	node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("commandMenu");
 		if(node != null){
 			List<CmsJspContentAccessValueWrapper> sections = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("section");
 			if(sections != null){
@@ -189,30 +203,137 @@ public class BackofficeProjectBean {
 				}
 			}
 			LOG.debug("Command menu:\n" + commandMenu.toString());
+
+			navigationMenu = new NavigationMenuBean();
+	    	node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("navigationMenu");
+			if(node != null){
+				Boolean fixedSize = new Boolean(((CmsJspContentAccessValueWrapper) node.getValue().get("fixedSize")).getStringValue());
+				navigationMenu.setFixedSize(fixedSize);
+
+				Integer maxLevel = 3;
+				try{
+					maxLevel = Integer.parseInt(((CmsJspContentAccessValueWrapper) node.getValue().get("maxLevel")).getStringValue());
+				} catch(NumberFormatException e){}
+				navigationMenu.setMaxLevel(maxLevel);
+
+				List<CmsJspContentAccessValueWrapper> combos = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("navCombos");
+				if(combos != null){
+					for(CmsJspContentAccessValueWrapper combo : combos){
+						String label = ((CmsJspContentAccessValueWrapper) combo.getValue().get("label")).getStringValue();
+						String newLabel = ((CmsJspContentAccessValueWrapper) combo.getValue().get("newComboLabel")).getStringValue();
+						String listHeader = ((CmsJspContentAccessValueWrapper) combo.getValue().get("listHeader")).getStringValue();
+						NavigationItemBean navItem = new NavigationItemBean();
+						navItem.setLabel(label);
+						navItem.setNewElementLabel(newLabel);
+						navItem.setListHeader(listHeader);
+						navigationMenu.addItem(navItem);
+					}
+				}
+			}
+			LOG.debug("Navigation menu:\n" + navigationMenu);
+
+			exportDestinationFolders = new LinkedList<ExportDestinationFolderBean>();
+			List<CmsJspContentAccessValueWrapper> expFolders = (List<CmsJspContentAccessValueWrapper>) contentAccess.getValueList().get("exportSettings");
+			if(expFolders != null){
+				for(CmsJspContentAccessValueWrapper expFolder : expFolders){
+					String description = ((CmsJspContentAccessValueWrapper) expFolder.getValue().get("exportDescription")).getStringValue();
+					List<CmsJspContentAccessValueWrapper> destinations = (List<CmsJspContentAccessValueWrapper>) expFolder.getValueList().get("exportDestFolder");
+					ExportDestinationFolderBean expFolderBean  = new  ExportDestinationFolderBean(description);
+					for(CmsJspContentAccessValueWrapper destination : destinations){
+						expFolderBean.addFolder(destination.getStringValue());
+					}
+					exportDestinationFolders.add(expFolderBean);
+				}
+			}
+			LOG.debug("Export destionations: " + exportDestinationFolders);
+
+			osWorkflow = new OSWorkflowBean();
+			node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("OSWorkflow");
+			if(node != null){
+				String workflowName = ((CmsJspContentAccessValueWrapper) node.getValue().get("workflowName")).getStringValue();
+				osWorkflow.setWorkflowName(workflowName);
+
+				Integer initialState = 100;
+				try{
+					initialState = Integer.parseInt(((CmsJspContentAccessValueWrapper) node.getValue().get("initialState")).getStringValue());
+				} catch(NumberFormatException e){}
+				osWorkflow.setInitialState(initialState);
+
+				CmsJspContentAccessValueWrapper actionIdNode = (CmsJspContentAccessValueWrapper) node.getValue().get("actionId");
+				if(actionIdNode != null){
+					List<CmsJspContentAccessValueWrapper> ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("publishId");
+					for(CmsJspContentAccessValueWrapper id : ids){
+						try{
+							Integer intId = Integer.parseInt(id.getStringValue());
+							osWorkflow.addPublishId(intId);
+						} catch(NumberFormatException e){
+							LOG.info("Cannot parse integer value for action id.", e);
+						}
+					}
+
+					ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("unpublishId");
+					for(CmsJspContentAccessValueWrapper id : ids){
+						try{
+							Integer intId = Integer.parseInt(id.getStringValue());
+							osWorkflow.addUnpublishId(intId);
+						} catch(NumberFormatException e){
+							LOG.info("Cannot parse integer value for action id.", e);
+						}
+					}
+
+					ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("editId");
+					for(CmsJspContentAccessValueWrapper id : ids){
+						try{
+							Integer intId = Integer.parseInt(id.getStringValue());
+							osWorkflow.addEditId(intId);
+						} catch(NumberFormatException e){
+							LOG.info("Cannot parse integer value for action id.", e);
+						}
+					}
+
+					ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("deleteId");
+					for(CmsJspContentAccessValueWrapper id : ids){
+						try{
+							Integer intId = Integer.parseInt(id.getStringValue());
+							osWorkflow.addDeleteId(intId);
+						} catch(NumberFormatException e){
+							LOG.info("Cannot parse integer value for action id.", e);
+						}
+					}
+
+					ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("exportId");
+					for(CmsJspContentAccessValueWrapper id : ids){
+						try{
+							Integer intId = Integer.parseInt(id.getStringValue());
+							osWorkflow.addExportId(intId);
+						} catch(NumberFormatException e){
+							LOG.info("Cannot parse integer value for action id.", e);
+						}
+					}
+				}
+			}
+			LOG.debug("OSWorkflow bean:\n" + osWorkflow);
+
 		}
 
 		dateRead = System.currentTimeMillis();
 
     }
 
-    public I_BackofficeAction getAction(String actionName){
+    public ActionBean getAction(String actionName){
         return actions.get(actionName);
     }
 
-    public Map<String, I_BackofficeAction> getActions(){
+    public Map<String, ActionBean> getActions(){
         return actions;
-    }
-
-    public CmsBackofficeActionElement getBackofficeActionElement(){
-        return backofficeActionElement;
     }
 
     public String getBasePath(){
         return basePath;
     }
 
-    public CmsResource getCmsResource() throws CmsException{
-        return getBackofficeActionElement().getCmsObject().readResource(cmsResourcePath);
+    public CmsResource getCmsResource(CmsObject cmsObject) throws CmsException{
+        return cmsObject.readResource(cmsResourcePath);
     }
 
     public CommandMenuBean getCommandMenu(){

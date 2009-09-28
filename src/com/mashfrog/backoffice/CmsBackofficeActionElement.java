@@ -14,6 +14,7 @@ import com.mashfrog.backoffice.actions.I_BackofficeAction;
 import com.mashfrog.backoffice.actions.constants.Constants;
 import com.mashfrog.backoffice.bean.request.RequestBean;
 import com.mashfrog.backoffice.project.BackofficeProjectBean;
+import com.mashfrog.backoffice.project.beans.ActionBean;
 
 public class CmsBackofficeActionElement extends CmsJspActionElement {
 	// Logger
@@ -25,6 +26,7 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
     private BackofficeProjectBean backofficeProject;
     private RequestBean actualRequest;
     private RequestBean previousRequest;
+    private I_BackofficeAction currentAction;
 
     public CmsBackofficeActionElement(PageContext context, HttpServletRequest req, HttpServletResponse res){
     	super(context, req, res);
@@ -63,10 +65,7 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
     }
 
     public I_BackofficeAction getCurrentAction(){
-    	if(backofficeProject == null)
-    		return null;
-    	else
-    		return backofficeProject.getAction(request.getParameter(Constants.ACTION_PARAM));
+    	return currentAction;
     }
 
     public int getCurrentPageIndex(){
@@ -89,6 +88,15 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
     	backofficeProject = null;
     	try {
 			backofficeProject = BackofficeProjectBean.getInstace(this);
+
+			if(backofficeProject == null)
+	    		currentAction = null;
+	    	else{
+	    		ActionBean actionBean = backofficeProject.getAction(request.getParameter(Constants.ACTION_PARAM));
+	    		currentAction = I_BackofficeAction.Factory.newInstance(this, actionBean);
+	    		currentAction.execute();
+	    	}
+
 		} catch (CmsException e) {
 			LOG.error("Error found while initializing " + this.getClass().getName() + " instance.", e);
 		}

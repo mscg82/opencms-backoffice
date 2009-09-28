@@ -13,6 +13,7 @@ public class NavigationMenuBean {
     }
 
     public void addItem(NavigationItemBean item){
+    	item.setItemLevel(items.size());
     	items.add(item);
     }
 
@@ -39,5 +40,14 @@ public class NavigationMenuBean {
 	public void setMaxLevel(Integer maxLevel){
     	this.maxLevel = maxLevel;
     }
+
+	@Override
+	public String toString() {
+		StringBuffer ret = new StringBuffer("Max level: " + getMaxLevel() + ", fixed size: " + isFixedSize() + ", items:\n");
+		for(NavigationItemBean item : getItems()){
+			ret.append("    " + item.toString() + "\n");
+		}
+		return ret.toString();
+	}
 
 }

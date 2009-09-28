@@ -6,6 +6,10 @@ public class NavigationItemBean {
     protected String listHeader;
     protected int itemLevel;
 
+    public NavigationItemBean(){
+
+    }
+
     public NavigationItemBean(int itemLevel){
     	setItemLevel(itemLevel);
     }
@@ -41,5 +45,11 @@ public class NavigationItemBean {
     public void setItemLevel(int itemLevel){
     	this.itemLevel = itemLevel;
     }
+
+	@Override
+	public String toString() {
+		return "Label: " + getLabel() + ", new element label: " + getNewElementLabel() + ", " +
+			   "level: " + getItemLevel() + ", list header: " + getListHeader();
+	}
 
 }

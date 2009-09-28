@@ -131,4 +131,15 @@ public class OSWorkflowBean {
         	exportIds.contains(id);
     }
 
+	@Override
+	public String toString() {
+		return
+			"Workflow name: " + getWorkflowName() + ", initial state: " + getInitialState() + ";\n" +
+			"    publish ids:   " + publishIds + "\n" +
+			"    unpublish ids: " + unpublishIds + "\n" +
+			"    edit ids:      " + editIds + "\n" +
+			"    delete ids:    " + deleteIds + "\n" +
+			"    export ids:    " + exportIds;
+	}
+
 }
