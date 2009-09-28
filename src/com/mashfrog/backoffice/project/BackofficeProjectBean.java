@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.opencms.file.CmsObject;
 import org.opencms.file.CmsResource;
 import org.opencms.file.CmsResourceFilter;
+import org.opencms.jsp.CmsJspActionElement;
 import org.opencms.jsp.util.CmsJspContentAccessBean;
 import org.opencms.jsp.util.CmsJspContentAccessValueWrapper;
 import org.opencms.main.CmsException;
@@ -35,23 +36,6 @@ public class BackofficeProjectBean {
 
     protected static Map<String, BackofficeProjectBean> projects = new LinkedHashMap<String, BackofficeProjectBean>();
 
-    protected CmsJspContentAccessBean contentAccess;
-    protected long dateRead;
-    protected String cmsResourcePath;
-    protected Map<String, ActionBean> actions;
-    protected String projectId;
-    protected String description;
-    protected String module;
-	protected Set<BackOfficeLanguageBean> languages;
-    protected RenderingBean rendering;
-    protected String basePath;
-    protected String orgUnit;
-    protected String galleriesPath;
-    protected CommandMenuBean commandMenu;
-    protected List<ExportDestinationFolderBean> exportDestinationFolders;
-    protected OSWorkflowBean osWorkflow;
-    protected NavigationMenuBean navigationMenu;
-
     public static synchronized BackofficeProjectBean getInstace(CmsBackofficeActionElement backofficeActionElement) throws CmsException{
     	String projectFolder = backofficeActionElement.getRequestContext().getFolderUri();
     	if(!projectFolder.endsWith("/"))
@@ -67,6 +51,23 @@ public class BackofficeProjectBean {
         }
         return project;
     }
+    protected CmsJspContentAccessBean contentAccess;
+    protected long dateRead;
+    protected String cmsResourcePath;
+    protected Map<String, ActionBean> actions;
+    protected String projectId;
+    protected String description;
+	protected String module;
+    protected Set<BackOfficeLanguageBean> languages;
+    protected RenderingBean rendering;
+    protected String basePath;
+    protected String orgUnit;
+    protected String galleriesPath;
+    protected CommandMenuBean commandMenu;
+    protected List<ExportDestinationFolderBean> exportDestinationFolders;
+    protected OSWorkflowBean osWorkflow;
+
+    protected NavigationMenuBean navigationMenu;
 
     private BackofficeProjectBean(CmsBackofficeActionElement backofficeActionElement, String projectFolder) throws CmsException{
 
@@ -137,6 +138,7 @@ public class BackofficeProjectBean {
     	LOG.debug("Galleries path: " + galleriesPath);
 
     	actions = new LinkedHashMap<String, ActionBean>();
+    	loadDefaultActions(backofficeActionElement);
     	List<CmsJspContentAccessValueWrapper> actions = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("action");
 		if(actions != null){
 			for(CmsJspContentAccessValueWrapper action : actions){
@@ -321,10 +323,12 @@ public class BackofficeProjectBean {
     }
 
     public ActionBean getAction(String actionName){
+    	if(actionName == null)
+    		return null;
         return actions.get(actionName);
     }
 
-    public Map<String, ActionBean> getActions(){
+	public Map<String, ActionBean> getActions(){
         return actions;
     }
 
@@ -387,5 +391,15 @@ public class BackofficeProjectBean {
     public RenderingBean getRendering(){
         return rendering;
     }
+
+    private void loadDefaultActions(CmsJspActionElement cmsAction) {
+    	ActionBean loginAction = new ActionBean(Constants.LOGIN_DEFAULT_ACTION_CLASS,
+    			Constants.LOGIN_DEFAULT_JSP_PATTERN.replace("${module.name}", Util.getModuleForRequest(cmsAction).getName()) , null);
+    	actions.put(Constants.LOGIN_DEFAULT_NAME, loginAction);
+
+    	ActionBean defaultAction = new ActionBean(Constants.NOACTION_DEFAULT_ACTION_CLASS,
+    			Constants.NOACTION_DEFAULT_JSP_PATTERN.replace("${module.name}", Util.getModuleForRequest(cmsAction).getName()) , null);
+    	actions.put(Constants.NOACTION_DEFAULT_NAME, defaultAction);
+	}
 
 }

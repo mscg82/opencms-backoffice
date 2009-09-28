@@ -7,7 +7,6 @@ import javax.servlet.jsp.PageContext;
 import org.apache.commons.logging.Log;
 import org.opencms.jsp.CmsJspActionElement;
 import org.opencms.jsp.util.CmsJspContentAccessBean;
-import org.opencms.main.CmsException;
 import org.opencms.main.CmsLog;
 
 import com.mashfrog.backoffice.actions.I_BackofficeAction;
@@ -33,35 +32,19 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
     	init(context, req, res);
     }
 
+    public RequestBean getActualRequest(){
+        return actualRequest;
+    }
+
+    public BackofficeProjectBean getBackofficeProject(){
+        return backofficeProject;
+    }
+
     public CmsJspContentAccessBean getContentAccess(){
     	if(backofficeProject == null)
     		return null;
     	else
     		return backofficeProject.getContentAccess();
-    }
-
-    public PageContext getPageContext(){
-        return pageContext;
-    }
-
-    public HttpServletRequest getRequest(){
-        return request;
-    }
-
-    public HttpServletResponse getResponse(){
-        return response;
-    }
-
-    public RequestBean getActualRequest(){
-        return actualRequest;
-    }
-
-    public RequestBean getPreviousRequest(){
-        return previousRequest;
-    }
-
-    public BackofficeProjectBean getBackofficeProject(){
-        return backofficeProject;
     }
 
     public I_BackofficeAction getCurrentAction(){
@@ -73,9 +56,25 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
 
     	try{
     		ret = Integer.parseInt(request.getParameter(Constants.PAGE_PARAM));
-    	}catch (NumberFormatException e) {}
+    	} catch (NumberFormatException e) {}
 
     	return ret;
+    }
+
+    public PageContext getPageContext(){
+        return pageContext;
+    }
+
+    public RequestBean getPreviousRequest(){
+        return previousRequest;
+    }
+
+    public HttpServletRequest getRequest(){
+        return request;
+    }
+
+    public HttpServletResponse getResponse(){
+        return response;
     }
 
     public void init(PageContext context, HttpServletRequest req, HttpServletResponse res){
@@ -92,12 +91,29 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
 			if(backofficeProject == null)
 	    		currentAction = null;
 	    	else{
-	    		ActionBean actionBean = backofficeProject.getAction(request.getParameter(Constants.ACTION_PARAM));
+	    		String actionName = request.getParameter(Constants.ACTION_PARAM);
+	    		ActionBean actionBean = null;
+	    		if(getRequestContext().currentUser().isGuestUser()){
+	    			// redirect to login action
+	    			actionBean = backofficeProject.getAction(Constants.LOGIN_DEFAULT_NAME);
+	    			LOG.warn("User is not logged in. Redirecting to login action.");
+	    		}
+	    		else if(actionBean == null){
+	    			// redirect to default action
+	    			actionBean = backofficeProject.getAction(Constants.NOACTION_DEFAULT_NAME);
+	    			LOG.info("Choosen action not mapped. Redirecting to default action.");
+	    		}
+	    		else{
+	    			actionBean = backofficeProject.getAction(actionName);
+	    			if(LOG.isDebugEnabled())
+	    				LOG.debug("User " + getRequestContext().currentUser().getFullName() + " requested action \"" + actionName + "\"");
+	    		}
 	    		currentAction = I_BackofficeAction.Factory.newInstance(this, actionBean);
 	    		currentAction.execute();
+
 	    	}
 
-		} catch (CmsException e) {
+		} catch (Exception e) {
 			LOG.error("Error found while initializing " + this.getClass().getName() + " instance.", e);
 		}
     }

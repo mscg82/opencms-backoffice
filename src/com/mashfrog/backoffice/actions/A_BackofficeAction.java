@@ -9,7 +9,8 @@ import com.mashfrog.backoffice.CmsBackofficeActionElement;
 import com.mashfrog.backoffice.project.beans.ActionBean;
 
 public abstract class A_BackofficeAction implements I_BackofficeAction {
-    protected List<String> allowedGroups;
+
+	protected List<String> allowedGroups;
     protected String errorMessage;
     protected String fatalErrorMessage;
     protected String jspPath;
@@ -42,7 +43,10 @@ public abstract class A_BackofficeAction implements I_BackofficeAction {
     }
 
     public void init(CmsBackofficeActionElement backofficeActionElement, ActionBean actionBean){
-
+    	this.backofficeActionElement = backofficeActionElement;
+    	setJspPath(actionBean.getJspPath());
+    	setAdditonalConfigurationFilePath(actionBean.getAdditionalConfigurationFilePath(),
+    			backofficeActionElement.getCmsObject());
     }
 
     public abstract void setAdditonalConfigurationFilePath(String filePath, CmsObject cmsObject);
