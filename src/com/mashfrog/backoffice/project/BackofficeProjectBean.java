@@ -355,6 +355,9 @@ public class BackofficeProjectBean {
 
 		dateRead = System.currentTimeMillis();
 
+		if(LOG.isDebugEnabled())
+    		LOG.debug("Parse finished.");
+
     }
 
     public ActionBean getAction(String actionName){
