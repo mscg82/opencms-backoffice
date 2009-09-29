@@ -37,7 +37,7 @@
 	</xsd:complexType>
 	<xsd:annotation>
 		<xsd:appinfo>
-			<resourcebundle name="it.mashfrog.backoffice.multilanguage.workplace"/>
+			<resourcebundle name="com.mashfrog.backoffice.v2x.workplace"/>
     		<mappings>
 			    	<mapping element="name" mapto="property:Title"/>
 			</mappings>

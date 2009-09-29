@@ -17,7 +17,7 @@
     </xsd:complexType>
     <xsd:annotation>
         <xsd:appinfo>
-            <resourcebundle name="it.mashfrog.backoffice.multilanguage.workplace"/>
+            <resourcebundle name="com.mashfrog.backoffice.v2x.workplace"/>
         </xsd:appinfo>
     </xsd:annotation>
 </xsd:schema>

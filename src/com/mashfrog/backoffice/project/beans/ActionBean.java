@@ -1,12 +1,13 @@
 package com.mashfrog.backoffice.project.beans;
 
-public class ActionBean {
+public class ActionBean extends GroupOUAssociableBean{
+
     private String className;
     private String jspPath;
     private String additionalConfigurationFilePath;
 
     public ActionBean() {
-
+    	super();
     }
 
     public ActionBean(String className, String jspPath, String additionalConfigurationFilePath) {
@@ -41,6 +42,7 @@ public class ActionBean {
 
 	@Override
 	public String toString() {
-		return "{Class name: " + getClassName() + "; Jsp path: " + getJspPath() + "; additional configuration: " + getAdditionalConfigurationFilePath() + "}";
+		return "{Class name: " + getClassName() + "; Jsp path: " + getJspPath() + "; " +
+				"additional configuration: " + getAdditionalConfigurationFilePath() + "; groups/OU: " + super.toString() + "}";
 	}
 }

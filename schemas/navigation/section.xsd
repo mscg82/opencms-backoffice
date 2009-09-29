@@ -13,10 +13,10 @@
 
     <xsd:complexType name="OpenCmsSection">
         <xsd:sequence>
-            <xsd:element name="name"             type="OpenCmsString" />
-            <xsd:element name="group"             type="OpenCmsString" minOccurs="0" maxOccurs="unbounded"   />
+            <xsd:element name="name"            type="OpenCmsString" />
+            <xsd:element name="group"           type="OpenCmsString" minOccurs="0" maxOccurs="unbounded"   />
             <xsd:element name="orgUnit"         type="OpenCmsString" minOccurs="0" maxOccurs="unbounded"   />
-            <xsd:element name="item"             type="OpenCmsItem"   minOccurs="1" maxOccurs="unbounded"   />
+            <xsd:element name="item"            type="OpenCmsItem"   minOccurs="1" maxOccurs="unbounded"   />
         </xsd:sequence>
         <xsd:attribute name="language" type="OpenCmsLocale" use="optional"/>
     </xsd:complexType>

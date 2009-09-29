@@ -14,16 +14,22 @@
             <xsd:element name="className"                   type="OpenCmsString" />
             <xsd:element name="jspPath"                     type="OpenCmsVfsFile" />
             <xsd:element name="additionalConfigurationFile" type="OpenCmsVfsFile" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="group"                       type="OpenCmsString" minOccurs="0" maxOccurs="unbounded"   />
+            <xsd:element name="orgUnit"                     type="OpenCmsString" minOccurs="0" maxOccurs="unbounded"   />
         </xsd:sequence>
         <xsd:attribute name="language" type="OpenCmsLocale" use="optional"/>
     </xsd:complexType>
     <xsd:annotation>
         <xsd:appinfo>
-            <resourcebundle name="it.mashfrog.backoffice.multilanguage.workplace"/>
+            <resourcebundle name="com.mashfrog.backoffice.v2x.workplace"/>
             <validationrules>
                 <rule element="name" regex="^.+$" type="error" message="${key.errormessage.obbligatorio.emptystr}"/>
                 <rule element="className" regex="^([\w\^]+\.)*[\w\^]+$" type="error" message="${key.errormessage.obbligatorio.classname}"/>
             </validationrules>
+            <layouts>
+                <layout element="group"      widget="GroupWidget" />
+                <layout element="orgUnit"    widget="OrgUnitWidget" />
+            </layouts>
         </xsd:appinfo>
     </xsd:annotation>
 </xsd:schema>

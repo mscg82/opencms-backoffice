@@ -158,6 +158,21 @@ public class BackofficeProjectBean {
 				String addConf = action.getValue().get("additionalConfigurationFile") != null ?
 						((CmsJspContentAccessValueWrapper) action.getValue().get("additionalConfigurationFile")).getStringValue() : null;
 				ActionBean actionBean = new ActionBean(className, jspPath, addConf);
+
+				List<CmsJspContentAccessValueWrapper> groups = (List<CmsJspContentAccessValueWrapper>) action.getValueList().get("group");
+				if(groups != null){
+					for(CmsJspContentAccessValueWrapper group : groups){
+						actionBean.addGroup(group.getStringValue());
+					}
+				}
+
+				List<CmsJspContentAccessValueWrapper> orgUnits = (List<CmsJspContentAccessValueWrapper>) action.getValueList().get("orgUnit");
+				if(orgUnits != null){
+					for(CmsJspContentAccessValueWrapper orgUnit : orgUnits){
+						actionBean.addOrgUnit(orgUnit.getStringValue());
+					}
+				}
+
 				this.actions.put(name, actionBean);
 			}
 		}

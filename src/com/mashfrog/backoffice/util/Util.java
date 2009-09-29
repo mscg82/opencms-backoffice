@@ -2,14 +2,23 @@ package com.mashfrog.backoffice.util;
 
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.opencms.file.CmsGroup;
+import org.opencms.file.CmsObject;
+import org.opencms.file.CmsUser;
 import org.opencms.file.types.A_CmsResourceType;
 import org.opencms.jsp.CmsJspActionElement;
+import org.opencms.main.CmsException;
+import org.opencms.main.CmsLog;
 import org.opencms.main.OpenCms;
 import org.opencms.module.CmsModule;
 
 import com.mashfrog.backoffice.actions.constants.Constants;
+import com.mashfrog.backoffice.project.beans.GroupOUAssociableBean;
 
 public class Util {
+	// Logger
+	private static Log LOG = CmsLog.getLog(Util.class);
 
 	/**
 	 * Finds the module in which the requested resource, wrapped in the
@@ -48,6 +57,59 @@ public class Util {
 			   Constants.BACKOFFICE_RESOURCE_NAME.toLowerCase())){
 
 				ret = type.getTypeId();
+			}
+		}
+
+		return ret;
+	}
+
+	/**
+	 * Checks if the provided {@link CmsUser} can access the specified
+	 * {@link GroupOUAssociableBean}.
+	 *
+	 * @param user The user that will be tested.
+	 * @param cmsObject The {@link CmsObject} that will be used to read user data.
+	 * @param bean The bean on which the access will be tested.
+	 * @return <code>true</code> if the user can access, the bean,
+	 * <code>false</code> otherwise.
+	 */
+	public static boolean canUserAccessBean(CmsUser user, CmsObject cmsObject, GroupOUAssociableBean bean) {
+		boolean ret = false;
+
+		if(bean.getOrgUnits() != null && bean.getOrgUnits().size() != 0){
+			String ou = user.getOuFqn();
+			for(String allowedOu : bean.getOrgUnits()){
+				if(ou.startsWith(allowedOu)){
+					ret = true;
+					break;
+				}
+			}
+		}
+		else{
+			ret = true;
+		}
+
+		if(ret){
+			ret = false;
+			if(bean.getGroups() != null && bean.getGroups().size() != 0){
+				try {
+
+					List<CmsGroup> groups = cmsObject.getGroupsOfUser(user.getName(), false, true);
+					for(CmsGroup group : groups){
+						if(bean.getGroups().contains(group.getName())){
+							ret = true;
+							break;
+						}
+					}
+
+				} catch (CmsException e) {
+					if(LOG.isWarnEnabled())
+						LOG.warn("Cannot read user groups. Ignoring filter.", e);
+					ret = true;
+				}
+			}
+			else{
+				ret = true;
 			}
 		}
 

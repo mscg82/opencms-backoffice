@@ -21,7 +21,7 @@
 	</xsd:complexType>
 	<xsd:annotation>
 		<xsd:appinfo>
-		<resourcebundle name="it.mashfrog.backoffice.multilanguage.workplace"/>
+		<resourcebundle name="com.mashfrog.backoffice.v2x.workplace"/>
 		<validationrules>
 			<rule element="initialState" regex="\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
 		</validationrules>	
