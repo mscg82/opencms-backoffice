@@ -3,11 +3,11 @@
     <xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
     <xsd:include schemaLocation="opencms://system/modules/com.mashfrog.backoffice.v2x/schemas/navigation/projectNavigationCombo.xsd"/>
 
-    <xsd:element name="NavMenus" type="OpenCmsNavigationMenus"/>
+    <xsd:element name="NavigationMenus" type="OpenCmsNavigationMenus"/>
     
     <xsd:complexType name="OpenCmsNavigationMenus">
         <xsd:sequence>
-            <xsd:element name="NavMenu" type="OpenCmsNavigationMenu" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="NavigationMenu" type="OpenCmsNavigationMenu" minOccurs="0" maxOccurs="unbounded"/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -23,7 +23,7 @@
         <xsd:appinfo>
             <resourcebundle name="com.mashfrog.backoffice.v2x.workplace"/>
             <validationrules>
-                <rule element="maxLevel" regex="\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
+                <rule element="maxLevel" regex="-?\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
             </validationrules>
             <defaults>
                 <default element="maxLevel" value="3"/>

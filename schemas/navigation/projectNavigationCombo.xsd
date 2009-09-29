@@ -1,7 +1,6 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 
 	<xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
-	<xsd:include schemaLocation="opencms://system/modules/com.mashfrog.backoffice.v2x/schemas/navigation/folderProperties.xsd"/>
 
 	<xsd:element name="ProjectNavigationCombos" type="OpenCmsProjectNavigationCombos"/>
 	
