@@ -92,6 +92,15 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
 	    		currentAction = null;
 	    	else{
 	    		String actionName = request.getParameter(Constants.ACTION_PARAM);
+
+	    		// The old actual request is now the previous request
+	    		previousRequest = (RequestBean)request.getSession().getAttribute(Constants.ACTUAL_ACTION_SESSION_PARAM);
+	    		request.getSession().setAttribute(Constants.PREVIOUS_ACTION_SESSION_PARAM, previousRequest);
+
+	    		// Build the new request bean
+	    		actualRequest = new RequestBean(req);
+	    		request.getSession().setAttribute(Constants.ACTUAL_ACTION_SESSION_PARAM, actualRequest);
+
 	    		ActionBean actionBean = null;
 	    		if(getRequestContext().currentUser().isGuestUser()){
 	    			// redirect to login action

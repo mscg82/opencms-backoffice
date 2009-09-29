@@ -1,16 +1,12 @@
 package com.mashfrog.backoffice.actions.impl;
 
-import org.opencms.file.CmsObject;
-
 import com.mashfrog.backoffice.actions.A_BackofficeAction;
+import com.mashfrog.backoffice.actions.RedirectingAction;
 import com.mashfrog.backoffice.bean.request.RequestBean;
 
-public class BackofficeConfirmAction extends A_BackofficeAction {
+public class BackofficeConfirmAction extends A_BackofficeAction implements RedirectingAction{
 
     public void execute(){
-    }
-
-    public void setAdditonalConfigurationFilePath(String filePath, CmsObject cmsObject){
     }
 
     public RequestBean getNextPageRequest(){
@@ -20,5 +16,9 @@ public class BackofficeConfirmAction extends A_BackofficeAction {
     public RequestBean getPreviuosPageRequest(){
         return null;
     }
+
+	public void redirect() {
+
+	}
 
 }

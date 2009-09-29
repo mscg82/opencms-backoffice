@@ -80,33 +80,40 @@ public class BackofficeProjectBean {
 
     	CmsObject obj = backofficeActionElement.getCmsObject();
 
-    	LOG.debug("Reading backoffice project from path \"" + cmsResourcePath + "\".");
+    	if(LOG.isDebugEnabled())
+    		LOG.debug("Reading backoffice project from path \"" + cmsResourcePath + "\".");
     	CmsResource projectRes = obj.readResource(cmsResourcePath);
 
-    	LOG.debug("Starting parsing settings...");
+    	if(LOG.isDebugEnabled())
+    		LOG.debug("Starting parsing settings...");
     	contentAccess = new CmsJspContentAccessBean(obj, projectRes);
 
     	projectId = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("id")).getStringValue();
-    	LOG.debug("Project id: " + projectId);
+    	if(LOG.isDebugEnabled())
+    		LOG.debug("Project id: " + projectId);
 
     	description = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("name")).getStringValue();
-    	LOG.debug("Project description: " + description);
+    	if(LOG.isDebugEnabled())
+    		LOG.debug("Project description: " + description);
 
     	List<CmsJspContentAccessValueWrapper> nodesList = (List<CmsJspContentAccessValueWrapper>) contentAccess.getValueList().get("languages");
     	this.languages = new LinkedHashSet<BackOfficeLanguageBean>();
     	if(nodesList != null){
-	    	LOG.debug("Configuring " + nodesList.size() + " languages...");
+    		if(LOG.isDebugEnabled())
+        		LOG.debug("Configuring " + nodesList.size() + " languages...");
 			for(CmsJspContentAccessValueWrapper language : nodesList){
 				String languageId = ((CmsJspContentAccessValueWrapper) language.getValue().get("languageId")).getStringValue();
 				String languageName = ((CmsJspContentAccessValueWrapper) language.getValue().get("languageDesc")).getStringValue();
 				BackOfficeLanguageBean langBean = new BackOfficeLanguageBean(languageId, languageName);
 				this.languages.add(langBean);
 			}
-			LOG.debug("Configured languages: " + this.languages);
+			if(LOG.isDebugEnabled())
+	    		LOG.debug("Configured languages: " + this.languages);
     	}
 
     	module = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("schemaModule")).getStringValue();
-    	LOG.debug("Associated module: " + module);
+    	if(LOG.isDebugEnabled())
+    		LOG.debug("Associated module: " + module);
 
     	CmsJspContentAccessValueWrapper node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("rendering");
     	rendering = new RenderingBean();
@@ -129,13 +136,16 @@ public class BackofficeProjectBean {
     	}
 
 		basePath = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("basePath")).getStringValue();
-    	LOG.debug("Base path: " + basePath);
+		if(LOG.isDebugEnabled())
+    		LOG.debug("Base path: " + basePath);
 
     	orgUnit = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("orgUnit")).getStringValue();
-    	LOG.debug("Organizational unit: " + orgUnit);
+    	if(LOG.isDebugEnabled())
+    		LOG.debug("Organizational unit: " + orgUnit);
 
     	galleriesPath = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("galleriesPath")).getStringValue();
-    	LOG.debug("Galleries path: " + galleriesPath);
+    	if(LOG.isDebugEnabled())
+    		LOG.debug("Galleries path: " + galleriesPath);
 
     	actions = new LinkedHashMap<String, ActionBean>();
     	loadDefaultActions(backofficeActionElement);
@@ -151,7 +161,8 @@ public class BackofficeProjectBean {
 				this.actions.put(name, actionBean);
 			}
 		}
-		LOG.debug("Configured actions: " + this.actions);
+		if(LOG.isDebugEnabled())
+    		LOG.debug("Configured actions: " + this.actions);
 
     	commandMenu = new CommandMenuBean();
     	node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("commandMenu");
@@ -204,7 +215,8 @@ public class BackofficeProjectBean {
 					commandMenu.addCommandMenuSection(sectionBean);
 				}
 			}
-			LOG.debug("Command menu:\n" + commandMenu.toString());
+			if(LOG.isDebugEnabled())
+	    		LOG.debug("Command menu:\n" + commandMenu.toString());
 
 			navigationMenu = new NavigationMenuBean();
 	    	node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("navigationMenu");
@@ -232,7 +244,8 @@ public class BackofficeProjectBean {
 					}
 				}
 			}
-			LOG.debug("Navigation menu:\n" + navigationMenu);
+			if(LOG.isDebugEnabled())
+	    		LOG.debug("Navigation menu:\n" + navigationMenu);
 
 			exportDestinationFolders = new LinkedList<ExportDestinationFolderBean>();
 			List<CmsJspContentAccessValueWrapper> expFolders = (List<CmsJspContentAccessValueWrapper>) contentAccess.getValueList().get("exportSettings");
@@ -247,7 +260,8 @@ public class BackofficeProjectBean {
 					exportDestinationFolders.add(expFolderBean);
 				}
 			}
-			LOG.debug("Export destionations: " + exportDestinationFolders);
+			if(LOG.isDebugEnabled())
+	    		LOG.debug("Export destionations: " + exportDestinationFolders);
 
 			osWorkflow = new OSWorkflowBean();
 			node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("OSWorkflow");
@@ -269,7 +283,8 @@ public class BackofficeProjectBean {
 							Integer intId = Integer.parseInt(id.getStringValue());
 							osWorkflow.addPublishId(intId);
 						} catch(NumberFormatException e){
-							LOG.info("Cannot parse integer value for action id.", e);
+							if(LOG.isInfoEnabled())
+					    		LOG.info("Cannot parse integer value for action id.", e);
 						}
 					}
 
@@ -279,7 +294,8 @@ public class BackofficeProjectBean {
 							Integer intId = Integer.parseInt(id.getStringValue());
 							osWorkflow.addUnpublishId(intId);
 						} catch(NumberFormatException e){
-							LOG.info("Cannot parse integer value for action id.", e);
+							if(LOG.isInfoEnabled())
+					    		LOG.info("Cannot parse integer value for action id.", e);
 						}
 					}
 
@@ -289,7 +305,8 @@ public class BackofficeProjectBean {
 							Integer intId = Integer.parseInt(id.getStringValue());
 							osWorkflow.addEditId(intId);
 						} catch(NumberFormatException e){
-							LOG.info("Cannot parse integer value for action id.", e);
+							if(LOG.isInfoEnabled())
+					    		LOG.info("Cannot parse integer value for action id.", e);
 						}
 					}
 
@@ -299,7 +316,8 @@ public class BackofficeProjectBean {
 							Integer intId = Integer.parseInt(id.getStringValue());
 							osWorkflow.addDeleteId(intId);
 						} catch(NumberFormatException e){
-							LOG.info("Cannot parse integer value for action id.", e);
+							if(LOG.isInfoEnabled())
+					    		LOG.info("Cannot parse integer value for action id.", e);
 						}
 					}
 
@@ -309,12 +327,14 @@ public class BackofficeProjectBean {
 							Integer intId = Integer.parseInt(id.getStringValue());
 							osWorkflow.addExportId(intId);
 						} catch(NumberFormatException e){
-							LOG.info("Cannot parse integer value for action id.", e);
+							if(LOG.isInfoEnabled())
+					    		LOG.info("Cannot parse integer value for action id.", e);
 						}
 					}
 				}
 			}
-			LOG.debug("OSWorkflow bean:\n" + osWorkflow);
+			if(LOG.isDebugEnabled())
+	    		LOG.debug("OSWorkflow bean:\n" + osWorkflow);
 
 		}
 
@@ -396,6 +416,10 @@ public class BackofficeProjectBean {
     	ActionBean loginAction = new ActionBean(Constants.LOGIN_DEFAULT_ACTION_CLASS,
     			Constants.LOGIN_DEFAULT_JSP_PATTERN.replace("${module.name}", Util.getModuleForRequest(cmsAction).getName()) , null);
     	actions.put(Constants.LOGIN_DEFAULT_NAME, loginAction);
+
+    	ActionBean logoutAction = new ActionBean(Constants.LOGOUT_DEFAULT_ACTION_CLASS,
+    			Constants.LOGOUT_DEFAULT_JSP_PATTERN.replace("${module.name}", Util.getModuleForRequest(cmsAction).getName()) , null);
+    	actions.put(Constants.LOGOUT_DEFAULT_NAME, logoutAction);
 
     	ActionBean defaultAction = new ActionBean(Constants.NOACTION_DEFAULT_ACTION_CLASS,
     			Constants.NOACTION_DEFAULT_JSP_PATTERN.replace("${module.name}", Util.getModuleForRequest(cmsAction).getName()) , null);

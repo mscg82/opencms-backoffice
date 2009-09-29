@@ -49,7 +49,9 @@ public abstract class A_BackofficeAction implements I_BackofficeAction {
     			backofficeActionElement.getCmsObject());
     }
 
-    public abstract void setAdditonalConfigurationFilePath(String filePath, CmsObject cmsObject);
+    public void setAdditonalConfigurationFilePath(String filePath, CmsObject cmsObject) {
+    	// Does Nothing
+    }
 
     protected void setErrorMessage(String errorMessage){
     	this.errorMessage = errorMessage;

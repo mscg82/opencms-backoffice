@@ -1,5 +1,6 @@
 package com.mashfrog.backoffice.bean.request;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -9,8 +10,11 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class RequestBean {
-    private Map<String, List<String>> attributes;
+public class RequestBean implements Serializable{
+
+	private static final long serialVersionUID = 651753014006485685L;
+
+	private Map<String, List<String>> attributes;
     private String page;
 
     public RequestBean(){
