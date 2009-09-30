@@ -8,12 +8,14 @@ import org.apache.commons.logging.Log;
 import org.opencms.jsp.CmsJspActionElement;
 import org.opencms.jsp.util.CmsJspContentAccessBean;
 import org.opencms.main.CmsLog;
+import org.opencms.module.CmsModule;
 
 import com.mashfrog.backoffice.actions.I_BackofficeAction;
 import com.mashfrog.backoffice.actions.constants.Constants;
 import com.mashfrog.backoffice.bean.request.RequestBean;
 import com.mashfrog.backoffice.project.BackofficeProjectBean;
 import com.mashfrog.backoffice.project.beans.ActionBean;
+import com.mashfrog.backoffice.util.Util;
 
 public class CmsBackofficeActionElement extends CmsJspActionElement {
 	// Logger
@@ -29,7 +31,7 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
 
     public CmsBackofficeActionElement(PageContext context, HttpServletRequest req, HttpServletResponse res){
     	super(context, req, res);
-    	init(context, req, res);
+    	// init(context, req, res) will be called by super(context, req, res)
     }
 
     public RequestBean getActualRequest(){
@@ -59,6 +61,10 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
     	} catch (NumberFormatException e) {}
 
     	return ret;
+    }
+
+    public CmsModule getModule(){
+    	return Util.getModuleForRequest(this);
     }
 
     public PageContext getPageContext(){

@@ -139,9 +139,17 @@ public class BackofficeProjectBean {
 		if(LOG.isDebugEnabled())
     		LOG.debug("Base path: " + basePath);
 
-    	orgUnit = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("orgUnit")).getStringValue();
-    	if(LOG.isDebugEnabled())
-    		LOG.debug("Organizational unit: " + orgUnit);
+		node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("orgUnit");
+		if(node != null){
+	    	orgUnit = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("orgUnit")).getStringValue();
+	    	if(LOG.isDebugEnabled())
+	    		LOG.debug("Organizational unit: " + orgUnit);
+		}
+		else{
+			orgUnit = null;
+			if(LOG.isDebugEnabled())
+	    		LOG.debug("Project will not be bound to organization unit.");
+		}
 
     	galleriesPath = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("galleriesPath")).getStringValue();
     	if(LOG.isDebugEnabled())
@@ -149,9 +157,9 @@ public class BackofficeProjectBean {
 
     	actions = new LinkedHashMap<String, ActionBean>();
     	loadDefaultActions(backofficeActionElement);
-    	List<CmsJspContentAccessValueWrapper> actions = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("action");
-		if(actions != null){
-			for(CmsJspContentAccessValueWrapper action : actions){
+    	nodesList = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("action");
+		if(nodesList != null){
+			for(CmsJspContentAccessValueWrapper action : nodesList){
 				String name = ((CmsJspContentAccessValueWrapper) action.getValue().get("name")).getStringValue();
 				String className = ((CmsJspContentAccessValueWrapper) action.getValue().get("className")).getStringValue();
 				String jspPath = ((CmsJspContentAccessValueWrapper) action.getValue().get("jspPath")).getStringValue();
@@ -173,11 +181,11 @@ public class BackofficeProjectBean {
 					}
 				}
 
-				this.actions.put(name, actionBean);
+				actions.put(name, actionBean);
 			}
 		}
 		if(LOG.isDebugEnabled())
-    		LOG.debug("Configured actions: " + this.actions);
+    		LOG.debug("Configured actions: " + actions);
 
     	commandMenu = new CommandMenuBean();
     	node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("commandMenu");
@@ -263,9 +271,9 @@ public class BackofficeProjectBean {
 	    		LOG.debug("Navigation menu:\n" + navigationMenu);
 
 			exportDestinationFolders = new LinkedList<ExportDestinationFolderBean>();
-			List<CmsJspContentAccessValueWrapper> expFolders = (List<CmsJspContentAccessValueWrapper>) contentAccess.getValueList().get("exportSettings");
-			if(expFolders != null){
-				for(CmsJspContentAccessValueWrapper expFolder : expFolders){
+			nodesList = (List<CmsJspContentAccessValueWrapper>) contentAccess.getValueList().get("exportSettings");
+			if(nodesList != null){
+				for(CmsJspContentAccessValueWrapper expFolder : nodesList){
 					String description = ((CmsJspContentAccessValueWrapper) expFolder.getValue().get("exportDescription")).getStringValue();
 					List<CmsJspContentAccessValueWrapper> destinations = (List<CmsJspContentAccessValueWrapper>) expFolder.getValueList().get("exportDestFolder");
 					ExportDestinationFolderBean expFolderBean  = new  ExportDestinationFolderBean(description);

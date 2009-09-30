@@ -25,9 +25,9 @@
             <xsd:element name="schemaModule" type="OpenCmsString"/>
             <xsd:element name="rendering" type="OpenCmsProjectRendering"   minOccurs="0"     maxOccurs="1"/>
             <xsd:element name="basePath" type="OpenCmsVfsFile"/>
-            <xsd:element name="orgUnit" type="OpenCmsString"/>
+            <xsd:element name="orgUnit" type="OpenCmsString"               minOccurs="0"     maxOccurs="1"/>
             <xsd:element name="galleriesPath" type="OpenCmsVfsFile"/>
-            <xsd:element name="action" type="OpenCmsAction" minOccurs="1" maxOccurs="unbounded"/>
+            <xsd:element name="action" type="OpenCmsAction"                minOccurs="1" maxOccurs="unbounded"/>
             <xsd:element name="commandMenu" type="OpenCmsMenu"/>
             <xsd:element name="navigationMenu" type="OpenCmsNavigationMenu"/>
             <xsd:element name="exportSettings" type="OpenCmsExportSetting" minOccurs="0" maxOccurs="unbounded"/>
