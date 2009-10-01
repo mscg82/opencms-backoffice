@@ -9,7 +9,8 @@ import com.mashfrog.backoffice.project.beans.TabbedContentBean;
 public class BackofficeBrowseFolderAction extends BackofficeNavMenuAction implements BackofficeTabbedContentAction {
     protected List<TabbedContentBean> contents;
 
-    public void execute(){
+    public String execute(){
+    	return null;
     }
 
     public List<TabbedContentBean> getTabbedContents(){

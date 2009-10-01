@@ -70,7 +70,7 @@ public interface I_BackofficeAction {
 
     public void addAllowedGroup(String allowedGroup);
 
-    public void execute();
+    public String execute();
 
     public List<String> getAllowedGroups();
 

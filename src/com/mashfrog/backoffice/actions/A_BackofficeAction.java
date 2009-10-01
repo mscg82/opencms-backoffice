@@ -24,7 +24,7 @@ public abstract class A_BackofficeAction implements I_BackofficeAction {
     	allowedGroups.add(allowedGroup);
     }
 
-    public abstract void execute();
+    public abstract String execute();
 
     public List<String> getAllowedGroups(){
         return allowedGroups;

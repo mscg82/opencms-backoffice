@@ -28,10 +28,15 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
     private RequestBean actualRequest;
     private RequestBean previousRequest;
     private I_BackofficeAction currentAction;
+    private String resultJsp;
 
     public CmsBackofficeActionElement(PageContext context, HttpServletRequest req, HttpServletResponse res){
     	super(context, req, res);
     	// init(context, req, res) will be called by super(context, req, res)
+    }
+
+    public String getActionLink(String actionName){
+    	return "?" + Constants.ACTION_PARAM + "=" + actionName;
     }
 
     public RequestBean getActualRequest(){
@@ -83,6 +88,10 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
         return response;
     }
 
+    public String getResultJsp() {
+    	return resultJsp;
+    }
+
     public void init(PageContext context, HttpServletRequest req, HttpServletResponse res){
     	super.init(context, req, res);
 
@@ -124,7 +133,10 @@ public class CmsBackofficeActionElement extends CmsJspActionElement {
 	    				LOG.debug("User " + getRequestContext().currentUser().getFullName() + " requested action \"" + actionName + "\"");
 	    		}
 	    		currentAction = I_BackofficeAction.Factory.newInstance(this, actionBean);
-	    		currentAction.execute();
+	    		String resultJsp = currentAction.execute();
+	    		if(resultJsp == null){
+	    			resultJsp = currentAction.getJspPath();
+	    		}
 
 	    	}
 

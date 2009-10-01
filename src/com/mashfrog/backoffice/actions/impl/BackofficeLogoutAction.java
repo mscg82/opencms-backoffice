@@ -13,8 +13,9 @@ public class BackofficeLogoutAction extends A_BackofficeAction implements Redire
 
 	private static Log LOG = CmsLog.getLog(BackofficeLogoutAction.class);
 
-	public void execute() {
+	public String execute() {
 		backofficeActionElement.getRequest().getSession().invalidate();
+		return null;
 	}
 
 	public void redirect() {

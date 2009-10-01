@@ -28,4 +28,6 @@ public class Constants {
     public static final String NOACTION_DEFAULT_ACTION_CLASS = BackofficeDefaultAction.class.getName();
     public static final String NOACTION_DEFAULT_JSP_PATTERN = "/system/modules/${module.name}/template/actions/default.jsp";
 
+    public static final String USER_ADDITIONAL_INFO_PARAM = "BACKOFFICE_ADDITIONAL_INFO";
+
 }

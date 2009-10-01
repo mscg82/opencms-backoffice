@@ -13,7 +13,8 @@ public class BackofficeLoginAction extends A_BackofficeAction implements Redirec
 
 	private static Log LOG = CmsLog.getLog(BackofficeLoginAction.class);
 
-    public void execute(){
+    public String execute(){
+    	return null;
     }
 
 	public void redirect() {

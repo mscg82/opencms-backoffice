@@ -6,7 +6,8 @@ import com.mashfrog.backoffice.bean.request.RequestBean;
 
 public class BackofficeConfirmAction extends A_BackofficeAction implements RedirectingAction{
 
-    public void execute(){
+    public String execute(){
+    	return null;
     }
 
     public RequestBean getNextPageRequest(){
