@@ -44,7 +44,7 @@
             <defaults>
                 <default element="id" value="Identificativo progetto"/>                
                 <default element="name" value="Nome progetto"/>
-                <default element="schemaModule" value="it.mashfrog.backoffice.multilanguage"/>
+                <default element="schemaModule" value="com.mashfrog.backoffice.v2x"/>
                 <default element="basePath" value="/"/>
                 <default element="galleriesPath" value="/system/galleries/"/>            
             </defaults>

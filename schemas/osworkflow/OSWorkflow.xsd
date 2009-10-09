@@ -1,34 +1,34 @@
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 
-	<xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
+    <xsd:include schemaLocation="opencms://opencms-xmlcontent.xsd"/>
     <xsd:include schemaLocation="opencms://system/modules/com.mashfrog.backoffice.v2x/schemas/osworkflow/actionId.xsd"/>
     
-	<xsd:element name="OSWorkflows" type="OpenCmsOSWorkflows"/>
-	
-	<xsd:complexType name="OpenCmsOSWorkflows">
-		<xsd:sequence>
-			<xsd:element name="OSWorkflow" type="OpenCmsOSWorkflow" minOccurs="0" maxOccurs="unbounded"/>
-		</xsd:sequence>
-	</xsd:complexType>
+    <xsd:element name="OSWorkflows" type="OpenCmsOSWorkflows"/>
+    
+    <xsd:complexType name="OpenCmsOSWorkflows">
+        <xsd:sequence>
+            <xsd:element name="OSWorkflow" type="OpenCmsOSWorkflow" minOccurs="0" maxOccurs="unbounded"/>
+        </xsd:sequence>
+    </xsd:complexType>
 
-	<xsd:complexType name="OpenCmsOSWorkflow">
-		<xsd:sequence>
-			<xsd:element name="workflowName" type="OpenCmsString"/>
-			<xsd:element name="initialState" type="OpenCmsString"/>
-			<xsd:element name="actionId" type="OpenCmsActionId"/>
-		</xsd:sequence>
-		<xsd:attribute name="language" type="OpenCmsLocale" use="optional"/>
-	</xsd:complexType>
-	<xsd:annotation>
-		<xsd:appinfo>
-		<resourcebundle name="com.mashfrog.backoffice.v2x.workplace"/>
-		<validationrules>
-			<rule element="initialState" regex="\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
-		</validationrules>	
-		<defaults>
-				<default  element="workflowName"	value="simple_wf" />				
-				<default  element="initialState"	value="100" />			
-			</defaults>
-  		</xsd:appinfo>
-	</xsd:annotation>
+    <xsd:complexType name="OpenCmsOSWorkflow">
+        <xsd:sequence>
+            <xsd:element name="workflowName" type="OpenCmsString"/>
+            <xsd:element name="initialState" type="OpenCmsString"/>
+            <xsd:element name="actionId" type="OpenCmsActionId"/>
+        </xsd:sequence>
+        <xsd:attribute name="language" type="OpenCmsLocale" use="optional"/>
+    </xsd:complexType>
+    <xsd:annotation>
+        <xsd:appinfo>
+        <resourcebundle name="com.mashfrog.backoffice.v2x.workplace"/>
+        <validationrules>
+            <rule element="initialState" regex="\d+" type="error" message="${key.errormessage.obbligatorio.integer}"/>
+        </validationrules>    
+        <defaults>
+                <default  element="workflowName"    value="simple_wf" />
+                <default  element="initialState"    value="100" />
+            </defaults>
+          </xsd:appinfo>
+    </xsd:annotation>
 </xsd:schema>

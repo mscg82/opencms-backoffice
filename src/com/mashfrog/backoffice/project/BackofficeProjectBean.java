@@ -96,10 +96,10 @@ public class BackofficeProjectBean {
     	if(LOG.isDebugEnabled())
     		LOG.debug("Project description: " + description);
 
-    	List<CmsJspContentAccessValueWrapper> nodesList = (List<CmsJspContentAccessValueWrapper>) contentAccess.getValueList().get("languages");
     	this.languages = new LinkedHashSet<BackOfficeLanguageBean>();
-    	if(nodesList != null){
-    		if(LOG.isDebugEnabled())
+    	if((Boolean)contentAccess.getHasValue().get("languages")){
+    		List<CmsJspContentAccessValueWrapper> nodesList = (List<CmsJspContentAccessValueWrapper>) contentAccess.getValueList().get("languages");
+        	if(LOG.isDebugEnabled())
         		LOG.debug("Configuring " + nodesList.size() + " languages...");
 			for(CmsJspContentAccessValueWrapper language : nodesList){
 				String languageId = ((CmsJspContentAccessValueWrapper) language.getValue().get("languageId")).getStringValue();
@@ -115,21 +115,22 @@ public class BackofficeProjectBean {
     	if(LOG.isDebugEnabled())
     		LOG.debug("Associated module: " + module);
 
-    	CmsJspContentAccessValueWrapper node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("rendering");
     	rendering = new RenderingBean();
-		if(node != null){
-    		CmsJspContentAccessValueWrapper logoNode = (CmsJspContentAccessValueWrapper)node.getValue().get("logo");
-    		if(logoNode != null)
-    			rendering.setLogo(logoNode.getStringValue());
-    		List<CmsJspContentAccessValueWrapper> cssList = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("css");
-    		if(cssList != null){
-    			for(CmsJspContentAccessValueWrapper css : cssList){
+		if((Boolean)contentAccess.getHasValue().get("rendering")){
+			CmsJspContentAccessValueWrapper node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("rendering");
+	    	if((Boolean)node.getHasValue().get("logo")){
+	    		CmsJspContentAccessValueWrapper logoNode = (CmsJspContentAccessValueWrapper)node.getValue().get("logo");
+	    		rendering.setLogo(logoNode.getStringValue());
+    		}
+    		if((Boolean)node.getHasValue().get("css")){
+    			List<CmsJspContentAccessValueWrapper> cssList = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("css");
+        		for(CmsJspContentAccessValueWrapper css : cssList){
     				rendering.addCss(css.getStringValue());
     			}
     		}
-    		List<CmsJspContentAccessValueWrapper> jsList = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("javascript");
-    		if(jsList != null){
-    			for(CmsJspContentAccessValueWrapper js : jsList){
+    		if((Boolean)node.getHasValue().get("javascript")){
+    			List<CmsJspContentAccessValueWrapper> jsList = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("javascript");
+        		for(CmsJspContentAccessValueWrapper js : jsList){
     				rendering.addJavascript(js.getStringValue());
     			}
     		}
@@ -139,9 +140,9 @@ public class BackofficeProjectBean {
 		if(LOG.isDebugEnabled())
     		LOG.debug("Base path: " + basePath);
 
-		node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("orgUnit");
-		if(node != null){
-	    	orgUnit = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("orgUnit")).getStringValue();
+		if((Boolean)contentAccess.getHasValue().get("orgUnit")){
+			CmsJspContentAccessValueWrapper node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("orgUnit");
+			orgUnit = node.getStringValue();
 	    	if(LOG.isDebugEnabled())
 	    		LOG.debug("Organizational unit: " + orgUnit);
 		}
@@ -157,25 +158,25 @@ public class BackofficeProjectBean {
 
     	actions = new LinkedHashMap<String, ActionBean>();
     	loadDefaultActions(backofficeActionElement);
-    	nodesList = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("action");
-		if(nodesList != null){
-			for(CmsJspContentAccessValueWrapper action : nodesList){
+    	if((Boolean)contentAccess.getHasValue().get("action")){
+    		List<CmsJspContentAccessValueWrapper> nodesList = (List<CmsJspContentAccessValueWrapper>) contentAccess.getValueList().get("action");
+    		for(CmsJspContentAccessValueWrapper action : nodesList){
 				String name = ((CmsJspContentAccessValueWrapper) action.getValue().get("name")).getStringValue();
 				String className = ((CmsJspContentAccessValueWrapper) action.getValue().get("className")).getStringValue();
 				String jspPath = ((CmsJspContentAccessValueWrapper) action.getValue().get("jspPath")).getStringValue();
-				String addConf = action.getValue().get("additionalConfigurationFile") != null ?
+				String addConf = ((Boolean)action.getHasValue().get("additionalConfigurationFile")) ?
 						((CmsJspContentAccessValueWrapper) action.getValue().get("additionalConfigurationFile")).getStringValue() : null;
 				ActionBean actionBean = new ActionBean(className, jspPath, addConf);
 
-				List<CmsJspContentAccessValueWrapper> groups = (List<CmsJspContentAccessValueWrapper>) action.getValueList().get("group");
-				if(groups != null){
+				if((Boolean)action.getHasValue().get("group")){
+					List<CmsJspContentAccessValueWrapper> groups = (List<CmsJspContentAccessValueWrapper>) action.getValueList().get("group");
 					for(CmsJspContentAccessValueWrapper group : groups){
 						actionBean.addGroup(group.getStringValue());
 					}
 				}
 
-				List<CmsJspContentAccessValueWrapper> orgUnits = (List<CmsJspContentAccessValueWrapper>) action.getValueList().get("orgUnit");
-				if(orgUnits != null){
+				if((Boolean)action.getHasValue().get("orgUnit")){
+					List<CmsJspContentAccessValueWrapper> orgUnits = (List<CmsJspContentAccessValueWrapper>) action.getValueList().get("orgUnit");
 					for(CmsJspContentAccessValueWrapper orgUnit : orgUnits){
 						actionBean.addOrgUnit(orgUnit.getStringValue());
 					}
@@ -188,30 +189,30 @@ public class BackofficeProjectBean {
     		LOG.debug("Configured actions: " + actions);
 
     	commandMenu = new CommandMenuBean();
-    	node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("commandMenu");
-		if(node != null){
-			List<CmsJspContentAccessValueWrapper> sections = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("section");
-			if(sections != null){
-				for(CmsJspContentAccessValueWrapper section : sections){
+    	if((Boolean)contentAccess.getHasValue().get("commandMenu")){
+    		CmsJspContentAccessValueWrapper node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("commandMenu");
+    		if((Boolean)node.getHasValue().get("section")){
+    			List<CmsJspContentAccessValueWrapper> sections = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("section");
+    			for(CmsJspContentAccessValueWrapper section : sections){
 					String name = ((CmsJspContentAccessValueWrapper) section.getValue().get("name")).getStringValue();
 					CommandMenuSectionBean sectionBean = new CommandMenuSectionBean(name);
 
-					List<CmsJspContentAccessValueWrapper> groups = (List<CmsJspContentAccessValueWrapper>) section.getValueList().get("group");
-					if(groups != null){
+					if((Boolean)section.getHasValue().get("group")){
+						List<CmsJspContentAccessValueWrapper> groups = (List<CmsJspContentAccessValueWrapper>) section.getValueList().get("group");
 						for(CmsJspContentAccessValueWrapper group : groups){
 							sectionBean.addGroup(group.getStringValue());
 						}
 					}
 
-					List<CmsJspContentAccessValueWrapper> orgUnits = (List<CmsJspContentAccessValueWrapper>) section.getValueList().get("orgUnit");
-					if(orgUnits != null){
+					if((Boolean)section.getHasValue().get("orgUnit")){
+						List<CmsJspContentAccessValueWrapper> orgUnits = (List<CmsJspContentAccessValueWrapper>) section.getValueList().get("orgUnit");
 						for(CmsJspContentAccessValueWrapper orgUnit : orgUnits){
 							sectionBean.addOrgUnit(orgUnit.getStringValue());
 						}
 					}
 
-					List<CmsJspContentAccessValueWrapper> items = (List<CmsJspContentAccessValueWrapper>) section.getValueList().get("item");
-					if(items != null){
+					if((Boolean)section.getHasValue().get("item")){
+						List<CmsJspContentAccessValueWrapper> items = (List<CmsJspContentAccessValueWrapper>) section.getValueList().get("item");
 						for(CmsJspContentAccessValueWrapper item : items){
 							String function = ((CmsJspContentAccessValueWrapper) item.getValue().get("url-function")).getStringValue();
 							String description = ((CmsJspContentAccessValueWrapper) item.getValue().get("description")).getStringValue();
@@ -219,15 +220,15 @@ public class BackofficeProjectBean {
 
 							CommandMenuItemBean itemBean = new CommandMenuItemBean(description, function, icon);
 
-							groups = (List<CmsJspContentAccessValueWrapper>) section.getValueList().get("group");
-							if(groups != null){
+							if((Boolean)item.getHasValue().get("group")){
+								List<CmsJspContentAccessValueWrapper> groups = (List<CmsJspContentAccessValueWrapper>) item.getValueList().get("group");
 								for(CmsJspContentAccessValueWrapper group : groups){
 									itemBean.addGroup(group.getStringValue());
 								}
 							}
 
-							orgUnits = (List<CmsJspContentAccessValueWrapper>) section.getValueList().get("orgUnit");
-							if(orgUnits != null){
+							if((Boolean)item.getHasValue().get("orgUnit")){
+								List<CmsJspContentAccessValueWrapper> orgUnits = (List<CmsJspContentAccessValueWrapper>) item.getValueList().get("orgUnit");
 								for(CmsJspContentAccessValueWrapper orgUnit : orgUnits){
 									itemBean.addOrgUnit(orgUnit.getStringValue());
 								}
@@ -238,128 +239,127 @@ public class BackofficeProjectBean {
 					commandMenu.addCommandMenuSection(sectionBean);
 				}
 			}
-			if(LOG.isDebugEnabled())
-	    		LOG.debug("Command menu:\n" + commandMenu.toString());
+    	}
+		if(LOG.isDebugEnabled())
+    		LOG.debug("Command menu:\n" + commandMenu.toString());
 
-			navigationMenu = new NavigationMenuBean();
-	    	node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("navigationMenu");
-			if(node != null){
-				Boolean fixedSize = new Boolean(((CmsJspContentAccessValueWrapper) node.getValue().get("fixedSize")).getStringValue());
-				navigationMenu.setFixedSize(fixedSize);
+		navigationMenu = new NavigationMenuBean();
+		if((Boolean)contentAccess.getHasValue().get("navigationMenu")){
+			CmsJspContentAccessValueWrapper node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("navigationMenu");
+			Boolean fixedSize = new Boolean(((CmsJspContentAccessValueWrapper) node.getValue().get("fixedSize")).getStringValue());
+			navigationMenu.setFixedSize(fixedSize);
 
-				Integer maxLevel = 3;
-				try{
-					maxLevel = Integer.parseInt(((CmsJspContentAccessValueWrapper) node.getValue().get("maxLevel")).getStringValue());
-				} catch(NumberFormatException e){}
-				navigationMenu.setMaxLevel(maxLevel);
+			Integer maxLevel = 3;
+			try{
+				maxLevel = Integer.parseInt(((CmsJspContentAccessValueWrapper) node.getValue().get("maxLevel")).getStringValue());
+			} catch(NumberFormatException e){}
+			navigationMenu.setMaxLevel(maxLevel);
 
+			if((Boolean)node.getHasValue().get("navCombos")){
 				List<CmsJspContentAccessValueWrapper> combos = (List<CmsJspContentAccessValueWrapper>) node.getValueList().get("navCombos");
-				if(combos != null){
-					for(CmsJspContentAccessValueWrapper combo : combos){
-						String label = ((CmsJspContentAccessValueWrapper) combo.getValue().get("label")).getStringValue();
-						String newLabel = ((CmsJspContentAccessValueWrapper) combo.getValue().get("newComboLabel")).getStringValue();
-						String listHeader = ((CmsJspContentAccessValueWrapper) combo.getValue().get("listHeader")).getStringValue();
-						NavigationItemBean navItem = new NavigationItemBean();
-						navItem.setLabel(label);
-						navItem.setNewElementLabel(newLabel);
-						navItem.setListHeader(listHeader);
-						navigationMenu.addItem(navItem);
-					}
+				for(CmsJspContentAccessValueWrapper combo : combos){
+					String label = ((CmsJspContentAccessValueWrapper) combo.getValue().get("label")).getStringValue();
+					String newLabel = ((CmsJspContentAccessValueWrapper) combo.getValue().get("newComboLabel")).getStringValue();
+					String listHeader = ((CmsJspContentAccessValueWrapper) combo.getValue().get("listHeader")).getStringValue();
+					NavigationItemBean navItem = new NavigationItemBean();
+					navItem.setLabel(label);
+					navItem.setNewElementLabel(newLabel);
+					navItem.setListHeader(listHeader);
+					navigationMenu.addItem(navItem);
 				}
 			}
-			if(LOG.isDebugEnabled())
-	    		LOG.debug("Navigation menu:\n" + navigationMenu);
-
-			exportDestinationFolders = new LinkedList<ExportDestinationFolderBean>();
-			nodesList = (List<CmsJspContentAccessValueWrapper>) contentAccess.getValueList().get("exportSettings");
-			if(nodesList != null){
-				for(CmsJspContentAccessValueWrapper expFolder : nodesList){
-					String description = ((CmsJspContentAccessValueWrapper) expFolder.getValue().get("exportDescription")).getStringValue();
-					List<CmsJspContentAccessValueWrapper> destinations = (List<CmsJspContentAccessValueWrapper>) expFolder.getValueList().get("exportDestFolder");
-					ExportDestinationFolderBean expFolderBean  = new  ExportDestinationFolderBean(description);
-					for(CmsJspContentAccessValueWrapper destination : destinations){
-						expFolderBean.addFolder(destination.getStringValue());
-					}
-					exportDestinationFolders.add(expFolderBean);
-				}
-			}
-			if(LOG.isDebugEnabled())
-	    		LOG.debug("Export destionations: " + exportDestinationFolders);
-
-			osWorkflow = new OSWorkflowBean();
-			node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("OSWorkflow");
-			if(node != null){
-				String workflowName = ((CmsJspContentAccessValueWrapper) node.getValue().get("workflowName")).getStringValue();
-				osWorkflow.setWorkflowName(workflowName);
-
-				Integer initialState = 100;
-				try{
-					initialState = Integer.parseInt(((CmsJspContentAccessValueWrapper) node.getValue().get("initialState")).getStringValue());
-				} catch(NumberFormatException e){}
-				osWorkflow.setInitialState(initialState);
-
-				CmsJspContentAccessValueWrapper actionIdNode = (CmsJspContentAccessValueWrapper) node.getValue().get("actionId");
-				if(actionIdNode != null){
-					List<CmsJspContentAccessValueWrapper> ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("publishId");
-					for(CmsJspContentAccessValueWrapper id : ids){
-						try{
-							Integer intId = Integer.parseInt(id.getStringValue());
-							osWorkflow.addPublishId(intId);
-						} catch(NumberFormatException e){
-							if(LOG.isInfoEnabled())
-					    		LOG.info("Cannot parse integer value for action id.", e);
-						}
-					}
-
-					ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("unpublishId");
-					for(CmsJspContentAccessValueWrapper id : ids){
-						try{
-							Integer intId = Integer.parseInt(id.getStringValue());
-							osWorkflow.addUnpublishId(intId);
-						} catch(NumberFormatException e){
-							if(LOG.isInfoEnabled())
-					    		LOG.info("Cannot parse integer value for action id.", e);
-						}
-					}
-
-					ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("editId");
-					for(CmsJspContentAccessValueWrapper id : ids){
-						try{
-							Integer intId = Integer.parseInt(id.getStringValue());
-							osWorkflow.addEditId(intId);
-						} catch(NumberFormatException e){
-							if(LOG.isInfoEnabled())
-					    		LOG.info("Cannot parse integer value for action id.", e);
-						}
-					}
-
-					ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("deleteId");
-					for(CmsJspContentAccessValueWrapper id : ids){
-						try{
-							Integer intId = Integer.parseInt(id.getStringValue());
-							osWorkflow.addDeleteId(intId);
-						} catch(NumberFormatException e){
-							if(LOG.isInfoEnabled())
-					    		LOG.info("Cannot parse integer value for action id.", e);
-						}
-					}
-
-					ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("exportId");
-					for(CmsJspContentAccessValueWrapper id : ids){
-						try{
-							Integer intId = Integer.parseInt(id.getStringValue());
-							osWorkflow.addExportId(intId);
-						} catch(NumberFormatException e){
-							if(LOG.isInfoEnabled())
-					    		LOG.info("Cannot parse integer value for action id.", e);
-						}
-					}
-				}
-			}
-			if(LOG.isDebugEnabled())
-	    		LOG.debug("OSWorkflow bean:\n" + osWorkflow);
-
 		}
+		if(LOG.isDebugEnabled())
+    		LOG.debug("Navigation menu:\n" + navigationMenu);
+
+		exportDestinationFolders = new LinkedList<ExportDestinationFolderBean>();
+		if((Boolean)contentAccess.getHasValue().get("exportSettings")){
+			List<CmsJspContentAccessValueWrapper> nodesList = (List<CmsJspContentAccessValueWrapper>) contentAccess.getValueList().get("exportSettings");
+			for(CmsJspContentAccessValueWrapper expFolder : nodesList){
+				String description = ((CmsJspContentAccessValueWrapper) expFolder.getValue().get("exportDescription")).getStringValue();
+				List<CmsJspContentAccessValueWrapper> destinations = (List<CmsJspContentAccessValueWrapper>) expFolder.getValueList().get("exportDestFolder");
+				ExportDestinationFolderBean expFolderBean  = new  ExportDestinationFolderBean(description);
+				for(CmsJspContentAccessValueWrapper destination : destinations){
+					expFolderBean.addFolder(destination.getStringValue());
+				}
+				exportDestinationFolders.add(expFolderBean);
+			}
+		}
+		if(LOG.isDebugEnabled())
+    		LOG.debug("Export destionations: " + exportDestinationFolders);
+
+		osWorkflow = new OSWorkflowBean();
+		if((Boolean)contentAccess.getHasValue().get("OSWorkflow")){
+			CmsJspContentAccessValueWrapper node = (CmsJspContentAccessValueWrapper) contentAccess.getValue().get("OSWorkflow");
+			String workflowName = ((CmsJspContentAccessValueWrapper) node.getValue().get("workflowName")).getStringValue();
+			osWorkflow.setWorkflowName(workflowName);
+
+			Integer initialState = 100;
+			try{
+				initialState = Integer.parseInt(((CmsJspContentAccessValueWrapper) node.getValue().get("initialState")).getStringValue());
+			} catch(NumberFormatException e){}
+			osWorkflow.setInitialState(initialState);
+
+			if((Boolean)node.getHasValue().get("actionId")){
+				CmsJspContentAccessValueWrapper actionIdNode = (CmsJspContentAccessValueWrapper) node.getValue().get("actionId");
+				List<CmsJspContentAccessValueWrapper> ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("publishId");
+				for(CmsJspContentAccessValueWrapper id : ids){
+					try{
+						Integer intId = Integer.parseInt(id.getStringValue());
+						osWorkflow.addPublishId(intId);
+					} catch(NumberFormatException e){
+						if(LOG.isInfoEnabled())
+				    		LOG.info("Cannot parse integer value for action id.", e);
+					}
+				}
+
+				ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("unpublishId");
+				for(CmsJspContentAccessValueWrapper id : ids){
+					try{
+						Integer intId = Integer.parseInt(id.getStringValue());
+						osWorkflow.addUnpublishId(intId);
+					} catch(NumberFormatException e){
+						if(LOG.isInfoEnabled())
+				    		LOG.info("Cannot parse integer value for action id.", e);
+					}
+				}
+
+				ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("editId");
+				for(CmsJspContentAccessValueWrapper id : ids){
+					try{
+						Integer intId = Integer.parseInt(id.getStringValue());
+						osWorkflow.addEditId(intId);
+					} catch(NumberFormatException e){
+						if(LOG.isInfoEnabled())
+				    		LOG.info("Cannot parse integer value for action id.", e);
+					}
+				}
+
+				ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("deleteId");
+				for(CmsJspContentAccessValueWrapper id : ids){
+					try{
+						Integer intId = Integer.parseInt(id.getStringValue());
+						osWorkflow.addDeleteId(intId);
+					} catch(NumberFormatException e){
+						if(LOG.isInfoEnabled())
+				    		LOG.info("Cannot parse integer value for action id.", e);
+					}
+				}
+
+				ids = (List<CmsJspContentAccessValueWrapper>) actionIdNode.getValueList().get("exportId");
+				for(CmsJspContentAccessValueWrapper id : ids){
+					try{
+						Integer intId = Integer.parseInt(id.getStringValue());
+						osWorkflow.addExportId(intId);
+					} catch(NumberFormatException e){
+						if(LOG.isInfoEnabled())
+				    		LOG.info("Cannot parse integer value for action id.", e);
+					}
+				}
+			}
+		}
+		if(LOG.isDebugEnabled())
+    		LOG.debug("OSWorkflow bean:\n" + osWorkflow);
 
 		dateRead = System.currentTimeMillis();
 
