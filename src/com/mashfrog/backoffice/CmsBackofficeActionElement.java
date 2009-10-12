@@ -26,10 +26,7 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
 	// Logger
 	private static Log LOG = CmsLog.getLog(CmsBackofficeActionElement.class);
 
-	private PageContext pageContext;
-    private HttpServletRequest request;
-    private HttpServletResponse response;
-    private BackofficeProjectBean backofficeProject;
+	private BackofficeProjectBean backofficeProject;
     private RequestBean actualRequest;
     private RequestBean previousRequest;
     private I_BackofficeAction currentAction;
@@ -67,7 +64,7 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
     	int ret = 0;
 
     	try{
-    		ret = Integer.parseInt(request.getParameter(Constants.PAGE_PARAM));
+    		ret = Integer.parseInt(getRequest().getParameter(Constants.PAGE_PARAM));
     	} catch (NumberFormatException e) {}
 
     	return ret;
@@ -77,20 +74,8 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
     	return Util.getModuleForRequest(this);
     }
 
-    public PageContext getPageContext(){
-        return pageContext;
-    }
-
     public RequestBean getPreviousRequest(){
         return previousRequest;
-    }
-
-    public HttpServletRequest getRequest(){
-        return request;
-    }
-
-    public HttpServletResponse getResponse(){
-        return response;
     }
 
     public String getResultJsp() {
@@ -100,10 +85,6 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
     public void init(PageContext context, HttpServletRequest req, HttpServletResponse res){
     	super.init(context, req, res);
 
-    	pageContext = context;
-    	request = req;
-    	response = res;
-
     	backofficeProject = null;
     	try {
 			backofficeProject = BackofficeProjectBean.getInstace(this);
@@ -111,15 +92,15 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
 			if(backofficeProject == null)
 	    		currentAction = null;
 	    	else{
-	    		String actionName = request.getParameter(Constants.ACTION_PARAM);
+	    		String actionName = getRequest().getParameter(Constants.ACTION_PARAM);
 
 	    		// The old actual request is now the previous request
-	    		previousRequest = (RequestBean)request.getSession().getAttribute(Constants.ACTUAL_ACTION_SESSION_PARAM);
-	    		request.getSession().setAttribute(Constants.PREVIOUS_ACTION_SESSION_PARAM, previousRequest);
+	    		previousRequest = (RequestBean)getRequest().getSession().getAttribute(Constants.ACTUAL_ACTION_SESSION_PARAM);
+	    		getRequest().getSession().setAttribute(Constants.PREVIOUS_ACTION_SESSION_PARAM, previousRequest);
 
 	    		// Build the new request bean
 	    		actualRequest = new RequestBean(req);
-	    		request.getSession().setAttribute(Constants.ACTUAL_ACTION_SESSION_PARAM, actualRequest);
+	    		getRequest().getSession().setAttribute(Constants.ACTUAL_ACTION_SESSION_PARAM, actualRequest);
 
 	    		ActionBean actionBean = null;
 	    		if(getRequestContext().currentUser().isGuestUser()){
@@ -127,18 +108,19 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
 	    			actionBean = backofficeProject.getAction(Constants.LOGIN_DEFAULT_NAME);
 	    			LOG.warn("User is not logged in. Redirecting to login action.");
 	    		}
-	    		else if(actionBean == null){
-	    			// redirect to default action
-	    			actionBean = backofficeProject.getAction(Constants.NOACTION_DEFAULT_NAME);
-	    			LOG.info("Choosen action not mapped. Redirecting to default action.");
-	    		}
-	    		else{
+	    		else {
 	    			actionBean = backofficeProject.getAction(actionName);
 	    			if(LOG.isDebugEnabled())
 	    				LOG.debug("User " + getRequestContext().currentUser().getFullName() + " requested action \"" + actionName + "\"");
+	    			if(actionBean == null){
+		    			// redirect to default action
+		    			actionBean = backofficeProject.getAction(Constants.NOACTION_DEFAULT_NAME);
+		    			LOG.info("Choosen action not mapped. Redirecting to default action.");
+		    		}
 	    		}
+
 	    		currentAction = I_BackofficeAction.Factory.newInstance(this, actionBean);
-	    		String resultJsp = currentAction.execute();
+	    		resultJsp = currentAction.execute();
 	    		if(resultJsp == null){
 	    			resultJsp = currentAction.getJspPath();
 	    		}

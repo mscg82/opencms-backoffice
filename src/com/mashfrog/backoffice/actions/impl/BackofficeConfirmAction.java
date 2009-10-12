@@ -22,4 +22,8 @@ public class BackofficeConfirmAction extends A_BackofficeAction implements Redir
 
 	}
 
+	public boolean sendRedirect() {
+		return false;
+	}
+
 }

@@ -33,22 +33,26 @@ public interface I_BackofficeAction {
 				LOG.debug("Factory class ClassLoader can't load action class.", e);
 			}
 
-			// second try: use the ClassLoader that loaded the servlet context
-			try {
-				LOG.debug("Loading " + actionBean.getClassName() + " with servlet context ClassLoader...");
-				clazz = backofficeActionElement.getPageContext().getServletContext().getClass().getClassLoader().loadClass(actionBean.getClassName());
-				LOG.debug("Action class loaded.");
-			} catch (ClassNotFoundException e) {
-				LOG.debug("Servlet context ClassLoader can't load action class.", e);
+			if(clazz == null) {
+				// second try: use the ClassLoader that loaded the servlet context
+				try {
+					LOG.debug("Loading " + actionBean.getClassName() + " with servlet context ClassLoader...");
+					clazz = backofficeActionElement.getJspContext().getServletContext().getClass().getClassLoader().loadClass(actionBean.getClassName());
+					LOG.debug("Action class loaded.");
+				} catch (ClassNotFoundException e) {
+					LOG.debug("Servlet context ClassLoader can't load action class.", e);
+				}
 			}
 
-			// third try: use the system ClassLoader
-			try {
-				LOG.debug("Loading " + actionBean.getClassName() + " with system ClassLoader...");
-				clazz = ClassLoader.getSystemClassLoader().loadClass(actionBean.getClassName());
-				LOG.debug("Action class loaded.");
-			} catch (ClassNotFoundException e) {
-				LOG.debug("System ClassLoader can't load action class.", e);
+			if(clazz  == null) {
+				// third try: use the system ClassLoader
+				try {
+					LOG.debug("Loading " + actionBean.getClassName() + " with system ClassLoader...");
+					clazz = ClassLoader.getSystemClassLoader().loadClass(actionBean.getClassName());
+					LOG.debug("Action class loaded.");
+				} catch (ClassNotFoundException e) {
+					LOG.debug("System ClassLoader can't load action class.", e);
+				}
 			}
 
 			if(clazz == null){
@@ -79,6 +83,8 @@ public interface I_BackofficeAction {
     public String getFatalErrorMessage();
 
     public String getJspPath();
+
+    public boolean hasBody();
 
     public void init(CmsBackofficeActionElement backofficeActionElement, ActionBean actionBean);
 

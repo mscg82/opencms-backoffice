@@ -2,6 +2,8 @@ package com.mashfrog.backoffice.actions.impl;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.logging.Log;
 import org.opencms.main.CmsLog;
 
@@ -14,16 +16,38 @@ public class BackofficeLogoutAction extends A_BackofficeAction implements Redire
 	private static Log LOG = CmsLog.getLog(BackofficeLogoutAction.class);
 
 	public String execute() {
-		backofficeActionElement.getRequest().getSession().invalidate();
+		HttpSession session = backofficeActionElement.getRequest().getSession(false);
+		if(session != null)
+			session.invalidate();
 		return null;
 	}
 
+	@Override
+	public boolean hasBody() {
+		return true;
+	}
+
 	public void redirect() {
+		/*
+		CmsLogin login = new CmsLogin(backofficeActionElement.getPageContext(), backofficeActionElement.getRequest(), backofficeActionElement.getResponse());
 		try {
+			login.logout();
+		} catch (IOException e) {
+			LOG.error("Cannot logout user.", e);
+		}
+		*/
+
+		try {
+
 			backofficeActionElement.getResponse().sendRedirect("?" + Constants.ACTION_PARAM + "=" + Constants.LOGIN_DEFAULT_NAME);
 		} catch (IOException e) {
 			LOG.error("Cannot redirect to login action.", e);
 		}
+
+	}
+
+	public boolean sendRedirect() {
+		return true;
 	}
 
 }

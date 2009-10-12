@@ -25,4 +25,8 @@ public class BackofficeLoginAction extends A_BackofficeAction implements Redirec
 		}
 	}
 
+	public boolean sendRedirect() {
+		return false;
+	}
+
 }

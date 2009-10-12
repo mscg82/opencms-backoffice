@@ -23,7 +23,7 @@
 <fmt:setLocale value="${cms.requestContext.locale}"/>
 <fmt:bundle basename="com.mashfrog.backoffice.v2x.workplace">      
        <div id="header">
-           <a id="logo" href="<%=cms.getActionLink("default")%>"><img src="<cms:link>${rendering.logo}</cms:link>" alt="<fmt:message key="header.logo.gohome" />" /></a>
+           <a id="logo" href="<%=cms.getActionLink("default")%>"><img src="<cms:link>${cms.backofficeProject.rendering.logo}</cms:link>" alt="<fmt:message key="header.logo.gohome" />" title="<fmt:message key="header.logo.gohome" />" /></a>
            <c:if test="${not user.guestUser}">
                <ul class="menuTop">
                    <li class="edit"><a href="<%=cms.getActionLink("changeInfo")%>" title="<fmt:message key="header.menu.changedata" />"><fmt:message key="header.menu.changedata" /></a></li>

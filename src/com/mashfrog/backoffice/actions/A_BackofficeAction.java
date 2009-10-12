@@ -11,7 +11,8 @@ import com.mashfrog.backoffice.project.beans.ActionBean;
 public abstract class A_BackofficeAction implements I_BackofficeAction {
 
 	protected List<String> allowedGroups;
-    protected String errorMessage;
+
+	protected String errorMessage;
     protected String fatalErrorMessage;
     protected String jspPath;
     protected CmsBackofficeActionElement backofficeActionElement;
@@ -40,6 +41,10 @@ public abstract class A_BackofficeAction implements I_BackofficeAction {
 
     public String getJspPath(){
         return jspPath;
+    }
+
+    public boolean hasBody() {
+    	return true;
     }
 
     public void init(CmsBackofficeActionElement backofficeActionElement, ActionBean actionBean){

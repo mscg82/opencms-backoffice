@@ -18,15 +18,15 @@ public class Constants {
 
     public static final String LOGIN_DEFAULT_NAME = "login";
     public static final String LOGIN_DEFAULT_ACTION_CLASS = BackofficeLoginAction.class.getName();
-    public static final String LOGIN_DEFAULT_JSP_PATTERN = "/system/modules/${module.name}/template/actions/login.jsp";
+    public static final String LOGIN_DEFAULT_JSP_PATTERN = "/system/modules/${module.name}/templates/functions/login.jsp";
 
     public static final String LOGOUT_DEFAULT_NAME = "logout";
     public static final String LOGOUT_DEFAULT_ACTION_CLASS = BackofficeLogoutAction.class.getName();
-    public static final String LOGOUT_DEFAULT_JSP_PATTERN = "/system/modules/${module.name}/template/actions/logout.jsp";
+    public static final String LOGOUT_DEFAULT_JSP_PATTERN = "/system/modules/${module.name}/templates/functions/logout.jsp";
 
     public static final String NOACTION_DEFAULT_NAME = "default";
     public static final String NOACTION_DEFAULT_ACTION_CLASS = BackofficeDefaultAction.class.getName();
-    public static final String NOACTION_DEFAULT_JSP_PATTERN = "/system/modules/${module.name}/template/actions/default.jsp";
+    public static final String NOACTION_DEFAULT_JSP_PATTERN = "/system/modules/${module.name}/templates/functions/default.jsp";
 
     public static final String USER_ADDITIONAL_INFO_PARAM = "BACKOFFICE_ADDITIONAL_INFO";
 
