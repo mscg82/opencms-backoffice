@@ -1,7 +1,10 @@
 package com.mashfrog.backoffice.project.beans.rowvalue;
 
 public class CheckboxRowValueBean extends TitledRowValueBean {
-    protected boolean checked;
+
+	private static final long serialVersionUID = 5631967478434279954L;
+
+	protected boolean checked;
     protected String value;
 
     public CheckboxRowValueBean(){

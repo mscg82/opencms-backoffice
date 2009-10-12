@@ -3,6 +3,8 @@
  */
 package com.mashfrog.backoffice.project.beans.user;
 
+import java.io.Serializable;
+
 /**
  * A bean with additional informations on
  * the user that logs to the backoffice.
@@ -10,7 +12,9 @@ package com.mashfrog.backoffice.project.beans.user;
  * @author Giuseppe Miscione
  *
  */
-public class UserAdditionalInfo {
+public class UserAdditionalInfo implements Serializable{
+
+	private static final long serialVersionUID = -5298550319662809553L;
 
 	private String sex;
 

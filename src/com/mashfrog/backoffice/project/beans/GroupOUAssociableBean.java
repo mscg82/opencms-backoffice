@@ -1,9 +1,12 @@
 package com.mashfrog.backoffice.project.beans;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class GroupOUAssociableBean {
+public class GroupOUAssociableBean implements Serializable{
+
+	private static final long serialVersionUID = 8766881550611934390L;
 
 	protected Set<String> groups;
     protected Set<String> orgUnits;

@@ -1,7 +1,12 @@
 package com.mashfrog.backoffice.project.beans;
 
-public class NavigableValueBean {
-    private String label;
+import java.io.Serializable;
+
+public class NavigableValueBean implements Serializable{
+
+	private static final long serialVersionUID = -6496528479189238222L;
+
+	private String label;
     private String value;
 
     public NavigableValueBean(){

@@ -1,7 +1,10 @@
 package com.mashfrog.backoffice.project.beans.rowvalue;
 
 public class LinkedIconRowValueBean extends IconRowValueBean {
-    protected String action;
+
+	private static final long serialVersionUID = 7206030104878712889L;
+
+	protected String action;
 
     public LinkedIconRowValueBean(){
     	this(null, null, null);

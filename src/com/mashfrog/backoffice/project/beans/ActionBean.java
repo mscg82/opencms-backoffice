@@ -2,6 +2,8 @@ package com.mashfrog.backoffice.project.beans;
 
 public class ActionBean extends GroupOUAssociableBean{
 
+    private static final long serialVersionUID = -1200137306955152290L;
+
     private String className;
     private String jspPath;
     private String additionalConfigurationFilePath;

@@ -1,9 +1,13 @@
 package com.mashfrog.backoffice.project.beans;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class RenderingBean {
+public class RenderingBean implements Serializable{
+
+	private static final long serialVersionUID = 2293104088128143220L;
+
 	private String logo;
     private List<String> cssList;
 	private List<String> javascriptList;

@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CommandMenuSectionBean extends BaseCommandMenuBean {
-    protected List<CommandMenuItemBean> items;
+
+	private static final long serialVersionUID = -5284699571857842696L;
+
+	protected List<CommandMenuItemBean> items;
 
     public CommandMenuSectionBean(){
     	this(null);

@@ -1,5 +1,7 @@
 package com.mashfrog.backoffice;
 
+import java.io.Serializable;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
@@ -17,7 +19,10 @@ import com.mashfrog.backoffice.project.BackofficeProjectBean;
 import com.mashfrog.backoffice.project.beans.ActionBean;
 import com.mashfrog.backoffice.util.Util;
 
-public class CmsBackofficeActionElement extends CmsJspActionElement {
+public class CmsBackofficeActionElement extends CmsJspActionElement implements Serializable {
+
+	private static final long serialVersionUID = -6617556987018565221L;
+
 	// Logger
 	private static Log LOG = CmsLog.getLog(CmsBackofficeActionElement.class);
 

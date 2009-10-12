@@ -3,6 +3,8 @@ package com.mashfrog.backoffice.project.beans;
 
 public class BaseCommandMenuBean extends GroupOUAssociableBean{
 
+	private static final long serialVersionUID = -7217144436096131361L;
+
 	protected String label;
 
     public BaseCommandMenuBean(){

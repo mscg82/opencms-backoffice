@@ -1,10 +1,14 @@
 package com.mashfrog.backoffice.project.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NavigationMenuBean {
-    protected List<NavigationItemBean> items;
+public class NavigationMenuBean implements Serializable{
+
+	private static final long serialVersionUID = 6069631112597194068L;
+
+	protected List<NavigationItemBean> items;
     protected Integer maxLevel;
     protected boolean fixedSize;
 

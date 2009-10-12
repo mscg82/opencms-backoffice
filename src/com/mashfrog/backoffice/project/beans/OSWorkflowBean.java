@@ -1,10 +1,14 @@
 package com.mashfrog.backoffice.project.beans;
 
+import java.io.Serializable;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class OSWorkflowBean {
-    private String workflowName;
+public class OSWorkflowBean implements Serializable{
+
+	private static final long serialVersionUID = 2578291777027814022L;
+
+	private String workflowName;
     private int initialState;
     private Set<Integer> publishIds;
     private Set<Integer> unpublishIds;

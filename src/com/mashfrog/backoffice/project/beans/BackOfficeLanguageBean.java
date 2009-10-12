@@ -1,6 +1,11 @@
 package com.mashfrog.backoffice.project.beans;
 
-public class BackOfficeLanguageBean {
+import java.io.Serializable;
+
+public class BackOfficeLanguageBean implements Serializable{
+
+	private static final long serialVersionUID = -5229943070652584468L;
+
     private String languageId;
     private String languageName;
     private boolean defaultLanguage;

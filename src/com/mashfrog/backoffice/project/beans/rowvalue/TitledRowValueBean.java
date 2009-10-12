@@ -1,7 +1,10 @@
 package com.mashfrog.backoffice.project.beans.rowvalue;
 
 public class TitledRowValueBean implements RowValueBean {
-    protected String title;
+
+	private static final long serialVersionUID = -4868820202061262817L;
+
+	protected String title;
     protected String type;
     protected boolean enabled;
 

@@ -1,5 +1,6 @@
 package com.mashfrog.backoffice.project.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -9,8 +10,11 @@ import org.opencms.jsp.CmsJspActionElement;
 
 import com.mashfrog.backoffice.util.Util;
 
-public class CommandMenuBean {
-    private List<CommandMenuSectionBean> sectionList;
+public class CommandMenuBean implements Serializable{
+
+	private static final long serialVersionUID = -2103479202911334584L;
+
+	private List<CommandMenuSectionBean> sectionList;
 
     public CommandMenuBean(){
     	sectionList = new ArrayList<CommandMenuSectionBean>();

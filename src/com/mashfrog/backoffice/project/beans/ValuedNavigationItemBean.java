@@ -5,7 +5,10 @@ import java.util.List;
 
 
 public class ValuedNavigationItemBean extends NavigationItemBean {
-    private List<NavigableValueBean> values;
+
+	private static final long serialVersionUID = -8141546109035409259L;
+
+	private List<NavigableValueBean> values;
 
     public ValuedNavigationItemBean(NavigationItemBean origNavItem){
     	super(origNavItem.getItemLevel());

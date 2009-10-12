@@ -1,10 +1,14 @@
 package com.mashfrog.backoffice.project.beans;
 
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TabbedContentBean {
-    private List<ColumnDescriptorBean> colDescriptor;
+public class TabbedContentBean implements Serializable{
+
+	private static final long serialVersionUID = -7053387219956058234L;
+
+	private List<ColumnDescriptorBean> colDescriptor;
     private List<TabbedContentRowBean> rows;
 
     public TabbedContentBean(){

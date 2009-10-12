@@ -1,6 +1,8 @@
 package com.mashfrog.backoffice.project.beans.rowvalue;
 
-public interface RowValueBean {
+import java.io.Serializable;
+
+public interface RowValueBean extends Serializable{
 
     public String getType();
 

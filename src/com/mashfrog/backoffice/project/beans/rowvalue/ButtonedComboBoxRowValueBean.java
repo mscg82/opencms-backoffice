@@ -1,7 +1,10 @@
 package com.mashfrog.backoffice.project.beans.rowvalue;
 
 public class ButtonedComboBoxRowValueBean extends ComboBoxRowValueBean {
-    protected String buttonText;
+
+	private static final long serialVersionUID = 6871600679401991631L;
+
+	protected String buttonText;
     protected String buttonAction;
 
     public ButtonedComboBoxRowValueBean(){

@@ -1,5 +1,6 @@
 package com.mashfrog.backoffice.project;
 
+import java.io.Serializable;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
@@ -31,7 +32,10 @@ import com.mashfrog.backoffice.project.beans.OSWorkflowBean;
 import com.mashfrog.backoffice.project.beans.RenderingBean;
 import com.mashfrog.backoffice.util.Util;
 
-public class BackofficeProjectBean {
+public class BackofficeProjectBean implements Serializable{
+
+	private static final long serialVersionUID = 1828293587121349278L;
+
 	private static Log LOG = CmsLog.getLog(BackofficeProjectBean.class);
 
     protected static Map<String, BackofficeProjectBean> projects = new LinkedHashMap<String, BackofficeProjectBean>();
@@ -51,7 +55,8 @@ public class BackofficeProjectBean {
         }
         return project;
     }
-    protected CmsJspContentAccessBean contentAccess;
+
+    protected CmsBackofficeActionElement backofficeActionElement;
     protected long dateRead;
     protected String cmsResourcePath;
     protected Map<String, ActionBean> actions;
@@ -71,6 +76,8 @@ public class BackofficeProjectBean {
 
     private BackofficeProjectBean(CmsBackofficeActionElement backofficeActionElement, String projectFolder) throws CmsException{
 
+    	this.backofficeActionElement = backofficeActionElement;
+
     	int backofficeType = Util.getBackofficeType(backofficeActionElement);
     	CmsResourceFilter filter = CmsResourceFilter.ALL.addRequireFile().addRequireType(backofficeType);
     	List<CmsResource> resources = backofficeActionElement.getCmsObject().readResources(projectFolder, filter, false);
@@ -78,15 +85,13 @@ public class BackofficeProjectBean {
     		cmsResourcePath = resources.get(0).getRootPath();
     	}
 
-    	CmsObject obj = backofficeActionElement.getCmsObject();
-
     	if(LOG.isDebugEnabled())
     		LOG.debug("Reading backoffice project from path \"" + cmsResourcePath + "\".");
-    	CmsResource projectRes = obj.readResource(cmsResourcePath);
 
     	if(LOG.isDebugEnabled())
     		LOG.debug("Starting parsing settings...");
-    	contentAccess = new CmsJspContentAccessBean(obj, projectRes);
+
+    	CmsJspContentAccessBean contentAccess = getContentAccess();
 
     	projectId = ((CmsJspContentAccessValueWrapper) contentAccess.getValue().get("id")).getStringValue();
     	if(LOG.isDebugEnabled())
@@ -382,8 +387,18 @@ public class BackofficeProjectBean {
         return basePath;
     }
 
+    public CmsResource getCmsResource() throws CmsException{
+    	return getCmsResource(backofficeActionElement.getCmsObject());
+    }
+
     public CmsResource getCmsResource(CmsObject cmsObject) throws CmsException{
-        return cmsObject.readResource(cmsResourcePath);
+        CmsResource ret = null;
+        try{
+        	ret = cmsObject.readResource(cmsObject.getRequestContext().removeSiteRoot(cmsResourcePath));
+        } catch(CmsException e){
+        	ret = cmsObject.readResource(cmsResourcePath);
+        }
+        return ret;
     }
 
     public CommandMenuBean getCommandMenu(){
@@ -391,7 +406,15 @@ public class BackofficeProjectBean {
     }
 
     public CmsJspContentAccessBean getContentAccess(){
-    	return contentAccess;
+    	CmsJspContentAccessBean ret = null;
+    	CmsObject obj = backofficeActionElement.getCmsObject();
+    	try {
+			CmsResource res = getCmsResource(obj);
+			ret = new CmsJspContentAccessBean(obj, res);
+		} catch (CmsException e) {
+			LOG.warn("Cannot obtain content access bean.", e);
+		}
+    	return ret;
     }
 
     public long getDateRead(){

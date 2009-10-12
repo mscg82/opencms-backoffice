@@ -5,7 +5,9 @@ import java.util.List;
 
 public class ValuedNavigationMenuBean extends NavigationMenuBean {
 
-    public ValuedNavigationMenuBean(NavigationMenuBean origNavMenu){
+    private static final long serialVersionUID = -4875020365315152279L;
+
+	public ValuedNavigationMenuBean(NavigationMenuBean origNavMenu){
     	super();
 
     	for(NavigationItemBean baseItem : origNavMenu.getItems()){

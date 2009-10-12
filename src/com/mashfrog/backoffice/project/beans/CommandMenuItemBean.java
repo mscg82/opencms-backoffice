@@ -1,7 +1,10 @@
 package com.mashfrog.backoffice.project.beans;
 
 public class CommandMenuItemBean extends BaseCommandMenuBean {
-    protected String function;
+
+	private static final long serialVersionUID = 1888615502615538465L;
+
+	protected String function;
     protected String icon;
 
     public CommandMenuItemBean(){

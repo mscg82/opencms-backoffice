@@ -1,7 +1,12 @@
 package com.mashfrog.backoffice.project.beans;
 
-public class NavigationItemBean {
-    protected String label;
+import java.io.Serializable;
+
+public class NavigationItemBean implements Serializable{
+
+	private static final long serialVersionUID = -7263651790184869629L;
+
+	protected String label;
     protected String newElementLabel;
     protected String listHeader;
     protected int itemLevel;

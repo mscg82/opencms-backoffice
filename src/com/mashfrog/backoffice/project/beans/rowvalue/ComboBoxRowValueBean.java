@@ -4,7 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ComboBoxRowValueBean implements RowValueBean {
-    protected String label;
+
+	private static final long serialVersionUID = -572544735581692900L;
+
+	protected String label;
     protected List<ComboBoxValueBean> values;
     protected String type;
     protected boolean enabled;

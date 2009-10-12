@@ -1,7 +1,12 @@
 package com.mashfrog.backoffice.project.beans.rowvalue;
 
-public class ComboBoxValueBean {
-    private String text;
+import java.io.Serializable;
+
+public class ComboBoxValueBean implements Serializable{
+
+	private static final long serialVersionUID = 3364226946041041797L;
+
+	private String text;
     private String value;
 
     public ComboBoxValueBean(){

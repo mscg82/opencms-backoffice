@@ -1,10 +1,14 @@
 package com.mashfrog.backoffice.project.beans;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExportDestinationFolderBean {
-    private String description;
+public class ExportDestinationFolderBean implements Serializable{
+
+	private static final long serialVersionUID = 5669958506160553146L;
+
+	private String description;
     private List<String> folders;
 
     public ExportDestinationFolderBean(String description){

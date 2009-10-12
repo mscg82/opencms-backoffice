@@ -1,7 +1,12 @@
 package com.mashfrog.backoffice.project.beans;
 
-public class ColumnDescriptorBean {
-    private String name;
+import java.io.Serializable;
+
+public class ColumnDescriptorBean implements Serializable{
+
+	private static final long serialVersionUID = 3999267818037969254L;
+
+	private String name;
     private String type;
 
     public ColumnDescriptorBean(){
