@@ -12,6 +12,7 @@ public class IconRowValueBean extends TitledRowValueBean {
 
     public IconRowValueBean(String icon, String title){
     	super(title);
+    	type = "icon";
     	setIcon(icon);
     }
 

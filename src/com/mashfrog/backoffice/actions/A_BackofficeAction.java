@@ -39,6 +39,10 @@ public abstract class A_BackofficeAction implements I_BackofficeAction {
         return fatalErrorMessage;
     }
 
+    public boolean getHasCommandMenu() {
+		return true;
+	}
+
     public String getJspPath(){
         return jspPath;
     }
@@ -66,8 +70,10 @@ public abstract class A_BackofficeAction implements I_BackofficeAction {
     	this.fatalErrorMessage = fatalErrorMessage;
     }
 
-    protected void setJspPath(String jspPath){
+	protected void setJspPath(String jspPath){
     	this.jspPath = jspPath;
     }
+
+
 
 }

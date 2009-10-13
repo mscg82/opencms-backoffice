@@ -1,5 +1,7 @@
 package com.mashfrog.backoffice.actions.constants;
 
+import org.opencms.workplace.CmsLogin;
+
 import com.mashfrog.backoffice.actions.impl.BackofficeDefaultAction;
 import com.mashfrog.backoffice.actions.impl.BackofficeLoginAction;
 import com.mashfrog.backoffice.actions.impl.BackofficeLogoutAction;
@@ -29,5 +31,10 @@ public class Constants {
     public static final String NOACTION_DEFAULT_JSP_PATTERN = "/system/modules/${module.name}/templates/functions/default.jsp";
 
     public static final String USER_ADDITIONAL_INFO_PARAM = "BACKOFFICE_ADDITIONAL_INFO";
+
+    public static final String LOGIN_EXECUTE_PARAM = "login";
+    public static final String LOGIN_USERNAME_PARAM = "username";
+    public static final String LOGIN_PASSWORD_PARAM = "password";
+    public static final String LOGIN_ORGUNIT_PARAM  = CmsLogin.PARAM_OUFQN;
 
 }

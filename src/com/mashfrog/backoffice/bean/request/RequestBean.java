@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class RequestBean implements Serializable{
 
     public RequestBean(HttpServletRequest request){
     	this();
-    	setPage(request.getRequestURL().toString());
+    	page = request.getRequestURL().toString();
     	Enumeration<String> names = request.getParameterNames();
     	while(names.hasMoreElements()){
     		String name = names.nextElement();
@@ -49,7 +50,8 @@ public class RequestBean implements Serializable{
     }
 
     public String getAttribute(String name){
-        return attributes.get(name).get(0);
+        List<String> values = attributes.get(name);
+        return (values == null ? null : values.get(0));
     }
 
     public Map<String,List<String>> getAttributes(){
@@ -64,8 +66,14 @@ public class RequestBean implements Serializable{
 		return page;
 	}
 
-	public void setPage(String page) {
-		this.page = page;
+	public void setAttribute(String name, String value) {
+		List<String> values = new LinkedList<String>();
+		values.add(value);
+		setAttribute(name, values);
+	}
+
+	public void setAttribute(String name, List<String> value) {
+		attributes.put(name, value);
 	}
 
 	public String toString(){

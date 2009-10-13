@@ -13,6 +13,7 @@ public class TitledRowValueBean implements RowValueBean {
     }
 
     public TitledRowValueBean(String title){
+    	type = "titled";
     	setTitle(title);
     }
 

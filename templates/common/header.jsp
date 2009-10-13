@@ -48,4 +48,13 @@
                </ul>
            </div>
        </div>
+       
+       <c:if test="${cms.currentAction.hasCommandMenu}">
+           <div class="clear"></div>
+           <div id="menu">
+               <ul class="wrap">
+                   <%-- IMPLEMENT COMMAN MENU --%>
+               </ul>
+           </div>
+       </c:if>
 </fmt:bundle>

@@ -10,11 +10,16 @@ public class BackofficeConfirmAction extends A_BackofficeAction implements Redir
     	return null;
     }
 
+    @Override
+	public boolean getHasCommandMenu() {
+		return false;
+	}
+
     public RequestBean getNextPageRequest(){
         return null;
     }
 
-    public RequestBean getPreviuosPageRequest(){
+	public RequestBean getPreviuosPageRequest(){
         return null;
     }
 

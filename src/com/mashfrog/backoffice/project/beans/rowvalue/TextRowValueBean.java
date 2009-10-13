@@ -13,6 +13,7 @@ public class TextRowValueBean implements RowValueBean {
     }
 
     public TextRowValueBean(String text){
+    	type = "text";
     	setText(text);
     }
 

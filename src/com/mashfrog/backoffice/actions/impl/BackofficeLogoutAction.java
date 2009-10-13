@@ -23,6 +23,11 @@ public class BackofficeLogoutAction extends A_BackofficeAction implements Redire
 	}
 
 	@Override
+	public boolean getHasCommandMenu() {
+		return false;
+	}
+
+	@Override
 	public boolean hasBody() {
 		return true;
 	}

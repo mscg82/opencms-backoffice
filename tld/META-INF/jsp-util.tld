@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib version="2.0" xmlns="http://java.sun.com/xml/ns/j2ee"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd">
+ <description>The backoffice / JSP additional tag library.
+        Developed by Mashfrog for OpenCms.</description>
+ <display-name>OpenCms Backoffice JSP additional taglib</display-name>
+ <tlib-version>1.0</tlib-version>
+ <short-name>bko</short-name>
+ <uri>http://www.mashfrog.org/taglib/backoffice</uri>
+ <function>
+  <description>Checks if the provided string is empty or white space only</description>
+  <display-name>isEmptyOrWhiteSpaceOnly</display-name>
+  <name>isEmptyOrWhiteSpaceOnly</name>
+  <function-class>com.mashfrog.backoffice.jsp.util.JspUtil</function-class>
+  <function-signature>String</function-signature>
+ </function>
+ <function>
+  <description>Checks if the provided string is not empty or white space only</description>
+  <display-name>isNotEmptyOrWhiteSpaceOnly</display-name>
+  <name>isNotEmptyOrWhiteSpaceOnly</name>
+  <function-class>com.mashfrog.backoffice.jsp.util.JspUtil</function-class>
+  <function-signature>String</function-signature>
+ </function>
+</taglib>

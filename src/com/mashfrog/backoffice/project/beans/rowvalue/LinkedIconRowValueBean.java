@@ -12,6 +12,7 @@ public class LinkedIconRowValueBean extends IconRowValueBean {
 
     public LinkedIconRowValueBean(String icon, String title, String action){
     	super(icon, title);
+    	type = "linked_icon";
     	setAction(action);
     }
 

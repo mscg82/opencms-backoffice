@@ -13,6 +13,7 @@ public class ComboBoxRowValueBean implements RowValueBean {
     protected boolean enabled;
 
     public ComboBoxRowValueBean(){
+    	type = "combobox";
     	values = new LinkedList<ComboBoxValueBean>();
     }
 

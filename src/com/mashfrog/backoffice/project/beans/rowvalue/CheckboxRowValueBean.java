@@ -13,6 +13,7 @@ public class CheckboxRowValueBean extends TitledRowValueBean {
 
     public CheckboxRowValueBean(boolean checked, String value){
     	super();
+    	type = "checkbox";
     	setChecked(checked);
     	setValue(value);
     }

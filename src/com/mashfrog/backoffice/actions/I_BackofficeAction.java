@@ -82,6 +82,8 @@ public interface I_BackofficeAction {
 
     public String getFatalErrorMessage();
 
+    public boolean getHasCommandMenu();
+
     public String getJspPath();
 
     public boolean hasBody();
