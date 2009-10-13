@@ -3,18 +3,18 @@ package com.mashfrog.backoffice.actions.impl;
 import java.io.IOException;
 
 import org.apache.commons.logging.Log;
+import org.opencms.db.CmsUserSettings;
+import org.opencms.file.CmsObject;
+import org.opencms.file.CmsProject;
 import org.opencms.i18n.CmsMessageException;
-import org.opencms.i18n.CmsMessages;
+import org.opencms.main.CmsException;
 import org.opencms.main.CmsLog;
 import org.opencms.security.CmsOrganizationalUnit;
 import org.opencms.workplace.CmsLogin;
 
-import com.mashfrog.backoffice.CmsBackofficeActionElement;
 import com.mashfrog.backoffice.actions.A_BackofficeAction;
 import com.mashfrog.backoffice.actions.RedirectingAction;
 import com.mashfrog.backoffice.actions.constants.Constants;
-import com.mashfrog.backoffice.project.beans.ActionBean;
-import com.mashfrog.backoffice.util.Util;
 
 public class BackofficeLoginAction extends A_BackofficeAction implements RedirectingAction{
 
@@ -23,19 +23,10 @@ public class BackofficeLoginAction extends A_BackofficeAction implements Redirec
 	private boolean sendRedirect;
 	private boolean hasBody;
 
-	protected CmsMessages cms_message;
-
-	@Override
-	public void init(CmsBackofficeActionElement backofficeActionElement, ActionBean actionBean) {
-		super.init(backofficeActionElement, actionBean);
-
+	public BackofficeLoginAction() {
+		super();
 		sendRedirect = false;
 		hasBody = true;
-
-		// Init CmsMessage object
-		cms_message = new CmsMessages(
-				Util.getModuleForRequest(backofficeActionElement).getName() + ".workplace",
-				backofficeActionElement.getCmsObject().getRequestContext().getLocale());
 	}
 
 	public String execute(){
@@ -45,29 +36,58 @@ public class BackofficeLoginAction extends A_BackofficeAction implements Redirec
     		String password = backofficeActionElement.getActualRequest().getAttribute(Constants.LOGIN_PASSWORD_PARAM);
     		String orgUnit = backofficeActionElement.getActualRequest().getAttribute(Constants.LOGIN_ORGUNIT_PARAM);
 
-    		username = (orgUnit == null ? CmsOrganizationalUnit.SEPARATOR : orgUnit) + username;
+    		boolean wrongOU = true;
 
-    		CmsLogin cmsLogin = new CmsLogin(backofficeActionElement.getJspContext(), backofficeActionElement.getRequest(), backofficeActionElement.getResponse());
+    		if(backofficeActionElement.getBackofficeProject().getOrgUnit().startsWith(orgUnit)) {
+	    		username = (orgUnit == null ? CmsOrganizationalUnit.SEPARATOR : orgUnit) + username;
 
-    		LOG.debug("Trying to login user \"" + username + "\" with password \"" + password + "\"");
-    		cmsLogin.login(username, password);
-    		if(cmsLogin.isLoginSuccess()){
-    			LOG.debug("Login successfully executed");
+	    		CmsLogin cmsLogin = new CmsLogin(backofficeActionElement.getJspContext(), backofficeActionElement.getRequest(), backofficeActionElement.getResponse());
+
+	    		LOG.debug("Trying to login user \"" + username + "\" with password \"" + password + "\"");
+	    		cmsLogin.login(username, password);
+
+	    		if(cmsLogin.isLoginSuccess()) {
+	    			LOG.debug("Login successfully executed");
+	    			CmsObject obj = cmsLogin.getCmsObject();
+	    			CmsUserSettings settings = new CmsUserSettings(obj);
+	    			try {
+						CmsProject project = obj.readProject(settings.getStartProject());
+						if (obj.getAllAccessibleProjects().contains(project)) {
+							cmsLogin.getRequestContext().setCurrentProject(project);
+							LOG.debug("Project set to \"" + project + "\"");
+							sendRedirect = true;
+			    			hasBody = false;
+			    			wrongOU = false;
+						}
+
+					} catch (CmsException e) {
+						LOG.warn("Cannot read project \"" + settings.getStartProject() + "\"");
+					}
+	    		}
+	    		else {
+	    			LOG.debug("Wrong credentials provided.");
+	    			wrongOU = false;
+	    			try {
+						setErrorMessage(cms_message.getString("login.error.wrongcredentials"));
+					} catch (CmsMessageException e) {
+						LOG.warn("An error occurred while reading localization string.", e);
+						setErrorMessage("Il nome utente o la password immesse non sono corrette.");
+					}
+	    		}
     		}
-    		else{
-    			LOG.debug("Wrong credentials provided.");
+
+    		if(wrongOU) {
+    			LOG.debug("Wrong organizational unit selected.");
     			try {
-					setErrorMessage(cms_message.getString("login.error.wrongcredentials"));
+					setErrorMessage(cms_message.getString("login.error.wrongsite"));
 				} catch (CmsMessageException e) {
 					LOG.warn("An error occurred while reading localization string.", e);
-					setErrorMessage("Il nome utente o la password immesse non sono corrette.");
+					setErrorMessage("Al suo account non &egrave; permesso l'accesso a questo backoffice.<br/>Per favore, ritenti il login sul backoffice corretto.");
 				}
     		}
 
     	}
-    	else{
-    		sendRedirect = false;
-    	}
+
     	return null;
     }
 

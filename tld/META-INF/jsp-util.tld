@@ -12,13 +12,38 @@
   <display-name>isEmptyOrWhiteSpaceOnly</display-name>
   <name>isEmptyOrWhiteSpaceOnly</name>
   <function-class>com.mashfrog.backoffice.jsp.util.JspUtil</function-class>
-  <function-signature>String</function-signature>
+  <function-signature>java.lang.String isEmptyOrWhiteSpaceOnly(java.lang.String)</function-signature>
  </function>
  <function>
   <description>Checks if the provided string is not empty or white space only</description>
   <display-name>isNotEmptyOrWhiteSpaceOnly</display-name>
   <name>isNotEmptyOrWhiteSpaceOnly</name>
   <function-class>com.mashfrog.backoffice.jsp.util.JspUtil</function-class>
-  <function-signature>String</function-signature>
+  <function-signature>java.lang.String isNotEmptyOrWhiteSpaceOnly(java.lang.String)</function-signature>
+ </function>
+ <function>
+  <display-name>trimToSize</display-name>
+  <name>trimToSize</name>
+  <function-class>com.mashfrog.backoffice.jsp.util.JspUtil</function-class>
+  <function-signature>java.lang.String trimToSize(java.lang.String, int)</function-signature>
+ </function>
+ <function>
+  <display-name>toUpperCase</display-name>
+  <name>toUpperCase</name>
+  <function-class>com.mashfrog.backoffice.jsp.util.JspUtil</function-class>
+  <function-signature>java.lang.String toUpperCase(java.lang.String)</function-signature>
+ </function>
+ <function>
+  <display-name>toLowerCase</display-name>
+  <name>toLowerCase</name>
+  <function-class>com.mashfrog.backoffice.jsp.util.JspUtil</function-class>
+  <function-signature>java.lang.String toLowerCase(java.lang.String)</function-signature>
+ </function>
+ <function>
+  <description>Escapes special char with their HTML entities</description>
+  <display-name>escapeHTML</display-name>
+  <name>escapeHTML</name>
+  <function-class>com.mashfrog.backoffice.jsp.util.JspUtil</function-class>
+  <function-signature>java.lang.String escapeHTML(java.lang.String)</function-signature>
  </function>
 </taglib>

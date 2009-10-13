@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.opencms.file.CmsObject;
+import org.opencms.i18n.CmsMessages;
 
 import com.mashfrog.backoffice.CmsBackofficeActionElement;
 import com.mashfrog.backoffice.project.beans.ActionBean;
+import com.mashfrog.backoffice.util.Util;
 
 public abstract class A_BackofficeAction implements I_BackofficeAction {
 
@@ -16,6 +18,7 @@ public abstract class A_BackofficeAction implements I_BackofficeAction {
     protected String fatalErrorMessage;
     protected String jspPath;
     protected CmsBackofficeActionElement backofficeActionElement;
+    protected CmsMessages cms_message;
 
     public A_BackofficeAction(){
     	allowedGroups = new ArrayList<String>();
@@ -56,6 +59,11 @@ public abstract class A_BackofficeAction implements I_BackofficeAction {
     	setJspPath(actionBean.getJspPath());
     	setAdditonalConfigurationFilePath(actionBean.getAdditionalConfigurationFilePath(),
     			backofficeActionElement.getCmsObject());
+
+    	// Init CmsMessage object
+		cms_message = new CmsMessages(
+				Util.getModuleForRequest(backofficeActionElement).getName() + ".workplace",
+				backofficeActionElement.getCmsObject().getRequestContext().getLocale());
     }
 
     public void setAdditonalConfigurationFilePath(String filePath, CmsObject cmsObject) {
