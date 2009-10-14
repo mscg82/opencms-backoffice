@@ -92,4 +92,8 @@ public interface I_BackofficeAction {
 
     public void setAdditonalConfigurationFilePath(String filePath, CmsObject cmsObject);
 
+    public void setErrorMessage(String errorMessage);
+
+    public void setFatalErrorMessage(String fatalErrorMessage);
+
 }

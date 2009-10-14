@@ -68,7 +68,7 @@ public class BackofficeLoginAction extends A_BackofficeAction implements Redirec
 	    			LOG.debug("Wrong credentials provided.");
 	    			wrongOU = false;
 	    			try {
-						setErrorMessage(cms_message.getString("login.error.wrongcredentials"));
+						setErrorMessage(backofficeActionElement.getMessages().getString("login.error.wrongcredentials"));
 					} catch (CmsMessageException e) {
 						LOG.warn("An error occurred while reading localization string.", e);
 						setErrorMessage("Il nome utente o la password immesse non sono corrette.");
@@ -79,7 +79,7 @@ public class BackofficeLoginAction extends A_BackofficeAction implements Redirec
     		if(wrongOU) {
     			LOG.debug("Wrong organizational unit selected.");
     			try {
-					setErrorMessage(cms_message.getString("login.error.wrongsite"));
+					setErrorMessage(backofficeActionElement.getMessages().getString("login.error.wrongsite"));
 				} catch (CmsMessageException e) {
 					LOG.warn("An error occurred while reading localization string.", e);
 					setErrorMessage("Al suo account non &egrave; permesso l'accesso a questo backoffice.<br/>Per favore, ritenti il login sul backoffice corretto.");

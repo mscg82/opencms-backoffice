@@ -478,6 +478,15 @@ tr.tableRow{
 	height: 45px;
 }
 
+div.error{
+	background-color: #F20000!important;
+	color: #000000;
+	font-size: large;
+	font-weight: bold;
+	text-align: center;
+	padding: 10 5 10 5px
+}
+
 /* Mozilla special CSS */
 *:focus {
     -moz-outline: 3px solid #10bae0;
@@ -485,10 +494,10 @@ tr.tableRow{
     -moz-outline-radius: 5px;
 }
 button:focus::-moz-focus-inner {
-border-color: transparent;
+    border-color: transparent;
 }
 button::-moz-focus-inner, input[type="reset"]::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="file"] > input[type="button"]::-moz-focus-inner {
-border: 1px dotted transparent;
+    border: 1px dotted transparent;
 }
 textarea:focus, button:focus, select:focus, input:focus {
     -moz-outline-offset: -1px;

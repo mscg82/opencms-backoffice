@@ -15,14 +15,12 @@
     CmsLogin login = new CmsLogin(pageContext, request, response);
 %>
         
-<cms:include file="../common/header.jsp"></cms:include>
 <fmt:setLocale value="${cms.requestContext.locale}"/>
 <fmt:bundle basename="com.mashfrog.backoffice.v2x.workplace">    
-        <div class="clear"></div>
-        <div id="mainBody">
-        <c:if test="${bko:isNotEmptyOrWhiteSpaceOnly(cms.currentAction.errorMessage)}">
-            <div><p><strong>${cms.currentAction.errorMessage}</strong></p></div>
-        </c:if>
+        
+            <c:if test="${bko:isNotEmptyOrWhiteSpaceOnly(cms.currentAction.errorMessage)}">
+                <div><p><strong>${cms.currentAction.errorMessage}</strong></p></div>
+            </c:if>
             <div>
                 <p>
                     <fmt:message key="login.header" />
@@ -51,5 +49,5 @@
                     </fieldset>
                 </form>
             </div>
-        </div>
+
 </fmt:bundle>

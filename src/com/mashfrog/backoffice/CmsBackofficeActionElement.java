@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
 
 import org.apache.commons.logging.Log;
+import org.opencms.i18n.CmsMessages;
 import org.opencms.jsp.CmsJspActionElement;
 import org.opencms.jsp.util.CmsJspContentAccessBean;
 import org.opencms.main.CmsLog;
@@ -31,6 +32,7 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
     private RequestBean previousRequest;
     private I_BackofficeAction currentAction;
     private String resultJsp;
+    protected CmsMessages cms_message;
 
     public CmsBackofficeActionElement(PageContext context, HttpServletRequest req, HttpServletResponse res){
     	super(context, req, res);
@@ -70,6 +72,10 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
     	return ret;
     }
 
+    public CmsMessages getMessages(){
+    	return cms_message;
+    }
+
     public CmsModule getModule(){
     	return Util.getModuleForRequest(this);
     }
@@ -84,6 +90,11 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
 
     public void init(PageContext context, HttpServletRequest req, HttpServletResponse res){
     	super.init(context, req, res);
+
+    	// Init CmsMessage object
+		cms_message = new CmsMessages(
+				Util.getModuleForRequest(this).getName() + ".workplace",
+				getCmsObject().getRequestContext().getLocale());
 
     	backofficeProject = null;
     	try {
@@ -122,7 +133,12 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
 	    		}
 
 	    		currentAction = I_BackofficeAction.Factory.newInstance(this, actionBean);
-	    		resultJsp = currentAction.execute();
+	    		if(Util.canUserAccessBean(getRequestContext().currentUser(), getCmsObject(), actionBean)){
+	    			resultJsp = currentAction.execute();
+	    		}
+	    		else{
+	    			currentAction.setFatalErrorMessage(cms_message.getString("general.error.action.notallowed"));
+	    		}
 	    		if(resultJsp == null){
 	    			resultJsp = currentAction.getJspPath();
 	    		}

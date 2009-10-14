@@ -1,5 +1,6 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://www.opencms.org/taglib/cms" prefix="cms"%>
+<%@taglib uri="http://www.mashfrog.org/taglib/backoffice" prefix="bko" %>
 
 <%@page import="com.mashfrog.backoffice.CmsBackofficeActionElement"%>
 <%@page import="com.mashfrog.backoffice.actions.RedirectingAction"%>
@@ -12,7 +13,7 @@
         ((RedirectingAction)cms.getCurrentAction()).redirect();
     }
     else if(!cms.getCurrentAction().hasBody()){
-    	cms.include(cms.getResultJsp());
+        cms.include(cms.getResultJsp());
     }
     else{
 %>
@@ -44,9 +45,20 @@
     </c:forEach>
 </head>
 <body>
-	<div id="wrap">
-	    <cms:include file="${cms.resultJsp}"></cms:include>   
-	</div>
+    <div id="wrap">
+        <cms:include file="common/header.jsp"></cms:include>
+        <div class="clear"></div>
+        <div id="mainBody">
+            <c:choose>
+                <c:when test="${bko:isNotEmptyOrWhiteSpaceOnly(cms.currentAction.fatalErrorMessage)}">
+                    <div class="error">${cms.currentAction.fatalErrorMessage}</div>
+                </c:when>
+                <c:otherwise>
+                    <cms:include file="${cms.resultJsp}"></cms:include>
+                </c:otherwise>
+            </c:choose>
+        </div>   
+    </div>
 </body>
 </html>
 <%  }%>
