@@ -6,11 +6,8 @@
 <fmt:setLocale value="${cms.requestContext.locale}"/>
 <fmt:bundle basename="com.mashfrog.backoffice.v2x.workplace">
             
-            <c:if test="${bko:isNotEmptyOrWhiteSpaceOnly(cms.currentAction.errorMessage)}">
-                <div><p><strong>${cms.currentAction.errorMessage}</strong></p></div>
-            </c:if>
-            <div>
-                <p><strong><fmt:message key="default.message"/></strong></p>
-            </div>
+    <div>
+        <p><strong><fmt:message key="default.message"/></strong></p>
+    </div>
 
 </fmt:bundle>

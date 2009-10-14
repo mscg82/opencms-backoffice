@@ -51,9 +51,12 @@
         <div id="mainBody">
             <c:choose>
                 <c:when test="${bko:isNotEmptyOrWhiteSpaceOnly(cms.currentAction.fatalErrorMessage)}">
-                    <div class="error">${cms.currentAction.fatalErrorMessage}</div>
+                    <div class="error"><p>${cms.currentAction.fatalErrorMessage}</p></div>
                 </c:when>
                 <c:otherwise>
+                    <c:if test="${bko:isNotEmptyOrWhiteSpaceOnly(cms.currentAction.errorMessage)}">
+                        <div><p><strong>${cms.currentAction.errorMessage}</strong></p></div>
+                    </c:if>
                     <cms:include file="${cms.resultJsp}"></cms:include>
                 </c:otherwise>
             </c:choose>
