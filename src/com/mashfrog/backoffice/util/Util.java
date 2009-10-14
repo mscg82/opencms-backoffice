@@ -12,6 +12,7 @@ import org.opencms.main.CmsException;
 import org.opencms.main.CmsLog;
 import org.opencms.main.OpenCms;
 import org.opencms.module.CmsModule;
+import org.opencms.security.CmsOrganizationalUnit;
 
 import com.mashfrog.backoffice.actions.constants.Constants;
 import com.mashfrog.backoffice.project.beans.GroupOUAssociableBean;
@@ -19,49 +20,6 @@ import com.mashfrog.backoffice.project.beans.GroupOUAssociableBean;
 public class Util {
 	// Logger
 	private static Log LOG = CmsLog.getLog(Util.class);
-
-	/**
-	 * Finds the module in which the requested resource, wrapped in the
-	 * provided {@link CmsJspActionElement}, is contained.
-	 *
-	 * @param cmsAction The {@link CmsJspActionElement} that wraps the request.
-	 * @return The {@link CmsModule} in which the requested resource is contained,
-	 * or <code>null</code> if no suitable module is found.
-	 */
-	public static CmsModule getModuleForRequest(CmsJspActionElement cmsAction){
-		CmsModule ret = null;
-		String folders[] = cmsAction.getRequest().getRequestURL().toString().split("/");
-		for(int i = folders.length - 1; i >= 0; i--){
-			CmsModule module = OpenCms.getModuleManager().getModule(folders[i]);
-			if(module != null){
-				ret = module;
-				break;
-			}
-		}
-		return ret;
-	}
-
-	/**
-	 * Finds the integer id for the resource type of backoffice projects.
-	 *
-	 * @param cmsAction The {@link CmsJspActionElement} that wraps the request.
-	 * @return The integer id for the resource type of backoffice projects.
-	 */
-	public static int getBackofficeType(CmsJspActionElement cmsAction){
-		int ret = -1;
-		CmsModule module = getModuleForRequest(cmsAction);
-		List<A_CmsResourceType> resourceTypes = module.getResourceTypes();
-
-		for(A_CmsResourceType type : resourceTypes){
-			if(type.getTypeName().toLowerCase().startsWith(
-			   Constants.BACKOFFICE_RESOURCE_NAME.toLowerCase())){
-
-				ret = type.getTypeId();
-			}
-		}
-
-		return ret;
-	}
 
 	/**
 	 * Checks if the provided {@link CmsUser} can access the specified
@@ -78,6 +36,9 @@ public class Util {
 
 		if(bean.getOrgUnits() != null && bean.getOrgUnits().size() != 0){
 			String ou = user.getOuFqn();
+			if(!ou.startsWith(CmsOrganizationalUnit.SEPARATOR)){
+				ou = CmsOrganizationalUnit.SEPARATOR + ou;
+			}
 			for(String allowedOu : bean.getOrgUnits()){
 				if(ou.startsWith(allowedOu)){
 					ret = true;
@@ -113,6 +74,70 @@ public class Util {
 			}
 		}
 
+		return ret;
+	}
+
+	/**
+	 * Null-safe object comparation to find if the two strings are equal.
+	 * If both objects are <code>null</code> the function returns <code>true</code>.
+	 *
+	 * @param obj1 The first object.
+	 * @param obj2 The second object.
+	 * @return <code>true</code> if the object are equal or both <code>null</code>,
+	 * <code>false</code> otherwise.
+	 */
+	public static boolean equals(Object obj1, Object obj2) {
+		if(obj1 == null){
+			if(obj2 == null)
+				return true;
+			else
+				return false;
+		}
+		else{
+			return obj1.equals(obj2);
+		}
+	}
+
+	/**
+	 * Finds the integer id for the resource type of backoffice projects.
+	 *
+	 * @param cmsAction The {@link CmsJspActionElement} that wraps the request.
+	 * @return The integer id for the resource type of backoffice projects.
+	 */
+	public static int getBackofficeType(CmsJspActionElement cmsAction){
+		int ret = -1;
+		CmsModule module = getModuleForRequest(cmsAction);
+		List<A_CmsResourceType> resourceTypes = module.getResourceTypes();
+
+		for(A_CmsResourceType type : resourceTypes){
+			if(type.getTypeName().toLowerCase().startsWith(
+			   Constants.BACKOFFICE_RESOURCE_NAME.toLowerCase())){
+
+				ret = type.getTypeId();
+			}
+		}
+
+		return ret;
+	}
+
+	/**
+	 * Finds the module in which the requested resource, wrapped in the
+	 * provided {@link CmsJspActionElement}, is contained.
+	 *
+	 * @param cmsAction The {@link CmsJspActionElement} that wraps the request.
+	 * @return The {@link CmsModule} in which the requested resource is contained,
+	 * or <code>null</code> if no suitable module is found.
+	 */
+	public static CmsModule getModuleForRequest(CmsJspActionElement cmsAction){
+		CmsModule ret = null;
+		String folders[] = cmsAction.getRequest().getRequestURL().toString().split("/");
+		for(int i = folders.length - 1; i >= 0; i--){
+			CmsModule module = OpenCms.getModuleManager().getModule(folders[i]);
+			if(module != null){
+				ret = module;
+				break;
+			}
+		}
 		return ret;
 	}
 

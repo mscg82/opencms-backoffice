@@ -12,7 +12,7 @@
             <div><p><strong>${cms.currentAction.errorMessage}</strong></p></div>
         </c:if>
             <div>
-                <p>Funzione browse</p>
+                <p>Funzione browse folders</p>
             </div>
         </div>
 </fmt:bundle>

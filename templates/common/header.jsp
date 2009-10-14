@@ -4,6 +4,8 @@
 
 <%@page import="java.util.Calendar"%>
 <%@page import="java.util.GregorianCalendar"%>
+<%@page import="java.util.List"%>
+<%@page import="com.mashfrog.backoffice.project.beans.CommandMenuSectionBean"%>
 <%@page import="com.mashfrog.backoffice.actions.constants.Constants"%>
 <%@page import="com.mashfrog.backoffice.CmsBackofficeActionElement"%>
 <%@page import="org.opencms.file.CmsUser"%>
@@ -20,6 +22,7 @@
     pageContext.setAttribute("additionalInfo", currUser.getAdditionalInfo(Constants.USER_ADDITIONAL_INFO_PARAM));
     pageContext.setAttribute("hour", now.get(Calendar.HOUR_OF_DAY));
 %>
+
 <fmt:setLocale value="${cms.requestContext.locale}"/>
 <fmt:bundle basename="com.mashfrog.backoffice.v2x.workplace">      
        <div id="header">
@@ -53,7 +56,28 @@
            <div class="clear"></div>
            <div id="menu">
                <ul class="wrap">
-                   <%-- IMPLEMENT COMMAN MENU --%>
+<%  List<CommandMenuSectionBean> menuSections = cms.getBackofficeProject().getCommandMenu().filterItemsForUser(cms);
+    pageContext.setAttribute("menuSections", menuSections);%>
+               <c:forEach var="menuSection" items="${menuSections}">
+                   <c:set var="class_id">class="main-item"</c:set>
+                   <c:set var="sub_menu_style"></c:set>
+                   <c:if test="${menuSection.actual}">
+                       <c:set var="class_id">class="main-item sel" id="actual"</c:set>
+                       <c:set var="sub_menu_style">style="display: block;"</c:set>
+                   </c:if>
+                   <li>
+                       <a ${class_id} href="#" title="${menuSection.label}">${menuSection.label}</a>
+	                   <ul class="sub-1" ${sub_menu_style}>
+	                       <c:forEach var="sectionItem" items="${menuSection.items}">
+	                           <c:set var="item_class"></c:set>
+	                           <c:if test="${sectionItem.actual}">
+	                               <c:set var="item_class">class="selected"</c:set>
+	                           </c:if>
+	                           <li><a ${item_class} title="${sectionItem.label}" href="${sectionItem.functionLink}">${sectionItem.label}</a></li>
+	                       </c:forEach>
+	                   </ul>
+                   </li>
+               </c:forEach>
                </ul>
            </div>
        </c:if>

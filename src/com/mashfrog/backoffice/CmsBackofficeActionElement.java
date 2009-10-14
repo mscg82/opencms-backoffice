@@ -105,7 +105,7 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
 	    		ActionBean actionBean = null;
 	    		if(getRequestContext().currentUser().isGuestUser()){
 	    			// redirect to login action
-	    			actualRequest.setAttribute(Constants.ACTUAL_ACTION_SESSION_PARAM, Constants.LOGIN_DEFAULT_NAME);
+	    			actualRequest.setAttribute(Constants.ACTION_PARAM, Constants.LOGIN_DEFAULT_NAME);
 	    			actionBean = backofficeProject.getAction(Constants.LOGIN_DEFAULT_NAME);
 	    			LOG.warn("User is not logged in. Redirecting to login action.");
 	    		}
@@ -115,7 +115,7 @@ public class CmsBackofficeActionElement extends CmsJspActionElement implements S
 	    				LOG.debug("User " + getRequestContext().currentUser().getFullName() + " requested action \"" + actionName + "\"");
 	    			if(actionBean == null){
 		    			// redirect to default action
-	    				actualRequest.setAttribute(Constants.ACTUAL_ACTION_SESSION_PARAM, Constants.NOACTION_DEFAULT_NAME);
+	    				actualRequest.setAttribute(Constants.ACTION_PARAM, Constants.NOACTION_DEFAULT_NAME);
 		    			actionBean = backofficeProject.getAction(Constants.NOACTION_DEFAULT_NAME);
 		    			LOG.info("Choosen action not mapped. Redirecting to default action.");
 		    		}

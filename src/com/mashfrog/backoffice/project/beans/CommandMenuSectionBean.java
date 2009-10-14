@@ -10,7 +10,7 @@ public class CommandMenuSectionBean extends BaseCommandMenuBean {
 	protected List<CommandMenuItemBean> items;
 
     public CommandMenuSectionBean(){
-    	this(null);
+    	this((String)null);
     }
 
     public CommandMenuSectionBean(String label){
@@ -18,8 +18,17 @@ public class CommandMenuSectionBean extends BaseCommandMenuBean {
     	items = new ArrayList<CommandMenuItemBean>();
     }
 
+    public CommandMenuSectionBean(CommandMenuSectionBean orig){
+    	super(orig.getLabel());
+    	setActual(orig.isActual());
+    	setGroups(orig.getGroups());
+    	setOrgUnits(orig.getOrgUnits());
+    	items = new ArrayList<CommandMenuItemBean>();
+    }
+
     public void addItem(CommandMenuItemBean item){
     	items.add(item);
+    	item.setMenuSection(this);
     }
 
     public List<CommandMenuItemBean> getItems(){
@@ -28,6 +37,9 @@ public class CommandMenuSectionBean extends BaseCommandMenuBean {
 
     public void setItems(List<CommandMenuItemBean> items){
     	this.items = items;
+    	for(CommandMenuItemBean item : this.items){
+    		item.setMenuSection(this);
+    	}
     }
 
 	@Override

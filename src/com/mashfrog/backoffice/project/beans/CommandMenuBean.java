@@ -8,6 +8,8 @@ import java.util.List;
 import org.opencms.file.CmsUser;
 import org.opencms.jsp.CmsJspActionElement;
 
+import com.mashfrog.backoffice.CmsBackofficeActionElement;
+import com.mashfrog.backoffice.actions.constants.Constants;
 import com.mashfrog.backoffice.util.Util;
 
 public class CommandMenuBean implements Serializable{
@@ -35,17 +37,24 @@ public class CommandMenuBean implements Serializable{
     public List<CommandMenuSectionBean> filterItemsForUser(CmsJspActionElement cmsAction){
     	List<CommandMenuSectionBean> ret = new LinkedList<CommandMenuSectionBean>();
 
+    	String actualAction = null;
+    	if(cmsAction instanceof CmsBackofficeActionElement){
+    		actualAction = ((CmsBackofficeActionElement)cmsAction).getActualRequest().getAttribute(Constants.ACTION_PARAM);
+    	}
+
     	CmsUser user = cmsAction.getRequestContext().currentUser();
 
     	for(CommandMenuSectionBean menuSection : sectionList){
     		if(Util.canUserAccessBean(user, cmsAction.getCmsObject(), menuSection)){
-    			CommandMenuSectionBean sectionBean = new CommandMenuSectionBean();
-    			sectionBean.setLabel(menuSection.getLabel());
-    			sectionBean.setGroups(menuSection.getGroups());
-    			sectionBean.setOrgUnits(menuSection.getOrgUnits());
+    			CommandMenuSectionBean sectionBean = new CommandMenuSectionBean(menuSection);
     			for(CommandMenuItemBean menuItem : menuSection.getItems()){
     				if(Util.canUserAccessBean(user, cmsAction.getCmsObject(), menuItem)){
-    					sectionBean.addItem(menuItem);
+    					CommandMenuItemBean itemBean = new CommandMenuItemBean(menuItem);
+    					sectionBean.addItem(itemBean);
+    					if(Util.equals(actualAction, itemBean.getFunction())){
+    						itemBean.setActual(true);
+    						itemBean.getMenuSection().setActual(true);
+    					}
     				}
     			}
     			ret.add(sectionBean);
