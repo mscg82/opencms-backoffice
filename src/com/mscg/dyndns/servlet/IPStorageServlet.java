@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.mscg.dyndns.servlet;
 
@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.mscg.dyndns.dnsfactory.DnsFactory;
+import com.mscg.dyndns.dnsfactory.DnsProvider;
 import com.mscg.util.Util;
 
 /**
@@ -22,9 +23,10 @@ import com.mscg.util.Util;
  *
  */
 public class IPStorageServlet extends HttpServlet {
-	
+
 	private static Logger log = Logger.getLogger(IPStorageServlet.class);
-	
+
+	private static final String ADDRESS_PARAM = "address";
 	private static final String CONFIRM_PARAM = "confirm";
 	private static final String NONCE_PARAM = "nonce";
 	private static final String SERVICE_PARAM = "service";
@@ -40,7 +42,7 @@ public class IPStorageServlet extends HttpServlet {
 				stage = Integer.parseInt(req.getParameter(STAGE_PARAM));
 			} catch(NumberFormatException e){ /* Bad numeric format, usgin default*/}
 			log.debug("Stage of storage: " + stage);
-			
+
 			String nonce = (String)session.getAttribute(NONCE_PARAM);
 			if(nonce == null){
 				// restart from first stage
@@ -49,7 +51,7 @@ public class IPStorageServlet extends HttpServlet {
 			}
 			String service = null;
 			String confirm = null;
-			
+
 			switch(stage){
 			case 0:
 				service = req.getParameter(SERVICE_PARAM);
@@ -57,9 +59,9 @@ public class IPStorageServlet extends HttpServlet {
 					throw new ServletException("Invalid service name.");
 				}
 				nonce = Util.md5sum(Long.toString(new Date().getTime()));
-				
+
 				log.debug("Nonce generated: " + nonce + "; service required: " + service);
-				
+
 				session.setAttribute(NONCE_PARAM, nonce);
 				session.setAttribute(SERVICE_PARAM, service);
 				resp.setContentType("text/plain");
@@ -75,9 +77,13 @@ public class IPStorageServlet extends HttpServlet {
 					throw new ServletException("Invalid confirmation string.");
 				}
 				else{
-					String IP = req.getRemoteAddr();
-					log.debug("Storing IP \"" + IP + "\" for service \"" + service + "\".");
-					DnsFactory.getProvider().addIP(service, IP);
+					DnsProvider provider = DnsFactory.getProvider();
+					provider.clearService(service);
+					String IPs[] = req.getParameterValues(ADDRESS_PARAM);
+					for(String IP : IPs){
+						log.debug("Storing IP \"" + IP + "\" for service \"" + service + "\".");
+						provider.addIP(service, IP);
+					}
 					resp.setContentType("text/plain");
 					resp.getOutputStream().print("OK");
 				}
