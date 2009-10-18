@@ -1,9 +1,12 @@
 /**
- * 
+ *
  */
 package com.mscg.httpinterface;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.util.Enumeration;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.httpclient.HttpException;
@@ -20,33 +23,43 @@ import com.mscg.util.Util;
 public class IPStorageInterface extends AbstractHttpInterface {
 
 	//private static Logger log = Logger.getLogger(IPStorageInterface.class);
-	
+
 	public IPStorageInterface() throws ConfigurationException {
 		super();
 	}
-	
+
 	public void storeIP(String service) throws HttpException, IOException{
 		String method = (String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_STORAGE_METHOD);
 		strUrl = prepareUrl(method);
 		httpPost = null;
-		
+
 		try{
 			httpPost = new PostMethod(strUrl);
 			httpPost.addParameter("stage", "0");
 			httpPost.addParameter("service", service);
-			
+
 			client.executeMethod(httpPost);
 			if (httpPost.getStatusCode() == HttpStatus.SC_OK) {
 	            String nonce = httpPost.getResponseBodyAsString();
 	            httpPost.releaseConnection();
-	            
+
 	            String confirm = Util.md5sum(Util.combineStrings(nonce, Util.SECRET_SHARED_KEY));
-	            
+
 				httpPost = null;
 				httpPost = new PostMethod(strUrl);
 				httpPost.addParameter("stage", "1");
 				httpPost.addParameter("confirm", confirm);
-				
+
+				Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
+				while(interfaces.hasMoreElements()) {
+					NetworkInterface interfaze = interfaces.nextElement();
+					Enumeration<InetAddress> addresses = interfaze.getInetAddresses();
+					while(addresses.hasMoreElements()){
+						InetAddress address = addresses.nextElement();
+						httpPost.addParameter("address", address.getHostAddress());
+					}
+				}
+
 				client.executeMethod(httpPost);
 	        }
 	        else {

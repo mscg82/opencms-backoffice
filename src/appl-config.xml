@@ -4,7 +4,8 @@
 	<dyndns>
 		<interface>
 			<protocol>http</protocol>
-			<server>mscg.s155.eatj.com</server>
+			<server>mscg3.s156.eatj.com</server>
+			<!-- <server>localhost</server> -->
 			<port></port>
 			<context>dyndns</context>
 			<methods>
