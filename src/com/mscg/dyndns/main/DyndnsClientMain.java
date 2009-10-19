@@ -1,10 +1,15 @@
 /**
- * 
+ *
  */
 package com.mscg.dyndns.main;
 
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
+import com.mscg.config.ConfigLoader;
 import com.mscg.dyndns.main.thread.IPStoreThread;
 import com.mscg.util.Util;
 
@@ -15,17 +20,59 @@ import com.mscg.util.Util;
 public class DyndnsClientMain {
 	private static Logger log = Logger.getLogger(DyndnsClientMain.class);
 
+	private static void launchAppAndWait() throws Exception {
+		String exePath = (String)ConfigLoader.getInstance().get("dyndns.process.exe-path");
+		String folderName = (String)ConfigLoader.getInstance().get("dyndns.process.folder");
+		File folder = (folderName == null || folderName.trim().length() == 0) ? null : new File(folderName);
+
+		if(exePath != null && exePath.trim().length() != 0 &&
+		   folder != null && folder.exists()){
+
+			List<String> parameters = null;
+			try{
+				parameters = (List<String>)ConfigLoader.getInstance().get("dyndns.process.parameter");
+			} catch(ClassCastException e){
+				parameters = new LinkedList<String>();
+				String param = (String)ConfigLoader.getInstance().get("dyndns.process.parameter");
+				if(param != null && param.trim().length() != 0)
+					parameters.add(param);
+			}
+
+			List<String> command = new LinkedList<String>();
+			command.add(exePath);
+			for(String parameter : parameters){
+				command.add(parameter.trim());
+			}
+
+			ProcessBuilder pb = new ProcessBuilder(command);
+			pb.directory(folder);
+
+			log.debug("Launching application \"" + command + "\" using \""
+				+ pb.directory().getCanonicalPath() + "\" as working directory.");
+
+			Process p = pb.start();
+			p.waitFor();
+		}
+		else {
+			log.debug("No application will be launched. Waiting for console input...");
+
+			System.out.println("Press return to stop IP storage...");
+			System.in.read();
+		}
+	}
+
 	public static void main(String[] args) {
 		IPStoreThread thread = null;
 		try {
 			Util.initApplication();
-			
+
 			thread = new IPStoreThread();
 			thread.start();
-			
-			System.out.println("Press a key to stop IP storage...");
-			System.in.read();
-			
+
+			launchAppAndWait();
+
+			log.debug("Exiting from application.");
+
 		} catch (Exception e) {
 			Util.logStackTrace(e, log);
 			e.printStackTrace();

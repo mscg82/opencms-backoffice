@@ -16,5 +16,10 @@
 		<thread>
 			<timeout>300</timeout>
 		</thread>
+		<process>
+		    <exe-path>C:\Windows\system32\notepad.exe</exe-path>
+		    <parameter></parameter>
+		    <folder>C:\Windows\system32\</folder>
+		</process>
 	</dyndns>
 </config>
