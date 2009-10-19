@@ -41,6 +41,8 @@ public class IPReadServlet extends HttpServlet {
 			if(appl == null)
 				appl = "";
 
+			Util.accessLog.info(
+				"Reading IPs for service \"" + service + "\". Request came from " + req.getRemoteAddr());
 			log.debug("Retrieving IP for service \"" + service + "\"");
 			Collection<String> IPs = DnsFactory.getProvider().getIPs(service);
 			log.debug("Retrieved IPs: \"" + IPs + "\"");

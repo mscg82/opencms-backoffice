@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.mscg.util;
 
@@ -18,10 +18,15 @@ import org.apache.log4j.Logger;
  */
 public class Util {
 	public static final String SECRET_SHARED_KEY = "jSdn32dfd369NCg<i3r89ri]jEKLofhj?$dkjsdf99";
-	
+
+	/**
+	 * The access logger.
+	 */
+	public static Logger accessLog = Logger.getLogger("com.mscg.dyndns.access");
+
 	/**
 	 * Log the complete stack trace of the provided exception in the logger.
-	 * 
+	 *
 	 * @param e The Exception.
 	 * @param log The log in which the stack trace will be printed.
 	 */
@@ -34,12 +39,12 @@ public class Util {
 			stream.close();
 		} catch (IOException e1) {}
 	}
-	
+
 	/**
 	 * Calculates the MD5 checksum of the provided string.
-	 * 
+	 *
 	 * @param originalString The string whose MD5 checksum will be computed.
-	 * 
+	 *
 	 * @return the MD5 checksum of the provided string.
 	 */
 	public static String md5sum(String originalString) {
@@ -49,7 +54,7 @@ public class Util {
 			algorithm.reset();
 			algorithm.update(defaultBytes);
 			byte messageDigest[] = algorithm.digest();
-		            
+
 			StringBuffer hexString = new StringBuffer();
 			for(int i = 0; i < messageDigest.length; i++){
 				int val = 0xFF & messageDigest[i];
@@ -57,10 +62,10 @@ public class Util {
 			}
 			return hexString.toString();
 		}catch(NoSuchAlgorithmException e){
-		    return null;         
+		    return null;
 		}
 	}
-	
+
 	public static String combineStrings(String nonce, String key){
 		return nonce + key;
 	}

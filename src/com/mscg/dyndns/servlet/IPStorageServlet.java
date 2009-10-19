@@ -77,6 +77,8 @@ public class IPStorageServlet extends HttpServlet {
 					throw new ServletException("Invalid confirmation string.");
 				}
 				else{
+					Util.accessLog.info(
+						"Storing IPs for service \"" + service + "\". Request came from " + req.getRemoteAddr());
 					DnsProvider provider = DnsFactory.getProvider();
 					provider.clearService(service);
 					String IPs[] = req.getParameterValues(ADDRESS_PARAM);
