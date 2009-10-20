@@ -5,14 +5,17 @@
 		<interface>
 			<protocol>http</protocol>
 			<server>mscg3.s156.eatj.com</server>
-			<!-- <server>localhost</server> -->
 			<port></port>
+            <!--
+			<server>localhost</server>
+			<port>8080</port>
+            -->
 			<context>dyndns</context>
 			<methods>
 				<ipstorage>ipstorage</ipstorage>
 			</methods>
 		</interface>
-		<service>mscg</service>
+		<service>mscg2</service>
 		<thread>
 			<timeout>300</timeout>
 		</thread>
