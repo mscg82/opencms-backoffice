@@ -1,0 +1,8 @@
+<Context path="/dyndns" docBase="dyndns">
+
+    <Resource name="jdbc/dyndns" auth="Container"
+      type="javax.sql.DataSource" maxActive="100" maxIdle="10" maxWait="5000"
+      username="dyndns" password="dyndnspass" driverClassName="com.mysql.jdbc.Driver"
+      url="jdbc:mysql://localhost:3306/dyndns?autoReconnect=true&amp;characterEncoding=UTF-8"/>     
+
+</Context>

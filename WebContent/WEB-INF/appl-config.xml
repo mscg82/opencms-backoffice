@@ -2,6 +2,22 @@
 
 <config>
 	<dns>
-		<provider-class>com.mscg.dyndns.dnsfactory.memory.MemoryDnsProvider</provider-class>
+		<!-- <provider-class>com.mscg.dyndns.dnsfactory.memory.MemoryDnsProvider</provider-class> -->
+		<provider-class>com.mscg.dyndns.dnsfactory.jdbc.JDBCDnsProvider</provider-class>
 	</dns>
+	<JDBCProvider>
+	   <jndi-name>jdbc/dyndns</jndi-name>
+	   <table-name>dnsTable</table-name>
+	   <id-col>id</id-col>
+	   <service-col>service</service-col>
+	   <ip-col>ip</ip-col>
+	   <create-statement><![CDATA[
+	       CREATE TABLE IF NOT EXISTS ${tableName} (
+	           ${idCol} INT NOT NULL AUTO_INCREMENT,
+	           ${serviceCol} VARCHAR(100) NOT NULL,
+	           ${ipCol} VARCHAR(60) NOT NULL,
+	           PRIMARY KEY(id)
+	       ) Engine=InnoDB;]]>
+	   </create-statement>
+	</JDBCProvider>
 </config>

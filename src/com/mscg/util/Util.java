@@ -8,9 +8,15 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 
+import com.mscg.config.ConfigLoader;
 
 /**
  * @author Giuseppe Miscione
@@ -23,6 +29,38 @@ public class Util {
 	 * The access logger.
 	 */
 	public static Logger accessLog = Logger.getLogger("com.mscg.dyndns.access");
+
+	public static String combineStrings(String nonce, String key){
+		return nonce + key;
+	}
+
+	/**
+	 * Returns a string set in the configuration file. If the string has semicolons, commons-config
+	 * builds a <code>List&lt;String&gt;</code> rather than a simple string. This method check the
+	 * type of <code>Object</code> in the configuration map and even returns a <code>String</code>.
+	 *
+	 * @param paramName The name of the configuration parameter that will be read.
+	 * @return The <code>String</code> contained in the configuration file under the specified parameter.
+	 * @throws ConfigurationException If the configuration file cannot be read.
+	 */
+	public static String getConfigString(String paramName) throws ConfigurationException{
+		StringBuffer message = new StringBuffer();
+		try{
+			ArrayList<String> words = (ArrayList<String>) ConfigLoader.getInstance().get(paramName);
+			boolean first = true;
+			for(String word : words){
+				if(!first)
+					message.append(", ");
+				message.append(word);
+				first = false;
+			}
+		} catch(NullPointerException e){
+			return "";
+		} catch(ClassCastException e){
+			message.append((String) ConfigLoader.getInstance().get(paramName));
+		}
+		return message.toString();
+	}
 
 	/**
 	 * Log the complete stack trace of the provided exception in the logger.
@@ -39,6 +77,29 @@ public class Util {
 			stream.close();
 		} catch (IOException e1) {}
 	}
+
+	/**
+	 * Lookup the provided location in the application context. Use this method to retrive
+	 * datasources.
+	 *
+	 * @param location The location to lookup for.
+	 * @return The object retrived.
+	 * @throws NamingException If an error occurs.
+	 */
+	public static Object lookup(String location) throws NamingException {
+        try {
+            InitialContext context = new InitialContext();
+
+            try {
+                return context.lookup(location);
+            } catch (NamingException e) {
+                //ok, couldn't find it, look in env
+                return context.lookup("java:comp/env/" + location);
+            }
+        } catch (NamingException e) {
+            throw e;
+        }
+    }
 
 	/**
 	 * Calculates the MD5 checksum of the provided string.
@@ -64,9 +125,5 @@ public class Util {
 		}catch(NoSuchAlgorithmException e){
 		    return null;
 		}
-	}
-
-	public static String combineStrings(String nonce, String key){
-		return nonce + key;
 	}
 }
