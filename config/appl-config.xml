@@ -2,14 +2,20 @@
 
 <config>
 	<dyndns>
+	    <store-thread>com.mscg.dyndns.main.thread.MyIpAddressStoreThread</store-thread>
+	    <myipaddress>
+	       <url>http://www.myipaddress.com/</url>
+	    </myipaddress>
 		<interface>
 			<protocol>http</protocol>
+			<!-- 
 			<server>mscg3.s156.eatj.com</server>
 			<port></port>
-            <!--
+			-->
+            
 			<server>localhost</server>
 			<port>8080</port>
-            -->
+            
 			<context>dyndns</context>
 			<methods>
 				<ipstorage>ipstorage</ipstorage>

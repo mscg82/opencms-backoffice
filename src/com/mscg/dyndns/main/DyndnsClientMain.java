@@ -4,13 +4,15 @@
 package com.mscg.dyndns.main;
 
 import java.io.File;
+import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
-import com.mscg.dyndns.main.thread.IPStoreThread;
+import com.mscg.dyndns.main.thread.LocalIPStoreThread;
 import com.mscg.util.Util;
 
 /**
@@ -61,13 +63,32 @@ public class DyndnsClientMain {
 		}
 	}
 
+	public static Thread launchStroreThread() throws ConfigurationException {
+		String className = (String)ConfigLoader.getInstance().get("dyndns.store-thread");
+		Thread thread = null;
+		try{
+			log.debug("Loading class " + className + "...");
+
+			Class threadClass = Class.forName(className);
+			Constructor<Thread> threadConstructor = threadClass.getConstructor();
+			thread = threadConstructor.newInstance();
+		} catch(Exception e){
+			// use default thread class
+			log.error("Error found while looking for thread class, " +
+					"using default " + LocalIPStoreThread.class.getCanonicalName(), e);
+			thread = new LocalIPStoreThread();
+		}
+		thread.start();
+
+		return thread;
+	}
+
 	public static void main(String[] args) {
-		IPStoreThread thread = null;
+		Thread thread = null;
 		try {
 			Util.initApplication();
 
-			thread = new IPStoreThread();
-			thread.start();
+			thread = launchStroreThread();
 
 			launchAppAndWait();
 

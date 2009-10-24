@@ -4,9 +4,7 @@
 package com.mscg.httpinterface;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.util.Enumeration;
+import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.httpclient.HttpException;
@@ -28,7 +26,7 @@ public class IPStorageInterface extends AbstractHttpInterface {
 		super();
 	}
 
-	public void storeIP(String service) throws HttpException, IOException{
+	public void storeIP(String service, List<String> IPs) throws HttpException, IOException{
 		String method = (String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_STORAGE_METHOD);
 		strUrl = prepareUrl(method);
 		httpPost = null;
@@ -50,14 +48,8 @@ public class IPStorageInterface extends AbstractHttpInterface {
 				httpPost.addParameter("stage", "1");
 				httpPost.addParameter("confirm", confirm);
 
-				Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-				while(interfaces.hasMoreElements()) {
-					NetworkInterface interfaze = interfaces.nextElement();
-					Enumeration<InetAddress> addresses = interfaze.getInetAddresses();
-					while(addresses.hasMoreElements()){
-						InetAddress address = addresses.nextElement();
-						httpPost.addParameter("address", address.getHostAddress());
-					}
+				for(String IP : IPs) {
+					httpPost.addParameter("address", IP);
 				}
 
 				client.executeMethod(httpPost);
