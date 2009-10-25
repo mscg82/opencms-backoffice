@@ -1,96 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app id="dyndns" version="2.4"
- xmlns="http://java.sun.com/xml/ns/j2ee"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
- <display-name>dyndns</display-name>
- <servlet>
-  <servlet-name>log4j-init</servlet-name>
-  <servlet-class>com.mscg.dyndns.servlet.LoggingServlet</servlet-class>
-  <init-param>
-   <param-name>log4j-init-file</param-name>
-   <param-value>WEB-INF/log4j.properties</param-value>
-  </init-param>
-  <load-on-startup>1</load-on-startup>
- </servlet>
- <servlet>
-  <description>Configuration Loader</description>
-  <display-name>Configuration Loader</display-name>
-  <servlet-name>configuration-loader</servlet-name>
-  <servlet-class>com.mscg.dyndns.servlet.ConfigurationServlet</servlet-class>
-  <load-on-startup>2</load-on-startup>
- </servlet>
- <servlet>
-  <description>IP storage servlet</description>
-  <display-name>IP storage</display-name>
-  <servlet-name>ipstorage</servlet-name>
-  <servlet-class>com.mscg.dyndns.servlet.IPStorageServlet</servlet-class>
-  <load-on-startup>3</load-on-startup>
- </servlet>
- <servlet>
-  <description>IP read servlet</description>
-  <display-name>IP read servlet</display-name>
-  <servlet-name>ipread</servlet-name>
-  <servlet-class>com.mscg.dyndns.servlet.IPReadServlet</servlet-class>
-  <load-on-startup>4</load-on-startup>
- </servlet>
- <servlet>
-  <description>Download Ping</description>
-  <display-name>Download Ping</display-name>
-  <servlet-name>downloadPing</servlet-name>
-  <servlet-class>com.mscg.dyndns.servlet.DownloadPingServlet</servlet-class>
-  <load-on-startup>5</load-on-startup>
- </servlet>
- <servlet>
-  <description>Upload Ping</description>
-  <display-name>Upload Ping</display-name>
-  <servlet-name>uploadPing</servlet-name>
-  <servlet-class>com.mscg.dyndns.servlet.UploadPingServlet</servlet-class>
-  <load-on-startup>6</load-on-startup>
- </servlet>
- <servlet>
-  <description>Dynamic jsp generation servlet</description>
-  <display-name>Dynamic jsp generation servlet</display-name>
-  <servlet-name>dynamicJsp</servlet-name>
-  <servlet-class>com.mscg.dyndns.servlet.DynamicJspGenerationServlet</servlet-class>
-  <init-param>
-    <param-name>repositoryBase</param-name>
-    <param-value>/WEB-INF/repository</param-value>
-  </init-param>
-  <init-param>
-    <param-name>workBase</param-name>
-    <param-value>/WEB-INF/jsp</param-value>
-  </init-param>
-  <load-on-startup>7</load-on-startup>
- </servlet>
- <servlet-mapping>
-  <servlet-name>ipstorage</servlet-name>
-  <url-pattern>/ipstorage</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>ipread</servlet-name>
-  <url-pattern>/ipread</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>downloadPing</servlet-name>
-  <url-pattern>/downloadPing</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>uploadPing</servlet-name>
-  <url-pattern>/uploadPing</url-pattern>
- </servlet-mapping>
- <servlet-mapping>
-  <servlet-name>dynamicJsp</servlet-name>
-  <url-pattern>/repository/*</url-pattern>
- </servlet-mapping>
- <welcome-file-list>
-  <welcome-file>index.html</welcome-file>
-  <welcome-file>index.htm</welcome-file>
-  <welcome-file>index.jsp</welcome-file>
-  <welcome-file>default.html</welcome-file>
-  <welcome-file>default.htm</welcome-file>
-  <welcome-file>default.jsp</welcome-file>
- </welcome-file-list>
- <login-config>
-  <auth-method>BASIC</auth-method>
- </login-config>
+<web-app id="dyndns" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<display-name>dyndns</display-name>
+	<servlet>
+		<servlet-name>log4j-init</servlet-name>
+		<servlet-class>com.mscg.dyndns.servlet.LoggingServlet</servlet-class>
+		<init-param>
+			<param-name>log4j-init-file</param-name>
+			<param-value>WEB-INF/log4j.properties</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>Configuration Loader</description>
+		<display-name>Configuration Loader</display-name>
+		<servlet-name>configuration-loader</servlet-name>
+		<servlet-class>com.mscg.dyndns.servlet.ConfigurationServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>IP storage servlet</description>
+		<display-name>IP storage</display-name>
+		<servlet-name>ipstorage</servlet-name>
+		<servlet-class>com.mscg.dyndns.servlet.IPStorageServlet</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>IP read servlet</description>
+		<display-name>IP read servlet</display-name>
+		<servlet-name>ipread</servlet-name>
+		<servlet-class>com.mscg.dyndns.servlet.IPReadServlet</servlet-class>
+		<load-on-startup>4</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>Download Ping</description>
+		<display-name>Download Ping</display-name>
+		<servlet-name>downloadPing</servlet-name>
+		<servlet-class>com.mscg.dyndns.servlet.DownloadPingServlet</servlet-class>
+		<load-on-startup>5</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>Upload Ping</description>
+		<display-name>Upload Ping</display-name>
+		<servlet-name>uploadPing</servlet-name>
+		<servlet-class>com.mscg.dyndns.servlet.UploadPingServlet</servlet-class>
+		<load-on-startup>6</load-on-startup>
+	</servlet>
+	<servlet>
+		<description>Dynamic jsp generation servlet</description>
+		<display-name>Dynamic jsp generation servlet</display-name>
+		<servlet-name>dynamicJsp</servlet-name>
+		<servlet-class>com.mscg.dyndns.servlet.DynamicJspGenerationServlet</servlet-class>
+		<init-param>
+			<param-name>repositoryBase</param-name>
+			<param-value>/WEB-INF/repository</param-value>
+		</init-param>
+		<init-param>
+			<param-name>workBase</param-name>
+			<param-value>/WEB-INF/jsp</param-value>
+		</init-param>
+		<load-on-startup>7</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ipstorage</servlet-name>
+		<url-pattern>/ipstorage</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ipread</servlet-name>
+		<url-pattern>/ipread</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>downloadPing</servlet-name>
+		<url-pattern>/downloadPing</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>uploadPing</servlet-name>
+		<url-pattern>/uploadPing</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>dynamicJsp</servlet-name>
+		<url-pattern>/repository/*</url-pattern>
+	</servlet-mapping>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	<login-config>
+		<auth-method>DIGEST</auth-method>
+		<realm-name>DynDns</realm-name>
+	</login-config>
+	<!--Security roles referenced by this web application -->
+	<security-role>
+		<role-name>manager</role-name>
+	</security-role>
+	<security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Users authorized to view IPs</web-resource-name>
+            <url-pattern>/view/*</url-pattern>
+            <url-pattern>/ipread</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>manager</role-name>
+        </auth-constraint>
+    </security-constraint>
 </web-app>
