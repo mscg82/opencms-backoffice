@@ -7,12 +7,16 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.roncemer.ocr.CharacterRange;
 import com.roncemer.ocr.OCRImageCanvas;
@@ -27,13 +31,15 @@ import com.roncemer.ocr.tracker.MediaTrackerProxy;
  */
 public class OCRScannerMain {
 
+	private static Log LOG = LogFactory.getLog(OCRScannerMain.class);
+
 	/**
      * Load demo training images.
      * @param trainingImageDir The directory from which to load the images.
      * @param scanner The OCRScanner that will be trained.
      */
 	public static void loadTrainingImages(String trainingImageDir, OCRScanner scanner) {
-		System.out.println("loadTrainingImages(" + trainingImageDir + ")");
+		LOG.warn("loadTrainingImages(" + trainingImageDir + ")");
 		if (!trainingImageDir.endsWith(File.separator)) {
 			trainingImageDir += File.separator;
 		}
@@ -41,48 +47,49 @@ public class OCRScannerMain {
 			scanner.clearTrainingImages();
 			TrainingImageLoader loader = new TrainingImageLoader();
 			HashMap images = new HashMap();
-			System.out.println("ascii.png");
+			LOG.info("ascii.png");
 			loader.load(
 				null,
 				trainingImageDir + "ascii.png",
 				new CharacterRange('!', '~'),
 				images);
-			System.out.println("hpljPica.jpg");
+			LOG.info("hpljPica.jpg");
 			loader.load(
 				null,
 				trainingImageDir + "hpljPica.jpg",
 				new CharacterRange('!', '~'),
 				images);
-			System.out.println("digits.jpg");
+			LOG.info("digits.jpg");
 			loader.load(
 				null,
 				trainingImageDir + "digits.jpg",
 				new CharacterRange('0', '9'),
 				images);
-			System.out.println("eatj_letter.jpg");
+			LOG.info("eatj_letter.jpg");
 			loader.load(
 				null,
 				trainingImageDir + "eatj_letter.jpg",
 				new CharacterRange('a', 'f'),
 				images);
-			System.out.println("eatj_number.jpg");
+			LOG.info("eatj_number.jpg");
 			loader.load(
 					null,
 					trainingImageDir + "eatj_number.jpg",
 					new CharacterRange('0', '9'),
 					images);
-			System.out.println("adding images");
+			LOG.info("adding images");
 			scanner.addTrainingImages(images);
-			System.out.println("loadTrainingImages() done");
+			LOG.warn("loadTrainingImages() done");
 		}
 		catch(IOException ex) {
-			ex.printStackTrace();
+			LOG.error("Error found while training scanner.", ex);
 			System.exit(2);
 		}
 	}
 
 	public static void process(String imageFilename, OCRScanner scanner) {
-		System.out.println("process(" + imageFilename + ")");
+		LOG.warn("");
+		LOG.warn("process(" + imageFilename + ")");
 		String imageFileUrlString = "";
 		Image image = null;
 
@@ -103,29 +110,28 @@ public class OCRScannerMain {
 			try {
 				mt.waitForAll();
 			} catch(InterruptedException ex) {}
-			System.out.println("image loaded");
+			LOG.info("image loaded");
 
 			OCRImageCanvas imageCanvas = new OCRImageCanvas();
 			imageCanvas.setSize(image.getWidth(null), image.getHeight(null));
 
-			System.out.println("constructing new PixelImage");
+			LOG.info("constructing new PixelImage");
 			PixelImage pixelImage = new PixelImage(image);
-			System.out.println("converting PixelImage to grayScale");
+			LOG.info("converting PixelImage to grayScale");
 			pixelImage.toGrayScale(true);
-			System.out.println("filtering");
+			LOG.info("filtering");
 			pixelImage.filter();
-			System.out.println("setting image for display");
+			LOG.info("setting image for display");
 			imageCanvas.setImage(
 				pixelImage.rgbToImage(
 					pixelImage.grayScaleToRGB(pixelImage.pixels),
 					pixelImage.width,
 					pixelImage.height,
 					imageCanvas));
-			System.out.println(imageFilename + ":");
 			String text = scanner.scan(image, 0, 0, 0, 0, null, imageCanvas.getGraphics());
-			System.out.println("[" + text + "]");
+			LOG.warn(imageFilename + ":[" + text + "]");
 		} catch(Exception e){
-			e.printStackTrace();
+			LOG.error("Error found while processing image.", e);
 		}
 	}
 
@@ -135,7 +141,7 @@ public class OCRScannerMain {
 	public static void main(String[] args) {
 		if (args.length < 1) {
 			System.err.println("Please specify one or more image filenames.");
-			System.exit(1);
+			return;
 		}
 		String trainingImageDir = System.getProperty("TRAINING_IMAGE_DIR");
 		if (trainingImageDir == null) {
@@ -152,7 +158,12 @@ public class OCRScannerMain {
 			File file = new File(args[i]);
 			if(file.exists()){
 				if(file.isDirectory()){
-					files.addAll(Arrays.asList(file.listFiles()));
+					files.addAll(Arrays.asList(file.listFiles(
+						new FileFilter(){
+							public boolean accept(File pathname) {
+								return pathname.isFile();
+							}}))
+					);
 				}
 				else{
 					files.add(file);
@@ -163,10 +174,10 @@ public class OCRScannerMain {
 			try {
 				process(file.getCanonicalPath(), scanner);
 			} catch (IOException e) {
-				e.printStackTrace();
+				LOG.error("Error found while getting file path.", e);
 			}
 		}
-		System.out.println("done.");
+		LOG.info("done.");
 	}
 
 }

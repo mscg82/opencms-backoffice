@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<appender name="CONSOLE_APP" class="org.apache.log4j.ConsoleAppender"> 
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n"/>
+        </layout>  
+    </appender>
+    
+    <appender name="GENERAL_APP" class="org.apache.log4j.RollingFileAppender"> 
+	    <param name="File" value="./logs/general.log"/>
+	    <param name="Append" value="true"/>
+	    <param name="MaxFileSize" value="500KB"/>
+	    <param name="MaxBackupIndex" value="2"/>
+	    <layout class="org.apache.log4j.PatternLayout">
+	        <param name="ConversionPattern" value="%d{DATE} %5p [%30.30c\:%4L] %m%n"/>
+	    </layout>  
+	</appender>
+	
+	<appender name="DEBUG_APP" class="org.apache.log4j.RollingFileAppender"> 
+        <param name="File" value="./logs/debug.log"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="500KB"/>
+        <param name="MaxBackupIndex" value="2"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{DATE} %5p [%30.30c\:%4L] %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelMatchFilter">  
+            <param name="LevelToMatch" value="debug" />  
+            <param name="AcceptOnMatch" value="true" />  
+        </filter>  
+        <filter class="org.apache.log4j.varia.DenyAllFilter"/>  
+    </appender>
+    
+    <appender name="INFO_APP" class="org.apache.log4j.RollingFileAppender"> 
+        <param name="File" value="./logs/info.log"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="500KB"/>
+        <param name="MaxBackupIndex" value="2"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{DATE} %5p [%30.30c\:%4L] %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelMatchFilter">  
+            <param name="LevelToMatch" value="info" />  
+            <param name="AcceptOnMatch" value="true" />  
+        </filter>  
+        <filter class="org.apache.log4j.varia.DenyAllFilter"/>  
+    </appender>
+    
+    <appender name="WARN_APP" class="org.apache.log4j.RollingFileAppender"> 
+        <param name="File" value="./logs/warn.log"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="500KB"/>
+        <param name="MaxBackupIndex" value="2"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{DATE} %5p [%30.30c\:%4L] %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelMatchFilter">  
+            <param name="LevelToMatch" value="warn" />  
+            <param name="AcceptOnMatch" value="true" />  
+        </filter>  
+        <filter class="org.apache.log4j.varia.DenyAllFilter"/>  
+    </appender>
+    
+    <appender name="ERROR_APP" class="org.apache.log4j.RollingFileAppender"> 
+        <param name="File" value="./logs/error.log"/>
+        <param name="Append" value="true"/>
+        <param name="MaxFileSize" value="500KB"/>
+        <param name="MaxBackupIndex" value="2"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{DATE} %5p [%30.30c\:%4L] %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelMatchFilter">  
+            <param name="LevelToMatch" value="error" />  
+            <param name="AcceptOnMatch" value="true" />  
+        </filter>  
+        <filter class="org.apache.log4j.varia.DenyAllFilter"/>  
+    </appender>
+    
+    <appender name="JDBC_APP" class="org.apache.log4j.jdbc.JDBCAppender"> 
+        <param name="Driver" value="com.mysql.jdbc.Driver"/>
+        <param name="URL" value="jdbc:mysql://localhost:3306/test?autoReconnect=true&amp;characterEncoding=UTF-8"/>
+        <param name="User" value="" />
+        <param name="Password" value="" />
+        <param name="Sql" value="INSERT INTO log(date, priority, class, message) VALUES('%d{DATE}', '%5p', '%30.30c\:%4L', '%m')" />
+    </appender>
+    
+    <logger name="com.roncemer">
+		<level value="info"/>
+    </logger>
+
+	<root> 
+	  <priority value ="error" />
+	  <appender-ref ref="CONSOLE_APP" />
+	  <!-- 
+	  <appender-ref ref="GENERAL_APP" /> 
+	  <appender-ref ref="DEBUG_APP" />
+	  <appender-ref ref="INFO_APP" />
+	  <appender-ref ref="WARN_APP" />
+	  <appender-ref ref="ERROR_APP" />
+	  -->
+	</root>
+  
+</log4j:configuration>
