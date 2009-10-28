@@ -17,11 +17,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package com.roncemer.ocr;
 
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.MediaTracker;
+import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+
+import com.roncemer.ocr.tracker.MediaTrackerProxy;
 
 /**
   * OCR document scanner.
@@ -44,21 +52,6 @@ public class OCRScanner extends DocumentScannerListenerAdaptor {
 	protected DocumentScanner documentScanner = new DocumentScanner();
 
 	/**
-      * @return The <code>DocumentScanner</code> instance that is used to scan the document(s).
-      * This is useful if the caller wants to adjust some of the scanner's parameters.
-      */
-	public DocumentScanner getDocumentScanner() {
-		return documentScanner;
-	}
-
-	/**
-      * Remove all training images from the training set.
-      */
-	public void clearTrainingImages() {
-		trainingImages.clear();
-	}
-
-	/**
       * Add training images to the training set.
       * @param images A <code>HashMap</code> using <code>Character</code>s for
       * the keys.  Each value is an <code>ArrayList</code> of
@@ -78,45 +71,6 @@ public class OCRScanner extends DocumentScannerListenerAdaptor {
 		}
 	}
 
-	/**
-      * Scan an image and return the decoded text.
-      * @param image The <code>Image</code> to be scanned.
-      * @param x1 The leftmost pixel position of the area to be scanned, or
-      * <code>0</code> to start scanning at the left boundary of the image.
-      * @param y1 The topmost pixel position of the area to be scanned, or
-      * <code>0</code> to start scanning at the top boundary of the image.
-      * @param x2 The rightmost pixel position of the area to be scanned, or
-      * <code>0</code> to stop scanning at the right boundary of the image.
-      * @param y2 The bottommost pixel position of the area to be scanned, or
-      * <code>0</code> to stop scanning at the bottom boundary of the image.
-      * @param acceptableChars An array of <code>CharacterRange</code> objects
-      * representing the ranges of characters which are allowed to be decoded,
-      * or <code>null</code> to not limit which characters can be decoded.
-      * @param g An optional <code>Graphics</code> object onto which border lines
-      * will be drawn to denote the borders of rows of text and character cells.
-      * This is used for debugging and can be <code>null</code>.
-      * @return The decoded text.
-      */
-	public String scan(
-		Image image,
-		int x1,
-		int y1,
-		int x2,
-		int y2,
-		CharacterRange[]acceptableChars, Graphics g) {
-
-		this.acceptableChars = acceptableChars;
-		PixelImage pixelImage = new PixelImage(image);
-		pixelImage.toGrayScale(true);
-		pixelImage.filter();
-		decodeBuffer.setLength(0);
-		firstRow = true;
-		documentScanner.scan(pixelImage, this, x1, y1, x2, y2, g);
-		String result = decodeBuffer.toString();
-		decodeBuffer.setLength(0);
-		return result;
-	}
-
 	public void beginRow(PixelImage pixelImage, int y1, int y2) {
 		beginningOfRow = true;
 		if (firstRow) {
@@ -124,6 +78,60 @@ public class OCRScanner extends DocumentScannerListenerAdaptor {
 		} else {
 			decodeBuffer.append(newline);
 		}
+	}
+
+	/**
+      * Remove all training images from the training set.
+      */
+	public void clearTrainingImages() {
+		trainingImages.clear();
+	}
+
+	/**
+      * @return The <code>DocumentScanner</code> instance that is used to scan the document(s).
+      * This is useful if the caller wants to adjust some of the scanner's parameters.
+      */
+	public DocumentScanner getDocumentScanner() {
+		return documentScanner;
+	}
+
+	private final boolean isTrainingImageACandidate(
+		float aspectRatio,
+		int w,
+		int h,
+		float
+		topWhiteSpaceFraction,
+		float
+		bottomWhiteSpaceFraction,
+		TrainingImage ti) {
+		// The aspect ratios must be within tolerance.
+		if (((aspectRatio / ti.aspectRatio) - 1.0f) > TrainingImage.ASPECT_RATIO_TOLERANCE) {
+			return false;
+		}
+		if (((ti.aspectRatio / aspectRatio) - 1.0f) > TrainingImage.ASPECT_RATIO_TOLERANCE) {
+			return false;
+		}
+		// The top whitespace fractions must be within tolerance.
+		if (Math.abs(topWhiteSpaceFraction - ti.topWhiteSpaceFraction) >
+			TrainingImage.TOP_WHITE_SPACE_FRACTION_TOLERANCE) {
+			return false;
+		}
+		// The bottom whitespace fractions must be within tolerance.
+		if (Math.abs(bottomWhiteSpaceFraction - ti.bottomWhiteSpaceFraction) >
+			TrainingImage.BOTTOM_WHITE_SPACE_FRACTION_TOLERANCE) {
+			return false;
+		}
+		// If the area being scanned is really small and we
+		// are about to crunch down a training image by a huge
+		// factor in order to compare to it, then don't do that.
+		if ((w <= 4) && (ti.width >= (w * 10))) return false;
+		if ((h <= 4) && (ti.height >= (h * 10))) return false;
+		// If the area being scanned is really large and we
+		// are about to expand a training image by a huge
+		// factor in order to compare to it, then don't do that.
+		if ((ti.width <= 4) && (w >= (ti.width * 10))) return false;
+		if ((ti.height <= 4) && (h >= (ti.height * 10))) return false;
+		return true;
 	}
 
 	public void processChar(
@@ -236,49 +244,113 @@ System.out.println();
 		}
 	}
 
-	private final boolean isTrainingImageACandidate(
-		float aspectRatio,
-		int w,
-		int h,
-		float
-		topWhiteSpaceFraction,
-		float
-		bottomWhiteSpaceFraction,
-		TrainingImage ti) {
-		// The aspect ratios must be within tolerance.
-		if (((aspectRatio / ti.aspectRatio) - 1.0f) > TrainingImage.ASPECT_RATIO_TOLERANCE) {
-			return false;
-		}
-		if (((ti.aspectRatio / aspectRatio) - 1.0f) > TrainingImage.ASPECT_RATIO_TOLERANCE) {
-			return false;
-		}
-		// The top whitespace fractions must be within tolerance.
-		if (Math.abs(topWhiteSpaceFraction - ti.topWhiteSpaceFraction) >
-			TrainingImage.TOP_WHITE_SPACE_FRACTION_TOLERANCE) {
-			return false;
-		}
-		// The bottom whitespace fractions must be within tolerance.
-		if (Math.abs(bottomWhiteSpaceFraction - ti.bottomWhiteSpaceFraction) >
-			TrainingImage.BOTTOM_WHITE_SPACE_FRACTION_TOLERANCE) {
-			return false;
-		}
-		// If the area being scanned is really small and we
-		// are about to crunch down a training image by a huge
-		// factor in order to compare to it, then don't do that.
-		if ((w <= 4) && (ti.width >= (w * 10))) return false;
-		if ((h <= 4) && (ti.height >= (h * 10))) return false;
-		// If the area being scanned is really large and we
-		// are about to expand a training image by a huge
-		// factor in order to compare to it, then don't do that.
-		if ((ti.width <= 4) && (w >= (ti.width * 10))) return false;
-		if ((ti.height <= 4) && (h >= (ti.height * 10))) return false;
-		return true;
-	}
-
 	public void processSpace(PixelImage pixelImage, int x1, int y1, int x2, int y2) {
 ///
 ///System.out.print(' ');
 ///System.out.flush();
 		decodeBuffer.append(' ');
+	}
+
+	/**
+     * Scan an image and return the decoded text.
+     * @param imageFile The {@link File} containing the image to be scanned.
+     * @param x1 The leftmost pixel position of the area to be scanned, or
+     * <code>0</code> to start scanning at the left boundary of the image.
+     * @param y1 The topmost pixel position of the area to be scanned, or
+     * <code>0</code> to start scanning at the top boundary of the image.
+     * @param x2 The rightmost pixel position of the area to be scanned, or
+     * <code>0</code> to stop scanning at the right boundary of the image.
+     * @param y2 The bottommost pixel position of the area to be scanned, or
+     * <code>0</code> to stop scanning at the bottom boundary of the image.
+     * @param acceptableChars An array of <code>CharacterRange</code> objects
+     * representing the ranges of characters which are allowed to be decoded,
+     * or <code>null</code> to not limit which characters can be decoded.
+     * @param g An optional <code>Graphics</code> object onto which border lines
+     * will be drawn to denote the borders of rows of text and character cells.
+     * This is used for debugging and can be <code>null</code>.
+     * @return The decoded text.
+	 * @throws IOException If an error occurs while reading the input file.
+     */
+	public String scan(
+		File imageFile,
+		int x1,
+		int y1,
+		int x2,
+		int y2,
+		CharacterRange[]acceptableChars, Graphics g) throws IOException {
+
+		Image image = Toolkit.getDefaultToolkit().createImage(imageFile.getCanonicalPath());
+		MediaTracker mt = new MediaTrackerProxy(null);
+		mt.addImage(image, 0);
+		try {
+			mt.waitForAll();
+		} catch(InterruptedException ex) {}
+
+		return scan(image, x1, y1, x2, y2, acceptableChars, g);
+	}
+
+	/**
+      * Scan an image and return the decoded text.
+      * @param image The {@link Image} to be scanned.
+      * @param x1 The leftmost pixel position of the area to be scanned, or
+      * <code>0</code> to start scanning at the left boundary of the image.
+      * @param y1 The topmost pixel position of the area to be scanned, or
+      * <code>0</code> to start scanning at the top boundary of the image.
+      * @param x2 The rightmost pixel position of the area to be scanned, or
+      * <code>0</code> to stop scanning at the right boundary of the image.
+      * @param y2 The bottommost pixel position of the area to be scanned, or
+      * <code>0</code> to stop scanning at the bottom boundary of the image.
+      * @param acceptableChars An array of <code>CharacterRange</code> objects
+      * representing the ranges of characters which are allowed to be decoded,
+      * or <code>null</code> to not limit which characters can be decoded.
+      * @param g An optional {@link Graphics} object onto which border lines
+      * will be drawn to denote the borders of rows of text and character cells.
+      * This is used for debugging and can be <code>null</code>.
+      * @return The decoded text.
+      */
+	public String scan(
+		Image image,
+		int x1,
+		int y1,
+		int x2,
+		int y2,
+		CharacterRange[]acceptableChars, Graphics g) {
+
+		this.acceptableChars = acceptableChars;
+		PixelImage pixelImage = new PixelImage(image);
+		pixelImage.toGrayScale(true);
+		pixelImage.filter();
+		decodeBuffer.setLength(0);
+		firstRow = true;
+		documentScanner.scan(pixelImage, this, x1, y1, x2, y2, g);
+		String result = decodeBuffer.toString();
+		decodeBuffer.setLength(0);
+		return result;
+	}
+
+	/**
+	 * Trains this scanner with the provided images. Each image is associated to a character range
+	 * in order to tell the scanner how to interpret images.
+	 *
+	 * @param component A {@link Component} that will be used to load images. If <code>null</code>
+	 * an alternative way to load images will be used.
+	 * @param trainingSet A <code>{@link Map}&lt;String, {@link CharacterRange}&gt;</code> that
+	 * maps file names pointing to images that will be used to train the scanner to the corresponding
+	 * character range represented in the image.
+	 * @param cleanBeforeTrain A boolean switch to force to clean the old training set of this scanner.
+	 * @throws IOException If an error occurs while reading training files.
+	 */
+	public void train(Component component, Map<String, CharacterRange> trainingSet, boolean cleanBeforeTrain) throws IOException {
+		if(cleanBeforeTrain)
+			clearTrainingImages();
+
+		HashMap images = new HashMap();
+		TrainingImageLoader loader = new TrainingImageLoader();
+
+		for(Map.Entry<String, CharacterRange> entry : trainingSet.entrySet()) {
+			loader.load(component, entry.getKey(), entry.getValue(), images);
+		}
+
+		addTrainingImages(images);
 	}
 }
