@@ -99,7 +99,7 @@ public class DyndnsClientMain {
 						System.out.println("Cannot encode string: " + e.getMessage());
 					}
 				}
-				else if("decode".equals(args[0])){
+				/*else if("decode".equals(args[0])){
 					String pwd = args[1];
 					CryptedPasswordReader cpr = new CryptedPasswordReader();
 					try {
@@ -107,7 +107,7 @@ public class DyndnsClientMain {
 					} catch (Exception e) {
 						System.out.println("Cannot decode string: " + e.getMessage());
 					}
-				}
+				}*/
 			}
 		}
 		else{

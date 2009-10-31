@@ -159,7 +159,7 @@ public class CryptedPasswordReader implements PasswordReader {
 		return ret;
 	}
 
-	public String decodeString(String str) throws InvalidKeyException,
+	private String decodeString(String str) throws InvalidKeyException,
 			NoSuchAlgorithmException, IllegalBlockSizeException, NoSuchPaddingException,
 			BadPaddingException, IOException {
 		String ret = null;

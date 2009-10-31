@@ -136,7 +136,7 @@ public class ConfigLoader implements Serializable {
 			for(Iterator it = confInstance.getKeys(); it.hasNext(); ){
 	    		String key = (String) it.next();
 	    		List<String> values = confInstance.getList(key);
-	    		log.debug(key + ": " + values);
+	    		log.trace(key + ": " + values);
 	    		if(values.size() == 1)
 	    			propList.put(key, values.get(0));
 	    		else
