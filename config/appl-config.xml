@@ -16,6 +16,7 @@
             <server>localhost</server>
             <port>8080</port>
             -->
+            
             <context>dyndns</context>
             <methods>
                 <ipstorage>ipstorage</ipstorage>
