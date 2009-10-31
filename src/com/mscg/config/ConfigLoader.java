@@ -67,6 +67,9 @@ public class ConfigLoader implements Serializable {
     public static final String DYNDNS_SERVICE			= "dyndns.service";
     public static final String DYNDNS_THREAD_TIMEOUT	= "dyndns.thread.timeout";
 
+    public static final String DYNDNS_EATJ_USERAGENT    = "dyndns.interface.eatj.user-agent";
+    public static final String DYNDNS_EATJ_TESTURL      = "dyndns.interface.eatj.test";
+
     /**
      * Returns a map with the configuration parameters found in the configuration file.
      *

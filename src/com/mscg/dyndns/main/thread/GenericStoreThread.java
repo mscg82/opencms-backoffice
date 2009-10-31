@@ -9,6 +9,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
+import com.mscg.httpinterface.EatjTesterInterface;
 import com.mscg.httpinterface.IPStorageInterface;
 import com.mscg.util.Util;
 
@@ -22,8 +23,9 @@ public abstract class GenericStoreThread extends Thread {
 
 	protected IPStorageInterface storageInterface;
 
-	protected String service;
+	protected EatjTesterInterface testerInterface;
 
+	protected String service;
 	protected long timeout;
 
 	protected GenericStoreThread() throws ConfigurationException{
@@ -34,6 +36,8 @@ public abstract class GenericStoreThread extends Thread {
 		timeout *= 1000;
 
 		storageInterface = new IPStorageInterface();
+
+		testerInterface = new EatjTesterInterface();
 
 		service = (String) ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_SERVICE);
 		if(service == null)
@@ -47,13 +51,27 @@ public abstract class GenericStoreThread extends Thread {
 	public void run() {
 		while(true){
 
-			log.debug("Storing IPs...");
-
-			List<String> IPs = retrieveIPs();
-
 			try {
-				storageInterface.storeIP(service, IPs);
-				log.debug("IPs stored!");
+				boolean store = false;
+
+				log.debug("Checking if server is running...");
+				boolean running = testerInterface.testIfServerIsRunning();
+
+				if(running){
+					log.debug("Server is running correctly.");
+					store = true;
+				}
+				else{
+					log.debug("Server is not running. Trying to start it");
+				}
+
+				if(store){
+					log.debug("Storing IPs...");
+					List<String> IPs = retrieveIPs();
+
+					storageInterface.storeIP(service, IPs);
+					log.debug("IPs stored!");
+				}
 			} catch (Exception e) {
 				log.error("Error found in HTTP comunication: " + e.getMessage());
 				Util.logStackTrace(e, log);

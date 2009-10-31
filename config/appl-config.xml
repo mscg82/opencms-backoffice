@@ -1,34 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <config>
-	<dyndns>
-	    <store-thread>com.mscg.dyndns.main.thread.MyIpAddressStoreThread</store-thread>
-	    <myipaddress>
-	       <url>http://www.myipaddress.com/</url>
-	    </myipaddress>
-		<interface>
-			<protocol>http</protocol>
-			<!-- 
-			<server>mscg3.s156.eatj.com</server>
-			<port></port>
-			-->
+    <dyndns>
+        <store-thread>com.mscg.dyndns.main.thread.MyIpAddressStoreThread</store-thread>
+        <myipaddress>
+           <url>http://www.myipaddress.com/</url>
+        </myipaddress>
+        <interface>
+            <protocol>http</protocol>
+             
+            <server>mscg3.s156.eatj.com</server>
+            <port></port>
             
-			<server>localhost</server>
-			<port>8080</port>
+            <!--
+            <server>localhost</server>
+            <port>8080</port>
+            -->
+            <context>dyndns</context>
+            <methods>
+                <ipstorage>ipstorage</ipstorage>
+            </methods>
             
-			<context>dyndns</context>
-			<methods>
-				<ipstorage>ipstorage</ipstorage>
-			</methods>
-		</interface>
-		<service>mscg2</service>
-		<thread>
-			<timeout>300</timeout>
-		</thread>
-		<process>
-		    <exe-path>C:\Windows\system32\notepad.exe</exe-path>
-		    <parameter></parameter>
-		    <folder>C:\Windows\system32\</folder>
-		</process>
-	</dyndns>
+            <eatj>
+                <user-agent><![CDATA[Mozilla/5.0 (Windows; U; Windows NT 6.0; it; rv:1.9.1.4) Gecko/20091016 Firefox/3.5.4 (.NET CLR 3.5.30729)]]></user-agent>
+                <test>test.jsp</test>
+            </eatj>
+        </interface>
+        <service>mscg2</service>
+        <thread>
+            <timeout>300</timeout>
+        </thread>
+        <process>
+            <exe-path>C:\Windows\system32\notepad.exe</exe-path>
+            <parameter></parameter>
+            <folder>C:\Windows\system32\</folder>
+        </process>
+    </dyndns>
 </config>
