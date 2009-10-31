@@ -16,6 +16,7 @@ import com.mscg.config.ConfigLoader;
 import com.mscg.dyndns.main.thread.GenericStoreThread;
 import com.mscg.dyndns.main.thread.LocalIPStoreThread;
 import com.mscg.util.Util;
+import com.mscg.util.passwordreader.CryptedPasswordReader;
 
 /**
  * @author Giuseppe Miscione
@@ -86,24 +87,49 @@ public class DyndnsClientMain {
 	}
 
 	public static void main(String[] args) {
-		GenericStoreThread thread = null;
-		try {
-			Util.initApplication();
 
-			thread = launchStoreThread();
+		if(args.length >= 1){
+			if(args.length >= 2){
+				if("encode".equals(args[0])){
+					String pwd = args[1];
+					CryptedPasswordReader cpr = new CryptedPasswordReader();
+					try {
+						System.out.println(pwd + " -> " + cpr.encodeString(pwd));
+					} catch (Exception e) {
+						System.out.println("Cannot encode string: " + e.getMessage());
+					}
+				}
+				else if("decode".equals(args[0])){
+					String pwd = args[1];
+					CryptedPasswordReader cpr = new CryptedPasswordReader();
+					try {
+						System.out.println(pwd + " -> " + cpr.decodeString(pwd));
+					} catch (Exception e) {
+						System.out.println("Cannot decode string: " + e.getMessage());
+					}
+				}
+			}
+		}
+		else{
+			GenericStoreThread thread = null;
+			try {
+				Util.initApplication();
 
-			launchAppAndWait();
+				thread = launchStoreThread();
 
-			log.debug("Exiting from application.");
+				launchAppAndWait();
 
-		} catch (Exception e) {
-			log.error("Error found (" + e.getClass() + ") while running application.", e);
-			Util.logStackTrace(e, log);
-			e.printStackTrace();
-		} finally{
-			thread.setExit(true);
-			if(thread != null)
-				thread.interrupt();
+				log.debug("Exiting from application.");
+
+			} catch (Exception e) {
+				log.error("Error found (" + e.getClass() + ") while running application.", e);
+				Util.logStackTrace(e, log);
+				e.printStackTrace();
+			} finally{
+				thread.setExit(true);
+				if(thread != null)
+					thread.interrupt();
+			}
 		}
 	}
 

@@ -45,8 +45,8 @@
                     <uuid-param>uuid</uuid-param>
                     <values>
                         <username>MscG3</username>
-                        <password>mscgpp82</password>
-                        <password-reader>com.mscg.util.passwordreader.PlainPasswordReader</password-reader>
+                        <password>GXIJ11+sJoxqXpbxJTZK7A==</password>
+                        <password-reader>com.mscg.util.passwordreader.CryptedPasswordReader</password-reader>
                     </values>
                 </parameters>
                 <captcha>
