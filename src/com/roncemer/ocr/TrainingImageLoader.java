@@ -23,6 +23,7 @@ import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -54,6 +55,36 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor {
 	public DocumentScanner getDocumentScanner() {
 		return documentScanner;
 	}
+
+	/**
+     * Load an image containing training characters, break it up into
+     * characters, and build a training set.
+     * Each entry in the training set (a <code>Map</code>) has a key which
+     * is a <code>Character</code> object whose value is the character code.
+     * Each corresponding value in the <code>Map</code> is an
+     * <code>ArrayList</code> of one or more <code>TrainingImage</code>
+     * objects which contain images of the character represented in the key.
+     * @param component A <code>Component</code> compatible with the image.
+     * This is used to instantiate a <code>MediaTracker</code> to wait for the
+     * image to load.
+     * @param imageFileURL An {@link URL} object pointing to the image file.
+     * @param charRange A <code>CharacterRange</code> object representing the
+     * range of characters which is contained in this image.
+     * @param dest A <code>Map</code> which gets loaded with the training
+     * data.  Multiple calls to this method may be made with the same
+     * <code>Map</code> to populate it with the data from several training
+     * images.
+     */
+	public void load(Component component, URL imageFileURL, CharacterRange charRange, Map dest)
+		throws IOException {
+
+		Image image = Toolkit.getDefaultToolkit().createImage(imageFileURL);
+		if (image == null) {
+			throw new IOException("Cannot find training image file at " + imageFileURL.toString());
+		}
+		load(component, image, charRange, dest, imageFileURL.toString());
+	}
+
 	/**
       * Load an image containing training characters, break it up into
       * characters, and build a training set.
@@ -76,19 +107,6 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor {
 	public void load(Component component, String imageFilename, CharacterRange charRange, Map dest)
 		throws IOException {
 
-		/*
-		StringBuffer sb = new StringBuffer();
-		sb.append("file://");
-		for (int i = 0, len = imageFilename.length(); i < len; i++) {
-			char c = imageFilename.charAt(i);
-			if ((c == '/') || (c == '\\') || (c == File.separatorChar)) {
-				sb.append('/');
-			} else {
-				sb.append(URLEncoder.encode(Character.toString(c)));
-			}
-		}
-		String imageFileUrlString = sb.toString();
-		*/
 		File imageFile = new File(imageFilename);
 		String imageFileUrlString = imageFile.getCanonicalPath();
 		Image image = Toolkit.getDefaultToolkit().createImage(imageFileUrlString);
