@@ -4,6 +4,7 @@
 package com.mscg.dyndns.main;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,6 +13,7 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
+import com.mscg.dyndns.main.thread.GenericStoreThread;
 import com.mscg.dyndns.main.thread.LocalIPStoreThread;
 import com.mscg.util.Util;
 
@@ -63,14 +65,14 @@ public class DyndnsClientMain {
 		}
 	}
 
-	public static Thread launchStroreThread() throws ConfigurationException {
+	public static GenericStoreThread launchStoreThread() throws ConfigurationException, ClassCastException, IOException {
 		String className = (String)ConfigLoader.getInstance().get("dyndns.store-thread");
-		Thread thread = null;
+		GenericStoreThread thread = null;
 		try{
 			log.debug("Loading class " + className + "...");
 
 			Class threadClass = Class.forName(className);
-			Constructor<Thread> threadConstructor = threadClass.getConstructor();
+			Constructor<GenericStoreThread> threadConstructor = threadClass.getConstructor();
 			thread = threadConstructor.newInstance();
 		} catch(Exception e){
 			// use default thread class
@@ -84,20 +86,22 @@ public class DyndnsClientMain {
 	}
 
 	public static void main(String[] args) {
-		Thread thread = null;
+		GenericStoreThread thread = null;
 		try {
 			Util.initApplication();
 
-			thread = launchStroreThread();
+			thread = launchStoreThread();
 
 			launchAppAndWait();
 
 			log.debug("Exiting from application.");
 
 		} catch (Exception e) {
+			log.error("Error found (" + e.getClass() + ") while running application.", e);
 			Util.logStackTrace(e, log);
 			e.printStackTrace();
 		} finally{
+			thread.setExit(true);
 			if(thread != null)
 				thread.interrupt();
 		}

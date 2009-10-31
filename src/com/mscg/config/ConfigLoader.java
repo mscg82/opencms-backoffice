@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
  */
 public class ConfigLoader implements Serializable {
 
-	private static final long serialVersionUID = 9083908460526771377L;
+	private static final long serialVersionUID = -7803708266647335688L;
 
 	/**
      * The logger to which the configuration loader registers its actions and problems.
@@ -67,8 +67,28 @@ public class ConfigLoader implements Serializable {
     public static final String DYNDNS_SERVICE			= "dyndns.service";
     public static final String DYNDNS_THREAD_TIMEOUT	= "dyndns.thread.timeout";
 
-    public static final String DYNDNS_EATJ_USERAGENT    = "dyndns.interface.eatj.user-agent";
-    public static final String DYNDNS_EATJ_TESTURL      = "dyndns.interface.eatj.test";
+    public static final String EATJ_THINKTIME        = "dyndns.interface.eatj.think-time";
+    public static final String EATJ_USERAGENT        = "dyndns.interface.eatj.user-agent";
+    public static final String EATJ_TESTURL          = "dyndns.interface.eatj.methods.test";
+    public static final String EATJ_URL_PREFIX       = "dyndns.interface.eatj.urls.prefix";
+    public static final String EATJ_URL_MAIN         = "dyndns.interface.eatj.urls.main-url";
+    public static final String EATJ_URL_CAPTCHA      = "dyndns.interface.eatj.urls.captcha-url";
+    public static final String EATJ_URL_FORM         = "dyndns.interface.eatj.urls.form-action";
+    public static final String EATJ_URL_CONFIRM      = "dyndns.interface.eatj.urls.confirm-url";
+    public static final String EATJ_URL_ACCOUNT      = "dyndns.interface.eatj.urls.account-url";
+    public static final String EATJ_URL_RESTART      = "dyndns.interface.eatj.urls.restart";
+    public static final String EATJ_URL_LOGOUT       = "dyndns.interface.eatj.urls.logout";
+    public static final String EATJ_PARAM_USERNAME   = "dyndns.interface.eatj.parameters.username-param";
+    public static final String EATJ_PARAM_PASSWORD   = "dyndns.interface.eatj.parameters.password-param";
+    public static final String EATJ_PARAM_CAPTCHA    = "dyndns.interface.eatj.parameters.captcha-param";
+    public static final String EATJ_PARAM_UUID       = "dyndns.interface.eatj.parameters.uuid-param";
+    public static final String EATJ_VALUES_USERNAME  = "dyndns.interface.eatj.parameters.values.username";
+    public static final String EATJ_VALUES_PASSWORD  = "dyndns.interface.eatj.parameters.values.password";
+    public static final String EATJ_VALUES_PWDREADER = "dyndns.interface.eatj.parameters.values.password-reader";
+
+    public static final String CAPTCHA_PARAMS        = "dyndns.interface.eatj.captcha";
+    public static final String CAPTCHA_TMP_FILE      = CAPTCHA_PARAMS + ".tmp-file-name";
+    public static final String CAPTCHA_TRAINING_SETS = CAPTCHA_PARAMS + ".training-sets";
 
     /**
      * Returns a map with the configuration parameters found in the configuration file.

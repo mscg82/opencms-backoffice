@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package com.mscg.httpinterface;
 
@@ -23,23 +23,23 @@ import com.mscg.config.ConfigLoader;
  */
 public class AbstractHttpInterface {
 	private static Logger log = Logger.getLogger(AbstractHttpInterface.class);
-	
+
 	private static final int CONN_TIMEOUT = 5000; // in milliseconds
 	private static final int INTERVAL_TIMEOUT = 30000; // in milliseconds
-	
+
 	protected String strUrl = null;
 	protected HttpClient client = null;
 	protected PostMethod httpPost = null;
 	protected GetMethod httpGet = null;
 	protected Map<String, Object> config = null;
-	
+
 	protected static IdleConnectionTimeoutThread connManagerThread = null;
 	protected static MultiThreadedHttpConnectionManager connectionManager = null;
 	protected static Integer mutex = new Integer(0);
-	
+
 	public AbstractHttpInterface() throws ConfigurationException {
 		config = ConfigLoader.getInstance();
-		
+
 		synchronized(mutex){
 			if(connManagerThread == null){
 				connManagerThread = new IdleConnectionTimeoutThread();
@@ -47,36 +47,27 @@ public class AbstractHttpInterface {
 				connManagerThread.setTimeoutInterval(INTERVAL_TIMEOUT);
 				connManagerThread.start();
 			}
-			
+
 			if(connectionManager == null){
 				connectionManager =	new MultiThreadedHttpConnectionManager();
 				HttpConnectionManagerParams params = new HttpConnectionManagerParams();
-				
+
 				HostConfiguration hostConf1 = new HostConfiguration();
 				hostConf1.setHost((String) config.get(ConfigLoader.DYNDNS_SERVER), 80, (String) config.get(ConfigLoader.DYNDNS_PROTOCOL));
 				params.setMaxConnectionsPerHost(hostConf1, 50);
-				
+
 				params.setMaxTotalConnections(50);
-				
+
 				connectionManager.setParams(params);
-				
+
 				connManagerThread.addConnectionManager(connectionManager);
 			}
 
 		}
-		
-	    // Get HTTP client instance
-	    client = new HttpClient(connectionManager);
-	    //establish a connection within 5 seconds
-	    client.getHttpConnectionManager().getParams().setConnectionTimeout(CONN_TIMEOUT);
-	    if(connManagerThread.isAlive()){
-	    	log.debug("Connection manager thread alive, adding connection manager: " + client.getHttpConnectionManager().toString());
-	    }
-	    else{
-	    	log.debug("Connection manager thread dead.");
-	    }
+
+		renewClient();
 	}
-	
+
 	protected String prepareUrl(String method) {
 		StringBuilder builder = new StringBuilder();
 		builder.append( (String) config.get(ConfigLoader.DYNDNS_PROTOCOL) );
@@ -94,5 +85,18 @@ public class AbstractHttpInterface {
 		}
 		builder.append(method);
 		return builder.toString();
+	}
+
+	protected void renewClient() {
+		// Get HTTP client instance
+	    client = new HttpClient(connectionManager);
+	    //establish a connection within 5 seconds
+	    client.getHttpConnectionManager().getParams().setConnectionTimeout(CONN_TIMEOUT);
+	    if(connManagerThread.isAlive()){
+	    	log.trace("Connection manager thread alive, adding connection manager: " + client.getHttpConnectionManager().toString());
+	    }
+	    else{
+	    	log.trace("Connection manager thread dead.");
+	    }
 	}
 }

@@ -23,7 +23,7 @@ public class LocalIPStoreThread extends GenericStoreThread {
 
 	private static Logger log = Logger.getLogger(LocalIPStoreThread.class);
 
-	public LocalIPStoreThread() throws ConfigurationException{
+	public LocalIPStoreThread() throws ConfigurationException, ClassCastException, IOException{
 		super();
 	}
 

@@ -22,8 +22,47 @@
             </methods>
             
             <eatj>
+                <think-time>300</think-time>
                 <user-agent><![CDATA[Mozilla/5.0 (Windows; U; Windows NT 6.0; it; rv:1.9.1.4) Gecko/20091016 Firefox/3.5.4 (.NET CLR 3.5.30729)]]></user-agent>
-                <test>test.jsp</test>
+                <methods>
+                    <test>test.jsp</test>
+                </methods>
+                <urls>
+                    <prefix>http://s156.eatj.com/</prefix>
+                    <main-url>index.jsp</main-url>
+                    <captcha-url>Cap_Img.jsp</captcha-url>
+                    <form-action>logonhandler1.jsp</form-action>
+                    <confirm-url>wait_login.jsp</confirm-url>
+                    <account-url>myacct.jsp</account-url>
+                    <restart>acctmanager.jsp?action=restart</restart>
+                    <logout>logout.jsp</logout>
+                </urls>
+                <parameters>
+                    <username-param>username1</username-param>
+                    <password-param>password</password-param>
+                    <captcha-param>captcha2-2</captcha-param>
+                    <uuid-param>uuid</uuid-param>
+                    <values>
+                        <username>MscG3</username>
+                        <password>mscgpp82</password>
+                        <password-reader>com.mscg.util.passwordreader.PlainPasswordReader</password-reader>
+                    </values>
+                </parameters>
+                <captcha>
+                    <tmp-file-name>./tmp-captcha.jpeg</tmp-file-name>
+                    <training-sets>eatj-training-set</training-sets>
+                    <eatj-training-set>
+                        <elements>letters,numbers</elements>
+                        <letters>
+                            <url>eatj/eatj_letter.jpg</url>
+                            <chars>af</chars>
+                        </letters>
+                        <numbers>
+                            <url>eatj/eatj_number.jpg</url>
+                            <chars>09</chars>
+                        </numbers>
+                    </eatj-training-set>
+                </captcha>
             </eatj>
         </interface>
         <service>mscg2</service>

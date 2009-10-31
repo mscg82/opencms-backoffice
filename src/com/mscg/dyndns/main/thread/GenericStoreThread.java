@@ -3,6 +3,7 @@
  */
 package com.mscg.dyndns.main.thread;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -28,7 +29,11 @@ public abstract class GenericStoreThread extends Thread {
 	protected String service;
 	protected long timeout;
 
-	protected GenericStoreThread() throws ConfigurationException{
+	protected boolean exit;
+
+	protected GenericStoreThread() throws ConfigurationException, ClassCastException, IOException{
+		setExit(false);
+
 		timeout = 300;
 		try{
 			timeout = Long.parseLong((String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_THREAD_TIMEOUT));
@@ -44,6 +49,13 @@ public abstract class GenericStoreThread extends Thread {
 			service = "mscg";
 
 		log.debug("Thread will run every " + timeout + " milliseconds for service \"" + service + "\".");
+	}
+
+	/**
+	 * @return the exit
+	 */
+	public synchronized boolean isExit() {
+		return exit;
 	}
 
 	public abstract List<String> retrieveIPs();
@@ -63,6 +75,12 @@ public abstract class GenericStoreThread extends Thread {
 				}
 				else{
 					log.debug("Server is not running. Trying to start it");
+					if(testerInterface.startServer()){
+						log.debug("Server started successfully.");
+						store = true;
+					}
+					else
+						log.debug("Cannot start server. Aborting IP storage.");
 				}
 
 				if(store){
@@ -77,12 +95,23 @@ public abstract class GenericStoreThread extends Thread {
 				Util.logStackTrace(e, log);
 			}
 
+			if(isExit())
+				return;
+
 			try {
 				Thread.sleep(timeout);
-			} catch (InterruptedException e) {
-				return;
-			}
+			} catch (InterruptedException e) { }
+
 		}
 	}
+
+	/**
+	 * @param exit the exit to set
+	 */
+	public synchronized void setExit(boolean exit) {
+		this.exit = exit;
+	}
+
+
 
 }

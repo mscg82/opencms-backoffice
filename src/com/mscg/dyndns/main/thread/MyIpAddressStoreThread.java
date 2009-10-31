@@ -3,6 +3,7 @@
  */
 package com.mscg.dyndns.main.thread;
 
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -24,7 +25,7 @@ public class MyIpAddressStoreThread extends GenericStoreThread {
 
 	private Pattern pattern;
 
-	public MyIpAddressStoreThread() throws ConfigurationException {
+	public MyIpAddressStoreThread() throws ConfigurationException, ClassCastException, IOException {
 		super();
 		pattern = Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
 	}
