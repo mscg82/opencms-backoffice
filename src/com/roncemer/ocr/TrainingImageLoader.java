@@ -48,72 +48,22 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor {
 
 	protected DocumentScanner documentScanner = new DocumentScanner();
 
+	public void beginRow(PixelImage pixelImage, int y1, int y2) {
+		if(LOG.isDebugEnabled())
+			LOG.debug("TrainingImageLoader.beginRow " + y1 + "," + y2);
+	}
+
+	public void endRow(PixelImage pixelImage, int y1, int y2) {
+		if(LOG.isDebugEnabled())
+			LOG.debug("TrainingImageLoader.endRow " + y1 + "," + y2);
+	}
+
 	/**
       * @return The <code>DocumentScanner</code> instance that is used to load the training
       * images.  This is useful if the caller wants to adjust some of the scanner's parameters.
       */
 	public DocumentScanner getDocumentScanner() {
 		return documentScanner;
-	}
-
-	/**
-     * Load an image containing training characters, break it up into
-     * characters, and build a training set.
-     * Each entry in the training set (a <code>Map</code>) has a key which
-     * is a <code>Character</code> object whose value is the character code.
-     * Each corresponding value in the <code>Map</code> is an
-     * <code>ArrayList</code> of one or more <code>TrainingImage</code>
-     * objects which contain images of the character represented in the key.
-     * @param component A <code>Component</code> compatible with the image.
-     * This is used to instantiate a <code>MediaTracker</code> to wait for the
-     * image to load.
-     * @param imageFileURL An {@link URL} object pointing to the image file.
-     * @param charRange A <code>CharacterRange</code> object representing the
-     * range of characters which is contained in this image.
-     * @param dest A <code>Map</code> which gets loaded with the training
-     * data.  Multiple calls to this method may be made with the same
-     * <code>Map</code> to populate it with the data from several training
-     * images.
-     */
-	public void load(Component component, URL imageFileURL, CharacterRange charRange, Map dest)
-		throws IOException {
-
-		Image image = Toolkit.getDefaultToolkit().createImage(imageFileURL);
-		if (image == null) {
-			throw new IOException("Cannot find training image file at " + imageFileURL.toString());
-		}
-		load(component, image, charRange, dest, imageFileURL.toString());
-	}
-
-	/**
-      * Load an image containing training characters, break it up into
-      * characters, and build a training set.
-      * Each entry in the training set (a <code>Map</code>) has a key which
-      * is a <code>Character</code> object whose value is the character code.
-      * Each corresponding value in the <code>Map</code> is an
-      * <code>ArrayList</code> of one or more <code>TrainingImage</code>
-      * objects which contain images of the character represented in the key.
-      * @param component A <code>Component</code> compatible with the image.
-      * This is used to instantiate a <code>MediaTracker</code> to wait for the
-      * image to load.
-      * @param imageFilename The filename of the image to load.
-      * @param charRange A <code>CharacterRange</code> object representing the
-      * range of characters which is contained in this image.
-      * @param dest A <code>Map</code> which gets loaded with the training
-      * data.  Multiple calls to this method may be made with the same
-      * <code>Map</code> to populate it with the data from several training
-      * images.
-      */
-	public void load(Component component, String imageFilename, CharacterRange charRange, Map dest)
-		throws IOException {
-
-		File imageFile = new File(imageFilename);
-		String imageFileUrlString = imageFile.getCanonicalPath();
-		Image image = Toolkit.getDefaultToolkit().createImage(imageFileUrlString);
-		if (image == null) {
-			throw new IOException("Cannot find training image file at " + imageFileUrlString);
-		}
-		load(component, image, charRange, dest, imageFileUrlString);
 	}
 
 	public void load(
@@ -148,14 +98,64 @@ public class TrainingImageLoader extends DocumentScannerListenerAdaptor {
 		}
 	}
 
-	public void beginRow(PixelImage pixelImage, int y1, int y2) {
-		if(LOG.isDebugEnabled())
-			LOG.debug("TrainingImageLoader.beginRow " + y1 + "," + y2);
+	/**
+      * Load an image containing training characters, break it up into
+      * characters, and build a training set.
+      * Each entry in the training set (a <code>Map</code>) has a key which
+      * is a <code>Character</code> object whose value is the character code.
+      * Each corresponding value in the <code>Map</code> is an
+      * <code>ArrayList</code> of one or more <code>TrainingImage</code>
+      * objects which contain images of the character represented in the key.
+      * @param component A <code>Component</code> compatible with the image.
+      * This is used to instantiate a <code>MediaTracker</code> to wait for the
+      * image to load.
+      * @param imageFilename The filename of the image to load.
+      * @param charRange A <code>CharacterRange</code> object representing the
+      * range of characters which is contained in this image.
+      * @param dest A <code>Map</code> which gets loaded with the training
+      * data.  Multiple calls to this method may be made with the same
+      * <code>Map</code> to populate it with the data from several training
+      * images.
+      */
+	public void load(Component component, String imageFilename, CharacterRange charRange, Map dest)
+		throws IOException {
+
+		File imageFile = new File(imageFilename);
+		String imageFileUrlString = imageFile.getCanonicalPath();
+		Image image = Toolkit.getDefaultToolkit().createImage(imageFileUrlString);
+		if (image == null) {
+			throw new IOException("Cannot find training image file at " + imageFileUrlString);
+		}
+		load(component, image, charRange, dest, imageFileUrlString);
 	}
 
-	public void endRow(PixelImage pixelImage, int y1, int y2) {
-		if(LOG.isDebugEnabled())
-			LOG.debug("TrainingImageLoader.endRow " + y1 + "," + y2);
+	/**
+     * Load an image containing training characters, break it up into
+     * characters, and build a training set.
+     * Each entry in the training set (a <code>Map</code>) has a key which
+     * is a <code>Character</code> object whose value is the character code.
+     * Each corresponding value in the <code>Map</code> is an
+     * <code>ArrayList</code> of one or more <code>TrainingImage</code>
+     * objects which contain images of the character represented in the key.
+     * @param component A <code>Component</code> compatible with the image.
+     * This is used to instantiate a <code>MediaTracker</code> to wait for the
+     * image to load.
+     * @param imageFileURL An {@link URL} object pointing to the image file.
+     * @param charRange A <code>CharacterRange</code> object representing the
+     * range of characters which is contained in this image.
+     * @param dest A <code>Map</code> which gets loaded with the training
+     * data.  Multiple calls to this method may be made with the same
+     * <code>Map</code> to populate it with the data from several training
+     * images.
+     */
+	public void load(Component component, URL imageFileURL, CharacterRange charRange, Map dest)
+		throws IOException {
+
+		Image image = Toolkit.getDefaultToolkit().createImage(imageFileURL);
+		if (image == null) {
+			throw new IOException("Cannot find training image file at " + imageFileURL.toString());
+		}
+		load(component, image, charRange, dest, imageFileURL.toString());
 	}
 
 	public void processChar

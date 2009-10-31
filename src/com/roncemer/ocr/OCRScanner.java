@@ -24,6 +24,7 @@ import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -279,14 +280,7 @@ System.out.println();
 		int y2,
 		CharacterRange[]acceptableChars, Graphics g) throws IOException {
 
-		Image image = Toolkit.getDefaultToolkit().createImage(imageFile.getCanonicalPath());
-		MediaTracker mt = new MediaTrackerProxy(null);
-		mt.addImage(image, 0);
-		try {
-			mt.waitForAll();
-		} catch(InterruptedException ex) {}
-
-		return scan(image, x1, y1, x2, y2, acceptableChars, g);
+		return scan(imageFile.toURL(), x1, y1, x2, y2, acceptableChars, g);
 	}
 
 	/**
@@ -329,26 +323,72 @@ System.out.println();
 	}
 
 	/**
+     * Scan an image and return the decoded text.
+     * @param imageURL The {@link URL} pointintg to the image to be scanned.
+     * @param x1 The leftmost pixel position of the area to be scanned, or
+     * <code>0</code> to start scanning at the left boundary of the image.
+     * @param y1 The topmost pixel position of the area to be scanned, or
+     * <code>0</code> to start scanning at the top boundary of the image.
+     * @param x2 The rightmost pixel position of the area to be scanned, or
+     * <code>0</code> to stop scanning at the right boundary of the image.
+     * @param y2 The bottommost pixel position of the area to be scanned, or
+     * <code>0</code> to stop scanning at the bottom boundary of the image.
+     * @param acceptableChars An array of <code>CharacterRange</code> objects
+     * representing the ranges of characters which are allowed to be decoded,
+     * or <code>null</code> to not limit which characters can be decoded.
+     * @param g An optional <code>Graphics</code> object onto which border lines
+     * will be drawn to denote the borders of rows of text and character cells.
+     * This is used for debugging and can be <code>null</code>.
+     * @return The decoded text.
+	 * @throws IOException If an error occurs while reading the input file.
+     */
+	public String scan(
+		URL imageURL,
+		int x1,
+		int y1,
+		int x2,
+		int y2,
+		CharacterRange[]acceptableChars, Graphics g) throws IOException {
+
+		Image image = Toolkit.getDefaultToolkit().createImage(imageURL);
+		MediaTracker mt = new MediaTrackerProxy(null);
+		mt.addImage(image, 0);
+		try {
+			mt.waitForAll();
+		} catch(InterruptedException ex) {}
+
+		return scan(image, x1, y1, x2, y2, acceptableChars, g);
+	}
+
+	/**
 	 * Trains this scanner with the provided images. Each image is associated to a character range
 	 * in order to tell the scanner how to interpret images.
 	 *
 	 * @param component A {@link Component} that will be used to load images. If <code>null</code>
 	 * an alternative way to load images will be used.
-	 * @param trainingSet A <code>{@link Map}&lt;String, {@link CharacterRange}&gt;</code> that
-	 * maps file names pointing to images that will be used to train the scanner to the corresponding
-	 * character range represented in the image.
+	 * @param trainingSet A <code>{@link Map}&lt;Object, {@link CharacterRange}&gt;</code> that
+	 * maps file pointers to images that will be used to train the scanner to the corresponding
+	 * character range represented in the image. The keys of the map can be {@link String} or {@link URL}.
 	 * @param cleanBeforeTrain A boolean switch to force to clean the old training set of this scanner.
 	 * @throws IOException If an error occurs while reading training files.
+	 * @throws ClassCastException If the keys of the trianing map are not Strings or URLs.
 	 */
-	public void train(Component component, Map<String, CharacterRange> trainingSet, boolean cleanBeforeTrain) throws IOException {
+	public void train(Component component, Map<Object, CharacterRange> trainingSet, boolean cleanBeforeTrain)
+			throws IOException, ClassCastException {
 		if(cleanBeforeTrain)
 			clearTrainingImages();
 
 		HashMap images = new HashMap();
 		TrainingImageLoader loader = new TrainingImageLoader();
 
-		for(Map.Entry<String, CharacterRange> entry : trainingSet.entrySet()) {
-			loader.load(component, entry.getKey(), entry.getValue(), images);
+		for(Map.Entry<Object, CharacterRange> entry : trainingSet.entrySet()) {
+			Object key = entry.getKey();
+			if(key instanceof String)
+				loader.load(component, (String) key, entry.getValue(), images);
+			else if(key instanceof URL)
+				loader.load(component, (URL) key, entry.getValue(), images);
+			else
+				throw new ClassCastException("Training map keys must be Strings or URLs.");
 		}
 
 		addTrainingImages(images);
