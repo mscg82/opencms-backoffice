@@ -13,12 +13,10 @@ namespace semaphore {
 	Semaphore::Semaphore(string semaphoreName, LONG initialCount, LONG maxCount) :
 		WaitableObject(), semaphoreName(semaphoreName)
 	{
-		semaphoreHandle = NULL;
-
 		this->initialCount = initialCount;
 		this->maxCount = maxCount;
 
-		semaphoreHandle = CreateSemaphore(NULL, this->initialCount, this->maxCount, this->semaphoreName.c_str());
+		HANDLE semaphoreHandle = CreateSemaphore(NULL, this->initialCount, this->maxCount, this->semaphoreName.c_str());
 		if(semaphoreHandle == NULL) {
 			throw CreateSemaphoreException(Util::getLastErrorMessage());
 		}
@@ -26,11 +24,7 @@ namespace semaphore {
 	}
 
 	Semaphore::~Semaphore() {
-		if(semaphoreHandle != NULL) {
-			if(CloseHandle(semaphoreHandle)) {
-				semaphoreHandle = NULL;
-			}
-		}
+
 	}
 
 	string Semaphore::getSemaphoreName() const {
@@ -38,7 +32,7 @@ namespace semaphore {
 	}
 
 	HANDLE Semaphore::getSemaphoreHandle() const {
-		return semaphoreHandle;
+		return WaitableObject::getWaitableHandle();
 	}
 
 	LONG Semaphore::getInitialCount() const {
@@ -62,11 +56,11 @@ namespace semaphore {
 	}
 
 	LONG Semaphore::signal(LONG count) {
-		if(semaphoreHandle == NULL) {
+		if(waitableHandle == NULL) {
 			throw NullPointerException();
 		}
 		LONG old = 0;
-		if(!ReleaseSemaphore(semaphoreHandle, count, &old)) {
+		if(!ReleaseSemaphore(waitableHandle, count, &old)) {
 			throw SignalSemaphoreException(Util::getLastErrorMessage());
 		}
 		return old;

@@ -11,6 +11,8 @@ namespace sharedmemory {
 namespace util {
 
 	WaitableObject::WaitableObject(HANDLE waitableHandle) {
+		this->waitableHandle = NULL;
+
 		setWaitableHandle(waitableHandle);
 	}
 

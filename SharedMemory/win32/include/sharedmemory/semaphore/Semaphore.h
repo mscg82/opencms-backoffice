@@ -29,7 +29,6 @@ namespace semaphore {
 
 	protected:
 		string semaphoreName;
-		HANDLE semaphoreHandle;
 		LONG initialCount;
 		LONG maxCount;
 
