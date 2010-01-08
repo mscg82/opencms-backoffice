@@ -14,21 +14,19 @@
 using namespace std;
 
 namespace sharedmemory {
+namespace util {
 
-	namespace util {
+	class Util {
 
-		class Util {
+	private:
+		Util();
 
-		private:
-			Util();
+	public:
+		virtual ~Util();
+		static string getLastErrorMessage();
+	};
 
-		public:
-			virtual ~Util();
-			static string getLastErrorMessage();
-		};
-
-	}
-
+}
 }
 
 #endif /* UTIL_H_ */

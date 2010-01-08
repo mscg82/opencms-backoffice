@@ -12,7 +12,7 @@
 #include <string>
 #include <cpp/lang/NullPointerException.h>
 #include <sharedmemory/util/Util.h>
-#include <sharedmemory/semaphore/SemaphoreState.h>
+#include <sharedmemory/util/WaitableObject.h>
 #include <sharedmemory/exception/CreateSemaphoreException.h>
 #include <sharedmemory/exception/WaitSemaphoreException.h>
 #include <sharedmemory/exception/SignalSemaphoreException.h>
@@ -25,7 +25,7 @@ using namespace sharedmemory::exception;
 namespace sharedmemory {
 namespace semaphore {
 
-	class Semaphore {
+	class Semaphore: public WaitableObject {
 
 	protected:
 		string semaphoreName;
@@ -42,8 +42,7 @@ namespace semaphore {
 		virtual LONG getInitialCount() const;
 		virtual LONG getMaxCount() const;
 
-		SemaphoreState wait();
-		SemaphoreState wait(DWORD milliseconds);
+		virtual WaitableState waitFor(DWORD milliseconds);
 
 		LONG signal();
 		LONG signal(LONG count);

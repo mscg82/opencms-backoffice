@@ -11,7 +11,7 @@ namespace sharedmemory {
 namespace semaphore {
 
 	Semaphore::Semaphore(string semaphoreName, LONG initialCount, LONG maxCount) :
-		semaphoreName(semaphoreName)
+		WaitableObject(), semaphoreName(semaphoreName)
 	{
 		semaphoreHandle = NULL;
 
@@ -22,6 +22,7 @@ namespace semaphore {
 		if(semaphoreHandle == NULL) {
 			throw CreateSemaphoreException(Util::getLastErrorMessage());
 		}
+		setWaitableHandle(semaphoreHandle);
 	}
 
 	Semaphore::~Semaphore() {
@@ -48,15 +49,8 @@ namespace semaphore {
 		return maxCount;
 	}
 
-	SemaphoreState Semaphore::wait() {
-		return wait(INFINITE);
-	}
-
-	SemaphoreState Semaphore::wait(DWORD milliseconds) {
-		if(semaphoreHandle == NULL) {
-			throw NullPointerException();
-		}
-		SemaphoreState ret(WaitForSingleObject(semaphoreHandle, milliseconds));
+	WaitableState Semaphore::waitFor(DWORD milliseconds) {
+		WaitableState ret = WaitableObject::waitFor(milliseconds) ;
 		if(ret.isErrorState()) {
 			throw WaitSemaphoreException(Util::getLastErrorMessage());
 		}
