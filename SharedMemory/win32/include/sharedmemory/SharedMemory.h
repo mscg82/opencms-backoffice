@@ -43,7 +43,7 @@ namespace sharedmemory {
 
 		virtual DWORD getMaxSizeHigh() const;
 		virtual DWORD getMaxSizeLow() const;
-		virtual char* getSharedMemoryData() const;
+		virtual BYTE* getSharedMemoryData() const;
 		virtual HANDLE getSharedMemoryHandle() const;
 		virtual string getSharedMemoryName() const;
 		virtual bool isInited() const;

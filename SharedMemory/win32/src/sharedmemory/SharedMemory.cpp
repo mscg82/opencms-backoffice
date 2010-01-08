@@ -39,8 +39,8 @@ namespace sharedmemory {
 		return maxSizeLow;
 	}
 
-	char* SharedMemory::getSharedMemoryData() const {
-		return (char*)sharedMemoryData;
+	BYTE* SharedMemory::getSharedMemoryData() const {
+		return (BYTE*)sharedMemoryData;
 	}
 
 	HANDLE SharedMemory::getSharedMemoryHandle() const {
