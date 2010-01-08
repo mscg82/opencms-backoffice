@@ -27,7 +27,7 @@ public:
 
 	virtual string getClass() const;
 
-	string toString() const;
+	virtual string toString() const;
 protected:
 	string *message;
 	Exception *cause;
