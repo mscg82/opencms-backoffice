@@ -36,8 +36,8 @@ namespace sharedmemory {
 
 	public:
 		SharedMemory(string sharedMemoryName, DWORD maxSizeHigh, DWORD maxSizeLow,
-				bool autoOpen = true, HANDLE fileHandle = INVALID_HANDLE_VALUE,
-				DWORD accessMode = PAGE_READONLY);
+				DWORD accessMode = PAGE_READONLY, bool autoOpen = true,
+				HANDLE fileHandle = INVALID_HANDLE_VALUE);
 
 		virtual ~SharedMemory();
 

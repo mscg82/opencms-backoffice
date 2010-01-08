@@ -10,7 +10,7 @@
 namespace sharedmemory {
 
 	SharedMemory::SharedMemory(string sharedMemoryName, DWORD maxSizeHigh, DWORD maxSizeLow,
-			bool autoOpen, HANDLE fileHandle, DWORD accessMode) :
+			DWORD accessMode, bool autoOpen, HANDLE fileHandle) :
 		sharedMemoryName(sharedMemoryName)
 	{
 		this->maxSizeHigh = maxSizeHigh;
