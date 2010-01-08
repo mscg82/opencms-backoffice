@@ -29,5 +29,9 @@ IndexOutOfBoundException::~IndexOutOfBoundException() {
 
 }
 
+string IndexOutOfBoundException::getClass() const {
+	return "cpp::lang::IndexOutOfBoundException";
+}
+
 }
 }

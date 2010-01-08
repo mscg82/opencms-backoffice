@@ -18,6 +18,8 @@ public:
 	NullPointerException();
 	NullPointerException(Exception *cause);
 	virtual ~NullPointerException();
+
+	virtual string getClass() const;
 };
 
 }

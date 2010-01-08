@@ -36,6 +36,24 @@ Exception* Exception::getCause() const{
 	return cause;
 }
 
+string Exception::getClass() const {
+	return "cpp::lang::Exception";
+}
+
+string Exception::toString() const {
+	string ret;
+	ret = this->getClass() + (this->message->length() == 0 ? "" : string(": ") + *this->message) + "\n";
+	if(this->cause != NULL) {
+		Exception *cause = this->cause;
+		while(cause != NULL) {
+			ret += string("Caused by ") + cause->getClass()  +
+					(cause->message->length() == 0 ? "" : string(": ") + *cause->message) + "\n";
+			cause = cause->getCause();
+		}
+	}
+	return ret;
+}
+
 void Exception::setMessage(const string &message){
 	this->message = new string(message);
 }

@@ -27,5 +27,9 @@ namespace lang {
 
 	}
 
+	string Base64BadStringLengthException::getClass() const {
+		return "cpp::lang::Base64BadStringLengthException";
+	}
+
 }
 }

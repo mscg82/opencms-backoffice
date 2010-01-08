@@ -24,5 +24,9 @@ NullPointerException::~NullPointerException() {
 
 }
 
+string NullPointerException::getClass() const {
+	return "cpp::lang::NullPointerException";
+}
+
 }
 }

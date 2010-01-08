@@ -19,6 +19,8 @@ public:
 	IndexOutOfBoundException(const string &message);
 	IndexOutOfBoundException(const string &message, Exception *cause);
 	~IndexOutOfBoundException();
+
+	virtual string getClass() const;
 };
 
 }

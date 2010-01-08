@@ -19,6 +19,8 @@ public:
 	ArrayIndexOutOfBoundException(int index, Exception *cause);
 	~ArrayIndexOutOfBoundException();
 
+	virtual string getClass() const;
+
 private:
 	void init(int index, Exception *cause);
 };

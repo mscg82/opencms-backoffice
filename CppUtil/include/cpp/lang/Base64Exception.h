@@ -21,6 +21,8 @@ namespace lang {
 		Base64Exception(const string &message);
 		Base64Exception(const string &message, Exception *cause);
 		~Base64Exception();
+
+		virtual string getClass() const;
 	};
 
 }

@@ -32,5 +32,9 @@ void ArrayIndexOutOfBoundException::init(int index, Exception *cause){
 	setCause(cause);
 }
 
+string ArrayIndexOutOfBoundException::getClass() const {
+	return "cpp::lang::ArrayIndexOutOfBoundException";
+}
+
 }
 }

@@ -28,5 +28,9 @@ namespace lang {
 
 	}
 
+	string Base64Exception::getClass() const {
+		return "cpp::lang::Base64Exception";
+	}
+
 }
 }

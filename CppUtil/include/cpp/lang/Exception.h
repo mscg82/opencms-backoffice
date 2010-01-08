@@ -24,6 +24,10 @@ public:
 
 	string getMessage() const;
 	Exception* getCause() const;
+
+	virtual string getClass() const;
+
+	string toString() const;
 protected:
 	string *message;
 	Exception *cause;
