@@ -11,34 +11,46 @@
 #include <windows.h>
 #include <string>
 #include <sharedmemory/util/Util.h>
+#include <sharedmemory/exception/CreateFileMappingException.h>
+#include <sharedmemory/exception/MapViewOfFileException.h>
+#include <sharedmemory/exception/UnMapException.h>
 
 using namespace std;
 using namespace sharedmemory::util;
+using namespace sharedmemory::exception;
 
 namespace sharedmemory {
 
 	class SharedMemory {
 	protected:
 		string sharedMemoryName;
+		HANDLE fileHandle;
 		HANDLE sharedMemoryHandle;
 		void*  sharedMemoryData;
 
 		DWORD maxSizeHigh;
 		DWORD maxSizeLow;
+		DWORD accessMode;
+
+		bool inited;
 
 	public:
-		SharedMemory(string sharedMemoryName, DWORD maxSizeHigh, DWORD maxSizeLow);
+		SharedMemory(string sharedMemoryName, DWORD maxSizeHigh, DWORD maxSizeLow,
+				bool autoOpen = true, HANDLE fileHandle = INVALID_HANDLE_VALUE,
+				DWORD accessMode = PAGE_READONLY);
+
 		virtual ~SharedMemory();
 
-		DWORD getMaxSizeHigh() const;
+		virtual DWORD getMaxSizeHigh() const;
+		virtual DWORD getMaxSizeLow() const;
+		virtual char* getSharedMemoryData() const;
+		virtual HANDLE getSharedMemoryHandle() const;
+		virtual string getSharedMemoryName() const;
+		virtual bool isInited() const;
+		virtual DWORD getAccessMode() const;
 
-	    DWORD getMaxSizeLow() const;
-
-	    void* getSharedMemoryData() const;
-
-	    HANDLE getSharedMemoryHandle() const;
-
-	    string getSharedMemoryName() const;
+		virtual void open();
+		virtual void close();
 
 	};
 

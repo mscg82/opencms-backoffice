@@ -21,9 +21,9 @@ namespace sharedmemory {
 
 		private:
 			Util();
-			virtual ~Util();
 
 		public:
+			virtual ~Util();
 			static string getLastErrorMessage();
 		};
 
