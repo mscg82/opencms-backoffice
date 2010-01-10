@@ -30,11 +30,16 @@ namespace sharedmemory {
 
 		DWORD maxSizeHigh;
 		DWORD maxSizeLow;
+		LONGLONG maxSize;
 		DWORD accessMode;
 
 		bool inited;
 
 	public:
+		SharedMemory(string sharedMemoryName, LONGLONG maxSize,
+				DWORD accessMode = PAGE_READONLY, bool autoOpen = true,
+				HANDLE fileHandle = INVALID_HANDLE_VALUE);
+
 		SharedMemory(string sharedMemoryName, DWORD maxSizeHigh, DWORD maxSizeLow,
 				DWORD accessMode = PAGE_READONLY, bool autoOpen = true,
 				HANDLE fileHandle = INVALID_HANDLE_VALUE);
@@ -43,6 +48,7 @@ namespace sharedmemory {
 
 		virtual DWORD getMaxSizeHigh() const;
 		virtual DWORD getMaxSizeLow() const;
+		virtual LONGLONG  getMaxSize() const;
 		virtual BYTE* getSharedMemoryData() const;
 		virtual HANDLE getSharedMemoryHandle() const;
 		virtual string getSharedMemoryName() const;

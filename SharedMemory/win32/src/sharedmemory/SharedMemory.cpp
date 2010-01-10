@@ -9,12 +9,32 @@
 
 namespace sharedmemory {
 
+	SharedMemory::SharedMemory(string sharedMemoryName, LONGLONG maxSize,
+				DWORD accessMode, bool autoOpen, HANDLE fileHandle) :
+			sharedMemoryName(sharedMemoryName)
+	{
+		this->maxSizeHigh = (DWORD)((maxSize >> 32) & 0xFFFFFF);
+		this->maxSizeLow = maxSize & 0xFFFFFF;
+		this->maxSize = maxSize;
+		this->accessMode = accessMode;
+
+		this->sharedMemoryHandle = NULL;
+		this->sharedMemoryData = NULL;
+		this->fileHandle = fileHandle;
+
+		inited = false;
+
+		if(autoOpen)
+			open();
+	}
+
 	SharedMemory::SharedMemory(string sharedMemoryName, DWORD maxSizeHigh, DWORD maxSizeLow,
 			DWORD accessMode, bool autoOpen, HANDLE fileHandle) :
 		sharedMemoryName(sharedMemoryName)
 	{
 		this->maxSizeHigh = maxSizeHigh;
 		this->maxSizeLow = maxSizeLow;
+		this->maxSize = ((LONGLONG)maxSizeHigh << 32) + maxSizeLow;
 		this->accessMode = accessMode;
 
 		this->sharedMemoryHandle = NULL;
@@ -37,6 +57,10 @@ namespace sharedmemory {
 
 	DWORD SharedMemory::getMaxSizeLow() const {
 		return maxSizeLow;
+	}
+
+	LONGLONG SharedMemory::getMaxSize() const {
+		return maxSize;
 	}
 
 	BYTE* SharedMemory::getSharedMemoryData() const {
