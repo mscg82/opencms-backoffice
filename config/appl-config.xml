@@ -69,6 +69,7 @@
         <service>mscg2</service>
         <thread>
             <timeout>300</timeout>
+            <enabled>false</enabled>
         </thread>
         <process>
             <exe-path>C:\Windows\system32\notepad.exe</exe-path>

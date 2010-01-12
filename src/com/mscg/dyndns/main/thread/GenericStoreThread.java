@@ -28,6 +28,7 @@ public abstract class GenericStoreThread extends Thread {
 
 	protected String service;
 	protected long timeout;
+	protected Boolean enabled;
 
 	protected boolean exit;
 
@@ -39,6 +40,8 @@ public abstract class GenericStoreThread extends Thread {
 			timeout = Long.parseLong((String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_THREAD_TIMEOUT));
 		} catch(NumberFormatException e){ /* Bad numeric format, using default */}
 		timeout *= 1000;
+
+		enabled = new Boolean((String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_THREAD_ENABLED));
 
 		storageInterface = new IPStorageInterface();
 
@@ -66,21 +69,27 @@ public abstract class GenericStoreThread extends Thread {
 			try {
 				boolean store = false;
 
-				log.debug("Checking if server is running...");
-				boolean running = testerInterface.testIfServerIsRunning();
+				if(enabled) {
+					log.debug("Checking if server is running...");
+					boolean running = testerInterface.testIfServerIsRunning();
 
-				if(running){
-					log.debug("Server is running correctly.");
-					store = true;
-				}
-				else{
-					log.debug("Server is not running. Trying to start it");
-					if(testerInterface.startServer()){
-						log.debug("Server started successfully.");
+					if(running){
+						log.debug("Server is running correctly.");
 						store = true;
 					}
-					else
-						log.debug("Cannot start server. Aborting IP storage.");
+					else{
+						log.debug("Server is not running. Trying to start it");
+						if(testerInterface.startServer()){
+							log.debug("Server started successfully.");
+							store = true;
+						}
+						else
+							log.debug("Cannot start server. Aborting IP storage.");
+					}
+				}
+				else {
+					log.debug("Thread is not enabled and won't run.");
+					return;
 				}
 
 				if(store){
@@ -100,7 +109,10 @@ public abstract class GenericStoreThread extends Thread {
 
 			try {
 				Thread.sleep(timeout);
-			} catch (InterruptedException e) { }
+			} catch (InterruptedException e) {
+				if(isExit())
+					return;
+			}
 
 		}
 	}
