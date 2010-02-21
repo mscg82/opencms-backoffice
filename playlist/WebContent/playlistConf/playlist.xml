@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<playlist>
+	<playlist-item>
+	    <name>early-morning</name>
+	    <length>10 min</length>
+	</playlist-item>
+
+	<playlist-item>
+	    <name>lunch-time</name>
+	    <length>30 min</length>
+	</playlist-item>
+</playlist>	
