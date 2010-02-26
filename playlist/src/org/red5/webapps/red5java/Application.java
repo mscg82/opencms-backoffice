@@ -50,6 +50,14 @@ public class Application extends ApplicationAdapter {
 
 		log.debug("Client parameters:\n" + conn.getConnectParams());
 
+		log.debug("Client \"" + conn.getClient().getId() + "\" permissions: " + conn.getClient().getPermissions(conn));
+		log.debug("Client \"" + conn.getClient().getId() + "\" attributes (before): " + conn.getClient().getAttributes());
+
+		conn.getClient().setAttribute("param1", "value1");
+		conn.getClient().setAttribute("param2", "value2");
+
+		log.debug("Client \"" + conn.getClient().getId() + "\" attributes (after): " + conn.getClient().getAttributes());
+
 		return super.appConnect(conn, params);
 	}
 

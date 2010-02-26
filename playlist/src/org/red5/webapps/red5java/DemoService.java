@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.red5.logging.Red5LoggerFactory;
 import org.red5.server.adapter.ApplicationAdapter;
+import org.red5.server.api.IConnection;
 import org.red5.server.api.IScope;
 import org.red5.server.api.Red5;
 import org.red5.server.api.so.ISharedObject;
@@ -36,6 +37,9 @@ public class DemoService extends ApplicationAdapter {
 
 		// get the value of the counter from the SO.
 		counter = (Integer) counterSO.getAttribute("counterValue");
+
+		IConnection conn = Red5.getConnectionLocal();
+		log.debug("Client \"" + conn.getClient().getId() + "\" attributes (getCounter): " + conn.getClient().getAttributes());
 
 		return counter;
 	}
