@@ -46,6 +46,10 @@ public class Application extends ApplicationAdapter {
 		// flash client connects...
 		this.incrementPersistentSharedObject();
 
+		log.debug("Client with id \"" + conn.getClient().getId() + "\" and session id \"" + conn.getSessionId() + "\" connected.");
+
+		log.debug("Client parameters:\n" + conn.getConnectParams());
+
 		return super.appConnect(conn, params);
 	}
 
