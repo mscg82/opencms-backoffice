@@ -1,0 +1,18 @@
+.clear {
+	clear: both;
+}
+
+.login .label, .login .value {
+	float: left;
+    padding-bottom: 5px;
+}
+
+.login .label {
+	display: inline;
+	width: 7em;
+	
+}
+
+.login .value {
+	display: block;
+}

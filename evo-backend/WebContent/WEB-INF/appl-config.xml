@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <general>
+    
+        <title><![CDATA[Eni Virtual Office, Backend di amministrazione]]></title>
+    
+        <lang>
+            <default>it</default>
+        </lang>
+        
+        <theme>
+            <base-folder>themes</base-folder>
+            <default>main</default>
+        </theme>
+    </general>   
+</config>
