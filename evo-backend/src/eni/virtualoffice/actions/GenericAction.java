@@ -30,6 +30,10 @@ public class GenericAction extends ActionSupport implements ApplicationAware, Se
 
 	protected ThemeBean themeInfo;
 
+	public GenericAction() {
+
+	}
+
 	/**
 	 * Returns the locale stored in the session.
 	 *

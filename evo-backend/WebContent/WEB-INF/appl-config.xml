@@ -13,5 +13,10 @@
             <base-folder>themes</base-folder>
             <default>main</default>
         </theme>
-    </general>   
+    </general>
+    
+    <persistence>
+        <persistence-unit>evo-pu</persistence-unit>
+    </persistence>
+       
 </config>

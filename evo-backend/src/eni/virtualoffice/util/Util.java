@@ -9,6 +9,8 @@ import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import eni.virtualoffice.config.ConfigLoader;
 
 public class Util {
@@ -62,6 +64,18 @@ public class Util {
 	}
 
 	/**
+	 * Utility method to test if a string is empty (null)
+	 * or white space only.
+	 *
+	 * @param test The string to test for.
+	 * @return <code>true</code> if the string is empty or
+	 * white space only, <code>false</code> otherwise.
+	 */
+	public static boolean isEmptyOrWhiteSpaceOnly(String test) {
+		return test == null || test.trim().length() == 0;
+	}
+
+	/**
 	 * Utility method to read all lines in a file.
 	 *
 	 * @param file The {@link File} object that will be read.
@@ -95,5 +109,15 @@ public class Util {
 			Util.closeObject(is); is = null;
 		}
 		return ret;
+	}
+
+	/**
+	 * Utility method to encode users passwords.
+	 *
+	 * @param plainPassword The pplain text password.
+	 * @return The encoded password.
+	 */
+	public static String encodeUserPassword(String plainPassword) {
+		return DigestUtils.md5Hex(plainPassword.getBytes());
 	}
 }

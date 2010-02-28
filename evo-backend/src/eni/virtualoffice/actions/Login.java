@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import com.opensymphony.xwork2.ModelDriven;
 
 import eni.virtualoffice.actions.models.LoginModel;
+import eni.virtualoffice.persistence.stores.UsersStore;
 import eni.virtualoffice.util.Constants;
 
 /**
@@ -30,6 +31,18 @@ public class Login extends GenericAction implements ModelDriven<LoginModel> {
 	@Override
 	public String execute() throws Exception {
 		LOG.debug("Login action is being executed");
+
+		if(model.getUsername() != null && model.getPassword() != null) {
+			// check for admin existence
+			UsersStore us = new UsersStore();
+			if(us.checkEsaminatoreCredentials(model.getUsername(), model.getPassword())) {
+				LOG.debug("User " + model.getUsername() + " logged in successfully.");
+				return "success";
+			}
+			else {
+				LOG.debug("Wrong user credentials provided for user " + model.getUsername());
+			}
+		}
 
 		return "login";
 	}
