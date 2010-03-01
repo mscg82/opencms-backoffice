@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+    <general> 
+        <session>
+            <user-session>esaminatore</user-session>
+        </session>
+    
+        <title><![CDATA[Eni Virtual Office, Backend di amministrazione]]></title>
+    
+        <lang>
+            <default>it</default>
+        </lang>
+        
+        <theme>
+            <base-folder>themes</base-folder>
+            <default>main</default>
+        </theme>
+    </general>
+    
+    <persistence>
+        <persistence-unit>evo-pu</persistence-unit>
+    </persistence>
+       
+</config>
