@@ -31,30 +31,32 @@ public class Esaminatore implements Serializable {
 
 	public static boolean checkAdminExistence(EntityManager em) throws Exception {
 		boolean ret = false;
-		try {
-			em.getTransaction().begin();
-			String query =
-				"SELECT t " +
-				"FROM Esaminatore t " +
-				"WHERE nickname = :nick";
-			Query pQuery = em.createQuery(query);
-			pQuery.setParameter("nick", "admin");
-			Esaminatore es = null;
+		if(em != null) {
 			try {
-				es = (Esaminatore)pQuery.getSingleResult();
-			} catch(Exception e) {}
-			if(es == null) {
-				es = new Esaminatore();
-				es.setNickname("admin");
-				es.setAndEncodePassword("adminadmin");
-				em.persist(es);
-			}
-			ret = true;
-			em.getTransaction().commit();
+				em.getTransaction().begin();
+				String query =
+					"SELECT t " +
+					"FROM Esaminatore t " +
+					"WHERE nickname = :nick";
+				Query pQuery = em.createQuery(query);
+				pQuery.setParameter("nick", "admin");
+				Esaminatore es = null;
+				try {
+					es = (Esaminatore)pQuery.getSingleResult();
+				} catch(Exception e) {}
+				if(es == null) {
+					es = new Esaminatore();
+					es.setNickname("admin");
+					es.setAndEncodePassword("adminadmin");
+					em.persist(es);
+				}
+				ret = true;
+				em.getTransaction().commit();
 
-		} catch(Exception e) {
-			em.getTransaction().rollback();
-			throw e;
+			} catch(Exception e) {
+				em.getTransaction().rollback();
+				throw e;
+			}
 		}
 		return ret;
 	}
