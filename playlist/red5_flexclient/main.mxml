@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute">
+	
+	<mx:Panel x="30" y="30" width="900" height="650" layout="absolute" creationComplete="init();" fontSize="12" title="Red5 Shared Objects and Remoting Tests.">
+		
+		<mx:VBox horizontalAlign="center" borderStyle="none" width="100%" paddingTop="5" paddingLeft="10" paddingBottom="5" paddingRight="5">
+		
+			<mx:HBox borderStyle="none" paddingBottom="10" paddingTop="10">
+	        	<mx:TextInput id="txtConnectURL" width="200" height="22" text=""/>
+				<mx:Button id="cmdConnect" width="75" click="doConnection();" height="22" toolTip="Connect to Red5" label="Connect"/>				
+			</mx:HBox>
+		
+			<mx:TextArea width="70%" height="280" id="txtALog" fontSize="12" wordWrap="true"/>
+					
+			<mx:HBox borderStyle="none" paddingBottom="10" paddingTop="10">
+				<mx:Label id="lblMessage" text="Message(message to send to Red5):"/>
+				<mx:TextInput id="txtMessage" width="200" height="22" text=""/>
+			</mx:HBox>
+			
+			<mx:HBox borderStyle="none">
+				<mx:Label id="lblMethods" text="Methods:"/>
+				<mx:ComboBox id="cmbMethods">
+		    		<mx:dataProvider>
+			    		<mx:ArrayCollection>
+				            <mx:Object label="getPlayList (get from Red5 TSO)" data="getPlayList"/>
+				            <mx:Object label="getCounter (get from Red5 PSO)" data="getCounter"/>
+				            <mx:Object label="sendMessage(trigger Red5 TSO update)" data="sendMessageTSO"/>
+				            <mx:Object label="sendMessage(trigger Red5 PSO update)" data="sendMessagePSO"/>
+				            <mx:Object label="remote_so.send(trigger Red5 SO handler for TSO)" data="remoteTSOSend"/>
+				            <mx:Object label="remote_so.send(trigger Red5 SO handler for PSO)" data="remotePSOSend"/>
+	        			</mx:ArrayCollection>
+		    		</mx:dataProvider>
+		  		</mx:ComboBox>
+		  		<mx:Button id="cmdExecute" width="75" height="22" click="doExecute();" label="Execute"/>
+			</mx:HBox>
+			
+		</mx:VBox>
+					
+    </mx:Panel>
+    
+    <mx:Script>
+    	<![CDATA[
+    	
+	    	import org.red5.as3.net.Connection;
+			import org.red5.as3.net.events.ConnectionEvent;
+			import flash.events.EventDispatcher;
+			import mx.events.MetadataEvent;
+			import flash.events.NetStatusEvent;
+			import flash.events.SecurityErrorEvent;
+			import mx.controls.Alert;
+			import flash.net.Responder;
+			import flash.net.SharedObject;
+			import flash.net.NetConnection;
+			import flash.events.SyncEvent;
+			import flash.system.Security;
+			import flash.net.ObjectEncoding;
+			
+			private var conn:Connection;
+			private var nc:NetConnection;
+			private var tso:SharedObject;
+			private var pso:SharedObject;			
+			
+			
+			private var spawnconn:Connection;
+			private var connOn:Boolean = false;
+			private var loopState:Boolean = false;
+			
+			public function init():void
+	    	{
+	    		Security.allowDomain("*");
+	    		
+	    		// set the default Red5 URL to connect to...
+	    		txtConnectURL.text = "rtmp://localhost/red5java";
+	    		
+	    		// create new Connection object...
+				conn = new Connection();
+	
+				// add a listener for a successful connection...
+				conn.addEventListener(Connection.SUCCESS, handleSucessfulConnection);
+				
+				// add a listener for no successful connection...
+				conn.addEventListener(Connection.DISCONNECTED, handleDisconnection);
+	    	}	
+    		
+    		public function doConnection():void
+			{
+				// do the connection - called by the Connect Button's click event
+				if(cmdConnect.label == "Connect")
+				{
+					conn.setURI(txtConnectURL.text);
+					conn.connect();
+					cmdConnect.label = "Disconnect";
+				}
+				else
+				{
+					conn.close();
+					cmdConnect.label = "Connect";
+				}
+			}
+			
+			public function handleSucessfulConnection(e:ConnectionEvent):void
+			{			
+				txtALog.text = "Connection successful!\n";
+				
+				// on successful connection, get both the persistent and transient SOs...	
+				// get the actual connection from the connector object
+				nc = conn.getConnection();
+				
+				//get the remote transient shared object messageTSO...
+				tso = SharedObject.getRemote("messageTSO", nc.uri, false);
+				tso.addEventListener(SyncEvent.SYNC, tsoOnSync);
+				tso.connect(nc);
+				txtALog.text += "Remote messageTSO is retreived...!\n";
+				
+				//get the remote persistent shared object messagePSO...
+				pso = SharedObject.getRemote("messagePSO", nc.uri, true);
+			   	pso.addEventListener(SyncEvent.SYNC, psoOnSync);
+			   	pso.connect(nc);
+			   	txtALog.text += "Remote messagePSO is retreived...!\n";
+			}
+			
+			public function handleDisconnection(e:ConnectionEvent):void
+			{
+				txtALog.text = "Connection to "+txtConnectURL.text+" closed.\n";
+				cmdConnect.label = "Connect";
+			}
+			
+			public function doExecute():void
+			{
+				var nc:NetConnection = conn.getConnection();
+				var nc_responder:Responder;
+				
+				switch(cmbMethods.selectedItem.data) 
+				{
+					case "getPlayList":
+						//---
+				    	txtALog.text = "Calling getPlayList method in Remote Red5 Server...\n";
+				    	txtALog.text += "Retreives playlist from a Transient Shared Object.\n\n";
+				      	//do the necessary calls here...
+				      	// call server-side method
+				      	// create a responder and set it to getPlayList
+					  	nc_responder = new Responder(getPlayList, null);
+					  	// call the server side method to get list of FLV's
+				      	nc.call("demoService.getPlayList", nc_responder);
+				      	//---
+				      break;
+				    case "getCounter":
+				      	//---
+				    	txtALog.text = "Calling getCounter method in Remote Red5 Server...\n";
+				    	txtALog.text += "Retreives counter from a Persistent Shared Object.\n\n";
+				      	//do the necessary calls here...
+				      	// call server-side method
+				      	// create a responder and set it to getMediaList
+					  	nc_responder = new Responder(getCounter, null);
+					  	// call the server side method to get list of FLV's
+				      	nc.call("demoService.getCounter", nc_responder);
+				      	//---
+				      	break;
+				    case "sendMessageTSO":
+				    	//--- This should trigger the SOEventListener...
+				      	txtALog.text = "Calling sendMessage method in Remote Red5 Server...\n";
+				      	txtALog.text += "Triggers TSO Shared Object Listener.\n\n";
+				      	//do the necessary calls here...
+				      	if(txtMessage.text == "")
+					    	nc.call("demoService.sendMessage", null, "TSO", "This is to modify TSO.");
+					    else
+					    	nc.call("demoService.sendMessage", null, "TSO", txtMessage.text);
+				      	//---
+				      	break;
+				    case "sendMessagePSO":
+				    	//--- This should trigger the SOEventListener...
+				      	txtALog.text = "Calling sendMessage method in Remote Red5 Server...\n";
+				      	txtALog.text += "Triggers PSO Shared Object Listener.\n\n";
+				      	//do the necessary calls here...
+				      	if(txtMessage.text == "")
+					      	nc.call("demoService.sendMessage", null, "PSO", "This is to modify PSO.");
+					    else
+					    	nc.call("demoService.sendMessage", null, "PSO", txtMessage.text);
+				      	break;
+				    case "remoteTSOSend":
+				      	//--- Use the SOHandler in server...
+				      	txtALog.text = "Calling TSO Shared Object Handler in Remote Red5 Server...\n";
+				      	//do the necessary calls here...
+				      	if(txtMessage.text == "")
+					      	tso.send("TSOHandler.sendMessage", "TSO", "Hello to TSO from flash client.");
+					    else
+					    	tso.send("TSOHandler.sendMessage", "TSO", txtMessage.text);
+				      	break;
+				      	//---
+				    case "remotePSOSend":
+				    	//--- Use the SOHandler in server...
+				      	txtALog.text += "Calling pSO Shared Object Handler in Remote Red5 Server...\n";
+				      	//do the necessary calls here...
+				      	if(txtMessage.text == "")
+				      		pso.send("PSOHandler.sendMessage", "PSO", "Hello to PSO from flash client.");
+				      	else
+				      		pso.send("PSOHandler.sendMessage", "PSO", txtMessage.text);
+				      	break;
+				    default:
+				    	//---
+				      	//none the called...
+				      	//---
+				}
+			}
+			
+			public function getPlayList(list:Object):void 
+			{
+				var i:Number = 0;
+				
+				for(var items:String in list) 
+				{
+					txtALog.text += "Item:"+i+", Name:"+list[items]["Name"]+", Length:"+list[items]["Length"]+"\n";
+					i++;
+				}
+			}
+				
+    		public function getCounter(counter:Number):void 
+			{
+				txtALog.text += "The current counter is: "+counter.toString();	
+			}
+			
+			private function tsoOnSync(event:SyncEvent):void 
+			{
+   				// Show the ChangeList:
+   				var iteminfo:Object;
+   				var eventsList:Array = event.changeList;
+   				var item:String;
+   				
+   				txtALog.text += "tsoOnSync event: " + event.toString();
+
+			   	for (var i:Number=0; i < eventsList.length; i++) 
+			   	{
+			       	iteminfo = eventsList[i];
+			       	
+			       	for (item in iteminfo)
+			       	{
+			         	txtALog.text += "tsoOnSync--> eventsList[" + i + "]." + item + ": " + iteminfo[item]+ "...\n";
+			       	}
+			   	}
+   				// Show all data in the text area
+   				txtALog.text += "----- Transient Shared Object Data -----";
+   				for(item in tso.data) txtALog.text += "tsoOnSync--> tso.data." + item + ": " + tso.data[item]+"...\n";
+
+   				txtALog.text += ""; // just add some space
+			
+			   	// Show the prop value in the TextInput even though it will be there already.
+			   	txtALog.text += tso.data.prop+"...\n";
+			}
+			
+			private function psoOnSync(event:SyncEvent):void 
+			{
+   				// Show the ChangeList:
+   				var iteminfo:Object;
+   				var eventsList:Array = event.changeList;
+   				var item:String
+   				
+   				txtALog.text += "psoOnSync event: " + event.toString();
+
+			   	for (var i:Number=0; i < eventsList.length; i++) 
+			   	{
+			       	iteminfo =  eventsList[i];
+			       	for (item in iteminfo)
+			       	{
+			         	txtALog.text += "psoOnSync--> eventsList[" + i + "]." + item + ": " + iteminfo[item]+"...\n";
+			       	}
+			   	}
+   				// Show all data in the text area
+   				txtALog.text += "---- Persistent Shared Object Data -----";
+   				for(item in pso.data) txtALog.text += "psoOnSync--> pso.data." + item + ": " + pso.data[item]+"...\n";
+
+   				txtALog.text += ""; // just add some space
+			
+			   	// Show the prop value in the TextInput even though it will be there already.
+			   	txtALog.text += pso.data.prop+"...\n";
+			}
+    	]]>    	
+    </mx:Script>
+    
+</mx:Application>
