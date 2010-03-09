@@ -129,6 +129,8 @@ public class Application extends ApplicationAdapter {
 
 		playListContainer = this.loadPlayList("playlistConf/playlist.xml");
 
+		this.registerSharedObjectSecurity(new ApplSecurityHandler());
+
 		if (log.isDebugEnabled()) {
 
 			log.debug("-----------------");
