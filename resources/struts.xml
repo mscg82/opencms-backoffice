@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <constant name="struts.enable.DynamicMethodInvocation" value="true" />
+    <constant name="struts.devMode" value="false" />
+    <constant name="struts.multipart.maxSize" value="104857600" /> <!-- 100 MB upload limit -->
+    
+    <package name="com.mscg.actions" namespace="/opencms/struts2" extends="struts-default">
+    
+        <result-types>
+            <result-type name="stream-headers" class="com.mscg.struts2.response.StreamWithHeadersResult"/>
+        </result-types>
+    
+        <interceptors>
+	        <interceptor name="beginAndEnd" class="com.mscg.struts2.interceptor.BeginAndEndInterceptor" />
+	        <interceptor-stack name="extendedStack">
+	            <interceptor-ref name="defaultStack"/>
+	            <interceptor-ref name="beginAndEnd"/>
+	        </interceptor-stack>
+	    </interceptors>
+	    
+	    <default-interceptor-ref name="extendedStack"/>
+	    
+        <action name="test" class="com.mscg.actions.Test">
+            <result name="result" type="stream-headers"></result>
+        </action>
+        
+        <action name="read" class="com.mscg.actions.ReadApplication">
+            <result name="result" type="stream-headers"></result>
+            <result name="jsp">/WEB-INF/readApp.jsp</result>
+        </action>
+    </package>
+
+</struts>
