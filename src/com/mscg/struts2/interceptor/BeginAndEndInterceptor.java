@@ -17,6 +17,7 @@ public class BeginAndEndInterceptor extends AbstractInterceptor {
 		LOG.debug("Before execution");
 		String ret = invocation.invoke();
 		LOG.debug("After execution");
+		LOG.debug("Result is of class " + invocation.getResult().getClass());
 		return ret;
 	}
 

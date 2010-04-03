@@ -32,7 +32,13 @@
         
         <action name="read" class="com.mscg.actions.ReadApplication">
             <result name="result" type="stream-headers"></result>
-            <result name="jsp">/WEB-INF/readApp.jsp</result>
+            <!-- <result name="jsp">/WEB-INF/readApp.jsp</result> -->
+            <!-- <result name="jsp">/result.jsp</result> -->
+            <result name="jsp">/opencms/struts2/test2.action</result>
+        </action>
+        
+        <action name="test2" class="com.mscg.actions.Test2">
+            <result name="jsp">/WEB-INF/redirectTest.jsp</result>
         </action>
     </package>
 
