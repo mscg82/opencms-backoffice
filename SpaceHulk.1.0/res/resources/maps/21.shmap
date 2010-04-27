@@ -1,0 +1,66 @@
+<map width="30" height="32" >
+  <blipsperturn>1</blipsperturn>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~AAAAI~~~~~LAA~~</tile>
+  <tile>~~~~~~~~~~~~~~!aaaaB~~~~~Dba!~</tile>
+  <tile>~~~~~~~~~~~~~~~EiHCJ~~~~~DcH~~</tile>
+  <tile>~~~~~~~~~~~~~~~DcB~~~~~~~DcB~~</tile>
+  <tile>~~~~~~~~~~~~~~~DcB~~~~~~~DcB~~</tile>
+  <tile>~~~~~~~~~~~~~~~DcB~~~~~~~DcB~~</tile>
+  <tile>~~~~~LAAAI~~~~~DcB~~~~~~~DcB~~</tile>
+  <tile>~~~~~DbaaRAAAAAPcGAAAAUAAFcB~~</tile>
+  <tile>~~~~~DcttjaaaaaadjaaaaaaaadB~~</tile>
+  <tile>~~~~~DctsTCCCCCMiHCCCCWCCEiB~~</tile>
+  <tile>~~~~~KNiSJ~~~~~DcB~~~~~~~DcB~~</tile>
+  <tile>~~~~~~DcB~~~~~~DcB~~~~~~~DcB~~</tile>
+  <tile>~~~~~~DcB~~~~~~DcB~~~~~~~DcB~~</tile>
+  <tile>~~~~~~DcB~~~~~LOcQI~~~~~LOcQI~</tile>
+  <tile>~GAAAAFcB~~~~~DbdjRAAAAAPbdtR~</tile>
+  <tile>~baaaaadB~~~~~DcetjaaaaaadfsT~</tile>
+  <tile>~HCCCCEiB~~~~~DcttTCCCCCMittB~</tile>
+  <tile>~~~~~~DcB~~~~~KNiSJ~~~~~KNiSJ~</tile>
+  <tile>~~~~~~DcB~~~~~~DcB~~~~~~~DcB~~</tile>
+  <tile>~~~~~~DcB~~~~~~DcB~~~~~~~DcB~~</tile>
+  <tile>~~~~~LOcQI~~~~~DcB~~~~~~~DcB~~</tile>
+  <tile>~~~~~DbdjRAAAAUFcGAAAUAAAFcB~~</tile>
+  <tile>~~~~~DcttjaaaaaadjaaaaaaaadB~~</tile>
+  <tile>~~~~~DctsTEiHCWCCCEiHWCCCCCJ~~</tile>
+  <tile>~~~~~KCCCJDcB~~~~~DcB~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~~DcB~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~~DcB~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~~DcB~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~FcB~~~~~DcG~~~~~~~~~</tile>
+  <tile>~~~~~~~~~!adB~~~~~Dcj!~~~~~~~~</tile>
+  <tile>~~~~~~~~~~CCJ~~~~~KCC~~~~~~~~~</tile>
+  <door x="9" y="9" />
+  <door x="15" y="9" />
+  <door x="22" y="9" />
+  <door x="7" y="11" />
+  <door x="16" y="14" />
+  <door x="26" y="14" />
+  <door x="18" y="16" />
+  <door x="24" y="16" />
+  <door x="16" y="18" />
+  <door x="26" y="18" />
+  <door x="7" y="21" />
+  <door x="9" y="23" />
+  <door x="14" y="23" />
+  <door x="21" y="23" />
+  <object x="27" y="15" >cargo</object>
+  <blip x="13" y="2" />
+  <blip x="29" y="2" />
+  <blip x="8" y="30" />
+  <blip x="22" y="30" />
+  <team>
+    <start x="5" y="16" face="east" >SGT. HUON</start>
+    <start x="4" y="16" face="east" >MARIAS</start>
+    <start x="3" y="16" face="east" >DEITRICH</start>
+    <start x="2" y="16" face="east" >BELIAS</start>
+    <start x="1" y="16" face="east" >UZAEL</start>
+    <marine type="sergeant" >SGT. HUON</marine>
+    <marine                 >MARIAS</marine>
+    <marine                 >DEITRICH</marine>
+    <marine type="flamer"   >BELIAS</marine>
+    <marine                 >UZAEL</marine>
+  </team>
+</map>

@@ -1,0 +1,68 @@
+<map width="32" height="27" >
+  <blipsperentry>1</blipsperentry>
+  <tile>~~~~~~~~~~E~H~~~~~~~E~H~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DnB~~~~~~~DnB~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DmB~~~~~~~DmB~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DmB~~~~~~~DmB~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DmB~~~~~~~DmB~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DmB~LAAAI~DmB~~~~~~~~~</tile>
+  <tile>~~~~~~~LAAFmGAPnggRAFmGAAAAAI~~~</tile>
+  <tile>~~~~~~~DnggorggoeerggorgggggB~~~</tile>
+  <tile>~~~~~~~DmHEpHCMpeeTCEpHCCCEpB~~~</tile>
+  <tile>~~~~~~~XmVDmB~KNpSJ~DmB~~~XmV~~~</tile>
+  <tile>~~~~~~~DmBDmB~~DmB~~DmB~~~DmB~~~</tile>
+  <tile>~~~~~~~DmBDmB~~DmB~~DmB~~~DmB~~~</tile>
+  <tile>LAAAAAAFmGOmQAAFmGAAOmQAAIDmB~~~</tile>
+  <tile>DnggggggorgorgggorgggorggBDmB~~~</tile>
+  <tile>DmHCCCCEpHCCCCCNpSCCCCCEpBDmB~~~</tile>
+  <tile>~!~~~~~DmB~~~~~DmB~~~~~DmGFmGAAI</tile>
+  <tile>~~~~~~~DmB~~~~~DmB~~~~~DmrgorggB</tile>
+  <tile>~~~~~~~DmB~~~~~DmB~~~~~DmHCCCEpB</tile>
+  <tile>~~~~~~LOmQI~~~LOmQI~~~LOmQI~~~!~</tile>
+  <tile>~~~~~~DnorRAAAPnorRAAAPnorB~~~~~</tile>
+  <tile>~~~~~~DmferkkknoferkkkgofeB~~~~~</tile>
+  <tile>~~~~~~DmeeTEpHMpeeTEpHMpeeB~~~~~</tile>
+  <tile>~~~~~~KCCCJDlBKCCCJDlBKCCCJ~~~~~</tile>
+  <tile>~~~~~~~~~~~DmB~~~~~DmB~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~DlB~~~~~DlB~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~DlB~~~~~DlB~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~F$G~~~~~F$G~~~~~~~~~~</tile>
+  <door x="14" y="7" />
+  <door x="18" y="7" />
+  <door x="8" y="9" />
+  <door x="16" y="9" />
+  <door x="27" y="9" />
+  <door x="11" y="12" />
+  <door x="21" y="12" />
+  <door x="16" y="14" />
+  <door x="8" y="18" />
+  <door x="16" y="18" />
+  <door x="24" y="18" />
+  <door x="10" y="20" />
+  <door x="14" y="20" />
+  <door x="18" y="20" />
+  <door x="22" y="20" />
+  <blip x="16" y="7" />
+  <blip x="16" y="20" />
+  <team>
+    <start x="11" y="5" face="south" >SGT. MACHIAVEL</start>
+    <start x="11" y="4" face="south" >BOVION</start>
+    <start x="11" y="3" face="south" >LINK</start>
+    <start x="11" y="2" face="south" >CATALLAN</start>
+    <start x="11" y="1" face="south" ></start>
+    <marine type="sergeant" >SGT. MACHIAVEL</marine>
+    <marine                 >BOVION</marine>
+    <marine                 >LINK</marine>
+    <marine                 >CATALLAN</marine>
+  </team>
+  <team>
+    <start x="21" y="5" face="south" >LEON</start>
+    <start x="21" y="4" face="south" >WILMSLOW</start>
+    <start x="21" y="3" face="south" >JELIC</start>
+    <start x="21" y="2" face="south" ></start>
+    <start x="21" y="1" face="south" ></start>
+    <marine type="flamer"   >LEON</marine>
+    <marine                 >WILMSLOW</marine>
+    <marine                 >JELIC</marine>
+  </team>
+</map>

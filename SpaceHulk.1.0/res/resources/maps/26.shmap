@@ -1,0 +1,72 @@
+<map width="30" height="32" >
+  <blipsperturn>1</blipsperturn>
+  <tile>~~~~~~~~~~LAA~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~Dba!~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcH~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~LAAAI~~~DcB~~~LAAAI~~~~~~~~~</tile>
+  <tile>~~DbaaRAAAFcGAAAPbaaRAAI~~~~~~</tile>
+  <tile>~~DcttjaaaadjaaaadttjaaB~~~~~~</tile>
+  <tile>~~DcttTCCCEiHCCCMittTEiB~~~~~~</tile>
+  <tile>~~KNiSJ~~~DcB~~~KNiSJDcB~~~~~~</tile>
+  <tile>~~~DcB~~~~DcB~~~~DcB~DcB~~~~~~</tile>
+  <tile>~~~DcB~~~~XcV~~~~DcB~DcGAAAAF~</tile>
+  <tile>~~~DcB~~~~DcB~~~~DcB~Dcjaaaaa~</tile>
+  <tile>~~~DcB~~~~DcB~~~~DcB~DcHCCCCE~</tile>
+  <tile>~~~DcB~~~~DcGAAUAFcGAFcB~~~~~~</tile>
+  <tile>~~~DcB~~~~DcjaaaaadjaadB~~~~~~</tile>
+  <tile>D$BDcB~~~~DcHCCWCEiHCEiB~~~~~~</tile>
+  <tile>DbGFcGAAAAFcB~~~~DcB~DcGAAAAF~</tile>
+  <tile>DcjadjaaaaadB~~~~DcB~Dcjaaaaa~</tile>
+  <tile>KCCEiHCCCCEiB~~~~DcB~DcHCCCCE~</tile>
+  <tile>~~~DcB~~~~DcB~~~~DcB~DcB~~~~~~</tile>
+  <tile>~~LOcQI~~~DcB~~~LOcQIDcB~~~~~~</tile>
+  <tile>~~DbdjRAAAFcGAAAPbdjRFcB~~~~~~</tile>
+  <tile>~~DcttjaaaadjaaaadttjadB~~~~~~</tile>
+  <tile>~~DcttTCCCEiHCCCMittTCCJ~~~~~~</tile>
+  <tile>~~KCCCJ~~~DcB~~~KCCCJ~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~FcB~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~!adB~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~CCJ~~~~~~~~~~~~~~~~~</tile>
+  <door x="6" y="7" />
+  <door x="16" y="7" />
+  <door x="20" y="7" />
+  <door x="4" y="9" />
+  <door x="18" y="9" />
+  <door x="11" y="11" />
+  <door x="15" y="15" />
+  <door x="4" y="21" />
+  <door x="18" y="21" />
+  <door x="6" y="23" />
+  <door x="16" y="23" />
+  <door x="20" y="23" />
+  <blip x="4" y="7" />
+  <blip x="18" y="7" />
+  <blip x="4" y="23" />
+  <blip x="18" y="23" />
+  <team>
+    <start x="23" y="12" face="west" >SGT. CICERO</start>
+    <start x="24" y="12" face="west" >GALEN</start>
+    <start x="25" y="12" face="west" >SPEIRO</start>
+    <start x="26" y="12" face="west" >HERPESTES</start>
+    <start x="27" y="12" face="west" ></start>
+    <start x="28" y="12" face="west" ></start>
+    <start x="23" y="18" face="west" >LEANCE</start>
+    <start x="24" y="18" face="west" >MALTHUS</start>
+    <start x="25" y="18" face="west" >KEYS</start>
+    <start x="26" y="18" face="west" ></start>
+    <start x="27" y="18" face="west" ></start>
+    <start x="28" y="18" face="west" ></start>
+    <marine type="sergeant" >SGT. CICERO</marine>
+    <marine                 >GALEN</marine>
+    <marine                 >SPEIRO</marine> <!-- dead ?? -->
+    <marine type="flamer"   >HERPESTES</marine>
+    <marine                 >LEANCE</marine>
+    <marine                 >MALTHUS</marine> <!-- dead ?? -->
+    <marine                 >KEYS</marine>
+  </team>
+</map>

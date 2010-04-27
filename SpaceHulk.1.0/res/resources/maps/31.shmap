@@ -1,0 +1,81 @@
+<map width="31" height="34" >
+  <blipsperentry>1</blipsperentry>
+  <tile>~~~~~~~~~~~~~~~~UAAI~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~!aaB~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~WEiB~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~DcB~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~DcB~~~~~~~~~~~</tile>
+  <tile>~~~~LAAAI~~~LAAAIDcB~~~~~~~~~~~</tile>
+  <tile>~~~~DbaaRAAAPbaaRFcGAAAAI~~~~~~</tile>
+  <tile>~~~~DcttjaaaadttjadjaaaaB~~~~~~</tile>
+  <tile>~~~~DcttTCCCMittTCCCCCEiB~~~~~~</tile>
+  <tile>~~~~KNiSJ~~~KNiSJ~~~~~DcGAAAAF~</tile>
+  <tile>~UAAAFcB~~~~~DcB~~~~~~Dcjaaaaa~</tile>
+  <tile>~!aaaadB~~~~~DcB~~~~~~DcHCCCCE~</tile>
+  <tile>~WCCCEiB~~~~~DcB~~~~~LOcQI~~~~~</tile>
+  <tile>~~~~~DcGAAAAAPcGAAAAAPbdjB~~~~~</tile>
+  <tile>~~~~~DcjaaaaaadjaaaaaadttB~~~~~</tile>
+  <tile>~~~~~DcHCCCCCMiHCCCCCMittB~~~~~</tile>
+  <tile>~~~~~DcB~~~~~DcB~~~~~KNiSJ~~~~~</tile>
+  <tile>~~~~~DcBLAAAIDcB~~~~~~DcGAAAAI~</tile>
+  <tile>~~~~~DcGPbaaBDcB~~~~~~DcjaaaaB~</tile>
+  <tile>~~~~~DcjadttBDcB~~~~~~DcHCCEiG~</tile>
+  <tile>~~~~~DcHMittBDcGAAAAAAFcB~~~~~~</tile>
+  <tile>~~X!VDcBKCCCJDcjaaaaaaadB~~~~~~</tile>
+  <tile>~~DcBDcB~~~~~DcHCCCEiHCCJ~~~~~~</tile>
+  <tile>~~DcBDcB~~~~LOcQI~~DcB~~~~~~~~~</tile>
+  <tile>~~DcGFcGAAAAPbdjB~~DcB~~~~~~~~~</tile>
+  <tile>~~DcjadjaaaaadttB~~DcB~~~~~~~~~</tile>
+  <tile>~~KCCEiHCCCCMittB~~DcB~~~~~~~~~</tile>
+  <tile>~~~~~DcB~~~~KCCCJ~~DcB~~~~~~~~~</tile>
+  <tile>~~~~~DcB~~~~~~~~~~~X!V~~~~~~~~~</tile>
+  <tile>~~~~~KCJ~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <bulkhead x="16" y="1" />
+  <door x="8" y="7" />
+  <door x="12" y="7" />
+  <door x="16" y="7" />
+  <door x="6" y="9" />
+  <door x="14" y="9" />
+  <bulkhead x="1" y="11" />
+  <door x="23" y="12" />
+  <door x="13" y="14" />
+  <door x="21" y="14" />
+  <door x="23" y="16" />
+  <door x="8" y="19" />
+  <bulkhead x="3" y="21" />
+  <door x="14" y="23" />
+  <door x="12" y="25" />
+  <bulkhead x="20" y="28" />
+  <blip x="6" y="7" />
+  <blip x="14" y="7" />
+  <blip x="10" y="19" />
+  <blip x="14" y="25" />
+  <team>
+    <start x="25" y="18" face="west" >SGT. TYCHO</start>
+    <start x="26" y="18" face="west" >TENWON</start>
+    <start x="27" y="18" face="west" >HEVVIG</start>
+    <start x="28" y="18" face="west" >PRIMUS</start>
+    <start x="28" y="19" face="west" >KORG</start>
+    <marine type="sergeant" >SGT. TYCHO</marine>
+    <marine                 >TENWON</marine>
+    <marine                 >HEVVIG</marine>
+    <marine type="flamer"   >PRIMUS</marine>
+    <marine                 >KORG</marine>
+  </team>
+  <team>
+    <start x="25" y="10" face="west" >SGT. LAERTES</start>
+    <start x="26" y="10" face="west" >SNIPES</start>
+    <start x="27" y="10" face="west" >OSCAR</start>
+    <start x="28" y="10" face="west" >XERXES</start>
+    <start x="29" y="10" face="west" >BATEU</start>
+    <marine type="sergeant" >SGT. LAERTES</marine>
+    <marine                 >SNIPES</marine>
+    <marine                 >OSCAR</marine>
+    <marine type="flamer"   >XERXES</marine>
+    <marine                 >BATEU</marine>
+  </team>
+</map>

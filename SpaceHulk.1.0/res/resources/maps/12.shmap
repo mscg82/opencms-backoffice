@@ -1,0 +1,67 @@
+<map width="44" height="33" >
+  <tile>~~~~~~~~~~~~~~LAAAAAAAAAI~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~DbaaaaaaaaB~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~!~~~~~~~~~~DcHCCCCCEiB~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~FcB~~~~~~~~~DcB~~~~~DcB~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~!adB~~~~~~~~~DcB~~~~~DcB~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~EiB~~~~~~~~~DcBLAAAIDcBLAAAI~~~~~~~~~~~~~~</tile>
+  <tile>~~FcGAAAAAAAAAOcQPnggRFcGPnggB~~~~~~~~~~~~~~</tile>
+  <tile>~!adjaaaaaaaaaadjaoeejadjaoeeB~~~~~~~~~~~~~~</tile>
+  <tile>~~EiHCCCCCCCCCNiSMpeeTCCCMpeeB~~~LAAAI~~~~~~</tile>
+  <tile>~~FcGAAAAAAAAAFcBKNiSJ~~~KNiSJ~~~DnggB~~~~~~</tile>
+  <tile>~!adjaaaaaaaaaadB~DcB~~~~~DcB~~~~DmeeB~~~~~~</tile>
+  <tile>~~EiHEiHCCCCCCCCJ~DcB~~~~~DcB~~~~DmeeB~~~~~~</tile>
+  <tile>~~~!~~!~~~~~~~~~~~DcB~~~~LOcQI~~~KEiHJ~LAAAI</tile>
+  <tile>~~~~~~~~~~~~~~~~~LOcQI~~~DnorRAAAAOcQAAFnggB</tile>
+  <tile>~~~~~~~~~~~~~~LAAPnorB~~~DmeejaaaaadjaaaoeeB</tile>
+  <tile>~~~~~~~~~~~~~~DbaaoeeB~~~DmeeTCCCCNcSCCEpeeB</tile>
+  <tile>~~~~~~~~~~~~~~DcHMpeeB~~~KNiSJ~~~~DcB~~KNiSJ</tile>
+  <tile>~~~~~~~~~~~~~~DcBKCCCJ~~~~DlB~~~~~DcB~~~DcB~</tile>
+  <tile>~~~~~~~~~~~~~~KCJ~~~~~~~~~DlB~~~~~DcB~~~DcB~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~DlB~~~~~DcB~~~DcB~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~DlB~~~~~DcRAAAOcV~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~DlB~~~~~DcjaaaadB~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~DlB~~~~~DcTCCCEiB~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~KCJ~~~~~DcGAAAFcB~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~DcjaaaadB~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~DcHNiSCCJ~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~DcBDcB~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~XcVDcB~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~DcBDcB~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~FcGFcGAAA~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!adjadjaaa!</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~EiHEiHEiH~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~!~~!~~!~~</tile>
+  <door x="15" y="6" />
+  <door x="17" y="7" />
+  <door x="21" y="7" />
+  <door x="25" y="7" />
+  <door x="15" y="8" />
+  <door x="19" y="9" />
+  <door x="27" y="9" />
+  <door x="27" y="12" />
+  <door x="19" y="13" />
+  <door x="35" y="13" />
+  <door x="29" y="14" />
+  <door x="17" y="15" />
+  <door x="35" y="15" />
+  <door x="27" y="16" />
+  <door x="41" y="16" />
+  <door x="41" y="20" />
+  <door x="36" y="21" />
+  <door x="38" y="25" />
+  <door x="35" y="27" />
+  <team>
+    <start x="19" y="7" ></start>
+    <start x="27" y="7" ></start>
+    <start x="35" y="10" ></start>
+    <start x="27" y="14" ></start>
+    <start x="41" y="14" ></start>
+    <start x="19" y="15" ></start>
+    <marine type="sergeant" >SGT. CYRANO</marine>
+    <marine                 >VINCIS</marine>
+    <marine                 >CORRIN</marine>
+    <marine type="flamer"   >HURD</marine>
+    <marine                 >TOBIAS</marine>
+  </team>
+</map>

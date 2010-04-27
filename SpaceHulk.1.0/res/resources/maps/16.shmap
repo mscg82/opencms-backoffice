@@ -1,0 +1,76 @@
+<map width="32" height="33" >
+  <initialblips>2</initialblips>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~!~~~~~~~~~~~~~!~~~~~~~~</tile>
+  <tile>~~~~~~~~DcB~~~~~!~~~~~DlB~~~~~~~</tile>
+  <tile>~~~~~~~~DcB~LAAFlGAAI~DcB~~~~~~~</tile>
+  <tile>~~~~~~~~DcB~DbaadjaaB~DcB~~~~~~~</tile>
+  <tile>~~~~~~~~DcB~DcHCCCEiB~DcB~~~~~~~</tile>
+  <tile>~~~~~~~~DcB~DcB~~~DcB~DcB~~~~~~~</tile>
+  <tile>~~~~~~~LOcQIDcB~~~DcBLOcQI~~~~~~</tile>
+  <tile>~~~~~~~DnorRFcGAAAFcGPbdaB~~~~~~</tile>
+  <tile>~~~~~~~DmeejadjaaaadjadttB~~~~~~</tile>
+  <tile>~~~~~~~DmeeTEiHCCCEiHMcttB~~~~~~</tile>
+  <tile>~~~~~~~KCCCJDcB~~~DcBKCCCJ~~~~~~</tile>
+  <tile>~~~~~~~~~~~~XcV~~~XcV~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~DcB~~~DcB~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~DcGAAAFcB~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~DljaaaadB~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~DcHCCCEiB~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~LOcQI~LOcQI~~~~~~~~~~</tile>
+  <tile>~~~~AAAAAAAPnorB~DnorRAAAAAAA~~~</tile>
+  <tile>~~~!aaaaaaaaoeeB~Dmeejaaaaaaa!~~</tile>
+  <tile>~~~~EiHCCCCMpeeB~DmeeTCCCCEiH~~~</tile>
+  <tile>~~~~DcB~~~~KNiSJ~KNiSJ~~~~DcB~~~</tile>
+  <tile>~~~~DcB~~~~~DcRAAAPcB~~~~~DcB~~~</tile>
+  <tile>~~~~DcB~~~~~DcjaaaadB~~~~~DcB~~~</tile>
+  <tile>~~~~DcB~~~~~DcTEiHMiB~~~~~DcB~~~</tile>
+  <tile>~~AAFcGAAAAAFcBDcBDcGAAAAAFcGAA~</tile>
+  <tile>~!aaadjaaaaaadBDcBDcjaaaaaadjak!</tile>
+  <tile>~~CCEiHCCCCCCCJDcBKCCCCCCCEiHCC~</tile>
+  <tile>~~~~FcG~~~~~~~LOcQI~~~~~~~FcG~~~</tile>
+  <tile>~~~!adj!~~~~~~DnorB~~~~~~!kdj!~~</tile>
+  <tile>~~~~EiH~~~~~~~DmeeB~~~~~~~EiH~~~</tile>
+  <tile>~~~~~!~~~~~~~~DmeeB~~~~~~~~!~~~~</tile>
+  <tile>~~~~~~~~~~~~~~KCCCJ~~~~~~~~~~~~~</tile>
+  <door x="9" y="7" />
+  <door x="23" y="7" />
+  <door x="11" y="9" />
+  <door x="21" y="9" />
+  <door x="13" y="12" />
+  <door x="19" y="12" />
+  <door x="13" y="17" />
+  <door x="19" y="17" />
+  <door x="11" y="19" />
+  <door x="21" y="19" />
+  <door x="13" y="21" />
+  <door x="19" y="21" />
+  <door x="14" y="23" />
+  <door x="18" y="23" />
+  <door x="16" y="28" />
+  <object x="16" y="31" >toxin</object>
+  <team>
+    <start x="13" y="18" ></start>
+    <start x="12" y="19" ></start>
+    <start x="13" y="19" ></start>
+    <start x="14" y="19" ></start>
+    <start x="13" y="20" ></start>
+    <marine type="sergeant" >SGT. DARIUS</marine>
+    <marine                 >PIKE</marine>
+    <marine                 >RAPHAEL</marine>
+    <marine type="flamer"   >MULLER</marine>
+    <marine                 >BOGART</marine>
+  </team>
+  <team>
+    <start x="19" y="18" ></start>
+    <start x="18" y="19" ></start>
+    <start x="19" y="19" ></start>
+    <start x="20" y="19" ></start>
+    <start x="19" y="20" ></start>
+    <marine type="sergeant" >SGT. MEDICI</marine>
+    <marine                 >ANDERSON</marine>
+    <marine                 >LOFTUS</marine>
+    <marine type="flamer"   >LYNCH</marine>
+    <marine                 >HEATON</marine>
+  </team>
+</map>

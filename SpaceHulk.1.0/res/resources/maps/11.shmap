@@ -1,0 +1,48 @@
+<map width="29" height="25" >
+  <blipsperturn>1</blipsperturn>
+  <initialblips>2</initialblips>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~!~LAAAI~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~DlGPbaaB~~~~~~</tile>
+  <tile>~~~~~~AAA~~~~~~DlfadtsB~~~~~~</tile>
+  <tile>~~~~~!kkk!~~~~~DlHMitsB~~~~~~</tile>
+  <tile>~~~~~~EiH~~~~~~~!~KNiSJ~~~~~~</tile>
+  <tile>~~~~~~DcB~~~~~~~~~~DcB~~~~~~~</tile>
+  <tile>~~~~~~DcB~~~~~~~~~~DcB~~~~~~~</tile>
+  <tile>~~~~~~DcB~~~~~~~~~~DcB~~~~~~~</tile>
+  <tile>~~~~~~DcB~~~~~~~~~~DcB~~~~~~~</tile>
+  <tile>~!~~~~DcB~~~~~~~~~LOcQI~~~~~~</tile>
+  <tile>DcGAAAFcGAAAAAAAAAPnorRAAAAAI</tile>
+  <tile>DcjaaaadjaaaaaaaaaaoeejkkkkkB</tile>
+  <tile>DcHCCCEiHCCCEiHCCCMpeeTCCCCCJ</tile>
+  <tile>DcGAAAFcGAAAPcB~~~KCCCJ~~~~~~</tile>
+  <tile>DcjaaaadjaaaadB~~~~~~~~~~~~~~</tile>
+  <tile>DcHCCCEiHCCCWCJ~~~~~~~~~~~~~~</tile>
+  <tile>~!~~~~DcB~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~DcB~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~DcB~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~LOcQI~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~DbdsB~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~DctsB~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~DcttB~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~KCCCJ~~~~~~~~~~~~~~~~~~~</tile>
+  <door x="18" y="3" />
+  <door x="20" y="5" />
+  <door x="20" y="10" />
+  <door x="18" y="12" />
+  <door x="22" y="12" />
+  <door x="12" y="15" />
+  <door x="7" y="20" />
+  <team>
+    <start x="23" y="12" face="west" >SGT. LANARTE</start>
+    <start x="24" y="12" face="west" >CROWE</start>
+    <start x="25" y="12" face="west" >DEITRICH</start>
+    <start x="26" y="12" face="west" >DRAKE</start>
+    <start x="27" y="12" face="west" >HICKS</start>
+    <marine type="sergeant" >SGT. LANARTE</marine>
+    <marine                 >CROWE</marine>
+    <marine                 >DEITRICH</marine>
+    <marine type="flamer"   >DRAKE</marine>
+    <marine                 >HICKS</marine>
+  </team>
+</map>

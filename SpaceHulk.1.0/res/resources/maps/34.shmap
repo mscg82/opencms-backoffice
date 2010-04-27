@@ -1,0 +1,74 @@
+<map width="30" height="27" >
+  <blipsperturn>1</blipsperturn>
+  <tile>~~~~~~~~~~~~~~~AAAAAI~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~!aaaaaB~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~CCCEiBLAAAI~~~~</tile>
+  <tile>~~~~~~~~~~~~LAAAAAFcGPbaaB~~~~</tile>
+  <tile>~~~~~~~~~~~~DbaaaaadjadttB~~~~</tile>
+  <tile>~~~~~LAAAI~~DcHCCCEiHMittB~~~~</tile>
+  <tile>~~~~~DbaaRAAFcB~~~DcBKNiSJ~~~~</tile>
+  <tile>~~~~~DcttjaaadB~~~DcB~DcB~~~~~</tile>
+  <tile>~~~~~DcttTCCEiB~~LOcQIDcB~~~~~</tile>
+  <tile>~~~~~KNiSJ~~XcQAAPbdsBDcB~~~~~</tile>
+  <tile>LAAAAAFcB~~~DcjaaadttBDcBLAAAI</tile>
+  <tile>DbaaaaadB~~~DcHCCMitsBDcGPbdsB</tile>
+  <tile>KCCCCCEiB~~~DcB~~KEiHJDcjadtsB</tile>
+  <tile>LAAAAAFcGAAAFcB~~LFcGIDcHMitsB</tile>
+  <tile>DbaaaaadjaaaadB~~DbdsRFcBKCCCJ</tile>
+  <tile>KCCCCCEiHCCCNiY~~DcttjadB~~~~~</tile>
+  <tile>~~~~~~DcB~~~DcB~~DctsTEiB~~~~~</tile>
+  <tile>~~~~~~DcB~~~DcB~~KNiSJDcB~~~~~</tile>
+  <tile>~~~~~~DcB~~~DcB~~~DcB~DcB~~~~~</tile>
+  <tile>~~~~~~DcB~~~DcB~~~DcB~DcB~~~~~</tile>
+  <tile>~~~~~LOcQI~~DcB~~~DcB~DcB~~~~~</tile>
+  <tile>~~~~~DbdjRAAFcGAAAFcGAFcB~~~~~</tile>
+  <tile>~~~~~DcttjaaadjaaaadjaadB~~~~~</tile>
+  <tile>~~~~~DcttTCCEiHCCCCCCCCCJ~~~~~</tile>
+  <tile>~~~~~KCCCJ~~DcGAAAA~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~Dcjaaaa!~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~KCCCCCC~~~~~~~~~~~</tile>
+  <door x="21" y="4" />
+  <door x="23" y="6" />
+  <door x="9" y="7" />
+  <door x="19" y="8" />
+  <door x="7" y="9" />
+  <door x="13" y="9" />
+  <door x="17" y="10" />
+  <door x="25" y="12" />
+  <door x="13" y="15" />
+  <door x="21" y="15" />
+  <door x="19" y="17" />
+  <door x="7" y="20" />
+  <door x="9" y="22" />
+  <object x="28" y="11" >controls1</object>
+  <object x="28" y="12" >controls2</object>
+  <object x="28" y="13" >controls3</object>
+  <blip x="23" y="4" />
+  <blip x="7" y="7" />
+  <blip x="27" y="12" />
+  <blip x="7" y="22" />
+  <team>
+    <start x="5" y="11" face="east" >SGT. MYRAN</start>
+    <start x="4" y="11" face="east" >M1</start>
+    <start x="3" y="11" face="east" >M2</start>
+    <start x="2" y="11" face="east" >M3</start>
+    <start x="1" y="11" face="east" >M4</start>
+    <marine type="sergeant" >SGT. MYRAN</marine>
+    <marine                 >M1</marine>
+    <marine                 >M2</marine>
+    <marine type="flamer"   >M3</marine>
+    <marine                 >M4</marine>
+  </team>
+  <team>
+    <start x="5" y="14" face="east" >SGT. CATULLUS</start>
+    <start x="4" y="14" face="east" >C1</start>
+    <start x="3" y="14" face="east" >C2</start>
+    <start x="2" y="14" face="east" >C3</start>
+    <start x="1" y="14" face="east" >C4</start>
+    <marine type="sergeant" >SGT. CATULLUS</marine>
+    <marine                 >C1</marine>
+    <marine                 >C2</marine>
+    <marine type="flamer"   >C3</marine>
+    <marine                 >C4</marine>
+  </team>
+</map>
