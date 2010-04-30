@@ -50,7 +50,7 @@ public class GameSin3 extends Game
         }
     }
 
-    protected void flame(int x, int y)
+    public void flame(int x, int y)
     {
         super.flame(x, y);
         if (getMap().getItem(x, y) == TileType.OBJECT_CAT)

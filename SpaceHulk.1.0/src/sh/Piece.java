@@ -84,8 +84,12 @@ public abstract class Piece
     {
         return action_;
     }
+    
+    public boolean canUseActionPoints(int ap) {
+    	return (ap < action_);
+    }
 
-    boolean useActionPoints(int ap)
+    public boolean useActionPoints(int ap)
     {
         if (action_ >= ap)
         {

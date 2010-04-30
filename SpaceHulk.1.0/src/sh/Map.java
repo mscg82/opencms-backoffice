@@ -3,15 +3,16 @@
 
 package sh;
 
-import java.io.InputStream;
 import java.io.IOException;
-import java.util.Vector;
+import java.io.InputStream;
 import java.util.Random;
-import util.Point2I;
-import util.Direction;
+import java.util.Vector;
+
 import los.BresLos;
 import los.ILosBoard;
+import util.Direction;
 import util.MiscUtils;
+import util.Point2I;
 
 public class Map
 {

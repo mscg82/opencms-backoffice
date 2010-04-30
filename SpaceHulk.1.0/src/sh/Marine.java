@@ -75,7 +75,7 @@ public class Marine extends Piece
         return ammunition_;
     }
 
-    void useAmmunition()
+    public void useAmmunition()
     {
         util.Debug.assert2(ammunition_ >= 1, "Marine::useAmmunition out of ammo");
         --ammunition_;
@@ -94,6 +94,10 @@ public class Marine extends Piece
     void setCarrying(int c)
     {
         carrying_ = c;
+    }
+    
+    public boolean canUseActionPoints(int ap) {
+    	return (ap < (action_ + cp_.get()));
     }
 
     public boolean useActionPoints(int ap)
