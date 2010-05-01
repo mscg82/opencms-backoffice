@@ -3,16 +3,25 @@ package main;
 // SpaceHulkME  Copyright (C) 2008  Adam Gates
 // This program comes with ABSOLUTELY NO WARRANTY; for license see COPYING.TXT.
 
-import main.managers.Tile;
+import javax.microedition.lcdui.Graphics;
+
 import main.managers.ImageManager;
 import main.managers.SoundManager;
-import javax.microedition.lcdui.Graphics;
-import sh.Map;
-import sh.Piece;
-import sh.Marine;
+import main.managers.Tile;
+import radui.BorderView;
+import radui.FillView;
+import radui.FrameView;
+import radui.ResizeView;
+import radui.ScreenCanvas;
+import radui.StackView;
+import radui.TextView;
+import radui.View;
 import sh.CommandPoints;
+import sh.Game;
+import sh.Map;
+import sh.Marine;
+import sh.Piece;
 import util.Point2I;
-import radui.*;
 
 public class MainView extends View
 {
@@ -22,14 +31,16 @@ public class MainView extends View
     private Tile targetTileMiss_ = new Tile(ImageManager.load("/targetring2.png"));
     
     private CommandPoints cp_;
+    private Game game_;
     private Point2I vc_;
     private MapView mapView_;
     private View minMapView_;
 
-    MainView(Map map, SoundManager sm, CommandPoints cp)
+    MainView(SoundManager sm, Game game)
     {
-        map_ = map;
-        cp_ = cp;
+    	game_ = game;
+        map_ = game_.getMap();
+        cp_ = game_.getCommandPoints();
         vc_ = new Point2I(
             (map_.getMinX() + map_.getMaxX()) / 2,
             (map_.getMinY() + map_.getMaxY()) / 2);
@@ -50,7 +61,7 @@ public class MainView extends View
             minMapView_ = rv;
         }
     }
-
+    
     int getPosX()
     {
         return vc_.x;
@@ -84,6 +95,13 @@ public class MainView extends View
         Marine active = getActive();
         if (active != null)
         {
+            int round = game_.getRound() + 1;
+            String roundStr = (round < 10 ? "0" : "") + round;
+        	int kills = game_.getStealearKills();
+        	String killsStr = (kills < 10 ? "0" : "") + kills;
+        	int casualties = game_.getCasualties();
+        	String casualtiesStr = (casualties < 10 ? "0" : "") + casualties;
+        	
             if (map_.existsLineOfSight(active, vc_.x, vc_.y, true))
                 targetTileHit_.paint(g, w / 2, h / 2);
             else
@@ -93,6 +111,10 @@ public class MainView extends View
                 g.drawString("Ammo: " + active.getAmmunition(), 0, g.getFont().getHeight(), Graphics.TOP | Graphics.LEFT);
             g.drawString("AP: " + active.getActionPoints(), w, 0, Graphics.TOP | Graphics.RIGHT);
             g.drawString("CP: " + cp_.get(), w, g.getFont().getHeight(), Graphics.TOP | Graphics.RIGHT);
+            int offset = 4 * g.getFont().stringWidth(TextView.WIDEST_CHAR);
+            g.drawString("TR: " + roundStr, w - offset, 0, Graphics.TOP | Graphics.RIGHT);
+            g.drawString("SK: " + killsStr, w - offset, g.getFont().getHeight(), Graphics.TOP | Graphics.RIGHT);
+            g.drawString("CS: " + casualtiesStr, w - offset, 2 * g.getFont().getHeight(), Graphics.TOP | Graphics.RIGHT);
 
             //double angle = los.ShadowCasting.angle(vc_.y - active.getPosY(), vc_.x - active.getPosX());
             //util.Debug.message("MainView::paint m " + active.getPosX() + " " + active.getPosY());

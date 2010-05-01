@@ -74,7 +74,7 @@ public class GameView extends View implements GameListener
         menuTheme_.color = 0x00FF00;
         menuTheme_.colorSelected = 0xFF0000;
 
-        mainView_ = new MainView(game_.getMap(), sm_, game_.getCommandPoints());
+        mainView_ = new MainView(sm_, game_);
         
         {
             StringView titlev = new StringView(game_.getName());
@@ -128,7 +128,7 @@ public class GameView extends View implements GameListener
             if (m.getJammed())
                 menuView.add("Clear Jam", new ClearJammedCallback());
             else if (m.getType() != Marine.FLAMER)
-                    menuView.add("Overwatch", new OverwatchCallback());
+                menuView.add("Overwatch", new OverwatchCallback());
         }
         menuView.add("Objective", new ShowObjective());
         menuView.add("Zoom", new ToggleZoom());
@@ -236,14 +236,26 @@ public class GameView extends View implements GameListener
                     (settings_.invertKeys && gameAction == ScreenCanvas.GAME_B))
             {
                 //util.Debug.message("GameView::keyPressed select next marine");
-                mainView_.setActive(game_.getNextMarine(mainView_.getActive()));
+            	Marine actual = mainView_.getActive();
+            	Marine next = game_.getNextMarine(actual);
+                mainView_.setActive(next);
+                // clear actual Marine action points if
+    			// he had made some actions
+    			if(next != null && actual.getActionPoints() < Marine.MAX_MARINE_ACTION_POINTS)
+    				actual.clearActionPoints();
                 sm_.playSound(SoundManager.SELECT);
             }
             else if ((!settings_.invertKeys && gameAction == ScreenCanvas.GAME_B) ||
                     (settings_.invertKeys && gameAction == ScreenCanvas.GAME_A))
             {
                 //util.Debug.message("GameView::keyPressed select prev marine");
-                mainView_.setActive(game_.getPrevMarine(mainView_.getActive()));
+            	Marine actual = mainView_.getActive();
+                Marine prev = game_.getPrevMarine(actual);
+                mainView_.setActive(prev);
+                // clear actual Marine action points if
+    			// he had made some actions
+    			if(prev != null && actual.getActionPoints() < Marine.MAX_MARINE_ACTION_POINTS)
+    				actual.clearActionPoints();
                 sm_.playSound(SoundManager.SELECT);
             }
             else if ((!settings_.invertKeys && gameAction == ScreenCanvas.GAME_C) ||
@@ -446,13 +458,9 @@ public class GameView extends View implements GameListener
 
             SettingsView settingsView = new SettingsView(sc_, menuTheme_, settings_, back);
 
-            ButtonCallbackView bcv = new ButtonCallbackView();
-            bcv.addKeyCode(ScreenCanvas.BACK, back);
-
             StackView sv = new StackView();
             sv.add(new FillView(0x80000000, true));
             sv.add(settingsView);
-            sv.add(bcv);
 
             ResizeView rv = new ResizeView(sv.getMaxWidth() + 4, sv.getMaxHeight() + 2);
             //rv.setAnchor(Graphics.BOTTOM | Graphics.RIGHT);

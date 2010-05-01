@@ -3,8 +3,9 @@
 
 package radui;
 
-import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Graphics;
+
 import main.SpaceHulk;
 import util.MiscUtils;
 
@@ -20,14 +21,14 @@ public class TextView extends View
     public static String OPEN_BOLD = START_TAG + "B" + END_TAG;
     public static String CLOSE_BOLD = START_TAG + "b" + END_TAG;
     public static String WHITESPACE = " \r\n";
-    private static String WIDEST_CHAR = "W";
+    public static String WIDEST_CHAR = "W";
     
     private String text_;
     private int color_ = 0xFFFFFF;
     private int anchor_ = Graphics.TOP | Graphics.HCENTER;
     private Font font_ = Font.getDefaultFont();
     
-    // These are tmeporary during the paint
+    // These are temporary during the paint
     private int x_;
     private int y_;
     
