@@ -6,6 +6,7 @@ package sh;
 import java.io.IOException;
 
 import util.Direction;
+import util.dice.Dice6;
 
 // TODO
 // Pass/pickup cat: 1 CAT damaged, 2 dropped ???
@@ -80,7 +81,7 @@ public class GameSin3 extends Game
             Marine m = (Marine) p;
             if (m.getCarrying() == TileType.OBJECT_CAT)
             {
-                switch (r_.nextInt(6) + 1)
+                switch (Dice6.getDice().getDiceRoll())
                 {
                 case 1:
                     if (catHP(m.getPosX(), m.getPosY(), 2))
@@ -121,7 +122,7 @@ public class GameSin3 extends Game
             m = (Marine) d;
         if (m != null && m.getCarrying() == TileType.OBJECT_CAT)
         {
-            switch (r_.nextInt(6) + 1)
+            switch (Dice6.getDice().getDiceRoll())
             {
             case 1:
                 if (catHP(m.getPosX(), m.getPosY(), 2))

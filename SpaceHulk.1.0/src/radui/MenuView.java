@@ -4,8 +4,9 @@
 package radui;
 
 import java.util.Vector;
-import javax.microedition.lcdui.Graphics;
+
 import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Graphics;
 
 public class MenuView extends View
 {
@@ -19,12 +20,19 @@ public class MenuView extends View
     {
         Command(String label, Callback cb)
         {
-            this.label = label;
-            this.cb = cb;
+            this(label, cb, null);
+        }
+
+        Command(String label, Callback cb, Font font)
+        {
+        	this.label = label;
+        	this.cb = cb;
+        	this.font = font;
         }
 
         String label;
         Callback cb;
+        Font font;
     }
 
     public MenuView(MenuTheme t)
@@ -39,8 +47,13 @@ public class MenuView extends View
     
     public int add(String label, Callback c)
     {
-        commands_.addElement(new Command(label, c));
-        return commands_.size() - 1;
+        return add(label, c, null);
+    }
+
+    public int add(String label, Callback c, Font f)
+    {
+    	commands_.addElement(new Command(label, c, f));
+    	return commands_.size() - 1;
     }
 
     public void setLabel(int i, String label)
@@ -58,19 +71,33 @@ public class MenuView extends View
         
         g.setFont(t_.font);
         
-        final int vspace = t_.font.getHeight();
+        int totalHeight = 0;
+        for (int i = 0, l = commands_.size(); i < l; ++i) {
+        	Command c = (Command) commands_.elementAt(i);
+        	if(c.font == null)
+        		totalHeight += t_.font.getHeight();
+        	else
+        		totalHeight += c.font.getHeight();
+        }
         
         int x = (w - getMaxWidth()) / 2;
-        int y = (h - commands_.size() * vspace) / 2 + offset_;
-        for (int i = 0; i < commands_.size(); ++i)
-        {
+        int y = (h - totalHeight) / 2 + offset_;
+        for (int i = 0, l = commands_.size(); i < l; ++i) {
             if (i == selected_)
                 g.setColor(t_.colorSelected);
             else
                 g.setColor(t_.color);
             Command c = (Command) commands_.elementAt(i);
-            if (c.label != null)
-                g.drawString(c.label, x, y, Graphics.TOP | Graphics.LEFT);
+            int vspace = t_.font.getHeight();
+            if (c.label != null) {
+            	if(c.font != null) {
+            		g.setFont(c.font);
+            		vspace = c.font.getHeight();
+            	}
+            	g.drawString(c.label, x, y, Graphics.TOP | Graphics.LEFT);
+            	if(c.font != null)
+            		g.setFont(t_.font);
+            }
             y += vspace;
         }
         
@@ -80,6 +107,9 @@ public class MenuView extends View
 
     private void makeSelectedVisible(int h)
     {
+    	if(!isCommandSelectable((Command) commands_.elementAt(selected_)))
+    		selectNext();
+    	
         final int vspace = t_.font.getHeight();
         int top = (commands_.size() * vspace - h) / 2 - selected_ * vspace;
         int bottom = (commands_.size() * vspace + h) / 2 - selected_ * vspace - vspace;
@@ -89,6 +119,32 @@ public class MenuView extends View
         if (offset_ < top)
             offset_ = top;
     }
+    
+    private boolean isCommandSelectable(Command c) {
+    	return c.label != null && c.cb != null;
+    }
+    
+    private void selectPrevious() {
+    	int start = selected_;
+    	do {
+            selected_ = (selected_ + commands_.size() - 1) % commands_.size();
+            if(selected_ == start){
+            	// cycled all items, exit loop
+            	break;
+            }
+        } while (!isCommandSelectable((Command) commands_.elementAt(selected_)));
+    }
+    
+    private void selectNext() {
+    	int start = selected_;
+    	do {
+            selected_ = (selected_ + 1) % commands_.size();
+            if(selected_ == start){
+            	// cycled all items, exit loop
+            	break;
+            }
+        } while (!isCommandSelectable((Command) commands_.elementAt(selected_)));
+    }
 
     public void keyPressed(ScreenCanvas sc, int keyCode)
     {
@@ -97,28 +153,12 @@ public class MenuView extends View
         switch (gameAction)
         {
         case ScreenCanvas.UP:
-            do
-            {
-                --selected_;
-                if (selected_ < 0)
-                {
-                    selected_ = commands_.size() - 1;
-                    break;
-                }
-            } while (((Command) commands_.elementAt(selected_)).label == null);
+            selectPrevious();
             sc.repaint();
             break;
             
         case ScreenCanvas.DOWN:
-            do
-            {
-                ++selected_;
-                if (selected_ >= commands_.size())
-                {
-                    selected_ = 0;
-                    break;
-                }
-            } while (((Command) commands_.elementAt(selected_)).label == null);
+        	selectNext();
             sc.repaint();
             break;
             
@@ -136,8 +176,12 @@ public class MenuView extends View
         for (int i = 0; i < commands_.size(); ++i)
         {
             Command c = (Command) commands_.elementAt(i);
-            if (c.label != null)
-                w = Math.max(w, t_.font.stringWidth(c.label));
+            if (c.label != null) {
+            	if(c.font == null)
+            		w = Math.max(w, t_.font.stringWidth(c.label));
+            	else
+            		w = Math.max(w, c.font.stringWidth(c.label));
+            }
         }
         return w;
     }

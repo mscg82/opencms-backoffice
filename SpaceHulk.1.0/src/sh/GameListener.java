@@ -3,6 +3,8 @@
 
 package sh;
 
+import java.util.Random;
+
 public interface GameListener
 {
     void beginTurn(Piece p);
@@ -23,4 +25,5 @@ public interface GameListener
     void objectDestroyed(int x, int y, int object);
     void objectUsed(int x, int y, int object, String msg);
     void objectDropped(Marine m, int object);
+    public void askResetCommandPoints(CommandPoints cp, Random r);
 }

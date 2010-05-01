@@ -12,18 +12,18 @@ import los.ShadowCasting;
 import los.impl.FlamerIFovBoard;
 import util.Direction;
 import util.Point2I;
+import util.dice.Dice6;
 
 // TODO
 // Opening a door with fire behind it
 // Can move in flamed area if already in it
-// Can only activate a marine once
 // Flamer self-destruct
 // Move and shoot
 
 public abstract class Game {
 	protected Random r_ = new Random();
 	private Map map_;
-	private CommandPoints cp_ = new CommandPoints(r_);
+	private CommandPoints cp_ = new CommandPoints();
 	private GameListener gl_ = null;
 	private StealerAI ai_ = new StealerAI(this);
 	protected Vector marines_ = new Vector();
@@ -38,11 +38,8 @@ public abstract class Game {
 	protected int bulkHeads_ = 0;
 
 	public final static int STATUS_NONE = 0;
-
 	public final static int STATUS_COMPLETED = 1;
-
 	public final static int STATUS_FAILED = 2;
-
 	public final static int STATUS_DRAWN = 3;
 
 	private static void cleanup(Vector pieces) {
@@ -269,9 +266,27 @@ public abstract class Game {
 			return true;
 
 		resetActionPoints(marines_);
-		cp_.reset(r_);
+		resetCommandPoints();
 		map_.clearFire();
 		return false;
+	}
+	
+	protected void resetCommandPoints() {
+		cp_.reset(r_);
+		// check if a sergeant is on the map
+		boolean sergeantFound = false;
+		for(int i = 0, l = marines_.size(); i < l; i++) {
+			Marine m = (Marine)marines_.elementAt(i);
+			if(m.getType() == Marine.SERGEANT) {
+				sergeantFound = true;
+				break;
+			}
+		}
+		if(sergeantFound) {
+			// ask to re-reset the command points
+			if(gl_ != null)
+				gl_.askResetCommandPoints(cp_, r_);
+		}
 	}
 
 	protected void exit(Marine m) {
@@ -305,7 +320,7 @@ public abstract class Game {
 	public void flame(int x, int y) {
 		map_.setFire(x, y);
 		Piece p = map_.getPiece(x, y);
-		if (p != null && (r_.nextInt(6) + 1) >= 2)
+		if (p != null && (Dice6.getDice().getDiceRoll()) >= 2)
 			kill(p);
 	}
 
@@ -803,8 +818,7 @@ public abstract class Game {
 				marineStart.removeElementAt(0);
 			}
 		}
-		util.Debug.assert2(marineStart.size() == 0, "Game::placeMarines "
-				+ marineStart.size() + "marines left to place");
+		util.Debug.assert2(marineStart.size() == 0, "Game::placeMarines " + marineStart.size() + "marines left to place");
 	}
 
 	public void setListener(GameListener gl) {
@@ -879,6 +893,8 @@ public abstract class Game {
 	}
 
 	public void start() {
+		resetCommandPoints();
+        
 		createBlip(map_.getInitialBlips());
 		if (map_.getInitialMoveStealers())
 			doStealerTurn();

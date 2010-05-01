@@ -5,33 +5,32 @@ package sh;
 
 import java.util.Random;
 
-public class CommandPoints
-{
-    private int points_;
+import util.dice.Dice6;
 
-    CommandPoints(Random r)
-    {
-        reset(r);
-    }
+public class CommandPoints {
+	private int points_;
 
-    void reset(Random r)
-    {
-        points_ = r.nextInt(6) + 1;
-    }
+	CommandPoints() {
+		points_ = 0;
+	}
 
-    public int get()
-    {
-        return points_;
-    }
+	CommandPoints(Random r) {
+		reset(r);
+	}
 
-    boolean use(int cp)
-    {
-        if (points_ >= cp)
-        {
-            points_ -= cp;
-            return true;
-        }
-        else
-            return false;
-    }
+	public void reset(Random r) {
+		points_ = Dice6.getDice().getDiceRoll();
+	}
+
+	public int get() {
+		return points_;
+	}
+
+	boolean use(int cp) {
+		if (points_ >= cp) {
+			points_ -= cp;
+			return true;
+		} else
+			return false;
+	}
 }

@@ -31,6 +31,7 @@ import radui.TextView;
 import radui.VerticalView;
 import radui.View;
 import sh.Blip;
+import sh.CommandPoints;
 import sh.DoorState;
 import sh.Game;
 import sh.GameListener;
@@ -44,20 +45,188 @@ import util.Point2I;
 
 public class GameView extends View implements GameListener
 {
+    private class ClearJammedCallback implements Callback
+    {
+        public void perform()
+        {
+            Marine m = mainView_.getActive();
+            if (m != null)
+            {
+                sm_.playSound(SoundManager.CLEAR_JAM);
+                game_.clearJammed(m);
+            }
+        }
+    }
+    private class ClearMsg implements Callback
+    {
+        public void perform()
+        {
+            msgView_ = null;
+        }
+    }
+    private class DropCallback implements Callback
+    {
+        public void perform()
+        {
+            Marine m = mainView_.getActive();
+            if (m != null)
+                game_.drop(m);
+        }
+    }
+    private class EndTurnCallback implements Callback
+    {
+    	public void perform()
+        {
+            interactive_ = false;
+            mainView_.setActive(null);
+            boolean over = game_.endTurn();
+            interactive_ = true;
+            if (over)
+            {
+                String title[] = { "Continue", "Mission Completed", "Mission Failed", "Mission Drawn" };
+                int status = game_.getStatus();
+                Callback next = back_;
+                if (next_ != null && (status == Game.STATUS_COMPLETED || status == Game.STATUS_DRAWN))
+                    next = next_;
+                showMsg(title[status], game_.getStatusText(status), next);
+            }
+            else
+            {
+                mainView_.setActive(game_.getNextMarine(null));
+                mainView_.setFocus(mainView_.getActive());
+            }
+        }
+    }
+    private static class MarinePathBoard implements IPathBoard
+    {
+        private Map map_;
+        private Marine m_;
+        private int x_;
+        private int y_;
+
+        MarinePathBoard(Map map, Marine m, int x, int y)
+        {
+            map_ = map;
+            m_ = m;
+            x_ = x;
+            y_ = y;
+        }
+
+        public boolean isEnd(int x, int y)
+        {
+            //util.Debug.message("MarinePathBoard::isEnd is " + x + " " + y);
+            return x == x_ && y == y_;
+        }
+
+        public boolean isObstacle(int x, int y)
+        {
+            //util.Debug.message("MarinePathBoard::isObstacle " + x + " " + y);
+            boolean surroundingCell = Math.abs(x - m_.getPosX()) <= 1
+                && Math.abs(y - m_.getPosY()) <= 1;
+            //util.Debug.message("MarinePathBoard::isObstacle surroundingCell " + surroundingCell);
+            return !map_.canMove(x, y, false, false, surroundingCell);
+        }
+    }
+    private class OverwatchCallback implements Callback
+    {
+        public void perform()
+        {
+            Marine m = mainView_.getActive();
+            if (m != null)
+            {
+                sm_.playSound(SoundManager.SET_OVERWATCH);
+                game_.toggleOverwatch(m);
+            }
+        }
+    }
+    private class PickupCallback implements Callback
+    {
+        public void perform()
+        {
+            Marine m = mainView_.getActive();
+            if (m != null)
+                game_.pickup(m);
+        }
+    }
+    private class ShowObjective implements Callback
+    {
+        public void perform()
+        {
+            showMsg("Mission Objective", game_.getStatusText(Game.STATUS_NONE), new ClearMsg());
+        }
+    }
+    private class ShowSettings implements Callback
+    {
+        public void perform()
+        {
+            Callback back = new ClearMsg();
+
+            SettingsView settingsView = new SettingsView(sc_, menuTheme_, settings_, back);
+
+            StackView sv = new StackView();
+            sv.add(new FillView(0x80000000, true));
+            sv.add(settingsView);
+
+            ResizeView rv = new ResizeView(sv.getMaxWidth() + 4, sv.getMaxHeight() + 2);
+            //rv.setAnchor(Graphics.BOTTOM | Graphics.RIGHT);
+            rv.setView(sv);
+
+            msgView_ = rv;
+        }
+    }
+
+    private class TakeCallback implements Callback
+    {
+        public void perform()
+        {
+            Marine m = mainView_.getActive();
+            if (m != null)
+                game_.take(m);
+        }
+    }
+    private class ToggleZoom implements Callback
+    {
+        public void perform()
+        {
+            Tile.zoom_ = !Tile.zoom_;
+            sc_.repaint();
+        }
+    }
+    private static void sleep(int sleep)
+    {
+        try
+        {
+            Thread.sleep(sleep);
+        }
+        catch (InterruptedException e)
+        {
+        }
+    }
     protected Game game_;
     private ScreenCanvas sc_;
+
     private Settings settings_;
+
     private Callback back_;
+    
     private Callback next_;
+
     private SoundManager sm_;
+
     private MenuTheme menuTheme_;
+
     private Random r_ = new Random();
+
     private boolean interactive_ = true;
 
     private MainView mainView_;
+    
     private View altView_;
+
     private View menuView_ = null;
+
     private View msgView_ = null;
+
     private boolean showMiniMap_ = false;
 
     GameView(ScreenCanvas sc, Settings settings, Game game, Callback back, Callback next)
@@ -89,94 +258,79 @@ public class GameView extends View implements GameListener
         }
     }
 
-    void start()
-    {
-        game_.start();
+    public void askResetCommandPoints(CommandPoints cp, Random r) {
+    	Callback back = new ClearMsg();
 
-        mainView_.setActive(game_.getNextMarine(null));
-        mainView_.setFocus(mainView_.getActive());
-        sc_.repaint();
-    }
-    
-    public void paint(Graphics g, int w, int h)
-    {
-        //util.Debug.message("+GameView::paint");
-        if (showMiniMap_)
-            altView_.paint(g, w, h);
-        else
-            mainView_.paint(g, w, h);
-        if (menuView_ != null)
-            menuView_.paint(g, w, h);
-        if (interactive_ && msgView_ != null)
-            msgView_.paint(g, w, h);
-        //util.Debug.message("-GameView::paint");
-    }
-
-    private void showMenu()
-    {
-        Marine m = mainView_.getActive();
-        MenuView menuView = new MenuView(menuTheme_);
-        menuView.add("End Turn", new EndTurnCallback());
-        if (m != null)
-        {
-            if (m.getCarrying() != 0)
-                menuView.add("Drop", new DropCallback());
-            if (game_.getMap().getItem(m.getPosX(), m.getPosY()) != 0)
-                menuView.add("Pickup", new PickupCallback());
-            if (game_.canTake(m))
-                menuView.add("Take", new TakeCallback());
-            if (m.getJammed())
-                menuView.add("Clear Jam", new ClearJammedCallback());
-            else if (m.getType() != Marine.FLAMER)
-                menuView.add("Overwatch", new OverwatchCallback());
-        }
-        menuView.add("Objective", new ShowObjective());
-        menuView.add("Zoom", new ToggleZoom());
-        menuView.add("Settings", new ShowSettings());
-        menuView.add("Quit", back_);
-
-        BorderView bv = new BorderView(menuView, 3, 1);
+        CommandPointsView cpv = new CommandPointsView(sc_, menuTheme_, cp, r, back);
 
         StackView sv = new StackView();
         sv.add(new FillView(0x80000000, true));
-        sv.add(new FrameView(0xFFFFFF));
-        sv.add(bv);
+        sv.add(cpv);
 
-        ResizeView rv = new ResizeView(sv.getMaxWidth(), sv.getMaxHeight());
-        rv.setAnchor(Graphics.BOTTOM | Graphics.RIGHT);
+        ResizeView rv = new ResizeView(sv.getMaxWidth() + 4, sv.getMaxHeight() + 2);
+        //rv.setAnchor(Graphics.BOTTOM | Graphics.RIGHT);
         rv.setView(sv);
 
-        menuView_ = rv;
+        msgView_ = rv;
+        
+        sc_.repaint();
+	}
+
+    public void beginTurn(Piece p)
+    {
+        //util.Debug.message("GameView::beginTurn " + p.getClass());
+        if (p instanceof Blip)
+        {
+            sm_.playSound(SoundManager.BLIP_MOVE);
+            mainView_.setFocus(p);
+            updateScreen();
+            sleep(200);
+        }
+        else if (p instanceof Stealer)
+        {
+            sm_.playSound(SoundManager.STEALER_MOVE);
+            mainView_.setFocus(p);
+            updateScreen();
+            sleep(200);
+        }
     }
 
-    private static class MarinePathBoard implements IPathBoard
+    public void doorStateChanged(int x, int y, int type, DoorState ds)
     {
-        private Map map_;
-        private Marine m_;
-        private int x_;
-        private int y_;
-
-        MarinePathBoard(Map map, Marine m, int x, int y)
+        //util.Debug.message("GameView::doorStateChanged " + x + ", " + y + " " + ds.getChar());
+        if (ds == DoorState.PARTIAL)
         {
-            map_ = map;
-            m_ = m;
-            x_ = x;
-            y_ = y;
+            updateScreen();
+            sleep(200);
         }
-
-        public boolean isObstacle(int x, int y)
+        else
         {
-            //util.Debug.message("MarinePathBoard::isObstacle " + x + " " + y);
-            boolean surroundingCell = Math.abs(x - m_.getPosX()) <= 1
-                && Math.abs(y - m_.getPosY()) <= 1;
-            //util.Debug.message("MarinePathBoard::isObstacle surroundingCell " + surroundingCell);
-            return !map_.canMove(x, y, false, false, surroundingCell);
+            if (interactive_)
+                sc_.repaint();
+            else
+            {
+                updateScreen();
+                sleep(200);
+            }
         }
+    }
 
-        public boolean isEnd(int x, int y)
+    public void doorStateChanging(int x, int y, int type, DoorState oldds, DoorState newds)
+    {
+        if (newds == DoorState.OPEN)
         {
-            //util.Debug.message("MarinePathBoard::isEnd is " + x + " " + y);
-            return x == x_ && y == y_;
+            sm_.playSound(SoundManager.DOOR_OPEN);
+        }
+        else if (newds == DoorState.CLOSED)
+        {
+            if (type == TileType.BULKHEAD)
+                sm_.playSound(SoundManager.BULKHEAD_CLOSE);
+            else
+                sm_.playSound(SoundManager.DOOR_CLOSE);
+        }
+        else if (newds == DoorState.BLASTED)
+        {
+            sm_.playSound(SoundManager.DOOR_BLAST);
         }
     }
 
@@ -296,275 +450,44 @@ public class GameView extends View implements GameListener
             mainView_.keyPressed(sc, keyCode);
     }
 
-    private void showMsg(String title, String msg, Callback next)
+    public void objectDamaged(int x, int y, int object)
     {
-        int w = 200;
-        View v = null;
-        if (title != null)
-        {
-            //util.Debug.message("GameView::keyPressed showMsg '" + title + "' '" + msg + "'");
-            StringView titleView = new StringView(title);
-            titleView.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_LARGE));
-            titleView.setColor(menuTheme_.color);
+        if (object == TileType.OBJECT_CAT)
+            showMsg("C.A.T. Damaged", "The C.A.T. has been damaged", new ClearMsg());
+    }
 
-            TextView msgView = new TextView(msg);
-            msgView.setColor(menuTheme_.color);
+    public void objectDestroyed(int x, int y, int object)
+    {
+        if (object == TileType.OBJECT_CAT)
+            showMsg("C.A.T. Destroyed", "The C.A.T. has been destroyed", new ClearMsg());
+    }
 
-            VerticalView vv = new VerticalView();
-            vv.add(titleView);
-            vv.add(msgView);
+    public void objectDropped(Marine m, int object)
+    {
+        if (object == TileType.OBJECT_CAT)
+            showMsg("C.A.T. Dropped", "The C.A.T. has been dropped", new ClearMsg());
+    }
 
-            w = titleView.getMaxWidth();
-            v = vv;
-        }
+    public void objectUsed(int x, int y, int object, String msg)
+    {
+        //if (object == TileType.OBJECT_CARGO) // Spawn1, Harbinger3
+        //if ((object == TileType.OBJECT_CONTROLS?) // Harbinger4
+        //if ((object == TileType.OBJECT_AIRPUMP?) // Harbinger6
+        showMsg(null, msg, new ClearMsg());
+    }
+
+    public void paint(Graphics g, int w, int h)
+    {
+        //util.Debug.message("+GameView::paint");
+        if (showMiniMap_)
+            altView_.paint(g, w, h);
         else
-        {
-            TextView msgView = new TextView(msg);
-            msgView.setColor(menuTheme_.color);
-
-            w = sc_.getWidth() / 2;
-            v = msgView;
-        }
-
-        int h = v.getHeight(w);
-        //util.Debug.message("GameView::keyPressed showMsg " + w + " " + h);
-
-        ButtonCallbackView bcv = new ButtonCallbackView();
-        bcv.addKeyCode(ScreenCanvas.BACK, next);
-        bcv.addGameAction(ScreenCanvas.FIRE, next);
-
-        StackView sv = new StackView();
-        sv.add(new FillView(0x80000000, true));
-        sv.add(v);
-        sv.add(bcv);
-
-        ResizeView rv = new ResizeView(w + 4, h + 2);
-        rv.setView(sv);
-
-        msgView_ = rv;
-    }
-    
-    private class EndTurnCallback implements Callback
-    {
-        public void perform()
-        {
-            interactive_ = false;
-            mainView_.setActive(null);
-            boolean over = game_.endTurn();
-            interactive_ = true;
-            if (over)
-            {
-                String title[] = { "Continue", "Mission Completed", "Mission Failed", "Mission Drawn" };
-                int status = game_.getStatus();
-                Callback next = back_;
-                if (next_ != null && (status == Game.STATUS_COMPLETED || status == Game.STATUS_DRAWN))
-                    next = next_;
-                showMsg(title[status], game_.getStatusText(status), next);
-            }
-            else
-            {
-                mainView_.setActive(game_.getNextMarine(null));
-                mainView_.setFocus(mainView_.getActive());
-            }
-        }
-    }
-
-    private class DropCallback implements Callback
-    {
-        public void perform()
-        {
-            Marine m = mainView_.getActive();
-            if (m != null)
-                game_.drop(m);
-        }
-    }
-
-    private class PickupCallback implements Callback
-    {
-        public void perform()
-        {
-            Marine m = mainView_.getActive();
-            if (m != null)
-                game_.pickup(m);
-        }
-    }
-
-    private class TakeCallback implements Callback
-    {
-        public void perform()
-        {
-            Marine m = mainView_.getActive();
-            if (m != null)
-                game_.take(m);
-        }
-    }
-
-    private class OverwatchCallback implements Callback
-    {
-        public void perform()
-        {
-            Marine m = mainView_.getActive();
-            if (m != null)
-            {
-                sm_.playSound(SoundManager.SET_OVERWATCH);
-                game_.toggleOverwatch(m);
-            }
-        }
-    }
-
-    private class ClearJammedCallback implements Callback
-    {
-        public void perform()
-        {
-            Marine m = mainView_.getActive();
-            if (m != null)
-            {
-                sm_.playSound(SoundManager.CLEAR_JAM);
-                game_.clearJammed(m);
-            }
-        }
-    }
-
-    private class ShowObjective implements Callback
-    {
-        public void perform()
-        {
-            showMsg("Mission Objective", game_.getStatusText(Game.STATUS_NONE), new ClearMsg());
-        }
-    }
-
-    private class ToggleZoom implements Callback
-    {
-        public void perform()
-        {
-            Tile.zoom_ = !Tile.zoom_;
-            sc_.repaint();
-        }
-    }
-
-    private class ClearMsg implements Callback
-    {
-        public void perform()
-        {
-            msgView_ = null;
-        }
-    }
-
-    private class ShowSettings implements Callback
-    {
-        public void perform()
-        {
-            Callback back = new ClearMsg();
-
-            SettingsView settingsView = new SettingsView(sc_, menuTheme_, settings_, back);
-
-            StackView sv = new StackView();
-            sv.add(new FillView(0x80000000, true));
-            sv.add(settingsView);
-
-            ResizeView rv = new ResizeView(sv.getMaxWidth() + 4, sv.getMaxHeight() + 2);
-            //rv.setAnchor(Graphics.BOTTOM | Graphics.RIGHT);
-            rv.setView(sv);
-
-            msgView_ = rv;
-        }
-    }
-
-    public void beginTurn(Piece p)
-    {
-        //util.Debug.message("GameView::beginTurn " + p.getClass());
-        if (p instanceof Blip)
-        {
-            sm_.playSound(SoundManager.BLIP_MOVE);
-            mainView_.setFocus(p);
-            updateScreen();
-            sleep(200);
-        }
-        else if (p instanceof Stealer)
-        {
-            sm_.playSound(SoundManager.STEALER_MOVE);
-            mainView_.setFocus(p);
-            updateScreen();
-            sleep(200);
-        }
-    }
-
-    public void pieceMoving(Piece p)
-    {
-        //util.Debug.message("GameView::pieceMoving " + p.getClass());
-        if (p instanceof Blip)
-        {
-            mainView_.setFocus(p);
-            for (int i = 0; i < TileManager.BLIP_COUNT; ++i)
-            {
-                p.setAnimation(i);
-                updateScreen();
-                sleep(25);
-            }
-        }
-    }
-
-    public void pieceMoved(Piece p)
-    {
-        //util.Debug.message("GameView::pieceMoved " + p.getClass());
-        if (p instanceof Blip)
-        {
-            mainView_.setFocus(p);
-            for (int i = (TileManager.BLIP_COUNT - 1); i >= 0; --i)
-            {
-                p.setAnimation(i);
-                updateScreen();
-                sleep(25);
-            }
-        }
-        else if (p instanceof Stealer)
-        {
-            int a = p.getAnimation() + 1;
-            if (a >= TileManager.STEALER_COUNT)
-                a = 0;
-            p.setAnimation(a);
-            //util.Debug.message("GameView::pieceMoved stealer " + a);
-            mainView_.setFocus(p);
-            updateScreen();
-            sleep(200);
-        }
-        else if (p instanceof Marine)
-        {
-            sm_.playSound(SoundManager.MARINE_MOVE);
-            // TODO move sc_.repaint(); here
-        }
-    }
-
-    public void pieceShoots(Piece p)
-    {
-        util.Debug.assert2(p instanceof Marine, "GameView::pieceShoots not Marine?");
-        Marine m = (Marine) p;
-        if (m.getType() == Marine.FLAMER)
-            sm_.playSound(SoundManager.SHOOT_FLAMER);
-        else if (m.getOverwatch())
-            sm_.playSound(SoundManager.SHOOT_OVERWATCH);
-        else
-            sm_.playSound(SoundManager.SHOOT_BOLTER);
-        updateScreen();
-        sleep(200);
-    }
-
-    public void pieceShootsMiss(Piece p)
-    {
-        util.Debug.assert2(p instanceof Marine, "GameView::pieceShootsMiss not Marine?");
-        sm_.playSound(SoundManager.SHOOT_MISS[r_.nextInt(SoundManager.SHOOT_MISS.length)]);
-    }
-
-    public void pieceShootsMissDoor(Piece p)
-    {
-        util.Debug.assert2(p instanceof Marine, "GameView::pieceShootsMissDoor not Marine?");
-        sm_.playSound(SoundManager.SHOOT_MISS_DOOR);
-    }
-
-    public void pieceJams(Piece p)
-    {
-        util.Debug.assert2(p instanceof Marine, "GameView::pieceJams not Marine?");
-        sm_.playSound(SoundManager.SHOOT_JAMS);
+            mainView_.paint(g, w, h);
+        if (menuView_ != null)
+            menuView_.paint(g, w, h);
+        if (interactive_ && msgView_ != null)
+            msgView_.paint(g, w, h);
+        //util.Debug.message("-GameView::paint");
     }
 
     public void pieceCloseCombat(Piece p)
@@ -628,85 +551,181 @@ public class GameView extends View implements GameListener
         }
     }
 
-    public void doorStateChanging(int x, int y, int type, DoorState oldds, DoorState newds)
+    public void pieceJams(Piece p)
     {
-        if (newds == DoorState.OPEN)
-        {
-            sm_.playSound(SoundManager.DOOR_OPEN);
-        }
-        else if (newds == DoorState.CLOSED)
-        {
-            if (type == TileType.BULKHEAD)
-                sm_.playSound(SoundManager.BULKHEAD_CLOSE);
-            else
-                sm_.playSound(SoundManager.DOOR_CLOSE);
-        }
-        else if (newds == DoorState.BLASTED)
-        {
-            sm_.playSound(SoundManager.DOOR_BLAST);
-        }
+        util.Debug.assert2(p instanceof Marine, "GameView::pieceJams not Marine?");
+        sm_.playSound(SoundManager.SHOOT_JAMS);
     }
 
-    public void doorStateChanged(int x, int y, int type, DoorState ds)
+    public void pieceMoved(Piece p)
     {
-        //util.Debug.message("GameView::doorStateChanged " + x + ", " + y + " " + ds.getChar());
-        if (ds == DoorState.PARTIAL)
+        //util.Debug.message("GameView::pieceMoved " + p.getClass());
+        if (p instanceof Blip)
         {
+            mainView_.setFocus(p);
+            for (int i = (TileManager.BLIP_COUNT - 1); i >= 0; --i)
+            {
+                p.setAnimation(i);
+                updateScreen();
+                sleep(25);
+            }
+        }
+        else if (p instanceof Stealer)
+        {
+            int a = p.getAnimation() + 1;
+            if (a >= TileManager.STEALER_COUNT)
+                a = 0;
+            p.setAnimation(a);
+            //util.Debug.message("GameView::pieceMoved stealer " + a);
+            mainView_.setFocus(p);
             updateScreen();
             sleep(200);
         }
-        else
+        else if (p instanceof Marine)
         {
-            if (interactive_)
-                sc_.repaint();
-            else
+            sm_.playSound(SoundManager.MARINE_MOVE);
+            // TODO move sc_.repaint(); here
+        }
+    }
+
+    public void pieceMoving(Piece p)
+    {
+        //util.Debug.message("GameView::pieceMoving " + p.getClass());
+        if (p instanceof Blip)
+        {
+            mainView_.setFocus(p);
+            for (int i = 0; i < TileManager.BLIP_COUNT; ++i)
             {
+                p.setAnimation(i);
                 updateScreen();
-                sleep(200);
+                sleep(25);
             }
         }
     }
 
-    public void objectDamaged(int x, int y, int object)
+    public void pieceShoots(Piece p)
     {
-        if (object == TileType.OBJECT_CAT)
-            showMsg("C.A.T. Damaged", "The C.A.T. has been damaged", new ClearMsg());
+        util.Debug.assert2(p instanceof Marine, "GameView::pieceShoots not Marine?");
+        Marine m = (Marine) p;
+        if (m.getType() == Marine.FLAMER)
+            sm_.playSound(SoundManager.SHOOT_FLAMER);
+        else if (m.getOverwatch())
+            sm_.playSound(SoundManager.SHOOT_OVERWATCH);
+        else
+            sm_.playSound(SoundManager.SHOOT_BOLTER);
+        updateScreen();
+        sleep(200);
     }
 
-    public void objectDestroyed(int x, int y, int object)
+    public void pieceShootsMiss(Piece p)
     {
-        if (object == TileType.OBJECT_CAT)
-            showMsg("C.A.T. Destroyed", "The C.A.T. has been destroyed", new ClearMsg());
+        util.Debug.assert2(p instanceof Marine, "GameView::pieceShootsMiss not Marine?");
+        sm_.playSound(SoundManager.SHOOT_MISS[r_.nextInt(SoundManager.SHOOT_MISS.length)]);
     }
 
-    public void objectUsed(int x, int y, int object, String msg)
+    public void pieceShootsMissDoor(Piece p)
     {
-        //if (object == TileType.OBJECT_CARGO) // Spawn1, Harbinger3
-        //if ((object == TileType.OBJECT_CONTROLS?) // Harbinger4
-        //if ((object == TileType.OBJECT_AIRPUMP?) // Harbinger6
-        showMsg(null, msg, new ClearMsg());
+        util.Debug.assert2(p instanceof Marine, "GameView::pieceShootsMissDoor not Marine?");
+        sm_.playSound(SoundManager.SHOOT_MISS_DOOR);
     }
 
-    public void objectDropped(Marine m, int object)
+    private void showMenu()
     {
-        if (object == TileType.OBJECT_CAT)
-            showMsg("C.A.T. Dropped", "The C.A.T. has been dropped", new ClearMsg());
+        Marine m = mainView_.getActive();
+        MenuView menuView = new MenuView(menuTheme_);
+        menuView.add("End Turn", new EndTurnCallback());
+        if (m != null)
+        {
+            if (m.getCarrying() != 0)
+                menuView.add("Drop", new DropCallback());
+            if (game_.getMap().getItem(m.getPosX(), m.getPosY()) != 0)
+                menuView.add("Pickup", new PickupCallback());
+            if (game_.canTake(m))
+                menuView.add("Take", new TakeCallback());
+            if (m.getJammed())
+                menuView.add("Clear Jam", new ClearJammedCallback());
+            else if (m.getType() != Marine.FLAMER)
+                menuView.add("Overwatch", new OverwatchCallback());
+        }
+        menuView.add("Objective", new ShowObjective());
+        menuView.add("Zoom", new ToggleZoom());
+        menuView.add("Settings", new ShowSettings());
+        menuView.add("Quit", back_);
+
+        BorderView bv = new BorderView(menuView, 3, 1);
+
+        StackView sv = new StackView();
+        sv.add(new FillView(0x80000000, true));
+        sv.add(new FrameView(0xFFFFFF));
+        sv.add(bv);
+
+        ResizeView rv = new ResizeView(sv.getMaxWidth(), sv.getMaxHeight());
+        rv.setAnchor(Graphics.BOTTOM | Graphics.RIGHT);
+        rv.setView(sv);
+
+        menuView_ = rv;
     }
 
-    private void updateScreen()
+    private void showMsg(String title, String msg, Callback next)
+    {
+        int w = 200;
+        View v = null;
+        if (title != null)
+        {
+            //util.Debug.message("GameView::keyPressed showMsg '" + title + "' '" + msg + "'");
+            StringView titleView = new StringView(title);
+            titleView.setFont(Font.getFont(Font.FACE_PROPORTIONAL, Font.STYLE_BOLD, Font.SIZE_LARGE));
+            titleView.setColor(menuTheme_.color);
+
+            TextView msgView = new TextView(msg);
+            msgView.setColor(menuTheme_.color);
+
+            VerticalView vv = new VerticalView();
+            vv.add(titleView);
+            vv.add(msgView);
+
+            w = titleView.getMaxWidth();
+            v = vv;
+        }
+        else
+        {
+            TextView msgView = new TextView(msg);
+            msgView.setColor(menuTheme_.color);
+
+            w = sc_.getWidth() / 2;
+            v = msgView;
+        }
+
+        int h = v.getHeight(w);
+        //util.Debug.message("GameView::keyPressed showMsg " + w + " " + h);
+
+        ButtonCallbackView bcv = new ButtonCallbackView();
+        bcv.addKeyCode(ScreenCanvas.BACK, next);
+        bcv.addGameAction(ScreenCanvas.FIRE, next);
+
+        StackView sv = new StackView();
+        sv.add(new FillView(0x80000000, true));
+        sv.add(v);
+        sv.add(bcv);
+
+        ResizeView rv = new ResizeView(w + 4, h + 2);
+        rv.setView(sv);
+
+        msgView_ = rv;
+    }
+
+    void start()
+    {
+        game_.start();
+
+        mainView_.setActive(game_.getNextMarine(null));
+        mainView_.setFocus(mainView_.getActive());
+        sc_.repaint();
+    }
+
+	private void updateScreen()
     {
         sc_.repaint();
         sc_.serviceRepaints();
-    }
-
-    private static void sleep(int sleep)
-    {
-        try
-        {
-            Thread.sleep(sleep);
-        }
-        catch (InterruptedException e)
-        {
-        }
     }
 }

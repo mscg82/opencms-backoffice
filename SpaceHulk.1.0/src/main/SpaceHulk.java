@@ -2,6 +2,8 @@ package main;
 
 // SpaceHulkME  Copyright (C) 2008  Adam Gates
 // This program comes with ABSOLUTELY NO WARRANTY; for license see COPYING.TXT.
+import java.util.Vector;
+
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
 import javax.microedition.lcdui.Display;
@@ -46,6 +48,7 @@ import sh.GameSpawn3;
 import sh.GameSpawn4;
 import sh.GameSpawn5;
 import sh.GameSpawn6;
+import util.dice.Dice6;
 
 public class SpaceHulk extends MIDlet {
 
@@ -88,6 +91,17 @@ public class SpaceHulk extends MIDlet {
 
     public void destroyApp(boolean unconditional) throws MIDletStateChangeException {
         settings_.close();
+        
+        // Print out the dice generated sequence
+        Vector diceSequence = Dice6.getDice().getGeneratedSequence();
+        if(diceSequence != null) {
+        	System.out.println("Dice generated sequence: ");
+        	System.out.print("[");
+        	for(int i = 0, l = diceSequence.size(); i < l; i++) {
+        		System.out.print((i == 0 ? "" : ", ") + diceSequence.elementAt(i));
+        	}
+        	System.out.println("]");
+        }
     }
 
     public void pauseApp() {

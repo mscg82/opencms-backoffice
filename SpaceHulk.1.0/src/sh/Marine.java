@@ -5,6 +5,8 @@ package sh;
 
 import java.util.Random;
 
+import util.dice.Dice6;
+
 public class Marine extends Piece {
 	public final static int MAX_SUSTAINED_FIRE_BONUS = 1;
 	public final static int MAX_MARINE_ACTION_POINTS = 4;
@@ -99,15 +101,15 @@ public class Marine extends Piece {
 	}
 
 	int getCloseCombatValue(Random r) {
-		int v = r.nextInt(6) + 1;
+		int v = Dice6.getDice().getDiceRoll();
 		if (type_ == SERGEANT)
 			++v;
 		return v;
 	}
 
 	int getShootValue(Random r, boolean jam, GameListener gl) {
-		int v1 = r.nextInt(6) + 1;
-		int v2 = r.nextInt(6) + 1;
+		int v1 = Dice6.getDice().getDiceRoll();
+		int v2 = Dice6.getDice().getDiceRoll();
 		// util.Debug.message("Marine::getShootValue bonus " + bonus_);
 		// if (jam && v1 >= 6 && v2 >= 6)
 		if (jam && v1 == v2) {

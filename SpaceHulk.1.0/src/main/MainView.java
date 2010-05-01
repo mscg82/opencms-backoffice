@@ -111,10 +111,11 @@ public class MainView extends View
                 g.drawString("Ammo: " + active.getAmmunition(), 0, g.getFont().getHeight(), Graphics.TOP | Graphics.LEFT);
             g.drawString("AP: " + active.getActionPoints(), w, 0, Graphics.TOP | Graphics.RIGHT);
             g.drawString("CP: " + cp_.get(), w, g.getFont().getHeight(), Graphics.TOP | Graphics.RIGHT);
-            int offset = 4 * g.getFont().stringWidth(TextView.WIDEST_CHAR);
-            g.drawString("TR: " + roundStr, w - offset, 0, Graphics.TOP | Graphics.RIGHT);
-            g.drawString("SK: " + killsStr, w - offset, g.getFont().getHeight(), Graphics.TOP | Graphics.RIGHT);
-            g.drawString("CS: " + casualtiesStr, w - offset, 2 * g.getFont().getHeight(), Graphics.TOP | Graphics.RIGHT);
+            
+            int offset = 0 * g.getFont().stringWidth(TextView.WIDEST_CHAR);
+            g.drawString("TR: " + roundStr, w - offset, h - 2 * g.getFont().getHeight(), Graphics.BOTTOM | Graphics.RIGHT);
+            g.drawString("SK: " + killsStr, w - offset, h - g.getFont().getHeight(), Graphics.BOTTOM | Graphics.RIGHT);
+            g.drawString("CS: " + casualtiesStr, w - offset, h, Graphics.BOTTOM | Graphics.RIGHT);
 
             //double angle = los.ShadowCasting.angle(vc_.y - active.getPosY(), vc_.x - active.getPosX());
             //util.Debug.message("MainView::paint m " + active.getPosX() + " " + active.getPosY());

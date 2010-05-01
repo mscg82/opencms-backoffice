@@ -5,6 +5,8 @@ package sh;
 
 import java.util.Random;
 
+import util.dice.Dice6;
+
 public class Stealer extends Piece
 {
     Stealer()
@@ -16,7 +18,7 @@ public class Stealer extends Piece
     {
         int v = 0;
         for (int i = 0; i < 3; ++i)
-            v = Math.max(v, r.nextInt(6) + 1);
+            v = Math.max(v, Dice6.getDice().getDiceRoll());
         return v;
     }
 
