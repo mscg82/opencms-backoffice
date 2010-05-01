@@ -18,11 +18,6 @@ public class MenuView extends View
 
     private static class Command
     {
-        Command(String label, Callback cb)
-        {
-            this(label, cb, null);
-        }
-
         Command(String label, Callback cb, Font font)
         {
         	this.label = label;

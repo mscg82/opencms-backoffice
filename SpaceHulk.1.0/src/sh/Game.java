@@ -60,6 +60,7 @@ public abstract class Game {
 			if (piece instanceof Marine) {
 				Marine m = (Marine) piece;
 				m.setOverwatch(false);
+				m.setGuard(false);
 			}
 		}
 	}
@@ -123,6 +124,12 @@ public abstract class Game {
 
 		int av = a.getCloseCombatValue(r_);
 		int dv = d.getCloseCombatValue(r_);
+		
+		if(av > dv && (d instanceof Marine) && ((Marine)d).getGuard()) {
+			// The defender is a Marine in a guard state,
+			// so re-roll defender dice
+			dv = d.getCloseCombatValue(r_);
+		}
 
 		if (av > dv) {
 			// util.Debug.message("Attacker destroys Defender");
@@ -197,31 +204,33 @@ public abstract class Game {
 	private void doOverwatch(Stealer s) {
 		for (int i = 0; i < marines_.size(); ++i) {
 			Marine m = (Marine) marines_.elementAt(i);
-			if (m.getType() != Marine.FLAMER
-					&& (m.getOverwatch() || cp_.get() >= 1) && !m.getJammed()) {
+			if(m.getType() != Marine.FLAMER && (m.getOverwatch() || cp_.get() >= 1)) {
+				m.setGuard(false);
 				// util.Debug.message("+Game::doOverwatch " + m.getName());
-				Vector path = map_.getLineOfSight(m.getPosX(), m.getPosY(), s
-						.getPosX(), s.getPosY());
+				Vector path = map_.getLineOfSight(m.getPosX(), m.getPosY(), s.getPosX(), s.getPosY());
 				if (path != null && path.size() > 1 && path.size() <= 12) {
-					// util.Debug.message("Game::doOverwatch foundpath");
-					Point2I p = (Point2I) path.elementAt(1);
-					int dir = Direction.getDirection(m.getPosX(), m.getPosY(),
-							p.x, p.y);
-					util.Debug.assert2(dir != Direction.NONE,
-							"Invalid direction");
-					if (Face.isForward(dir, m.getFace())) {
-						if (m.getOverwatch() || m.useActionPoints(1)) {
-							m.setShoot(true);
-							gl_.pieceShoots(m);
-							m.setTarget(s);
-							if (m.getShootValue(r_, m.getOverwatch(), gl_) >= 6) {
-								// util.Debug.message("Marine shoots Stealer");
-								kill(s);
-							} else
-								gl_.pieceShootsMiss(m);
-							if (m.getJammed())
-								m.setOverwatch(false);
-							m.setShoot(false);
+					if(m.getJammed() && m.useActionPoints(1)) {
+						m.clearJammed();
+					}
+					if (!m.getJammed()) {
+						// util.Debug.message("Game::doOverwatch foundpath");
+						Point2I p = (Point2I) path.elementAt(1);
+						int dir = Direction.getDirection(m.getPosX(), m.getPosY(), p.x, p.y);
+						util.Debug.assert2(dir != Direction.NONE, "Invalid direction");
+						if (Face.isForward(dir, m.getFace())) {
+							if (m.getOverwatch() || m.useActionPoints(1)) {
+								m.setShoot(true);
+								gl_.pieceShoots(m);
+								m.setTarget(s);
+								if (m.getShootValue(r_, m.getOverwatch(), gl_) >= 6) {
+									// util.Debug.message("Marine shoots Stealer");
+									kill(s);
+								} else
+									gl_.pieceShootsMiss(m);
+//								if (m.getJammed())
+//									m.setOverwatch(false);
+								m.setShoot(false);
+							}
 						}
 					}
 				}
@@ -567,12 +576,14 @@ public abstract class Game {
 			if (p instanceof Stealer) {
 				if (m.useActionPoints(1)) {
 					m.setOverwatch(false);
+					m.setGuard(false);
 					m.setTarget(null);
 					closeCombat(m, p, dir);
 				}
 			} else if (DoorState.getState(TileType.DOOR, object) == DoorState.CLOSED) {
 				if (m.useActionPoints(1)) {
 					m.setOverwatch(false);
+					m.setGuard(false);
 					m.setTarget(null);
 					// map_.openDoor(x, y, gl_);
 					// flipBlips();
@@ -607,6 +618,7 @@ public abstract class Game {
 				if (canmove) {
 					if (m.useActionPoints(1)) {
 						m.setOverwatch(false);
+						m.setGuard(false);
 						m.setTarget(null);
 						m.move(map_, x, y, gl_);
 						flipBlips();
@@ -632,6 +644,7 @@ public abstract class Game {
 				if (canmove) {
 					if (m.useActionPoints(2)) {
 						m.setOverwatch(false);
+						m.setGuard(false);
 						m.setTarget(null);
 						m.move(map_, x, y, gl_);
 						flipBlips();
@@ -639,6 +652,7 @@ public abstract class Game {
 				}
 			} else if (m.useActionPoints(2)) {
 				m.setOverwatch(false);
+				m.setGuard(false);
 				m.setTarget(null);
 				m.setFace(m.getFace().flip());
 				flipBlips();
@@ -648,6 +662,7 @@ public abstract class Game {
 			// util.Debug.message("Game::move marine turn right");
 			if (m.useActionPoints(1)) {
 				m.setOverwatch(false);
+				m.setGuard(false);
 				m.setTarget(null);
 				m.setFace(m.getFace().right());
 				flipBlips();
@@ -657,6 +672,7 @@ public abstract class Game {
 			// util.Debug.message("Game::move marine turn left");
 			if (m.useActionPoints(1)) {
 				m.setOverwatch(false);
+				m.setGuard(false);
 				m.setTarget(null);
 				m.setFace(m.getFace().left());
 				flipBlips();
@@ -851,6 +867,7 @@ public abstract class Game {
 				if (p instanceof Stealer) {
 					if (m.useActionPoints(1)) {
 						m.setOverwatch(false);
+						m.setGuard(false);
 						m.setShoot(true);
 						gl_.pieceShoots(m);
 						m.setTarget(p);
@@ -866,6 +883,7 @@ public abstract class Game {
 				else if (DoorState.getState(TileType.DOOR, object) == DoorState.CLOSED) {
 					if (m.useActionPoints(1)) {
 						m.setOverwatch(false);
+						m.setGuard(false);
 						m.setShoot(true);
 						gl_.pieceShoots(m);
 						Door door = new Door(x, y);
@@ -960,6 +978,15 @@ public abstract class Game {
 		} else if (!m.getJammed() && m.getType() != Marine.FLAMER) {
 			if (m.useActionPoints(2))
 				m.setOverwatch(true);
+		}
+	}
+	
+	public void toggleGuard(Marine m) {
+		if (m.getGuard()) {
+			m.setGuard(false);
+		} else if (m.getType() != Marine.FLAMER) {
+			if (m.useActionPoints(2))
+				m.setGuard(true);
 		}
 	}
 	

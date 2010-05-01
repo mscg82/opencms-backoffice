@@ -12,13 +12,14 @@ public class Marine extends Piece {
 	public final static int MAX_MARINE_ACTION_POINTS = 4;
 
 	public final static int SERGEANT = 2;
-	public final static int FLAMER = 1;
+	public final static int FLAMER   = 1;
 	public final static int STANDARD = 0;
 
 	private String name_;
 	private int type_;
 	private boolean shoot_ = false;
 	private boolean overwatch_ = false;
+	private boolean guard_ = false;
 	private boolean jammed_ = false;
 	private CommandPoints cp_;
 
@@ -56,6 +57,18 @@ public class Marine extends Piece {
 
 	void setOverwatch(boolean o) {
 		overwatch_ = o;
+		if(overwatch_)
+			setGuard(false);
+	}
+	
+	public boolean getGuard() {
+		return guard_;
+	}
+
+	void setGuard(boolean g) {
+		guard_ = g;
+		if(guard_)
+			setOverwatch(false);
 	}
 
 	public boolean getJammed() {

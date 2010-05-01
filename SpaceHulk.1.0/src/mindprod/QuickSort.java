@@ -52,7 +52,7 @@ public class QuickSort
 
     private static final boolean DEBUGGING = false;
 
-    private static final String EmbeddedCopyright =
+    public static final String EmbeddedCopyright =
             "copyright (c) 1996-2008 Roedy Green, Canadian Mind Products, http://mindprod.com";
 
     // callback object we are passed that has

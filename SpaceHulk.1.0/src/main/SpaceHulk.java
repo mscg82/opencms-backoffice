@@ -161,7 +161,7 @@ public class SpaceHulk extends MIDlet {
 
         String name;
         String introFile;
-        String mapFile;
+        //String mapFile;
         Class gameClass;
 
 //        Mission(String name, String introFile, String mapFile) {

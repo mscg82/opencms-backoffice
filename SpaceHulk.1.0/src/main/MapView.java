@@ -24,6 +24,7 @@ public class MapView extends View
     private SoundManager sm_;
     private Tile activeTile_ = new Tile(ImageManager.load("/mselect.png"));
     private Tile overwatchTile_ = new Tile(ImageManager.load("/overwatch.png"));
+    private Tile guardTile_ = new Tile(ImageManager.load("/guard.png"));
     private Tile jammedTile_ = new Tile(ImageManager.load("/jammed.png"));
     private Marine active_ = null;
     
@@ -135,10 +136,12 @@ public class MapView extends View
                         if (p instanceof Marine)
                         {
                             Marine m = (Marine) p;
-                            if (m.getOverwatch())
+                            if (m.getOverwatch() && !m.getJammed())
                                 overwatchTile_.paint(g, sx, sy);
                             if (m.getJammed())
                                 jammedTile_.paint(g, sx, sy);
+                            if (m.getGuard())
+                            	guardTile_.paint(g, sx, sy);
                         }
                     }
 

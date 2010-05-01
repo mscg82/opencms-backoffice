@@ -139,6 +139,18 @@ public class GameView extends View implements GameListener
             }
         }
     }
+    private class GuardCallback implements Callback
+    {
+        public void perform()
+        {
+            Marine m = mainView_.getActive();
+            if (m != null)
+            {
+                sm_.playSound(SoundManager.SET_OVERWATCH);
+                game_.toggleGuard(m);
+            }
+        }
+    }
     private class PickupCallback implements Callback
     {
         public void perform()
@@ -629,13 +641,11 @@ public class GameView extends View implements GameListener
         sm_.playSound(SoundManager.SHOOT_MISS_DOOR);
     }
 
-    private void showMenu()
-    {
+    private void showMenu() {
         Marine m = mainView_.getActive();
         MenuView menuView = new MenuView(menuTheme_);
         menuView.add("End Turn", new EndTurnCallback());
-        if (m != null)
-        {
+        if (m != null) {
             if (m.getCarrying() != 0)
                 menuView.add("Drop", new DropCallback());
             if (game_.getMap().getItem(m.getPosX(), m.getPosY()) != 0)
@@ -644,8 +654,9 @@ public class GameView extends View implements GameListener
                 menuView.add("Take", new TakeCallback());
             if (m.getJammed())
                 menuView.add("Clear Jam", new ClearJammedCallback());
-            else if (m.getType() != Marine.FLAMER)
+            if (m.getType() != Marine.FLAMER)
                 menuView.add("Overwatch", new OverwatchCallback());
+            menuView.add("Guard", new GuardCallback());
         }
         menuView.add("Objective", new ShowObjective());
         menuView.add("Zoom", new ToggleZoom());

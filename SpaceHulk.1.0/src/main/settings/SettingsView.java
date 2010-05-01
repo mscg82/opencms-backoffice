@@ -3,10 +3,10 @@ package main.settings;
 // SpaceHulkME  Copyright (C) 2008  Adam Gates
 // This program comes with ABSOLUTELY NO WARRANTY; for license see COPYING.TXT.
 
-import radui.MenuView;
-import radui.MenuTheme;
 import radui.Callback;
 import radui.CallbackChainer;
+import radui.MenuTheme;
+import radui.MenuView;
 import radui.ScreenCanvas;
 
 public class SettingsView extends MenuView
@@ -17,7 +17,7 @@ public class SettingsView extends MenuView
     private int fullscreenIndex_;
     private int rotateIndex_;
     private int invertKeysIndex_;
-    private int defaultIndex_;
+    //private int defaultIndex_;
 
     public SettingsView(ScreenCanvas sc, MenuTheme mt, Settings settings, Callback back)
     {
@@ -109,7 +109,7 @@ public class SettingsView extends MenuView
                     defaultCallback, soundCallback,
                     fullscreenCallback, rotateCallback,
                     invertCallback});
-        defaultIndex_ = add("Restore defaults", defaultExtCallback);
+        /*defaultIndex_ =*/ add("Restore defaults", defaultExtCallback);
 
         add(null, null);
 
