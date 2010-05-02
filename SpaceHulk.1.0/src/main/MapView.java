@@ -127,7 +127,9 @@ public class MapView extends View
                                 Face f = m.getFace();
                                 Tile t = tm_.getShoot(f);
                                 if (t != null)
-                                    t.paint(g, sx + f.getOffsetX() * TileManager.getTileWidth(), sy + f.getOffsetY() * TileManager.getTileHeight());
+                                    t.paint(g,
+                                    	sx + f.getOffsetX() * (TileManager.getTileWidth() + tm_.getShootOffset()),
+                                    	sy + f.getOffsetY() * (TileManager.getTileHeight() + tm_.getShootOffset()));
                             }
                         }
                         Tile t = tm_.getTile(p);

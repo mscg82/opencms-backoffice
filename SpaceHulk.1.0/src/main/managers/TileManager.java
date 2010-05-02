@@ -3,13 +3,13 @@ package main.managers;
 // SpaceHulkME  Copyright (C) 2008  Adam Gates
 // This program comes with ABSOLUTELY NO WARRANTY; for license see COPYING.TXT.
 
-import sh.Face;
-import sh.TileType;
-import sh.DoorState;
-import sh.Piece;
 import sh.Blip;
-import sh.Stealer;
+import sh.DoorState;
+import sh.Face;
 import sh.Marine;
+import sh.Piece;
+import sh.Stealer;
+import sh.TileType;
 
 public class TileManager
 {
@@ -175,6 +175,10 @@ public class TileManager
     public Tile getShoot(Face f)
     {
         return shoot_[f.getValue()];
+    }
+    
+    public int getShootOffset() {
+    	return -2;
     }
 
     public Tile getTile(int tile)

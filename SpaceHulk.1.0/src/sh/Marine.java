@@ -5,7 +5,6 @@ package sh;
 
 import java.util.Random;
 
-import util.Direction;
 import util.dice.Dice6;
 
 public class Marine extends Piece {
