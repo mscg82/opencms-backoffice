@@ -43,7 +43,7 @@ public abstract class Piece {
 		return animation_;
 	}
 
-	abstract int getCloseCombatValue(Random r);
+	abstract int getCloseCombatValue(Random r, int dir);
 
 	public Face getFace() {
 		return face_;

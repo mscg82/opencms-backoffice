@@ -5,6 +5,8 @@ package sh;
 
 import java.io.IOException;
 
+import util.Direction;
+
 public class GameSin6 extends Game
 {
     public final static String NAME = "Defend";
@@ -34,7 +36,7 @@ public class GameSin6 extends Game
             {
                 getListener().pieceCloseCombat(p);
                 //moved = true;
-                int c = p.getCloseCombatValue(r_);
+                int c = p.getCloseCombatValue(r_, Direction.getDirection(p.getFace()));
                 if (c >= 6)
                 {
                     getMap().setObject(x, y, 0);

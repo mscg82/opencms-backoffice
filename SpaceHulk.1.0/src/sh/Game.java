@@ -122,13 +122,13 @@ public abstract class Game {
 
 		gl_.pieceCloseCombat(a);
 
-		int av = a.getCloseCombatValue(r_);
-		int dv = d.getCloseCombatValue(r_);
+		int av = a.getCloseCombatValue(r_, dir);
+		int dv = d.getCloseCombatValue(r_, dir);
 		
 		if(av > dv && (d instanceof Marine) && ((Marine)d).getGuard()) {
 			// The defender is a Marine in a guard state,
 			// so re-roll defender dice
-			dv = d.getCloseCombatValue(r_);
+			dv = d.getCloseCombatValue(r_, dir);
 		}
 
 		if (av > dv) {
@@ -525,7 +525,7 @@ public abstract class Game {
 			if (blip.useActionPoints(1)) {
 				gl_.pieceCloseCombat(blip);
 				moved = true;
-				int c = blip.getCloseCombatValue(r_);
+				int c = blip.getCloseCombatValue(r_, dir);
 				if (c >= 6) {
 					map_.blastDoor(x, y, gl_);
 					flipBlips();
@@ -588,7 +588,7 @@ public abstract class Game {
 					// map_.openDoor(x, y, gl_);
 					// flipBlips();
 					gl_.pieceCloseCombat(m);
-					int c = m.getCloseCombatValue(r_);
+					int c = m.getCloseCombatValue(r_, dir);
 					if (c >= 6) {
 						map_.blastDoor(x, y, gl_);
 						flipBlips();
@@ -703,7 +703,7 @@ public abstract class Game {
 				if (s.useActionPoints(1)) {
 					gl_.pieceCloseCombat(s);
 					moved = true;
-					int c = s.getCloseCombatValue(r_);
+					int c = s.getCloseCombatValue(r_, dir);
 					if (c >= 6) {
 						map_.blastDoor(x, y, gl_);
 						flipBlips();

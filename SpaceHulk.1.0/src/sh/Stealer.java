@@ -14,7 +14,7 @@ public class Stealer extends Piece
         super(Face.NORTH);
     }
     
-    int getCloseCombatValue(Random r)
+    int getCloseCombatValue(Random r, int dir)
     {
         int v = 0;
         for (int i = 0; i < 3; ++i)

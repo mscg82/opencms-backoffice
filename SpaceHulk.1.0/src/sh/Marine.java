@@ -5,6 +5,7 @@ package sh;
 
 import java.util.Random;
 
+import util.Direction;
 import util.dice.Dice6;
 
 public class Marine extends Piece {
@@ -113,10 +114,12 @@ public class Marine extends Piece {
 			return false;
 	}
 
-	int getCloseCombatValue(Random r) {
+	int getCloseCombatValue(Random r, int dir) {
 		int v = Dice6.getDice().getDiceRoll();
-		if (type_ == SERGEANT)
-			++v;
+		if (type_ == SERGEANT) {
+			if(Face.isForward(dir, getFace()))
+				++v;
+		}
 		return v;
 	}
 

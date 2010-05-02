@@ -19,7 +19,7 @@ public class Blip extends Piece
         throw new IllegalArgumentException();
     }
 
-    int getCloseCombatValue(Random r)
+    int getCloseCombatValue(Random r, int dir)
     {
         int v = 0;
         for (int i = 0; i < 3; ++i)

@@ -3,6 +3,8 @@
 
 package util;
 
+import sh.Face;
+
 public class Direction
 {
     public final static int NONE  = 0;
@@ -64,5 +66,18 @@ public class Direction
         }
         util.Debug.error("Direction::flip could not find " + dir);
         return dir;
+    }
+    
+    public static int getDirection(Face f) {
+    	if(f == Face.NORTH)
+    		return NORTH;
+    	else if(f == Face.EAST)
+    		return EAST;
+    	else if(f == Face.SOUTH)
+    		return SOUTH;
+    	else if(f == Face.WEST)
+    		return WEST;
+    	else
+    		return NONE;
     }
 }

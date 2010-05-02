@@ -28,7 +28,7 @@ public class Door extends Piece {
 		setPos(x, y);
 	}
 
-	int getCloseCombatValue(Random r) {
+	int getCloseCombatValue(Random r, int dir) {
 		return 0;
 	}
 
