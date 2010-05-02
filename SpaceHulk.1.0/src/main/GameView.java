@@ -654,7 +654,7 @@ public class GameView extends View implements GameListener
                 menuView.add("Take", new TakeCallback());
             if (m.getJammed())
                 menuView.add("Clear Jam", new ClearJammedCallback());
-            if (m.getType() != Marine.FLAMER)
+            if (m.canOverwatch())
                 menuView.add("Overwatch", new OverwatchCallback());
             menuView.add("Guard", new GuardCallback());
         }

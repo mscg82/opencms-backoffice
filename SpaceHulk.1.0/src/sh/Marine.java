@@ -39,40 +39,12 @@ public class Marine extends Piece {
 		cp_ = cp;
 	}
 
-	public String getName() {
-		return name_;
+	public boolean canOverwatch() {
+		return type_ != FLAMER;
 	}
 
-	public boolean getShoot() {
-		return shoot_;
-	}
-
-	void setShoot(boolean s) {
-		shoot_ = s;
-	}
-
-	public boolean getOverwatch() {
-		return overwatch_;
-	}
-
-	void setOverwatch(boolean o) {
-		overwatch_ = o;
-		if(overwatch_)
-			setGuard(false);
-	}
-	
-	public boolean getGuard() {
-		return guard_;
-	}
-
-	void setGuard(boolean g) {
-		guard_ = g;
-		if(guard_)
-			setOverwatch(false);
-	}
-
-	public boolean getJammed() {
-		return jammed_;
+	public boolean canUseActionPoints(int ap) {
+		return (ap < (action_ + cp_.get()));
 	}
 
 	void clearJammed() {
@@ -83,36 +55,10 @@ public class Marine extends Piece {
 		return ammunition_;
 	}
 
-	public void useAmmunition() {
-		util.Debug.assert2(ammunition_ >= 1, "Marine::useAmmunition out of ammo");
-		--ammunition_;
-	}
-
-	public int getType() {
-		return type_;
-	}
-
 	public int getCarrying() {
 		return carrying_;
 	}
-
-	void setCarrying(int c) {
-		carrying_ = c;
-	}
-
-	public boolean canUseActionPoints(int ap) {
-		return (ap < (action_ + cp_.get()));
-	}
-
-	public boolean useActionPoints(int ap) {
-		if (super.useActionPoints(ap))
-			return true;
-		else if (cp_.use(ap - getActionPoints()))
-			return useActionPoints(getActionPoints()); // Should always be true
-		else
-			return false;
-	}
-
+	
 	int getCloseCombatValue(Random r, int dir) {
 		int v = Dice6.getDice().getDiceRoll();
 		if (type_ == SERGEANT) {
@@ -120,6 +66,26 @@ public class Marine extends Piece {
 				++v;
 		}
 		return v;
+	}
+
+	public boolean getGuard() {
+		return guard_;
+	}
+
+	public boolean getJammed() {
+		return jammed_;
+	}
+
+	public String getName() {
+		return name_;
+	}
+
+	public boolean getOverwatch() {
+		return overwatch_;
+	}
+
+	public boolean getShoot() {
+		return shoot_;
 	}
 
 	int getShootValue(Random r, boolean jam, GameListener gl) {
@@ -132,6 +98,34 @@ public class Marine extends Piece {
 			gl.pieceJams(this);
 		}
 		return Math.max(v1, v2) + bonus_;
+	}
+
+	public int getType() {
+		return type_;
+	}
+
+	public void resetActionPoints() {
+		action_ = MAX_MARINE_ACTION_POINTS;
+	}
+
+	void setCarrying(int c) {
+		carrying_ = c;
+	}
+
+	void setGuard(boolean g) {
+		guard_ = g;
+		if(guard_)
+			setOverwatch(false);
+	}
+
+	void setOverwatch(boolean o) {
+		overwatch_ = o;
+		if(overwatch_)
+			setGuard(false);
+	}
+
+	void setShoot(boolean s) {
+		shoot_ = s;
 	}
 
 	void setTarget(Piece target) {
@@ -156,7 +150,17 @@ public class Marine extends Piece {
 		}
 	}
 
-	public void resetActionPoints() {
-		action_ = MAX_MARINE_ACTION_POINTS;
+	public boolean useActionPoints(int ap) {
+		if (super.useActionPoints(ap))
+			return true;
+		else if (cp_.use(ap - getActionPoints()))
+			return useActionPoints(getActionPoints()); // Should always be true
+		else
+			return false;
+	}
+	
+	public void useAmmunition() {
+		util.Debug.assert2(ammunition_ >= 1, "Marine::useAmmunition out of ammo");
+		--ammunition_;
 	}
 }
