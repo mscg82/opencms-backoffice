@@ -198,7 +198,7 @@ public class Marine extends Piece {
             Face f = getFace();
             Tile t = tm.getShoot(f);
             if (t != null) {
-            	tiles.addElement(new TileInfo(c,
+            	tiles.addElement(new TileInfo(t,
             		f.getOffsetX() * (TileManager.getTileWidth() + tm.getShootOffset()), 
             		f.getOffsetY() * (TileManager.getTileHeight() + tm.getShootOffset())));
             }
