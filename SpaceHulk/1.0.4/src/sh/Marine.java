@@ -4,7 +4,11 @@
 package sh;
 
 import java.util.Random;
+import java.util.Vector;
 
+import main.managers.Tile;
+import main.managers.TileManager;
+import util.TileInfo;
 import util.dice.Dice6;
 
 public class Marine extends Piece {
@@ -14,6 +18,10 @@ public class Marine extends Piece {
 	public final static int SERGEANT = 2;
 	public final static int FLAMER   = 1;
 	public final static int STANDARD = 0;
+	
+	public final static int WEAPONS_BOLTER = 0;
+	public final static int WEAPONS_FLAMER = 1;
+	public final static int WEAPONS_SERGEANT_BOLTER = 2;
 
 	private String name_;
 	private int type_;
@@ -22,6 +30,7 @@ public class Marine extends Piece {
 	private boolean guard_ = false;
 	private boolean jammed_ = false;
 	private CommandPoints cp_;
+	private int rangedWeapon_;
 
 	private int carrying_ = 0;
 
@@ -37,6 +46,18 @@ public class Marine extends Piece {
 		name_ = name;
 		type_ = type;
 		cp_ = cp;
+		
+		switch (type) {
+		case FLAMER:
+			rangedWeapon_ = WEAPONS_FLAMER;
+			break;
+		case SERGEANT:
+			rangedWeapon_ = WEAPONS_SERGEANT_BOLTER;
+			break;
+		default:
+			rangedWeapon_ = WEAPONS_BOLTER;
+			break;
+		}
 	}
 
 	public boolean canOverwatch() {
@@ -162,5 +183,53 @@ public class Marine extends Piece {
 	public void useAmmunition() {
 		util.Debug.assert2(ammunition_ >= 1, "Marine::useAmmunition out of ammo");
 		--ammunition_;
+	}
+	
+	public Vector getTiles(TileManager tm) {
+		Vector tiles = new Vector();
+		
+		// check if there is the a tile for the carried item
+		Tile c = tm.getTile(getCarrying());
+		if(c != null)
+			tiles.addElement(new TileInfo(c, 0, 0));
+		
+		// check if the marine is shooting
+		if (getShoot()) {
+            Face f = getFace();
+            Tile t = tm.getShoot(f);
+            if (t != null) {
+            	tiles.addElement(new TileInfo(c,
+            		f.getOffsetX() * (TileManager.getTileWidth() + tm.getShootOffset()), 
+            		f.getOffsetY() * (TileManager.getTileHeight() + tm.getShootOffset())));
+            }
+		}
+		
+		if(getType() != SERGEANT) {
+			// get the weapon tile
+			Tile w = tm.getWeapon(rangedWeapon_, getFace());
+			if(w != null)
+				tiles.addElement(new TileInfo(w, 0, 0));
+			// get the main tile
+			Tile t = tm.getTile(this);
+			if (t != null)
+				tiles.addElement(new TileInfo(t, 0, 0));
+		}
+		else {
+			// get the main tile
+			Tile t = tm.getTile(this);
+			if (t != null)
+				tiles.addElement(new TileInfo(t, 0, 0));
+		}
+		
+		
+		// additionals overlaying tiles
+		if (getOverwatch() && !getJammed())
+			tiles.addElement(new TileInfo(TileManager.overwatchTile, 0, 0));
+        if (getJammed())
+        	tiles.addElement(new TileInfo(TileManager.jammedTile, 0, 0));
+        if (getGuard())
+        	tiles.addElement(new TileInfo(TileManager.guardTile, 0, 0));
+		
+		return tiles;
 	}
 }

@@ -3,30 +3,27 @@ package main;
 // SpaceHulkME  Copyright (C) 2008  Adam Gates
 // This program comes with ABSOLUTELY NO WARRANTY; for license see COPYING.TXT.
 
+import java.util.Vector;
+
 import javax.microedition.lcdui.Graphics;
 
-import main.managers.ImageManager;
 import main.managers.SoundManager;
 import main.managers.Tile;
 import main.managers.TileManager;
 import main.settings.Settings;
 import radui.ScreenCanvas;
 import radui.View;
-import sh.Face;
 import sh.Map;
 import sh.Marine;
 import sh.Piece;
 import util.Point2I;
+import util.TileInfo;
 
 public class MapView extends View
 {
     private Map m_;
     private TileManager tm_ = new TileManager();
     private SoundManager sm_;
-    private Tile activeTile_ = new Tile(ImageManager.load("/mselect.png"));
-    private Tile overwatchTile_ = new Tile(ImageManager.load("/overwatch.png"));
-    private Tile guardTile_ = new Tile(ImageManager.load("/guard.png"));
-    private Tile jammedTile_ = new Tile(ImageManager.load("/jammed.png"));
     private Marine active_ = null;
     
     private Point2I vc_;
@@ -117,35 +114,20 @@ public class MapView extends View
                             ax = sx;
                             ay = sy;
                         }
-                        if (p instanceof Marine)
-                        {
-                            Marine m = (Marine) p;
-                            Tile c = tm_.getTile(m.getCarrying());
-                            if (c != null)
-                                c.paint(g, sx, sy);
-                            if (m.getShoot())
-                            {
-                                Face f = m.getFace();
-                                Tile t = tm_.getShoot(f);
-                                if (t != null)
-                                    t.paint(g,
-                                    	sx + f.getOffsetX() * (TileManager.getTileWidth() + tm_.getShootOffset()),
-                                    	sy + f.getOffsetY() * (TileManager.getTileHeight() + tm_.getShootOffset()));
-                            }
+                        if(p instanceof Marine) {
+                        	Marine m = (Marine) p;
+                        	Vector tiles = m.getTiles(tm_);
+                        	for(int i = 0, l = tiles.size(); i < l; i++) {
+                        		TileInfo ti = (TileInfo)tiles.elementAt(i);
+                        		ti.getTile().paint(g, sx + ti.getOffsetX(), sy + ti.getOffsetY());
+                        	}
                         }
-                        Tile t = tm_.getTile(p);
-                        if (t != null)
-                            t.paint(g, sx, sy);
-                        if (p instanceof Marine)
-                        {
-                            Marine m = (Marine) p;
-                            if (m.getOverwatch() && !m.getJammed())
-                                overwatchTile_.paint(g, sx, sy);
-                            if (m.getJammed())
-                                jammedTile_.paint(g, sx, sy);
-                            if (m.getGuard())
-                            	guardTile_.paint(g, sx, sy);
+                        else {
+                        	Tile t = tm_.getTile(p);
+                            if (t != null)
+                                t.paint(g, sx, sy);
                         }
+                        
                     }
 
 
@@ -155,7 +137,7 @@ public class MapView extends View
             }
         }
         if (drawActive)
-            activeTile_.paint(g, ax, ay);
+        	TileManager.activeTile.paint(g, ax, ay);
     }
 
     public void keyPressed(ScreenCanvas sc, int keyCode)
@@ -173,7 +155,9 @@ public class MapView extends View
             Piece p = m_.getPiece(vc_.x, vc_.y);
             if (p instanceof Marine)
             {
-            	getActive().clearActionPoints();
+            	Marine active = getActive();
+            	if(active.getActionPoints() < Marine.MAX_MARINE_ACTION_POINTS)
+            		getActive().clearActionPoints();
                 setActive((Marine) p);
                 sm_.playSound(SoundManager.SELECT);
                 sc.repaint();
