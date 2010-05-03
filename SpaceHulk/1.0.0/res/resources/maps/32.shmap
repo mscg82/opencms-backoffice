@@ -1,0 +1,84 @@
+<map width="29" height="31" >
+  <blipsperturn>0</blipsperturn>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~!~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~LAAFcB</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~DbaadB</tile>
+  <tile>~~~~~LAAAI~~~~~~~LAAAI~DcHCCJ</tile>
+  <tile>~~~~~DbaaRAAAAAAAPbaaRAFcB~~~</tile>
+  <tile>~~~~~DcttjaaaaaaaadttjaadB~~~</tile>
+  <tile>~~~~~DcttTCCCCCCCMittTCEiB~~~</tile>
+  <tile>~~~~~KNiSJ~~~~~~~KNiSJ~DcB~~~</tile>
+  <tile>~~~~~~DcB~~~~~~LAIDcB~~DcB~~~</tile>
+  <tile>~~~~~~DcB~~~~~~DbBDcB~~DcB~~~</tile>
+  <tile>~~~~~~DcGAAAAAAPcGFcGAIDcB~~~</tile>
+  <tile>~~~~~~DcjaaaaaaadjadjkBDcB~~~</tile>
+  <tile>~~~~~~DcHCEiHCCMiHEiHCJXcV~~~</tile>
+  <tile>~GAAAAFcBLOcQI~DlBDcB~~DcB~~~</tile>
+  <tile>~baaaaadBDbdjB~KCJDcB~~DcB~~~</tile>
+  <tile>~HCCCCEiBDcttB~~~~DcB~~DcB~~~</tile>
+  <tile>~~~~~~DcBDcttB~~~~DcRAAFcB~~~</tile>
+  <tile>~~~~~~DcBKCCCJ~~~~DcjaaadB~~~</tile>
+  <tile>~~~~~~DcB~~~~LAAAIDcTCCCCJ~~~</tile>
+  <tile>~GAAAAFcGAAAAPbaaRFcB~~~~~~~~</tile>
+  <tile>~baaaaadjaaaaadttjadB~~~~~~~~</tile>
+  <tile>~HCCCCEiHCCCCMittTEiB~~~~~~~~</tile>
+  <tile>~~~~~~DcB~~~~KNiSJDcGAAAAAI~~</tile>
+  <tile>~~~~~~DcB~~~~~DcB~DcjaaaaaB~~</tile>
+  <tile>~~~~~~DcB~~~~~DcB~DcHCCCEiB~~</tile>
+  <tile>~~~~~LOcQI~~~~DcBLOcQI~~~!~~~</tile>
+  <tile>~~~~~DbdjRAAAAFcGPbdjB~~~~~~~</tile>
+  <tile>~~~~~DcttjaaaaadjadttB~~~~~~~</tile>
+  <tile>~~~~~DcttTCCCCCCCMittB~~~~~~~</tile>
+  <tile>~~~~~KCCCJ~~~~~~~KCCCJ~~~~~~~</tile>
+  <door x="9" y="6" />
+  <door x="17" y="6" />
+  <door x="21" y="6" />
+  <door x="7" y="8" />
+  <door x="19" y="8" />
+  <door x="15" y="12" />
+  <door x="24" y="13" />
+  <door x="11" y="14" />
+  <door x="20" y="18" />
+  <door x="13" y="21" />
+  <door x="17" y="21" />
+  <door x="15" y="23" />
+  <door x="7" y="26" />
+  <door x="19" y="26" />
+  <door x="9" y="28" />
+  <door x="17" y="28" />
+  <blip x="7" y="6" />
+  <blip x="14" y="6" />
+  <blip x="19" y="6" />
+  <blip x="24" y="12" />
+  <blip x="16" y="14" />
+  <blip x="11" y="16" />
+  <blip x="15" y="21" />
+  <blip x="7" y="28" />
+  <blip x="13" y="28" />
+  <blip x="19" y="28" />
+  <team>
+    <start x="5" y="15" face="east" >SGT. GORIAS</start>
+    <start x="4" y="15" face="east" >G1</start>
+    <start x="3" y="15" face="east" >G2</start>
+    <start x="2" y="15" face="east" >G3</start>
+    <start x="1" y="15" face="east" >G4</start>
+    <marine type="sergeant" >SGT. GORIAS</marine>
+    <marine                 >G1</marine>
+    <marine                 >G2</marine>
+    <marine type="flamer"   >G3</marine>
+    <marine                 >G4</marine>
+  </team>
+  <team>
+    <start x="5" y="21" face="east" >SGT. CLEON</start>
+    <start x="4" y="21" face="east" >C1</start>
+    <start x="3" y="21" face="east" >C2</start>
+    <start x="2" y="21" face="east" >C3</start>
+    <start x="1" y="21" face="east" >C4</start>
+    <marine type="sergeant" >SGT. CLEON</marine>
+    <marine                 >C1</marine>
+    <marine                 >C2</marine>
+    <marine type="flamer"   >C3</marine>
+    <marine                 >C4</marine>
+  </team>
+</map>

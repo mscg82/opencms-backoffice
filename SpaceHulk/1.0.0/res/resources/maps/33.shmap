@@ -1,0 +1,73 @@
+<map width="35" height="24" >
+  <blipsperentry>1</blipsperentry>
+  <initialblips>4</initialblips>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~LAAAI~~~~X!V~~~~~~~~~LAAAI~~~~~~</tile>
+  <tile>~~~DbdsRAAAAFcRAAAAAAAAAPbaaB~~~~~~</tile>
+  <tile>~~~DcttjaaaaadjaaaaaaaaaadttB~~~~~~</tile>
+  <tile>~~~DctsTCCCCEiTCCCCEtHCCMittB~~~~~~</tile>
+  <tile>~~~KNiSJ~~~~DcB~~~LOcQI~KNpSJ~~~~~~</tile>
+  <tile>~LAAFcGAAAAAFcGAAAPbdjB~~DlGAAAAAU~</tile>
+  <tile>~DbaadjaaaaaadjaaaadttB~~Dlraaaaa!~</tile>
+  <tile>~DcHEiHCCCCCEiHCCCMittB~~DlHCCCCCW~</tile>
+  <tile>GFcBDcB~~~~~DcB~~~KCCCJ~~DlB~~~~~~~</tile>
+  <tile>~bdBDcB~~~~~DcB~~~~~~~~~LOmQI~~~~~~</tile>
+  <tile>HCCJDcRAAAAAFcGAUAAAAAAAPnorB~~~~~~</tile>
+  <tile>~~~~DcjaaaaaadjaaaagkkkkgoeeB~~~~~~</tile>
+  <tile>~~~~DcTCCCCCEiHCWCEiHCCCMpeeB~~~~~~</tile>
+  <tile>~~~~DcB~~~~~DcB~~~DcB~~~KNpSJ~~~~~~</tile>
+  <tile>~~~~DcB~~~~~DcB~~~DcB~~~~DlB~~~~~~~</tile>
+  <tile>~LAIDcB~~~~~DcB~~~DcB~~~~DlB~~~~~~~</tile>
+  <tile>~DbBDcB~~~~~DcB~~LOcQI~~~DlB~~~~~~~</tile>
+  <tile>LFcGFcGAAAAAPcGAAPbdjRAAAFlB~~~~~~~</tile>
+  <tile>DbdjadjaaaaaadjaaadttrkkkkoB~~~~~~~</tile>
+  <tile>KEiHCCCCCCCCMiHCCMittTEiHCCJ~~~~~~~</tile>
+  <tile>~DcB~~~~~~~~X!V~~KCCCJDcGAAAU~~~~~~</tile>
+  <tile>~F~G~~~~~~~~~~~~~~~~~~Dcjaaa!~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~KCCCCCW~~~~~~</tile>
+  <bulkhead x="13" y="1" />
+  <door x="7" y="3" />
+  <door x="14" y="3" />
+  <door x="24" y="3" />
+  <door x="5" y="5" />
+  <door x="20" y="5" />
+  <door x="26" y="5" />
+  <door x="18" y="7" />
+  <bulkhead x="33" y="7" />
+  <door x="26" y="10" />
+  <door x="6" y="12" />
+  <door x="16" y="12" />
+  <door x="24" y="12" />
+  <door x="26" y="14" />
+  <door x="19" y="17" />
+  <door x="12" y="19" />
+  <door x="17" y="19" />
+  <door x="21" y="19" />
+  <bulkhead x="13" y="21" />
+  <bulkhead x="28" y="22" />
+  <object x="25" y="11" >cargo</object>
+  <team>
+    <start x="2" y="7" face="east" >SGT. PESARO</start>
+    <start x="2" y="8" face="east" >P1</start>
+    <start x="2" y="9" face="east" >P2</start>
+    <start x="2" y="10" face="east" >P3</start>
+    <start x="1" y="10" face="east" >P4</start>
+    <marine type="sergeant" >SGT. PESARO</marine>
+    <marine                 >P1</marine>
+    <marine                 >P2</marine>
+    <marine type="flamer"   >P3</marine>
+    <marine                 >P4</marine>
+  </team>
+  <team>
+    <start x="3" y="19" face="east" >SGT. LIMBUS</start>
+    <start x="2" y="18" face="east" >L1</start>
+    <start x="2" y="20" face="east" >L2</start>
+    <start x="2" y="19" face="east" >L3</start>
+    <start x="1" y="19" face="east" >L4</start>
+    <marine type="sergeant" >SGT. LIMBUS</marine>
+    <marine                 >L1</marine>
+    <marine                 >L2</marine>
+    <marine type="flamer"   >L3</marine>
+    <marine                 >L4</marine>
+  </team>
+</map>

@@ -1,0 +1,76 @@
+<map width="28" height="31" >
+  <blipsperentry>1</blipsperentry>
+  <initialmove>stealers</initialmove>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>X!V~~~~~~LAAAI~~~LAOQI~~~~~~</tile>
+  <tile>DcGAAAAAAPnggRAAAPnggR~~~~~~</tile>
+  <tile>DcjaaaaaagofergkggofeT~~~~~~</tile>
+  <tile>KCCEiHCCCMpeeTCCCMpeeB~~~~~~</tile>
+  <tile>~~~DcB~~~KNpSJ~~~KNpSJ~~~~~~</tile>
+  <tile>~~~DcB~~~~DmB~~~~~DmB~~~~~~~</tile>
+  <tile>~~~DcB~~~~DlB~~~~~DlB~~~~X!V</tile>
+  <tile>~~~DcB~~~~DmB~~~~~DmGAAAAFmB</tile>
+  <tile>~~~DcB~~~~DmB~~~~~DmrggkggoB</tile>
+  <tile>~~LOcQI~~~DlB~~~~~DlHCCCCCCJ</tile>
+  <tile>~~DbdjRAAAFmGAAAAAFmB~~~~~~~</tile>
+  <tile>~~DcttjgkggorkggkggoB~~~~~~~</tile>
+  <tile>~~DctsTCCCNpSCCCCCEpB~~~~~~~</tile>
+  <tile>~~KCCCJ~~~DcB~~~~~DlB~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~~DmB~~~~~~~</tile>
+  <tile>LAAAI~~~~~DcB~~~~LOcQI~~~~~~</tile>
+  <tile>DbaaRAAAAAFcGAAAAPbdjB~~~~~~</tile>
+  <tile>DcttjaaaaaadjaaaaadttB~~~~~~</tile>
+  <tile>DctsTEiHCCCCCCCCCMittB~~~~~~</tile>
+  <tile>KNiSJDcB~~~~~~~~~KNiSJ~~~~~~</tile>
+  <tile>~DcB~DcB~~~~~~~~~~DcB~~~~~~~</tile>
+  <tile>~DcB~DcB~~~~~~~~~~DcB~~~~~~~</tile>
+  <tile>~DcB~FcG~~~~~~~~~~DcB~~~~~~~</tile>
+  <tile>~DcB~~~~~~~~~~~~~~DcB~~~~~~~</tile>
+  <tile>~FcG~~~~~~~~~~~~~~O!Q~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <bulkhead x="1" y="1" />
+  <door x="9" y="3" />
+  <door x="13" y="3" />
+  <door x="17" y="3" />
+  <door x="11" y="5" />
+  <door x="19" y="5" />
+  <bulkhead x="26" y="7" />
+  <door x="4" y="10" />
+  <door x="6" y="12" />
+  <door x="11" y="13" />
+  <door x="19" y="16" />
+  <door x="4" y="18" />
+  <door x="17" y="18" />
+  <door x="2" y="20" />
+  <door x="19" y="20" />
+  <bulkhead x="19" y="25" />
+  <object x="20" y="2" >damping</object>
+  <team>
+    <start x="6" y="19" face="north" >SGT. ISCON</start>
+    <start x="6" y="20" face="north" >PHELPS</start>
+    <start x="6" y="21" face="north" >DJANGO</start>
+    <start x="6" y="22" face="north" >HICKS</start>
+    <start x="6" y="23" face="north" >ELI</start>
+    <marine type="sergeant" >SGT. ISCON</marine>
+    <marine                 >PHELPS</marine>
+    <marine                 >DJANGO</marine>
+    <marine type="flamer"   >HICKS</marine>
+    <marine                 >ELI</marine>
+  </team>
+  <team>
+    <start x="2" y="21" face="north" >SGT. CICERO</start>
+    <start x="2" y="22" face="north" >ANGELO</start>
+    <start x="2" y="23" face="north" >MARNE</start>
+    <start x="2" y="24" face="north" >ISMUS</start>
+    <start x="2" y="25" face="north" >MAEL</start>
+    <marine type="sergeant" >SGT. CICERO</marine>
+    <marine                 >ANGELO</marine>
+    <marine                 >MARNE</marine>
+    <marine type="flamer"   >ISMUS</marine>
+    <marine                 >MAEL</marine>
+  </team>
+</map>

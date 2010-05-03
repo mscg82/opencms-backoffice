@@ -1,0 +1,71 @@
+<map width="36" height="27" >
+  <tile>~~~~~~~~~~~~~LAI~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~DbB~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~DcB~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~DcB~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~DlB~~~~~~!~~~~AAA~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~DcB~~~~~DcB~~!kkk!~~~~~</tile>
+  <tile>~~~~~~~~LAAAIDcBLAAAIDcB~~~EiH~~~~~~</tile>
+  <tile>~~~~!~~~DbgaRFcGPnagRFcB~~~DcB~~~~~~</tile>
+  <tile>~~~DlB~~DmtejadjadetjadB~~~DcB~~~~~~</tile>
+  <tile>~~~DcB~~DcetTCCCMpteTCCJ~~~DcB~~~~~~</tile>
+  <tile>~~~DcB~~KNtSJ~~~KNiSJ~~~~~~DcB~~~~~~</tile>
+  <tile>LAAFcGAUAFcGAAAAAPlRAAAUAAAFcGAAAAI~</tile>
+  <tile>DbaadjaaaadjaaaaaadjaaaaaaaadkkkkkB~</tile>
+  <tile>DcHCCCCWCEiHCCCCCMiTEiHWCCCEiHCCCCJ~</tile>
+  <tile>DcGAAAAUAFcGAAAAAPcRFcGUAAAFcGAAAAI~</tile>
+  <tile>DcjaaaaaaadjaaaaaadjadjaaaaadkkkkkB~</tile>
+  <tile>KCCEiHCWCEiHCCCCCMiTCCCWCCCEiHCCCCJ~</tile>
+  <tile>~~~DcB~~LOcQI~~~LOcQI~~~~~~DcB~~~~~~</tile>
+  <tile>~~~DcB~~DndrRAAAPbojRAAI~~~DcB~~~~~~</tile>
+  <tile>~~~DlB~~DcetjakaaotejaaB~~~DcB~~~~~~</tile>
+  <tile>~~~~!~~~DmteTEiHMcetTEiB~~~DcB~~~~~~</tile>
+  <tile>~~~~~~~~KCCCJDcBKCCCJDcB~~~FcG~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~DcB~~~~~DcB~~!kdj!~~~~~</tile>
+  <tile>~~~~~~~~~~~~~DcB~~~~~~!~~~~CCC~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~DcB~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~DcB~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~KCJ~~~~~~~~~~~~~~~~~~~~</tile>
+  <door x="12" y="8" />
+  <door x="16" y="8" />
+  <door x="20" y="8" />
+  <door x="10" y="10" />
+  <door x="18" y="10" />
+  <door x="7" y="12" />
+  <door x="17" y="12" />
+  <door x="19" y="12" />
+  <door x="23" y="12" />
+  <door x="7" y="15" />
+  <door x="17" y="15" />
+  <door x="19" y="15" />
+  <door x="23" y="15" />
+  <door x="10" y="17" />
+  <door x="18" y="17" />
+  <door x="12" y="19" />
+  <door x="16" y="19" />
+  <door x="20" y="19" />
+  <team>
+    <start x="29" y="12" face="west" >SGT. CARISTO</start>
+    <start x="30" y="12" face="west" >ELLIS</start>
+    <start x="31" y="12" face="west" >FROST</start>
+    <start x="32" y="12" face="west" >MAXIM</start>
+    <start x="33" y="12" face="west" >DELARNO</start>
+    <marine type="sergeant" >SGT. CARISTO</marine>
+    <marine                 >ELLIS</marine>
+    <marine                 >FROST</marine>
+    <marine type="flamer"   >MAXIM</marine>
+    <marine                 >DELARNO</marine>
+  </team>
+  <team>
+    <start x="29" y="15" face="west" >SGT. TACINIO</start>
+    <start x="30" y="15" face="west" >MYERS</start>
+    <start x="31" y="15" face="west" >LEE</start>
+    <start x="32" y="15" face="west" >JORGENSON</start>
+    <start x="33" y="15" face="west" >TRELANE</start>
+    <marine type="sergeant" >SGT. TACINIO</marine>
+    <marine                 >MYERS</marine>
+    <marine                 >LEE</marine>
+    <marine type="flamer"   >JORGENSON</marine>
+    <marine                 >TRELANE</marine>
+  </team>
+</map>

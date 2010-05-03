@@ -1,0 +1,78 @@
+<map width="38" height="29" >
+  <blipsperturn>1</blipsperturn>
+  <tile>~~~~~~~~~~AAI~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~!aaB~~~E~H~LAAAI~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~EiB~~~DcB~DbaaB~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~DcB~DcttB~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~DcB~DcttB~~~~~~~~~~~~~</tile>
+  <tile>~~~~~LAAAIDcB~~~DcB~KNiSJ~~~~~~~~~~~~~</tile>
+  <tile>~~~~~DbaaRFcGAAAFcGAAFcGAAAAAI~~~~~~~~</tile>
+  <tile>~~~~~DcttjadjaaaadjaaadjaaaaaB~~~~~~~~</tile>
+  <tile>~~~~~DcttTCCCCCCEiHCCCCCCCCEiB~~~~~~!~</tile>
+  <tile>~~~~~KNiSJ~~~~~~DcB~~~~~~~~DcGAAAAAFcB</tile>
+  <tile>~~~~~~DcB~~~~~~~DcB~~~~~~~~DcjaaaaaadB</tile>
+  <tile>~~~~~~DcB~~~~~~~DcB~~~~~~~~DcHCCCCCCCJ</tile>
+  <tile>~~~~~LOcQI~~~~~LOcQI~~~~~~LOcQI~~~~~~~</tile>
+  <tile>~~~~~DbdjRAAAAAPbdjRAAAAAAPbdjB~~~~~~~</tile>
+  <tile>~~~~~DcttjaaaaaadttjaaaaaaadttB~~~~~~~</tile>
+  <tile>~~~~~DcttTEiHCCMittTEiHCCCMittB~~~~~~~</tile>
+  <tile>~~~~~KCCCJDcB~~KCCCJDcB~~~KNiSJ~~~~~~~</tile>
+  <tile>~~AAI~~~~~XcV~~~~~~~XcV~~~~DcB~~~~~~~~</tile>
+  <tile>~!aaB~~~~~DcB~~~~~~~DcB~~~~DcB~~~~~~~~</tile>
+  <tile>~~EiB~~~~~DcB~~~~~~~DcB~~~LOcQI~~~~~~~</tile>
+  <tile>~~DcGAAUAAFcGAAAAAAAFcGAAAPbdjB~~~~~~~</tile>
+  <tile>~~DcjaaaaaadjaaaaaaaadjaaaadttB~~~~~~~</tile>
+  <tile>~~KCCCCWCCEiHCCCCEiHCCCCCCMittB~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~DcB~~~~~~KCCCJ~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~DcB~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~DcB~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~DcB~~~~DcB~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~FcG~~~~FcG~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <door x="22" y="5" />
+  <door x="9" y="7" />
+  <door x="7" y="9" />
+  <door x="7" y="12" />
+  <door x="17" y="12" />
+  <door x="28" y="12" />
+  <door x="9" y="14" />
+  <door x="15" y="14" />
+  <door x="19" y="14" />
+  <door x="26" y="14" />
+  <door x="28" y="16" />
+  <door x="11" y="17" />
+  <door x="21" y="17" />
+  <door x="28" y="19" />
+  <door x="7" y="21" />
+  <door x="26" y="21" />
+  <blip x="22" y="3" />
+  <blip x="7" y="7" />
+  <blip x="7" y="14" />
+  <blip x="17" y="14" />
+  <blip x="28" y="14" />
+  <blip x="28" y="21" />
+  <team>
+    <start x="18" y="23" face="north" >SGT. JOSEFAS</start>
+    <start x="18" y="24" face="north" >GOSEN</start>
+    <start x="18" y="25" face="north" >MENNOD</start>
+    <start x="18" y="26" face="north" >FIRREL</start>
+    <start x="18" y="27" face="north" >SERVILUS</start>
+    <marine type="sergeant" >SGT. JOSEFAS</marine>
+    <marine                 >GOSEN</marine>
+    <marine                 >MENNOD</marine>
+    <marine type="flamer"   >FIRREL</marine>
+    <marine                 >SERVILUS</marine>
+  </team>
+  <team>
+    <start x="11" y="23" face="north" >SGT. PIETR</start>
+    <start x="11" y="24" face="north" >HAL</start>
+    <start x="11" y="25" face="north" >SARTEL</start>
+    <start x="11" y="26" face="north" >KIRON</start>
+    <start x="11" y="27" face="north" >CHAMTEK</start>
+    <marine type="sergeant" >SGT. PIETR</marine>
+    <marine                 >HAL</marine>
+    <marine                 >SARTEL</marine>
+    <marine type="flamer"   >KIRON</marine>
+    <marine                 >CHAMTEK</marine>
+  </team>
+</map>
