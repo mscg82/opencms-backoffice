@@ -9,6 +9,7 @@ import main.managers.ImageManager;
 import main.managers.SoundManager;
 import main.managers.Tile;
 import main.managers.TileManager;
+import main.settings.Settings;
 import radui.ScreenCanvas;
 import radui.View;
 import sh.Face;
@@ -163,13 +164,16 @@ public class MapView extends View
 
         //util.Debug.message("MapView::keyPressed");
 
-        if (gameAction == ScreenCanvas.GAME_C)
+        Settings settings = SpaceHulk.instance.getSettings();
+        if ((!settings.invertKeys && gameAction == ScreenCanvas.GAME_C) ||
+            (settings.invertKeys && gameAction == ScreenCanvas.GAME_D))
         {
             //if (m_.toggleDoor(vc_.x, vc_.y))
             //sc.repaint();
             Piece p = m_.getPiece(vc_.x, vc_.y);
             if (p instanceof Marine)
             {
+            	getActive().clearActionPoints();
                 setActive((Marine) p);
                 sm_.playSound(SoundManager.SELECT);
                 sc.repaint();
