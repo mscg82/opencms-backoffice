@@ -1,0 +1,63 @@
+<map width="34" height="24" >
+  <blipsperturn>1</blipsperturn>
+  <initialmove>stealers</initialmove>
+  <tile>~~~~~~~~~~~~~~~E$HE$H~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~DcBDcB~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~DcBDcB~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~DcBDcB~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~~DcBDcB~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~LAAAI~~~DcBDcB~~LAAAI~~~~~~</tile>
+  <tile>~~~~~~~DbaaRAAAFcGFcGAAPbaaB~~~~~~</tile>
+  <tile>~~~~~~~DcttjaaaadjadjaaadttB~~~~~~</tile>
+  <tile>~~~~~~~DcttTCCCCCCEiHCCMittB~~~~~~</tile>
+  <tile>~~~~~~~KNiSJ~~~~~~DcB~~KNiSJ~~~~~~</tile>
+  <tile>~~~~~~~~DcB~~~~~~~DcB~~~DcB~~~~~~~</tile>
+  <tile>~~~~~~~~DcB~~~~~~~DcB~~~DcB~~~~~~~</tile>
+  <tile>~~~~~~~~DcGAAAAAAAFcGAAAFcGAAAAAAI</tile>
+  <tile>~~~~~~~~DcjaaaaaaaadjaaaadjaaaaaaB</tile>
+  <tile>~~~~~~~~DcHCCCCEiHCCCCCCEiHCCCCEiB</tile>
+  <tile>~~~~~~~LOcQI~~~DcB~~~~~LOcQI~~~~!~</tile>
+  <tile>LAAAAAAPbdjRAAAFcGAAAAAPbdjB~~~~~~</tile>
+  <tile>DbaaaaaadttjaaaadjaaaaaadttB~~~~~~</tile>
+  <tile>DcHCCCCMittTCCCEiHCCCCCMittB~~~~~~</tile>
+  <tile>~!~~~~~KCCCJ~~LOcQI~~~~KCCCJ~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~DbdsB~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~DctsB~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~DcttB~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~~~~~~~KCCCJ~~~~~~~~~~~~~~~</tile>
+  <door x="11" y="7" />
+  <door x="23" y="7" />
+  <door x="9" y="9" />
+  <door x="25" y="9" />
+  <door x="9" y="15" />
+  <door x="25" y="15" />
+  <door x="7" y="17" />
+  <door x="11" y="17" />
+  <door x="23" y="17" />
+  <door x="16" y="19" />
+  <object x="16" y="21" >archive</object>
+  <team>
+    <start x="16" y="5" face="south" >SGT. LORENZO</start>
+    <start x="16" y="4" face="south" >HAURITZ</start>
+    <start x="16" y="3" face="south" >DURANIO</start>
+    <start x="16" y="2" face="south" >MONONI</start>
+    <start x="16" y="1" face="south" >NANGOW</start>
+    <marine type="sergeant" >SGT. LORENZO</marine>
+    <marine                 >HAURITZ</marine>
+    <marine                 >DURANIO</marine>
+    <marine type="flamer"   >MONONI</marine>
+    <marine                 >NANGOW</marine>
+  </team>
+  <team>
+    <start x="19" y="5" face="south" >SGT. VITOR</start>
+    <start x="19" y="4" face="south" >TREMOR</start>
+    <start x="19" y="3" face="south" >RADDACH</start>
+    <start x="19" y="2" face="south" >KAIN</start>
+    <start x="19" y="1" face="south" >BRANCH</start>
+    <marine type="sergeant" >SGT. VITOR</marine>
+    <marine                 >TREMOR</marine>
+    <marine                 >RADDACH</marine>
+    <marine type="flamer"   >KAIN</marine>
+    <marine                 >BRANCH</marine>
+  </team>
+</map>

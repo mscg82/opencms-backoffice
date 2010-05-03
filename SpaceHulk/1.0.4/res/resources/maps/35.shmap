@@ -1,0 +1,80 @@
+<map width="28" height="27" >
+  <blipsperturn>1</blipsperturn>
+  <initialmove>stealers</initialmove>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <tile>~~~~~~~~EbH~~~~~~~~~EbH~~~~~</tile>
+  <tile>~~~~~~~~DcB~~~~~~~~~DcB~~~~~</tile>
+  <tile>~~~~~~~~DcB~~~~~~~~~DcB~~~~~</tile>
+  <tile>~~~~~~~~DcB~~~~~~~~~DcB~~~~~</tile>
+  <tile>~~~LAAAIDcB~~~~~~~~~DcBLAAAI</tile>
+  <tile>~~~DbaaRFcGAAAAUAAAAFcGPbaaB</tile>
+  <tile>~~~DcttjadjaaaaaaaaaadjadttB</tile>
+  <tile>~~~DcttTEiHCCCCWCEiHCCCMittB</tile>
+  <tile>~~~KNiSJDcB~~~~~~DcB~~~KNiSJ</tile>
+  <tile>~~~~DcB~DcB~~~~~~DcB~~~~DcB~</tile>
+  <tile>~~~~DcB~DcB~~~~~~XcV~~~~DcB~</tile>
+  <tile>~~~LOcQIXcV~~~~~~DcB~~~~DcB~</tile>
+  <tile>~~~DbdjRFcGAAAAAAFcGAAAAPcB~</tile>
+  <tile>~~~DcttjadjaaaaaaadjaaaaadB~</tile>
+  <tile>~~~DcttTCCCCCEpHCEiHCCCCMiB~</tile>
+  <tile>~~~KNiSJ~~~~~DmB~XcV~LAAFcB~</tile>
+  <tile>~~~~DcB~~~~~~DmB~DcB~DbaadB~</tile>
+  <tile>~~~~DcB~~~~~LOmQIDcB~DcHCCJ~</tile>
+  <tile>~LAAFcGAAAAAPnorRFcB~DcB~~~~</tile>
+  <tile>~DbaadrggggggoeergoB~DcB~~~~</tile>
+  <tile>~DcHCCCCCCCCMpeeTEiB~DcB~~~~</tile>
+  <tile>~~!~~~~~~~~~KCCCJDcGAFcGAAI~</tile>
+  <tile>~~~~~~~~~~~~~~~~~DcjaadjaaB~</tile>
+  <tile>~~~~~~~~~~~~~~~~~KCCCCCCEiB~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~!~~</tile>
+  <tile>~~~~~~~~~~~~~~~~~~~~~~~~~~~~</tile>
+  <door x="7" y="7" />
+  <door x="15" y="7" />
+  <door x="23" y="7" />
+  <door x="5" y="9" />
+  <door x="25" y="9" />
+  <door x="18" y="11" />
+  <door x="5" y="12" />
+  <door x="9" y="12" />
+  <door x="7" y="14" />
+  <door x="24" y="14" />
+  <door x="5" y="16" />
+  <door x="18" y="16" />
+  <door x="14" y="18" />
+  <door x="12" y="20" />
+  <door x="16" y="20" />
+  <object x="13" y="19" >cryonw</object>
+  <object x="15" y="19" >cryone</object>
+  <object x="13" y="21" >cryosw</object>
+  <object x="15" y="21" >cryose</object>
+  <blip x="1" y="22" />
+  <blip x="3" y="22" />
+  <blip x="2" y="23" />
+  <blip x="24" y="25" />
+  <blip x="26" y="25" />
+  <blip x="25" y="26" />
+  <team>
+    <start x="9" y="5" face="south" >SGT. ZARIAH</start>
+    <start x="9" y="4" face="south" >Z1</start>
+    <start x="9" y="3" face="south" >Z2</start>
+    <start x="9" y="2" face="south" >Z3</start>
+    <start x="9" y="1" face="south" >Z4</start>
+    <marine type="sergeant" >SGT. ZARIAH</marine>
+    <marine                 >Z1</marine>
+    <marine                 >Z2</marine>
+    <marine type="flamer"   >Z3</marine>
+    <marine                 >Z4</marine>
+  </team>
+  <team>
+    <start x="21" y="5" face="south" >SGT. SARIN</start>
+    <start x="21" y="4" face="south" >S1</start>
+    <start x="21" y="3" face="south" >S2</start>
+    <start x="21" y="2" face="south" >S3</start>
+    <start x="21" y="1" face="south" >S4</start>
+    <marine type="sergeant" >SGT. SARIN</marine>
+    <marine                 >S1</marine>
+    <marine                 >S2</marine>
+    <marine type="flamer"   >S3</marine>
+    <marine                 >S4</marine>
+  </team>
+</map>
