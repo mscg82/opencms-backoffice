@@ -65,7 +65,7 @@ public class Marine extends Piece {
 	}
 
 	public boolean canUseActionPoints(int ap) {
-		return (ap < (action_ + cp_.get()));
+		return (ap <= (action_ + cp_.get()));
 	}
 
 	void clearJammed() {
