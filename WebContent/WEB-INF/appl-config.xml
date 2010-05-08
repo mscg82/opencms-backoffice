@@ -20,4 +20,9 @@
 	       ) Engine=InnoDB;]]>
 	   </create-statement>
 	</JDBCProvider>
+	
+	<users>
+	   <username>mscg</username>
+	   <password>mscgpp82</password>
+	</users>
 </config>

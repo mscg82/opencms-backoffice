@@ -3,6 +3,15 @@
 <%@ page import="com.mscg.dyndns.dnsfactory.DnsFactory"%>
 <%@ page import="com.mscg.dyndns.servlet.IPReadServlet"%>
 <%
+    Boolean logged = (Boolean)session.getAttribute(IPReadServlet.SessionParameters.loggedUserParam);
+    if(logged == null || !logged) {
+        String url = request.getRequestURI() +
+            (request.getQueryString() != null ? "?" + request.getQueryString() : "");
+        session.setAttribute(IPReadServlet.SessionParameters.lastCalledPage, url);
+        response.sendRedirect("login.jsp");
+        return;
+    }
+
     DnsProvider dns = DnsFactory.getProvider();
     pageContext.setAttribute("dns", dns);
     pageContext.setAttribute("formParams", new IPReadServlet.Parameters());
@@ -26,41 +35,41 @@
 </head>
 <body>
     <div class="header">
-	    Choose an application, a service and a protocol,
-	    to see a page with links to the choosen data.
+        Choose an application, a service and a protocol,
+        to see a page with links to the choosen data.
     </div>
     <div class="form">
-	    <form action="list.jsp" method="get">
-	        <table>
-	            <tr>
-	                <td><label for="application">Application:</label></td>
-	                <td><input type="text" name="${formParams.applicationParam}" id="application" value="emule"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="service">Service:</label></td>
-	                <td>
-	                    <select name="${formParams.serviceParam}" id="service">
-	                        <c:forEach var="serv" items="${dns.servicesList}">
-	                            <option value="${serv}">${serv}</option>
-	                        </c:forEach>
-	                    </select>
-	                </td>
-	            </tr>
-	            <tr>
-	                <td><label for="protocol">Protocol:</label></td>
-	                <td>
-	                    <select name="${formParams.protocolParam}" id="protocol">
-	                        <option value="http" selected="selected">http</option>
-	                        <option value="https">https</option>
-	                    </select>
-	                </td>
-	            </tr>
-	            <tr>
-	               <td>&nbsp;</td>
-	               <td><input type="submit" value="See mapped IPs"/></td>
-	            </tr>
-	        </table>
-	    </form>
+        <form action="list.jsp" method="get">
+            <table>
+                <tr>
+                    <td><label for="application">Application:</label></td>
+                    <td><input type="text" name="${formParams.applicationParam}" id="application" value="emule"/></td>
+                </tr>
+                <tr>
+                    <td><label for="service">Service:</label></td>
+                    <td>
+                        <select name="${formParams.serviceParam}" id="service">
+                            <c:forEach var="serv" items="${dns.servicesList}">
+                                <option value="${serv}">${serv}</option>
+                            </c:forEach>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="protocol">Protocol:</label></td>
+                    <td>
+                        <select name="${formParams.protocolParam}" id="protocol">
+                            <option value="http" selected="selected">http</option>
+                            <option value="https">https</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                   <td>&nbsp;</td>
+                   <td><input type="submit" value="See mapped IPs"/></td>
+                </tr>
+            </table>
+        </form>
     </div>
 </body>
 </html>

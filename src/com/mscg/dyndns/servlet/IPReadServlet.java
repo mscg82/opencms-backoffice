@@ -24,9 +24,14 @@ import com.mscg.util.Util;
  */
 public class IPReadServlet extends HttpServlet {
 
+	public static class SessionParameters {
+		public static final String loggedUserParam = "logged";
+		public static final String lastCalledPage  = "lastPage";
+	}
+
 	public static class Parameters{
-		public static final String serviceParam = "service";
-		public static final String protocolParam = "proto";
+		public static final String serviceParam     = "service";
+		public static final String protocolParam    = "proto";
 		public static final String applicationParam = "appl";
 
 		public String getApplicationParam() {
