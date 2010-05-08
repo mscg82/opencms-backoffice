@@ -6,7 +6,7 @@
 		<provider-class>com.mscg.dyndns.dnsfactory.jdbc.JDBCDnsProvider</provider-class>
 	</dns>
 	<JDBCProvider>
-	   <jndi-name>jdbc/mscg82</jndi-name>
+	   <jndi-name>jdbc/mscgpp</jndi-name>
 	   <table-name>dnsTable</table-name>
 	   <id-col>id</id-col>
 	   <service-col>service</service-col>
