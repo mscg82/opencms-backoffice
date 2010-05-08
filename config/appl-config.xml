@@ -9,7 +9,7 @@
         <interface>
             <protocol>http</protocol>
              
-            <server>mscg3.s156.eatj.com</server>
+            <server>free.hostingjava.it</server>
             <port></port>
             
             <!--
@@ -17,11 +17,19 @@
             <port>8080</port>
             -->
             
-            <context>dyndns</context>
+            <context>-mscgpp</context>
             <methods>
                 <ipstorage>ipstorage</ipstorage>
             </methods>
             
+            <tester-class>com.mscg.httpinterface.EatjTesterInterface</tester-class>
+            
+            <fhj>
+                <methods>
+                    <test>test.jsp</test>
+                </methods>
+            </fhj>
+
             <eatj>
                 <think-time>300</think-time>
                 <user-agent><![CDATA[Mozilla/5.0 (Windows; U; Windows NT 6.0; it; rv:1.9.1.4) Gecko/20091016 Firefox/3.5.4 (.NET CLR 3.5.30729)]]></user-agent>
@@ -69,7 +77,7 @@
         <service>mscg2</service>
         <thread>
             <timeout>300</timeout>
-            <enabled>false</enabled>
+            <enabled>true</enabled>
         </thread>
         <process>
             <exe-path>C:\Windows\system32\notepad.exe</exe-path>

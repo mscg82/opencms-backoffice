@@ -4,6 +4,7 @@
 package com.mscg.dyndns.main.thread;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -12,6 +13,7 @@ import org.apache.log4j.Logger;
 import com.mscg.config.ConfigLoader;
 import com.mscg.httpinterface.EatjTesterInterface;
 import com.mscg.httpinterface.IPStorageInterface;
+import com.mscg.httpinterface.TesterInterface;
 import com.mscg.util.Util;
 
 /**
@@ -24,7 +26,7 @@ public abstract class GenericStoreThread extends Thread {
 
 	protected IPStorageInterface storageInterface;
 
-	protected EatjTesterInterface testerInterface;
+	protected TesterInterface testerInterface;
 
 	protected String service;
 	protected long timeout;
@@ -45,7 +47,19 @@ public abstract class GenericStoreThread extends Thread {
 
 		storageInterface = new IPStorageInterface();
 
-		testerInterface = new EatjTesterInterface();
+		String className = (String)ConfigLoader.getInstance().get(ConfigLoader.TESTER_CLASS);
+		try{
+			log.debug("Loading tester class " + className + "...");
+
+			Class testerClass = Class.forName(className);
+			Constructor<TesterInterface> testerConstructor = testerClass.getConstructor();
+			testerInterface = testerConstructor.newInstance();
+		} catch(Exception e){
+			// use default tester class
+			log.error("Error found while looking for tester class, " +
+					"using default " + EatjTesterInterface.class.getCanonicalName(), e);
+			testerInterface = new EatjTesterInterface();
+		}
 
 		service = (String) ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_SERVICE);
 		if(service == null)

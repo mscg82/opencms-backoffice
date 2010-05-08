@@ -35,7 +35,7 @@ import com.roncemer.ocr.OCRScanner;
  * @author Giuseppe Miscione
  *
  */
-public class EatjTesterInterface extends AbstractHttpInterface {
+public class EatjTesterInterface extends AbstractHttpInterface implements TesterInterface {
 
 	private static Logger LOG = Logger.getLogger(EatjTesterInterface.class);
 
@@ -144,9 +144,13 @@ public class EatjTesterInterface extends AbstractHttpInterface {
 		scanner.train(null, trainingset, true);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mscg.httpinterface.TesterInterface#testIfServerIsRunning()
+	 */
 	public boolean testIfServerIsRunning() throws HttpException, IOException{
 		boolean ret = false;
 		strUrl = prepareUrl(testUrl);
+		LOG.debug("Testign connection on url: " + strUrl);
 		httpGet = null;
 		try{
 			httpGet = new GetMethod(strUrl);
@@ -166,6 +170,9 @@ public class EatjTesterInterface extends AbstractHttpInterface {
 		return ret;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.mscg.httpinterface.TesterInterface#startServer()
+	 */
 	public boolean startServer() throws HttpException, IOException{
 		boolean ret = false;
 

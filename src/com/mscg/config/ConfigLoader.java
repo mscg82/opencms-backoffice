@@ -68,6 +68,8 @@ public class ConfigLoader implements Serializable {
     public static final String DYNDNS_THREAD_TIMEOUT	= "dyndns.thread.timeout";
     public static final String DYNDNS_THREAD_ENABLED	= "dyndns.thread.enabled";
 
+    public static final String TESTER_CLASS = "dyndns.interface.tester-class";
+
     public static final String EATJ_THINKTIME        = "dyndns.interface.eatj.think-time";
     public static final String EATJ_USERAGENT        = "dyndns.interface.eatj.user-agent";
     public static final String EATJ_TESTURL          = "dyndns.interface.eatj.methods.test";
