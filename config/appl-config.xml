@@ -22,7 +22,7 @@
                 <ipstorage>ipstorage</ipstorage>
             </methods>
             
-            <tester-class>com.mscg.httpinterface.EatjTesterInterface</tester-class>
+            <tester-class>com.mscg.httpinterface.FreeHostingJavaTesterInterface</tester-class>
             
             <fhj>
                 <methods>

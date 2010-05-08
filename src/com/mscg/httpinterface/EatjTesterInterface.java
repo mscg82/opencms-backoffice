@@ -150,7 +150,7 @@ public class EatjTesterInterface extends AbstractHttpInterface implements Tester
 	public boolean testIfServerIsRunning() throws HttpException, IOException{
 		boolean ret = false;
 		strUrl = prepareUrl(testUrl);
-		LOG.debug("Testign connection on url: " + strUrl);
+		LOG.debug("Testing connection on url: " + strUrl);
 		httpGet = null;
 		try{
 			httpGet = new GetMethod(strUrl);
