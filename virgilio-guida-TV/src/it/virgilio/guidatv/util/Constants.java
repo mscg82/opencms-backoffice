@@ -15,13 +15,13 @@ import java.util.Calendar;
 public class Constants {
 
 	public static final String[] daysNames = {
-		"Lunedì",
-		"Martedì",
-		"Mercoledì",
-		"Giovedì",
-		"Venerdì",
-		"Sabato",
-		"Domenica"
+		"Lunedì ${day} / ${month}",
+		"Martedì  ${day} / ${month}",
+		"Mercoledì  ${day} / ${month}",
+		"Giovedì  ${day} / ${month}",
+		"Venerdì  ${day} / ${month}",
+		"Sabato  ${day} / ${month}",
+		"Domenica ${day} / ${month}"
 	};
 	
 	public static final String[] dayFileNames = {
@@ -47,6 +47,11 @@ public class Constants {
 	public static final String palinsestoURLprefix =
 		"http://cinema-tv.virgilio.it/services/guida-tv/flash/palinsesto-";
 	public static final String palinsestoURLsuffix =".xml";
+	
+	public static final long MILLIS_PER_SECOND = 1000L;
+	public static final long MILLIS_PER_MINUTE = 1000L * 60;
+	public static final long MILLIS_PER_HOUR   = 1000L * 60 * 60;
+	public static final long MILLIS_PER_DAY    = 1000L * 60 * 60 * 24;
 	
 	private Constants() {
 		

@@ -14,6 +14,22 @@ public class VirgilioTheme extends Theme {
 	public VirgilioTheme() {
 		super();
 	}
+	
+	public String getFloatSeparator() {
+		return ",";
+	}
+	
+	public String getMainMenuTitle() {
+		return "Virgilio Guida TV";
+	}
+	
+	public String getDaySelectionTitle() {
+		return "Seleziona un giorno";
+	}
+	
+	public String getChannelSelectionTitle() {
+		return "${day} / ${month} - Seleziona un canale";
+	}
 
 	public String getMenuTextForCancel() {
 		return "Indietro";

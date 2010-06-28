@@ -5,6 +5,7 @@ package it.virgilio.guidatv.menu;
 
 import it.virgilio.guidatv.programs.Channel;
 import it.virgilio.guidatv.programs.Programs;
+import it.virgilio.guidatv.programs.ProgramsManager;
 import it.virgilio.guidatv.theme.VirgilioTheme;
 import it.virgilio.guidatv.util.Constants;
 import it.virgilio.guidatv.util.ProgramXMLParser;
@@ -43,24 +44,22 @@ public class WeekDayMenu extends BaseMenu {
 	
 	private ProgressBar spinner;
 	
-	private Programs programs;
-	
 	private int actualPage;
 	private int elementsPerPage;
 	private int totalPages;
 	private List page;
 	
-	/**
-	 * @param name
-	 * @param previous
-	 */
-	public WeekDayMenu(String title, String dayName, int dayNumber, DeviceScreen previous) {
-		super(title, previous);
+	public WeekDayMenu(int dayNum, int monNum, String dayName, int dayNumber, DeviceScreen previous) {
+		super("", previous);
 
+		String title = ((VirgilioTheme)UIManager.getTheme()).getChannelSelectionTitle();
+		title = Util.replace(title, "${day}", (dayNum < 10 ? "0" : "") + dayNum);			
+		title = Util.replace(title, "${month}", (monNum < 10 ? "0" : "") + monNum);	
+		setTitle(title);
+		
 		this.dayName = dayName;
 		this.dayNumber = dayNumber;
 		
-		this.programs = null;
 		httpClient = new HttpClient();
 		
 		actualPage = 0;
@@ -78,7 +77,9 @@ public class WeekDayMenu extends BaseMenu {
 
 	public void showNotify() {
 		super.showNotify();
-		if(this.programs == null) {
+		Programs programs = ProgramsManager.getInstance().getProgramsByDayName(dayName);
+		if(programs == null) {
+			deleteAll();
 			// Add an indefinate progress bar.
 			spinner = new ProgressBar();
 			spinner.setLabel(((VirgilioTheme)UIManager.getTheme()).getProgramsLoadingText());
@@ -155,10 +156,11 @@ public class WeekDayMenu extends BaseMenu {
 				spinner = null;
 			}
 			deleteAll();
-			if(programs.getChannels().size() != 0) {
+			Programs programs = ProgramsManager.getInstance().getProgramsByDayName(dayName);
+			if(programs != null && programs.getChannels().size() != 0) {
 				if(elementsPerPage == 0) {
 					// calculate how many elements per page will fit the screen
-					calculateElementsPerPage(); 
+					calculateElementsPerPage(programs); 
 				}
 				int firstIndex = actualPage * elementsPerPage;
 				int endIndex = Math.min(firstIndex + elementsPerPage, programs.getChannels().size());
@@ -175,7 +177,7 @@ public class WeekDayMenu extends BaseMenu {
 		}
 	}
 	
-	private void calculateElementsPerPage() {
+	private void calculateElementsPerPage(Programs programs) {
 		MenuOption tmp = new MenuOption(
 			new ChannelMenu((Channel)programs.getChannels().get(0), this),
 			true);
@@ -187,7 +189,7 @@ public class WeekDayMenu extends BaseMenu {
 	}
 	
 	/**
-	 * Private class that listens on HTTP events.
+	 * Private class that listens on HTTP and loading events.
 	 * 
 	 * @author Giuseppe Miscione
 	 *
@@ -210,13 +212,15 @@ public class WeekDayMenu extends BaseMenu {
 		
 		public void onMethodExecuted(HttpMethod method) {
 			 try {
+				ProgramsManager.getInstance().checkForFreeSpace();
 				InputStream is = new PositionNotifierInputStream(
 					method.getResponseBodyAsStream(),
 					method.getResponseSize(),
 					this);
 				ProgramXMLParser parser = new ProgramXMLParser(is);
 				if(parser.isValid()) {
-					WeekDayMenu.this.programs = parser.getPrograms();
+					Programs programs = parser.getPrograms();
+					ProgramsManager.getInstance().saveProgramsByDayName(dayName, programs);
 					WeekDayMenu.this.updateInterface();
 				}
 				else {
@@ -244,9 +248,18 @@ public class WeekDayMenu extends BaseMenu {
 			int max = 100 * 100;
 			int value = (int)(percentage * 100);
 			double dValue = ((double)value / 100.0);
+			
+			int intValue = (int)dValue;
+			int remValue = (int)((dValue - intValue) * 100);
+			
 			spinner.setMaxValue(max);
 			spinner.setValue(value);
-			spinner.setLabel((String)elaboratingStrParts.get(0) + dValue + elaboratingStrParts.get(1));
+			spinner.setLabel(
+				(String)elaboratingStrParts.get(0) +
+				(intValue < 10 ? "0" : "") + intValue +
+				((VirgilioTheme)UIManager.getTheme()).getFloatSeparator() +
+				(remValue < 10 ? "0" : "") + remValue +
+				(String)elaboratingStrParts.get(1));
 			WeekDayMenu.this.repaint();
 		}
 
@@ -254,7 +267,12 @@ public class WeekDayMenu extends BaseMenu {
 			int max = 100 * 100;
 			spinner.setMaxValue(max);
 			spinner.setValue(max);
-			spinner.setLabel((String)elaboratingStrParts.get(0) + 100.0 + elaboratingStrParts.get(1));
+			spinner.setLabel(
+				(String)elaboratingStrParts.get(0) +
+				"100" +
+				((VirgilioTheme)UIManager.getTheme()).getFloatSeparator() +
+				"00" +
+				elaboratingStrParts.get(1));
 			WeekDayMenu.this.repaint();
 		}
 		

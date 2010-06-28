@@ -3,11 +3,14 @@
  */
 package it.virgilio.guidatv.menu;
 
+import it.virgilio.guidatv.theme.VirgilioTheme;
 import it.virgilio.guidatv.util.Constants;
+import it.virgilio.guidatv.util.Util;
 
 import java.util.Calendar;
 
 import org.j4me.ui.DeviceScreen;
+import org.j4me.ui.UIManager;
 
 /**
  * @author Giuseppe Miscione
@@ -28,20 +31,33 @@ public class WeekDaySelectionMenu extends BaseMenu {
 	 * @param previous is the screen to return to if the user cancels this.
 	 */
 	public WeekDaySelectionMenu(DeviceScreen previous) {
-		super("Seleziona un giorno", previous);
+		super(((VirgilioTheme)UIManager.getTheme()).getDaySelectionTitle(), previous);
 		
 		Calendar now = Calendar.getInstance();
 		int dayOfWeek = now.get(Calendar.DAY_OF_WEEK);
 		
 		int selectedDay = 0;
+		for(int i = 0; i < Constants.dayNumbers.length; i++) {
+			if(dayOfWeek == Constants.dayNumbers[i]) {
+				selectedDay = i;
+				break;
+			}
+		}
+		
 		// Add a menu item for each day
 		for(int i = 0; i < Constants.daysNames.length; i++) {
-			this.appendSubmenu(new WeekDayMenu(
-				Constants.daysNames[i], Constants.dayFileNames[i],
-				Constants.dayNumbers[i], this));
+			Calendar dayCal = Util.addTimeToDate(now, i - selectedDay, Calendar.DAY_OF_MONTH);
+			int dayNum = dayCal.get(Calendar.DAY_OF_MONTH);
+			int monNum = dayCal.get(Calendar.MONTH) + 1;
 			
-			if(dayOfWeek == Constants.dayNumbers[i])
-				selectedDay = i;
+			String menuItemLabel = Constants.daysNames[i];
+			menuItemLabel = Util.replace(menuItemLabel, "${day}", (dayNum < 10 ? "0" : "") + dayNum);			
+			menuItemLabel = Util.replace(menuItemLabel, "${month}", (monNum < 10 ? "0" : "") + monNum);			
+			
+			this.appendSubmenu(menuItemLabel, new WeekDayMenu(
+				dayNum, monNum,
+				Constants.dayFileNames[i],
+				Constants.dayNumbers[i], this));
 		}
 		
 		// Select the item corresponding to actual day

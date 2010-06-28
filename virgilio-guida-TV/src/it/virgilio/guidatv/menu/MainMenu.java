@@ -3,6 +3,8 @@
  */
 package it.virgilio.guidatv.menu;
 
+import it.virgilio.guidatv.theme.VirgilioTheme;
+
 import org.j4me.ui.Menu;
 import org.j4me.ui.Theme;
 import org.j4me.ui.UIManager;
@@ -17,7 +19,7 @@ public class MainMenu extends BaseMenu {
 	public MainMenu() {
 		super();
 		
-		setTitle("Virgilio Guida TV");
+		setTitle(((VirgilioTheme)UIManager.getTheme()).getMainMenuTitle());
 		
 		// Set the menu text.
 		Theme theme = UIManager.getTheme();
