@@ -15,13 +15,13 @@ import java.util.Calendar;
 public class Constants {
 
 	public static final String[] daysNames = {
-		"Lunedì ${day} / ${month}",
-		"Martedì  ${day} / ${month}",
-		"Mercoledì  ${day} / ${month}",
-		"Giovedì  ${day} / ${month}",
-		"Venerdì  ${day} / ${month}",
-		"Sabato  ${day} / ${month}",
-		"Domenica ${day} / ${month}"
+		"${day} / ${month} Lunedì",
+		"${day} / ${month} Martedì",
+		"${day} / ${month} Mercoledì",
+		"${day} / ${month} Giovedì",
+		"${day} / ${month} Venerdì",
+		"${day} / ${month} Sabato",
+		"${day} / ${month} Domenica"
 	};
 	
 	public static final String[] dayFileNames = {

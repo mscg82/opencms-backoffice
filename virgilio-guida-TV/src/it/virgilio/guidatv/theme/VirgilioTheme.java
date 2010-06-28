@@ -28,7 +28,7 @@ public class VirgilioTheme extends Theme {
 	}
 	
 	public String getChannelSelectionTitle() {
-		return "${day} / ${month} - Seleziona un canale";
+		return "${day} / ${month} - Canali";
 	}
 
 	public String getMenuTextForCancel() {
