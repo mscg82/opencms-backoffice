@@ -1,7 +1,12 @@
 package org.j4me.ui.components;
 
-import javax.microedition.lcdui.*;
-import org.j4me.ui.*;
+import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Graphics;
+
+import org.j4me.ui.DeviceScreen;
+import org.j4me.ui.Menu;
+import org.j4me.ui.MenuItem;
+import org.j4me.ui.Theme;
 
 /**
  * The <code>Menu</code> screen uses one of these <code>MenuOption</code> components
@@ -138,6 +143,22 @@ public class MenuOption
 	{
 		this( choice );
 		this.submenu = submenu;
+	}
+	
+	/**
+	 * Creates a new <code>MenuOption</code> component that encapsulates a
+	 * <code>Menu</code>.
+	 * 
+	 * @param text is string that appears in the menu option.
+	 * @param choice is the command that is represented by this component.
+	 * @param submenu when <code>true</code> indicates this is a submenu of the
+	 *  current menu.
+	 */
+	public MenuOption (String text, Menu choice, boolean submenu)
+	{
+		this( choice );
+		this.submenu = submenu;
+		this.screenText = text;
 	}
 
 	/**

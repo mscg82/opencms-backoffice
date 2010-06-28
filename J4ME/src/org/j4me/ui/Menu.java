@@ -1,6 +1,7 @@
 package org.j4me.ui;
 
-import org.j4me.ui.components.*;
+import org.j4me.ui.components.Component;
+import org.j4me.ui.components.MenuOption;
 
 /**
  * The <code>Menu</code> class is used for creating the application's menus.
@@ -119,6 +120,22 @@ public class Menu
 	public void appendSubmenu (Menu submenu)
 	{
 		MenuOption choice = new MenuOption( submenu, true );
+		append( choice );
+	}
+	
+	/**
+	 * Appends another menu as a menu option.  The submenu will have an
+	 * arrow next to it to indicate to the user it is another menu.
+	 * <p>
+	 * To use a <code>Menu</code> as a screen and not a submenu call the
+	 * <code>appendMenuOption</code> method instead.
+	 * 
+	 * @param text is string that appears in the menu option.
+	 * @param submenu is the screen to add as a menu item.
+	 */
+	public void appendSubmenu (String text, Menu submenu)
+	{
+		MenuOption choice = new MenuOption( text, submenu, true );
 		append( choice );
 	}
 	
