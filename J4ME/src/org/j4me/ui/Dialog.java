@@ -1,9 +1,12 @@
 package org.j4me.ui;
 
-import java.util.*;
-import javax.microedition.lcdui.*;
-import org.j4me.ui.components.*;
-import org.j4me.util.*;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import javax.microedition.lcdui.Graphics;
+
+import org.j4me.ui.components.Component;
+import org.j4me.util.MathFunc;
 
 /**
  * The <code>Dialog</code> class is a base class for any screen that accepts user input
@@ -95,11 +98,19 @@ public abstract class Dialog
 	boolean invalidated;
 	
 	/**
+	 * A boolean switch that can be used to prevent the drawing of the
+	 * vertical scrollbar.
+	 */
+	protected boolean preventScrollbar;
+	
+	/**
 	 * Implicitly called by derived classes to setup a new J4ME form.
 	 */
 	public Dialog ()
 	{
 		super();
+		
+		preventScrollbar = false;
 		
 		// Set the default menu options.
 		Theme theme = UIManager.getTheme();
@@ -442,10 +453,10 @@ public abstract class Dialog
 		int height = getHeight();
 		
 		// Add a vertical scrollbar?
-		if ( hasVerticalScrollbar() )
+		if ( !preventScrollbar && hasVerticalScrollbar() )
 		{
 			// Paint the scrollbar.
-			int width = super.getWidth();  // Exclude the margins and scrollbar
+			int width = getTotalWidth();  // Exclude the margins and scrollbar
 			int heightOfAllComponents = absoluteHeights[absoluteHeights.length - 1];
 			paintVerticalScrollbar( g, 0, 0, width, height, topOfScreen, heightOfAllComponents );
 		}
@@ -597,6 +608,15 @@ public abstract class Dialog
 		}
 
 		return formWidth;
+	}
+	
+	/**
+	 * Returns the compplete width of the element, without margins and scrollbar.
+	 * @return The compplete width of the element.
+	 */
+	public int getTotalWidth ()
+	{
+		return super.getWidth();
 	}
 	
 	/**
