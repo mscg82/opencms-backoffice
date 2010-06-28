@@ -59,4 +59,39 @@ public class VirgilioTheme extends Theme {
 		return "Si è verificato un errore durante l'aggiornamento del palinsesto.";
 	}
 
+	public int getProgramInfoBorderColor() {
+		return 0x00909090;
+	}
+	
+	public int getProgramInfoBackgroundColor() {
+		return LIGHT_GRAY;
+	}
+	
+	public int getProgramInfoMarginTop() {
+		return 2;
+	}
+	
+	public int getProgramInfoMarginBottom() {
+		return 2;
+	}
+
+	public int getProgramTimeBorderColor() {
+		return NAVY;
+	}
+	
+	public int getProgramStartTimeBackgroundColor() {
+		return LIGHT_BLUE;
+	}
+
+	public int getProgramStartTimeFontColor() {
+		return WHITE;
+	}
+	
+	public int getProgramEndTimeBackgroundColor() {
+		return WHITE;
+	}
+
+	public int getProgramEndTimeFontColor() {
+		return BLACK;
+	}
 }
