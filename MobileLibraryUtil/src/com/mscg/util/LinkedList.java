@@ -1,5 +1,7 @@
 package com.mscg.util;
 
+import java.util.Vector;
+
 /**
  * Linked list implementation of the <tt>List</tt> interface.  Implements all
  * optional list operations, and permits all elements (including
@@ -775,17 +777,17 @@ public class LinkedList extends AbstractSequentialList
 	return newEntry;
     }
 
-    private Object remove(Entry e) {
+	private Object remove(Entry e) {
 	if (e == header)
 	    throw new NoSuchElementException();
 
         Object result = e.element;
-	e.previous.next = e.next;
-	e.next.previous = e.previous;
+        e.previous.next = e.next;
+        e.next.previous = e.previous;
         e.next = e.previous = null;
         e.element = null;
-	size--;
-	modCount++;
+        size--;
+        modCount++;
         return result;
     }
 
@@ -799,13 +801,13 @@ public class LinkedList extends AbstractSequentialList
     /** Adapter to provide descending iterators via ListItr.previous */
     private class DescendingIterator implements Iterator {
         final ListItr itr = new ListItr(size());
-	public boolean hasNext() {
-	    return itr.hasPrevious();
-	}
-	public Object next() {
+        public boolean hasNext() {
+            return itr.hasPrevious();
+        }
+        public Object next() {
             return itr.previous();
         }
-	public void remove() {
+        public void remove() {
             itr.remove();
         }
     }
@@ -825,11 +827,11 @@ public class LinkedList extends AbstractSequentialList
      *         in proper sequence
      */
     public Object[] toArray() {
-	Object[] result = new Object[size];
+        Object[] result = new Object[size];
         int i = 0;
         for (Entry e = header.next; e != header; e = e.next)
             result[i++] = e.element;
-	return result;
+        return result;
     }
 
     private static final long serialVersionUID = 876323262645176354L;
