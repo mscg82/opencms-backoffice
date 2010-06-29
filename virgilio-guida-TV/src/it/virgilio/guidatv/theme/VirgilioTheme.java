@@ -68,7 +68,7 @@ public class VirgilioTheme extends Theme {
 	}
 	
 	public int getProgramInfoMarginTop() {
-		return 2;
+		return 0;
 	}
 	
 	public int getProgramInfoMarginBottom() {

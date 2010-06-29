@@ -92,7 +92,7 @@ public class WeekDayMenu extends BaseMenu {
 			httpClient.executeMethod(get);
 		}
 		else {
-			repaint();
+			//repaint();
 		}
 	}
 	

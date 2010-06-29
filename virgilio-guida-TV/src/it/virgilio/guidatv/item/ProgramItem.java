@@ -43,7 +43,9 @@ public class ProgramItem extends Component {
 		height += fontHeight + 2 * HEADER_PADDING;
 		
 		// add program info height
-		height += programName.getPreferredSize(theme, viewportWidth, viewportHeight)[1] + 2 * PROGRAM_PADDING;
+		height +=
+			programName.getPreferredSize(theme, viewportWidth - 2 * PROGRAM_PADDING, viewportHeight)[1] +
+			2 * PROGRAM_PADDING;
 		
 		return new int[] { viewportWidth, height };
 	}
@@ -55,35 +57,37 @@ public class ProgramItem extends Component {
 		g.setFont(font);
 		int fontHeight = font.getHeight();
 
+		int marginSum = vt.getProgramInfoMarginTop() + vt.getProgramInfoMarginBottom();
 		int offsetTop = vt.getProgramInfoMarginTop();
-		int programInfoOffset = offsetTop + fontHeight + 2 * HEADER_PADDING;
+		int timeBoxHeight = fontHeight + 2 * HEADER_PADDING;
+		int programInfoOffset = offsetTop + timeBoxHeight;
 		// draw a border around the whole element
 		int rounding = Math.min( height / 4, 8 );
+		g.setColor(vt.getProgramInfoBackgroundColor());
+		g.fillRoundRect(0, offsetTop,
+				width - 1, height - marginSum - 1, rounding, rounding);
 		g.setColor(vt.getProgramInfoBorderColor());
 		g.drawRoundRect(0, offsetTop,
-			width - 1, height - vt.getProgramInfoMarginBottom() - 1,
+			width - 1, height - marginSum - 1,
 			rounding, rounding);
-		g.setColor(vt.getProgramInfoBackgroundColor());
-		g.fillRoundRect(1, offsetTop + 1,
-			width - 2, height - vt.getProgramInfoMarginBottom() - 2, rounding, rounding);
 		
 		// draw the border on the left top half of the element
+		g.setColor(vt.getProgramStartTimeBackgroundColor());
+		g.fillRoundRect(0, offsetTop,
+				width / 2 - 1, timeBoxHeight - 1, rounding, rounding);
 		g.setColor(vt.getProgramTimeBorderColor());
 		g.drawRoundRect(0, offsetTop,
-			width / 2 - 1, programInfoOffset - 1,
+			width / 2 - 1, timeBoxHeight - 1,
 			rounding, rounding);	
-		g.setColor(vt.getProgramStartTimeBackgroundColor());
-		g.fillRoundRect(1, offsetTop + 1,
-			width / 2 - 2, programInfoOffset - 2, rounding, rounding);
 			
 		// draw the border on the rigth top half of the element
+		g.setColor(vt.getProgramEndTimeBackgroundColor());
+		g.fillRoundRect(width / 2, offsetTop,
+				width / 2 - 1, timeBoxHeight - 1, rounding, rounding);
 		g.setColor(vt.getProgramTimeBorderColor());
 		g.drawRoundRect(width / 2, offsetTop,
-			width / 2 - 1, programInfoOffset - 1,
+			width / 2 - 1, timeBoxHeight - 1,
 			rounding, rounding);
-		g.setColor(vt.getProgramEndTimeBackgroundColor());
-		g.fillRoundRect(width / 2 + 1, offsetTop + 1,
-			width / 2 - 2, programInfoOffset - 2, rounding, rounding);
 				
 		
 		// draw start time in the left top half of the element
@@ -93,10 +97,12 @@ public class ProgramItem extends Component {
 		g.setColor(vt.getProgramEndTimeFontColor());
 		g.drawString(program.getEndTime(), width * 3 / 4, offsetTop + HEADER_PADDING, Graphics.TOP|Graphics.HCENTER);
 		
+		int labelHeight = height - programInfoOffset - 2 * PROGRAM_PADDING - vt.getProgramInfoMarginBottom();
 		g.setColor(vt.getFontColor());
 		programName.visible(true);
 		programName.paint(g, theme, getScreen(), PROGRAM_PADDING, programInfoOffset + PROGRAM_PADDING,
-			width, height - (programInfoOffset + PROGRAM_PADDING) - PROGRAM_PADDING, selected);
+			width - PROGRAM_PADDING, labelHeight,
+			selected);
 	}
 
 }
