@@ -100,7 +100,7 @@ public class VirgilioTheme extends Theme {
 	}
 	
 	public String getMemoryStatusFreeTextAction() {
-		return "Libera memoria";
+		return "Pulisci";
 	}
 	
 	public String getMemoryStatusTotalMemory() {
@@ -116,11 +116,11 @@ public class VirgilioTheme extends Theme {
 	}
 	
 	public String getItemsInMemoryCache() {
-		return "Palinsesti in memoria: ${count}";
+		return "In memoria: ${count}";
 	}
 	
 	public String getItemsInDiskCache() {
-		return "Palinsesti su scheda: ${count}";
+		return "Su scheda: ${count}";
 	}
 	
 	public String getDeleteItemsInMemoryCache() {
