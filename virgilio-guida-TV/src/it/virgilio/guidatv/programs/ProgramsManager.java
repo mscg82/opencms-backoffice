@@ -49,15 +49,7 @@ public class ProgramsManager {
 			Iterator head = programsBuffer.entrySet().iterator();
 			Map.Entry entry = (Map.Entry)head.next();
 			Programs p = (Programs)entry.getValue();
-			// clean up programs object so that the GC can free memory
-			for(Iterator it1 = p.getChannels().iterator(); it1.hasNext();) {
-				Channel c = (Channel) it1.next();
-				for(Iterator it2 = c.getTVPrograms().iterator(); it2.hasNext();) {
-					it2.next();
-					it2.remove();
-				}
-				it1.remove();
-			}
+			clearPrograms(p);
 			head.remove();
 			
 			// free memory
@@ -67,6 +59,45 @@ public class ProgramsManager {
 			try {
 				Thread.sleep(300);
 			} catch (InterruptedException e) { }
+		}
+	}
+	
+	/**
+	 * Removes all entries from memory cache and run the garbage collector
+	 * to free memory as soon as possible.
+	 */
+	public void cleanMemoryCache() {
+		for(Iterator it = programsBuffer.entrySet().iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry)it.next();
+			Programs p = (Programs)entry.getValue();
+			clearPrograms(p);
+		}
+		programsBuffer.clear();
+		
+		// free memory
+		System.gc();
+		
+		// give the GC some time
+		try {
+			Thread.sleep(300);
+		} catch (InterruptedException e) { }
+	}
+	
+	/**
+	 * Internal cleanup function.
+	 * 
+	 * @param p The {@link Programs} object that needs to be
+	 * removed from memory.
+	 */
+	protected void clearPrograms(Programs p) {
+		// clean up programs object so that the GC can free memory
+		for(Iterator it1 = p.getChannels().iterator(); it1.hasNext();) {
+			Channel c = (Channel) it1.next();
+			for(Iterator it2 = c.getTVPrograms().iterator(); it2.hasNext();) {
+				it2.next();
+				it2.remove();
+			}
+			it1.remove();
 		}
 	}
 	
@@ -81,6 +112,28 @@ public class ProgramsManager {
 	public Programs getProgramsByDayName(String dayName) {
 		Programs ret = (Programs) programsBuffer.get(dayName);
 		return ret;
+	}
+	
+	/**
+	 * Returns the number of items in the
+	 * memory cache. 
+	 * 
+	 * @return The number of items in the
+	 * memory cache.
+	 */
+	public int getProgramsInMemory() {
+		return programsBuffer.size();
+	}
+	
+	/**
+	 * Returns the number of items in the
+	 * disk cache. 
+	 * 
+	 * @return The number of items in the
+	 * disk cache.
+	 */
+	public int getProgramsOnDisk() {
+		return 0;
 	}
 	
 	/**

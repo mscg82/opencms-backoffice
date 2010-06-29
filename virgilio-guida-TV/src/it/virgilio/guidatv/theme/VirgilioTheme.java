@@ -94,4 +94,40 @@ public class VirgilioTheme extends Theme {
 	public int getProgramEndTimeFontColor() {
 		return BLACK;
 	}
+	
+	public String getMemoryStatusTitle() {
+		return "Stato della memoria";
+	}
+	
+	public String getMemoryStatusFreeTextAction() {
+		return "Libera memoria";
+	}
+	
+	public String getMemoryStatusTotalMemory() {
+		return "Memoria totale: ${mem} MB";
+	}
+
+	public String getMemoryStatusFreeMemory() {
+		return "Memoria libera: ${mem} MB";
+	}
+	
+	public String getCacheStatusTitle() {
+		return "Stato cache";
+	}
+	
+	public String getItemsInMemoryCache() {
+		return "Palinsesti in memoria: ${count}";
+	}
+	
+	public String getItemsInDiskCache() {
+		return "Palinsesti su scheda: ${count}";
+	}
+	
+	public String getDeleteItemsInMemoryCache() {
+		return "Rimuovi elementi in memoria";
+	}
+	
+	public String getDeleteItemsInDiskCache() {
+		return "Rimuovi elementi da scheda";
+	}
 }

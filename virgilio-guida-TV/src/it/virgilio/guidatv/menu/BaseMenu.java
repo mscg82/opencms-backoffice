@@ -21,6 +21,7 @@ public abstract class BaseMenu extends Menu {
 	
 	protected boolean visible;
 	protected boolean preventKeyPropagation;
+	protected boolean drawInterface;
 
 	/**
 	 * Constructs a menu
@@ -28,6 +29,7 @@ public abstract class BaseMenu extends Menu {
 	public BaseMenu() {
 		visible = false;
 		preventKeyPropagation = false;
+		drawInterface = true;
 	}
 
 	/**
@@ -40,6 +42,8 @@ public abstract class BaseMenu extends Menu {
 	public BaseMenu(String name, DeviceScreen previous) {
 		super(name, previous);
 		visible = false;
+		preventKeyPropagation = false;
+		drawInterface = true;
 	}
 
 	protected void keyPressed(int key) {

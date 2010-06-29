@@ -3,6 +3,9 @@
  */
 package it.virgilio.guidatv.menu;
 
+import it.virgilio.guidatv.menu.settings.CacheStatus;
+import it.virgilio.guidatv.menu.settings.MemoryStatus;
+
 import org.j4me.ui.DeviceScreen;
 
 /**
@@ -16,6 +19,7 @@ public class SettingsMenu extends BaseMenu {
 	 */
 	public SettingsMenu() {
 		super();
+		init();
 	}
 	
 	/**
@@ -25,6 +29,7 @@ public class SettingsMenu extends BaseMenu {
 	 */
 	public SettingsMenu(DeviceScreen previous) {
 		super("Impostazioni", previous);
+		init();
 	}
 
 	/**
@@ -35,6 +40,12 @@ public class SettingsMenu extends BaseMenu {
 	 */
 	public SettingsMenu(String name, DeviceScreen previous) {
 		super(name, previous);
+		init();
+	}
+	
+	private void init() {
+		appendSubmenu(new MemoryStatus(this));
+		appendSubmenu(new CacheStatus(this));
 	}
 
 }

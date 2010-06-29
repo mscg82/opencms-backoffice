@@ -18,14 +18,12 @@ import com.mscg.util.Iterator;
 public class ChannelMenu extends BaseMenu {
 
 	private Channel channel;
-	private boolean drawInterface;
 	
 	public ChannelMenu(Channel channel, DeviceScreen previous) {
 		super(channel.getName(), previous);
 		
 		setMenuText(getLeftMenuText(), null);
 		
-		this.drawInterface = true;
 		this.channel = channel;
 	
 	}

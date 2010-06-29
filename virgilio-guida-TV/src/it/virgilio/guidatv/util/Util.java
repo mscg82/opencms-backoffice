@@ -83,6 +83,17 @@ public class Util {
 	}
 	
 	/**
+	 * Rounds the provided double to up to 2 decimal digits.
+	 * 
+	 * @param val The original double value
+	 * @return The rounded double
+	 */
+	public static double round(double val) {
+        double ret = ((int)(val * 100)) / 100.0d;
+        return ret;
+    }
+	
+	/**
 	 * Splits a string using the second string as separator.
 	 * 
 	 * @param str The string that will be split.
