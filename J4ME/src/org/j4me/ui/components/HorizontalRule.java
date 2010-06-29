@@ -1,7 +1,8 @@
 package org.j4me.ui.components;
 
-import javax.microedition.lcdui.*;
-import org.j4me.ui.*;
+import javax.microedition.lcdui.Graphics;
+
+import org.j4me.ui.Theme;
 
 /**
  * A horizontal rule component.  It is a line across the screen used
@@ -116,7 +117,7 @@ public class HorizontalRule
 		g.setColor( color );
 		
 		// Draw the line.
-		g.drawLine( lineX, 0, lineX + lineWidth, height - 1 );
+		g.fillRect(lineX, 0, lineWidth - 1, height - 1);
 	}
 
 	/**

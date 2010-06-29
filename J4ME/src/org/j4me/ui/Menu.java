@@ -76,11 +76,13 @@ public class Menu
 	 * Appends a new menu option to this menu.
 	 * 
 	 * @param option is the menu item to add.
+	 * @return The {@link MenuOption} object representing the added item.
 	 */
-	public void appendMenuOption (MenuItem option)
+	public MenuOption appendMenuOption (MenuItem option)
 	{
 		MenuOption choice = new MenuOption( option );
 		append( choice );
+		return choice;
 	}
 	
 	/**
@@ -88,11 +90,13 @@ public class Menu
 	 * shown.  The screen's title is used as its text.
 	 * 
 	 * @param option is screen to add as a menu item.
+	 * @return The {@link MenuOption} object representing the added item.
 	 */
-	public void appendMenuOption (DeviceScreen option)
+	public MenuOption appendMenuOption (DeviceScreen option)
 	{
 		MenuOption choice = new MenuOption( option );
 		append( choice );
+		return choice;
 	}
 	
 	/**
@@ -101,11 +105,13 @@ public class Menu
 	 * 
 	 * @param text is string that appears in the menu option.
 	 * @param option is screen to add as a menu item.
+	 * @return The {@link MenuOption} object representing the added item.
 	 */
-	public void appendMenuOption (String text, DeviceScreen option)
+	public MenuOption appendMenuOption (String text, DeviceScreen option)
 	{
 		MenuOption choice = new MenuOption( text, option );
 		append( choice );
+		return choice;
 	}
 	
 	/**
@@ -116,11 +122,13 @@ public class Menu
 	 * <code>appendMenuOption</code> method instead.
 	 * 
 	 * @param submenu is the screen to add as a menu item.
+	 * @return The {@link MenuOption} object representing the added item.
 	 */
-	public void appendSubmenu (Menu submenu)
+	public MenuOption appendSubmenu (Menu submenu)
 	{
 		MenuOption choice = new MenuOption( submenu, true );
 		append( choice );
+		return choice;
 	}
 	
 	/**
@@ -132,11 +140,13 @@ public class Menu
 	 * 
 	 * @param text is string that appears in the menu option.
 	 * @param submenu is the screen to add as a menu item.
+	 * @return The {@link MenuOption} object representing the added item.
 	 */
-	public void appendSubmenu (String text, Menu submenu)
+	public MenuOption appendSubmenu (String text, Menu submenu)
 	{
 		MenuOption choice = new MenuOption( text, submenu, true );
 		append( choice );
+		return choice;
 	}
 	
 	/**
@@ -179,26 +189,26 @@ public class Menu
 	 */
 	protected void keyPressed (int key)
 	{
-		boolean goToFirst = false;
-		boolean goToLast = false;
+//		boolean goToFirst = false;
+//		boolean goToLast = false;
 		
 		// Wrap the scroll around the screen?
-		if ( key == DOWN )
-		{
-			if ( getSelected() == size() - 1 )
-			{
-				// Go to the first menu choice.
-				goToFirst = true;
-			}
-		}
-		else if ( key == UP )
-		{
-			if ( (getSelected() == 0) && (size() > 1) )
-			{
-				// Go to the last menu choice.
-				goToLast = true;
-			}
-		}
+//		if ( key == DOWN )
+//		{
+//			if ( getSelected() == size() - 1 )
+//			{
+//				// Go to the first menu choice.
+//				goToFirst = true;
+//			}
+//		}
+//		else if ( key == UP )
+//		{
+//			if ( (getSelected() == 0) && (size() > 1) )
+//			{
+//				// Go to the last menu choice.
+//				goToLast = true;
+//			}
+//		}
 
 		// Process the key event.
 		super.keyPressed( key );
@@ -207,14 +217,14 @@ public class Menu
 		//   Only do these after super.keyPressed().  Otherwise
 		//   keyPressed() will scroll again so we'll actually wind
 		//   up on the second or second-to-last menu choice.
-		if ( goToFirst )
-		{
-			setSelected( 0 );
-		}
-		else if ( goToLast )
-		{
-			setSelected( size() - 1 );
-		}
+//		if ( goToFirst )
+//		{
+//			setSelected( 0 );
+//		}
+//		else if ( goToLast )
+//		{
+//			setSelected( size() - 1 );
+//		}
 	}
 	
 	/**

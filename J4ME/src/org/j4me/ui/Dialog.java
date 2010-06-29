@@ -356,7 +356,19 @@ public abstract class Dialog
 	 * 
 	 * @param index is the new selected component.
 	 */
-	public void setSelected (int index)
+	public void setSelected (int index) {
+		setSelected(index, false);
+	}
+	
+	/**
+	 * Sets the selected component.  It is the one the user can input
+	 * data into and that the screen is scrolled to.
+	 * 
+	 * @param index is the new selected component.
+	 * @param preventScroll a boolean switch to prevent form scrolling
+	 * when selecting the component.
+	 */
+	public void setSelected (int index, boolean preventScroll)
 	{
 		if ( (index < 0) || (index >= components.size()) )
 		{
@@ -371,31 +383,33 @@ public abstract class Dialog
 			calculateLayout( UIManager.getTheme(), getWidth(), getHeight() );
 		}
 		
-		// Set the top of the screen. 
-		if ( index == 0 )
-		{
-			// The top of the screen will be the very start.
-			topOfScreen = 0;
-		}
-		else
-		{
-			// The top of the screen will be the top of the component.
-			topOfScreen = absoluteHeights[index] - spacing;  
-		}
-		
-		// Adjust the top of the screen for scrolling.
-		int maxScroll = absoluteHeights[absoluteHeights.length - 1] - getHeight();
-		
-		if ( maxScroll <= 0 )
-		{
-			// All the components fit on one form.
-			topOfScreen = 0;
-		}
-		else if ( topOfScreen > maxScroll )
-		{
-			// Scroll all the way to the bottom.  The highlighted 
-			// component will be visible, but not at the top of the page.
-			topOfScreen = maxScroll;
+		if(!preventScroll) {
+			// Set the top of the screen. 
+			if ( index == 0 )
+			{
+				// The top of the screen will be the very start.
+				topOfScreen = 0;
+			}
+			else
+			{
+				// The top of the screen will be the top of the component.
+				topOfScreen = absoluteHeights[index] - spacing;  
+			}
+			
+			// Adjust the top of the screen for scrolling.
+			int maxScroll = absoluteHeights[absoluteHeights.length - 1] - getHeight();
+			
+			if ( maxScroll <= 0 )
+			{
+				// All the components fit on one form.
+				topOfScreen = 0;
+			}
+			else if ( topOfScreen > maxScroll )
+			{
+				// Scroll all the way to the bottom.  The highlighted 
+				// component will be visible, but not at the top of the page.
+				topOfScreen = maxScroll;
+			}
 		}
 	}
 	
@@ -406,7 +420,20 @@ public abstract class Dialog
 	 * @param component is the new selected component.  If it is not
 	 *  on the form this has no effect.
 	 */
-	public void setSelected (Component component)
+	public void setSelected (Component component) {
+		setSelected(component, false);
+	}
+	
+	/**
+	 * Sets the selected component.  It is the one the user can input
+	 * data into and that the screen is scrolled to.
+	 * 
+	 * @param component is the new selected component.  If it is not
+	 *  on the form this has no effect.
+	 * @param a boolean switch to prevent form scrolling
+	 * when selecting the component.
+	 */
+	public void setSelected (Component component, boolean preventScroll)
 	{
 		int index = 0;
 		
@@ -429,7 +456,16 @@ public abstract class Dialog
 		// Set the component as the selected one.
 		if ( index < size() )
 		{
-			setSelected( index );
+			setSelected( index, preventScroll );
+		}
+	}
+	
+	protected synchronized void revalidate() {
+		// Have we determined the layout?
+		if ( invalidated )
+		{
+			layout();
+			invalidated = false;
 		}
 	}
 
@@ -442,11 +478,7 @@ public abstract class Dialog
 	protected synchronized void paint (Graphics g)
 	{
 		// Have we determined the layout?
-		if ( invalidated )
-		{
-			layout();
-			invalidated = false;
-		}
+		revalidate();
 		
 		// Get the height of the screen.
 		Theme theme = UIManager.getTheme();
@@ -787,8 +819,8 @@ public abstract class Dialog
 			
 			// Walk through the components until we find the next one to highlight.
 			int components = size();
-			
-			for ( int next = highlightedComponent + 1; next < components; next++ )
+			int startIndex = (highlightedComponent + 1) % components;
+			for ( int next = startIndex; next != highlightedComponent; next = (next + 1) % components )
 			{
 				// Otherwise have we walked off the end of the screen?
 				int nextBottom = absoluteHeights[next + 1];
@@ -825,13 +857,15 @@ public abstract class Dialog
 		}
 		else  // up
 		{
-			if ( highlightedComponent > 0 )
+			if ( highlightedComponent >= 0 )
 			{
 				// How far up can the component be?
 				int maxTop = topOfScreen - maxScroll;
 
 				// Walk through the components until we find the next one to highlight.
-				for ( int next = highlightedComponent - 1; next >= 0; next-- )
+				int components = size();
+				int startindex = (highlightedComponent + components - 1) % components;
+				for ( int next = startindex; next != highlightedComponent; next = (next + components - 1) % components )
 				{
 					// Otherwise have we walked off the end of the screen?
 					int nextTop = absoluteHeights[next];
@@ -870,6 +904,16 @@ public abstract class Dialog
 	}
 	
 	/**
+	 * Move the screen to the specified position.
+	 * 
+	 * @param scroll The position to which the top of
+	 * the screen will be set.
+	 */
+	protected void scrollTo(int scroll) {
+		topOfScreen = scroll;
+	}
+	
+	/**
 	 * Moves the viewport of the form up or down and calls <code>repaint</code>.
 	 * <p>
 	 * The amount scrolled is dependent on the components shown.  Typically
@@ -879,7 +923,7 @@ public abstract class Dialog
 	 * @param down is <code>true</code> when the form should scroll down and 
 	 *  <code>false</code> when it should scroll up.
 	 */
-	private void scroll (boolean down)
+	protected void scroll (boolean down)
 	{
 		// Safety checks.
 		if ( absoluteHeights == null )
