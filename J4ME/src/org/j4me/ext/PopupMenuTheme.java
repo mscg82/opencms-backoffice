@@ -7,6 +7,7 @@ public interface PopupMenuTheme {
 	public static final int[] DEFAULT_MARGINS = {0, 0, 0, 0};
 	public static final int[] DEFAULT_MENUBORDERS = {1, 1, 1, 1};
 	public static final int DEFAULT_BACKGROUND_COLOR = Theme.BLACK;
+	public static final int[] DEFAULT_BORDER_COLORS = {Theme.BLACK, Theme.BLACK, Theme.BLACK, Theme.BLACK};
 	public static final int DEFAULT_BACKGROUND_ALPHA = 170;
 	public static final int DEFAULT_SELECTED_BACKGROUND_COLOR = Theme.BLUE;
 	public static final int DEFAULT_SELECTED_FOREGROUND_COLOR = Theme.WHITE;
@@ -36,6 +37,14 @@ public interface PopupMenuTheme {
 	 * @return The color of the menu background.
 	 */
 	public int getMenuBackgroundColor();
+	
+	/**
+	 * Returns an array with the colors of the menu borders.
+	 * 
+	 * @return An array of integers indicating
+	 * the top, right, bottom and left borders colors.
+	 */
+	public int[] getMenuBorderColors();
 	
 	/**
 	 * Returns the menu borders, in pixels,

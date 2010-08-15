@@ -110,6 +110,7 @@ public class PopupMenuDialog extends Dialog {
 		int selFgColor = PopupMenuTheme.DEFAULT_SELECTED_FOREGROUND_COLOR;
 		int margins[] = PopupMenuTheme.DEFAULT_MARGINS;
 		int borders[] = PopupMenuTheme.DEFAULT_MENUBORDERS;
+		int bordersColors[] = PopupMenuTheme.DEFAULT_BORDER_COLORS;
 		if(theme instanceof PopupMenuTheme) {
 			bgColor = ((PopupMenuTheme)theme).getMenuBackgroundColor();
 			bgAlpha = ((PopupMenuTheme)theme).getMenuBackgroundAlpha();
@@ -117,6 +118,7 @@ public class PopupMenuDialog extends Dialog {
 			selFgColor = ((PopupMenuTheme)theme).getSelectionForegroundColor();
 			margins = ((PopupMenuTheme)theme).getItemMargins();
 			borders = ((PopupMenuTheme)theme).getMenuBorders();
+			bordersColors = ((PopupMenuTheme)theme).getMenuBorderColors();
 		}
 
 		int menuTop = getScreenHeight() - theme.getMenuHeight() - size[1] - borders[0] - borders[2];
@@ -127,10 +129,15 @@ public class PopupMenuDialog extends Dialog {
 		if(!left) {
 			offset = getScreenWidth() - borders[1] - size[0] - borders[3];
 		}
+		g.setColor(bordersColors[0]);
 		g.fillRect(offset, menuTop, borders[3] + size[0] + borders[1], borders[0]); // top border
+		g.setColor(bordersColors[1]);
 		g.fillRect(offset + borders[3] + size[0], menuTop, borders[1], borders[0] + size[1] + borders[2]); // right border
+		g.setColor(bordersColors[2]);
 		g.fillRect(offset, menuTop + borders[0] + size[1], borders[3] + size[0] + borders[1], borders[2]); // bottom border
+		g.setColor(bordersColors[3]);
 		g.fillRect(offset, menuTop, borders[3], borders[0] + size[1] + borders[2]); // left border			
+		g.setColor(bgColor);
 		
 		menuTop += borders[0];
 		// draw the background
