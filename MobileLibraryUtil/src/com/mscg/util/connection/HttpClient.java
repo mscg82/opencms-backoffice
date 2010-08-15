@@ -5,13 +5,15 @@
 
 package com.mscg.util.connection;
 
-import com.mscg.util.connection.auth.AuthScope;
-import com.mscg.util.connection.auth.Credentials;
-import com.mscg.util.net.URL;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Hashtable;
+
 import org.apache.commons.codec.binary.Base64;
+
+import com.mscg.util.connection.auth.AuthScope;
+import com.mscg.util.connection.auth.Credentials;
+import com.mscg.util.net.URL;
 
 /**
  *
@@ -96,6 +98,13 @@ public class HttpClient {
         Thread ret = new MethodExecutorThread(method);
         ret.start();
         return ret;
+    }
+    
+    public void executeMethodSynchronously(HttpMethod method) {
+    	Thread tmp = new MethodExecutorThread(method);
+    	// call run, so the thread code will execute in the current thread
+    	// and not in a new one
+    	tmp.run();
     }
 
     public void setCredentials(AuthScope scope, Credentials credentials) {
