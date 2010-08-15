@@ -104,6 +104,7 @@ public class PopupMenuDialog extends Dialog {
 		int size[] = getMenuSize(menu);
 		
 		Theme theme = UIManager.getTheme();
+		int fontColor = theme.getFontColor();
 		int bgColor = PopupMenuTheme.DEFAULT_BACKGROUND_COLOR;
 		int bgAlpha = PopupMenuTheme.DEFAULT_BACKGROUND_ALPHA;
 		int selBgColor = PopupMenuTheme.DEFAULT_SELECTED_BACKGROUND_COLOR;
@@ -112,6 +113,7 @@ public class PopupMenuDialog extends Dialog {
 		int borders[] = PopupMenuTheme.DEFAULT_MENUBORDERS;
 		int bordersColors[] = PopupMenuTheme.DEFAULT_BORDER_COLORS;
 		if(theme instanceof PopupMenuTheme) {
+			fontColor = ((PopupMenuTheme)theme).getPopupMenuFontColor();
 			bgColor = ((PopupMenuTheme)theme).getMenuBackgroundColor();
 			bgAlpha = ((PopupMenuTheme)theme).getMenuBackgroundAlpha();
 			selBgColor = ((PopupMenuTheme)theme).getSelectionBackgroundColor();
@@ -161,7 +163,7 @@ public class PopupMenuDialog extends Dialog {
 				g.setColor(selFgColor);
 			}
 			else {
-				g.setColor(theme.getFontColor());
+				g.setColor(fontColor);
 			}
 			if(left)
 				g.drawString(el.getLabel(), borders[0] + margins[3], elY + margins[0], Graphics.TOP | Graphics.LEFT);
