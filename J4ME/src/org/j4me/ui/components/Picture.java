@@ -1,8 +1,12 @@
 package org.j4me.ui.components;
 
-import java.io.*;
-import javax.microedition.lcdui.*;
-import org.j4me.ui.*;
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
+
+import org.j4me.ui.Theme;
 
 /**
  * The <code>Picture</code> component shows an <code>Image</code>.  Typically this
@@ -55,6 +59,19 @@ public class Picture
 		throws IOException
 	{
 		this.image = Image.createImage( location );
+		invalidate();
+	}
+	
+	/**
+	 * Sets the image displayed by this component to a PNG resource. 
+	 * 
+	 * @param source is the {@link InputStream} source from which the image is read.
+	 * @throws IOException if the PNG could not be loaded from <code>location</code>.
+	 */
+	public void setImage (InputStream source)
+		throws IOException
+	{
+		this.image = Image.createImage( source );
 		invalidate();
 	}
 	
