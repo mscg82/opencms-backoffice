@@ -124,6 +124,9 @@ public class PopupMenuDialog extends Dialog {
 		}
 
 		int menuTop = getScreenHeight() - theme.getMenuHeight() - size[1] - borders[0] - borders[2];
+		if(this.getTitle() != null && this.getTitle().length() > 0) {
+			menuTop -= theme.getTitleHeight();
+		}
 
 		// draw the borders
 		g.setColor(bgColor);
