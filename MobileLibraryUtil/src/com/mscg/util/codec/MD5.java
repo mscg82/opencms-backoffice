@@ -93,6 +93,9 @@ public class MD5 {
 	private static final char[]	HEX_CHARS	= { 
 		'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f' 
 	};
+	private static final char[]	HEX_CHARS_UPPER	= { 
+		'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' 
+	};
 	
 	private MD5State	state;
 	private MD5State	finals;
@@ -442,17 +445,27 @@ public class MD5 {
 
 		return encode(finals.state, 16);
 	}
-
+	
 	/**
 	 * Returns 32-character hex representation of this objects hash
 	 * 
 	 * @return String of this object's hash
 	 */
 	public static final String toHex( final byte[] hash ) {
+		return toHex(hash, false);
+	}
+
+	/**
+	 * Returns 32-character hex representation of this objects hash
+	 * 
+	 * @return String of this object's hash
+	 */
+	public static final String toHex( final byte[] hash, boolean upperCase ) {
 		char buf[] = new char[hash.length * 2];
+		char chars[] = (upperCase ? HEX_CHARS_UPPER : HEX_CHARS);
 		for (int i = 0, x = 0; i < hash.length; i++) {
-			buf[x++] = HEX_CHARS[(hash[i] >>> 4) & 0xf];
-			buf[x++] = HEX_CHARS[hash[i] & 0xf];
+			buf[x++] = chars[(hash[i] >>> 4) & 0xf];
+			buf[x++] = chars[hash[i] & 0xf];
 		}
 		return new String(buf);
 	}
