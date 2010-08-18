@@ -35,10 +35,20 @@ public class TableLayout extends Component {
 	private int size[];
 	
 	/**
-	 * A vector of {@link Component}s arrays
+	 * A vector of {@link TableCell}s arrays
 	 * with the rows of the table.
 	 */
 	private Vector rows;
+	
+	/**
+	 * The default value of cell margins.
+	 */
+	private int cellMargin;
+	
+	/**
+	 * The default value of cell paddings.
+	 */
+	private int cellPadding;
 	
 	/**
 	 * A boolean switch that indicates if a bulk update
@@ -86,6 +96,8 @@ public class TableLayout extends Component {
 		this.rowHeights = null;
 		this.size = null;
 		this.bulkUpdate = false;
+		this.cellMargin = 0;
+		this.cellPadding = 0;
 	}
 	
 	/**
@@ -94,19 +106,22 @@ public class TableLayout extends Component {
 	 * @param row The row in which the component must be placed.
 	 * @param column The column in which the component must be placed.
 	 * @param component The {@link Component} that will be added.
+	 * @return The {@link TableCell} holding the provided element.
 	 * @throws IndexOutOfBoundsException If the row or column index
 	 * fall outside the table actual size.
 	 * @throws NullPointerException If component is <code>null</code>
 	 */
-	public void addComponent(int row, int column, Component component)
+	public TableCell addComponent(int row, int column, Component component)
 			throws IndexOutOfBoundsException, NullPointerException {
 		if(component == null)
 			throw new NullPointerException("Component cannot be null");
-		Component rowData[] = (Component[])rows.elementAt(row);
-		rowData[column] = component;
+		TableCell rowData[] = (TableCell[])rows.elementAt(row);
+		TableCell cell = rowData[column];
+		cell.setComponent(component);
 		this.invalidate();
+		return cell;
 	}
-	
+
 	/**
 	 * Adds a row in the table.
 	 * 
@@ -114,8 +129,39 @@ public class TableLayout extends Component {
 	 */
 	public int addRow() {
 		int ret = rows.size();
-		rows.addElement(new Component[colWidths.size()]);
+		TableCell rowData[] = new TableCell[colWidths.size()];
+		for(int i = 0; i < rowData.length; i++) {
+			rowData[i] = new TableCell();
+		}
+		rows.addElement(rowData);
 		return ret;
+	}
+
+	/**
+	 * Terminates a bulk update and invalidates the
+	 * whole table so that it can be redrawn.
+	 */
+	public void endBulkUpdate() {
+		bulkUpdate = false;
+		invalidate();
+	}
+
+	/**
+	 * Returns the default value of cell margin.
+	 * 
+	 * @return The default value of cell margin.
+	 */
+	public int getCellMargin() {
+		return cellMargin;
+	}
+
+	/**
+	 * Returns the default value of cell padding.
+	 * 
+	 * @return The default value of cell padding.
+	 */
+	public int getCellPadding() {
+		return cellPadding;
 	}
 	
 	/**
@@ -128,17 +174,17 @@ public class TableLayout extends Component {
 	}
 	
 	/**
-	 * Returns a component from the table.
+	 * Returns a cell from the table.
 	 * 
 	 * @param row The row from which the component will be retrieved.
 	 * @param column The column from which the component will be retrieved.
-	 * @return The {@link Component} that was retrieved.
+	 * @return The {@link TableCell} that was retrieved.
 	 * @throws IndexOutOfBoundsException If the row or column index
 	 * fall outside the table actual size.
 	 */
-	public Component getComponent(int row, int column) throws IndexOutOfBoundsException {
-		Component rowData[] = (Component[])rows.elementAt(row);
-		Component ret = rowData[column];
+	public TableCell getTableCell(int row, int column) throws IndexOutOfBoundsException {
+		TableCell rowData[] = (TableCell[])rows.elementAt(row);
+		TableCell ret = rowData[column];
 		return ret;
 	}
 	
@@ -156,12 +202,16 @@ public class TableLayout extends Component {
 			}
 			for(int i = 0, l = rows.size(); i < l; i++) {
 				int rowHeight = 0;
-				Component row[] = (Component[])rows.elementAt(i);
+				TableCell row[] = (TableCell[])rows.elementAt(i);
 				for(int j = 0; j < row.length; j++) {
-					Component c = row[j];
+					int paddingTop    = (row[j].getPaddings()[0] >= 0 ? row[j].getPaddings()[0] : getCellPadding());
+					int paddingRight  = (row[j].getPaddings()[1] >= 0 ? row[j].getPaddings()[1] : getCellPadding());
+					int paddingBottom = (row[j].getPaddings()[2] >= 0 ? row[j].getPaddings()[2] : getCellPadding());
+					int paddingLeft   = (row[j].getPaddings()[3] >= 0 ? row[j].getPaddings()[3] : getCellPadding());
+					Component c = row[j].getComponent();
 					if(c != null) {
-						int tmp[] = c.getPreferredSize(theme, widths[j], viewportHeight);
-						rowHeight = (int)Math.max(tmp[1], rowHeight);
+						int tmp[] = c.getPreferredSize(theme, widths[j] - paddingLeft - paddingRight, viewportHeight);
+						rowHeight = (int)Math.max(tmp[1] + paddingTop + paddingBottom, rowHeight);
 					}
 				}
 				rowHeights[i] = rowHeight;
@@ -181,25 +231,6 @@ public class TableLayout extends Component {
 	}
 	
 	/**
-	 * Starts a bulk update and prevents invalidation
-	 * of the table to be propagated to contained elements
-	 * and/or to the screen. Use {@link #endBulkUpdate()}
-	 * to terminate the bulk update and draw the new table.
-	 */
-	public void startBulkUpdate() {
-		bulkUpdate = true;
-	}
-	
-	/**
-	 * Terminates a bulk update and invalidates the
-	 * whole table so that it can be redrawn.
-	 */
-	public void endBulkUpdate() {
-		bulkUpdate = false;
-		invalidate();
-	}
-
-	/**
 	 * In this implementation, the invalidation is not
 	 * propagated if a bulk update in progress.
 	 * Use {@link #startBulkUpdate()} and {@link #endBulkUpdate()}
@@ -213,9 +244,9 @@ public class TableLayout extends Component {
 			size = null;
 			// invalidate all child elements
 			for(int i = 0, l = rows.size(); i < l; i++) {
-				Component row[] = (Component[]) rows.elementAt(i);
+				TableCell row[] = (TableCell[]) rows.elementAt(i);
 				for(int j = 0; j < row.length; j++) {
-					Component c = row[j];
+					Component c = row[j].getComponent();
 					if(c != null)
 						new InvalidableComponent(c).invalidateComponent();
 				}
@@ -223,7 +254,7 @@ public class TableLayout extends Component {
 			super.invalidate();
 		}
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.j4me.ui.components.Component#paintComponent(javax.microedition.lcdui.Graphics, org.j4me.ui.Theme, int, int, boolean)
 	 */
@@ -241,14 +272,23 @@ public class TableLayout extends Component {
 		int clipBottom = clipTop + g.getClipHeight();
 		
 		for(int i = 0, l = rows.size(); i < l; i++) {
-			Component row[] = (Component[])rows.elementAt(i);
+			TableCell row[] = (TableCell[])rows.elementAt(i);
 			offsetX = 0;
 			for(int j = 0; j < row.length; j++) {
-				Component c = row[j];
+				int paddingTop    = (row[j].getPaddings()[0] >= 0 ? row[j].getPaddings()[0] : getCellPadding());
+				int paddingRight  = (row[j].getPaddings()[1] >= 0 ? row[j].getPaddings()[1] : getCellPadding());
+				int paddingBottom = (row[j].getPaddings()[2] >= 0 ? row[j].getPaddings()[2] : getCellPadding());
+				int paddingLeft   = (row[j].getPaddings()[3] >= 0 ? row[j].getPaddings()[3] : getCellPadding());
+				Component c = row[j].getComponent();
 				if(c != null) {
 					if((offsetY + rowHeights[i] >= clipTop) && (offsetY <= clipBottom)){
 						c.visible(true);
-						c.paint(g, theme, getScreen(), offsetX, offsetY, widths[j], height, selected);
+						c.paint(g, theme, getScreen(),
+							offsetX + paddingLeft,
+							offsetY + paddingTop,
+							widths[j] - paddingLeft - paddingRight,
+							rowHeights[i] - paddingTop - paddingBottom,
+							selected);
 					}
 					else {
 						c.visible(false);
@@ -270,9 +310,10 @@ public class TableLayout extends Component {
 	 * fall outside the table actual size.
 	 */
 	public Component removeComponent(int row, int column) throws IndexOutOfBoundsException {
-		Component rowData[] = (Component[])rows.elementAt(row);
-		Component ret = rowData[column];
-		rowData[column] = null;
+		TableCell rowData[] = (TableCell[])rows.elementAt(row);
+		TableCell cell = rowData[column];
+		Component ret = cell.getComponent(); 
+		cell.setComponent(null);
 		return ret;
 	}
 
@@ -280,16 +321,16 @@ public class TableLayout extends Component {
 	 * Removes the last row in the table and returns the components
 	 * that where hold in it.
 	 * 
-	 * @return The array of {@link Component}s contained in
+	 * @return The array of {@link TableCell}s contained in
 	 * the last row.
 	 */
-	public Component[] removeRow() {
-		Component rowData[] = (Component[])rows.elementAt(rows.size() - 1);
+	public TableCell[] removeRow() {
+		TableCell rowData[] = (TableCell[])rows.elementAt(rows.size() - 1);
 		rows.setSize(rows.size() - 1);
 		invalidate();
 		return rowData;
 	}
-	
+
 	/**
 	 * Removes a complete row from the table
 	 * and returns the components that where hold in it.
@@ -301,11 +342,49 @@ public class TableLayout extends Component {
 	 * @throws IndexOutOfBoundsException If the row index
 	 * falls outside the table actual size.
 	 */
-	public Component[] removeRow(int row) throws IndexOutOfBoundsException {
-		Component rowData[] = (Component[])rows.elementAt(row);
+	public TableCell[] removeRow(int row) throws IndexOutOfBoundsException {
+		TableCell rowData[] = (TableCell[])rows.elementAt(row);
 		rows.removeElementAt(row);
 		invalidate();
 		return rowData;
+	}
+	
+	/**
+	 * Sets the default cell margin and invalidates the table
+	 * so it will be redrawn.
+	 * 
+	 * @param cellMargin The new cell margin value. The value
+	 * must be &gt;= 0.
+	 */
+	public void setCellMargin(int cellMargin) {
+		if(cellMargin < 0)
+			throw new IllegalArgumentException();
+		this.cellMargin = cellMargin;
+		invalidate();
+	}
+
+	/**
+	 * Sets the default cell padding and invalidates the table
+	 * so it will be redrawn.
+	 * 
+	 * @param cellMargin The new cell padding value. The value
+	 * must be &gt;= 0.
+	 */
+	public void setCellPadding(int cellPadding) {
+		if(cellPadding < 0)
+			throw new IllegalArgumentException();
+		this.cellPadding = cellPadding;
+		invalidate();
+	}
+	
+	/**
+	 * Starts a bulk update and prevents invalidation
+	 * of the table to be propagated to contained elements
+	 * and/or to the screen. Use {@link #endBulkUpdate()}
+	 * to terminate the bulk update and draw the new table.
+	 */
+	public void startBulkUpdate() {
+		bulkUpdate = true;
 	}
 
 }
