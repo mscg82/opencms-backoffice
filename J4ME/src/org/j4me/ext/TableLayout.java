@@ -9,6 +9,7 @@ import javax.microedition.lcdui.Graphics;
 
 import org.j4me.ui.Theme;
 import org.j4me.ui.components.Component;
+import org.j4me.ui.components.InvalidableComponent;
 
 /**
  * @author Giuseppe Miscione
@@ -26,13 +27,24 @@ public class TableLayout extends Component {
 	/**
 	 * An array with the row heights.
 	 */
-	private int[] rowHeights;
+	private int rowHeights[];
+	
+	/**
+	 * The size of the component.
+	 */
+	private int size[];
 	
 	/**
 	 * A vector of {@link Component}s arrays
 	 * with the rows of the table.
 	 */
 	private Vector rows;
+	
+	/**
+	 * A boolean switch that indicates if a bulk update
+	 * is in progress.
+	 */
+	private boolean bulkUpdate;
 	
 	/**
 	 * Builds a new TableLayout, specifing the number
@@ -72,6 +84,8 @@ public class TableLayout extends Component {
 		this.rows = new Vector(1, 1);
 		
 		this.rowHeights = null;
+		this.size = null;
+		this.bulkUpdate = false;
 	}
 	
 	/**
@@ -132,25 +146,27 @@ public class TableLayout extends Component {
 	 * @see org.j4me.ui.components.Component#getPreferredComponentSize(org.j4me.ui.Theme, int, int)
 	 */
 	protected int[] getPreferredComponentSize(Theme theme, int viewportWidth, int viewportHeight) {
-		int size[] = {viewportWidth, 0};
-		int widths[] = new int[colWidths.size()];
-		for(int i = 0, l = colWidths.size(); i < l; i++) {
-			Double w = (Double)this.colWidths.elementAt(i);
-			widths[i] = (int)Math.floor(w.doubleValue() * viewportWidth);
-		}
-		rowHeights = new int[rows.size()];
-		for(int i = 0, l = rows.size(); i < l; i++) {
-			int rowHeight = 0;
-			Component row[] = (Component[])rows.elementAt(i);
-			for(int j = 0; j < row.length; j++) {
-				Component c = row[j];
-				if(c != null) {
-					int tmp[] = c.getPreferredSize(theme, widths[j], viewportHeight);
-					rowHeight = (int)Math.max(tmp[1], rowHeight);
-				}
+		if(size == null || rowHeights == null) {
+			size = new int[]{viewportWidth, 0};
+			rowHeights = new int[rows.size()];
+			int widths[] = new int[colWidths.size()];
+			for(int i = 0, l = colWidths.size(); i < l; i++) {
+				Double w = (Double)this.colWidths.elementAt(i);
+				widths[i] = (int)Math.floor(w.doubleValue() * viewportWidth);
 			}
-			rowHeights[i] = rowHeight;
-			size[1] += rowHeight;
+			for(int i = 0, l = rows.size(); i < l; i++) {
+				int rowHeight = 0;
+				Component row[] = (Component[])rows.elementAt(i);
+				for(int j = 0; j < row.length; j++) {
+					Component c = row[j];
+					if(c != null) {
+						int tmp[] = c.getPreferredSize(theme, widths[j], viewportHeight);
+						rowHeight = (int)Math.max(tmp[1], rowHeight);
+					}
+				}
+				rowHeights[i] = rowHeight;
+				size[1] += rowHeight;
+			}
 		}
 		return size;
 	}
@@ -163,10 +179,49 @@ public class TableLayout extends Component {
 	public int getRowsCount() {
 		return rows.size();
 	}
+	
+	/**
+	 * Starts a bulk update and prevents invalidation
+	 * of the table to be propagated to contained elements
+	 * and/or to the screen. Use {@link #endBulkUpdate()}
+	 * to terminate the bulk update and draw the new table.
+	 */
+	public void startBulkUpdate() {
+		bulkUpdate = true;
+	}
+	
+	/**
+	 * Terminates a bulk update and invalidates the
+	 * whole table so that it can be redrawn.
+	 */
+	public void endBulkUpdate() {
+		bulkUpdate = false;
+		invalidate();
+	}
 
+	/**
+	 * In this implementation, the invalidation is not
+	 * propagated if a bulk update in progress.
+	 * Use {@link #startBulkUpdate()} and {@link #endBulkUpdate()}
+	 * to optime the update of the table.
+	 * 
+	 * @see Component#invalidate()
+	 */
 	protected void invalidate() {
-		rowHeights = null;
-		super.invalidate();
+		if(!bulkUpdate) {
+			rowHeights = null;
+			size = null;
+			// invalidate all child elements
+			for(int i = 0, l = rows.size(); i < l; i++) {
+				Component row[] = (Component[]) rows.elementAt(i);
+				for(int j = 0; j < row.length; j++) {
+					Component c = row[j];
+					if(c != null)
+						new InvalidableComponent(c).invalidateComponent();
+				}
+			}
+			super.invalidate();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -204,7 +259,7 @@ public class TableLayout extends Component {
 			offsetY += rowHeights[i];
 		}
 	}
-
+	
 	/**
 	 * Removes a component from the table and returns it.
 	 * 
@@ -219,6 +274,38 @@ public class TableLayout extends Component {
 		Component ret = rowData[column];
 		rowData[column] = null;
 		return ret;
+	}
+
+	/**
+	 * Removes the last row in the table and returns the components
+	 * that where hold in it.
+	 * 
+	 * @return The array of {@link Component}s contained in
+	 * the last row.
+	 */
+	public Component[] removeRow() {
+		Component rowData[] = (Component[])rows.elementAt(rows.size() - 1);
+		rows.setSize(rows.size() - 1);
+		invalidate();
+		return rowData;
+	}
+	
+	/**
+	 * Removes a complete row from the table
+	 * and returns the components that where hold in it.
+	 * 
+	 * @param row The row that must be removed.
+	 * @return The array of {@link Component}s contained in
+	 * the removed row.
+	 * 
+	 * @throws IndexOutOfBoundsException If the row index
+	 * falls outside the table actual size.
+	 */
+	public Component[] removeRow(int row) throws IndexOutOfBoundsException {
+		Component rowData[] = (Component[])rows.elementAt(row);
+		rows.removeElementAt(row);
+		invalidate();
+		return rowData;
 	}
 
 }
