@@ -31,11 +31,11 @@ public class VirgilioTheme extends Theme implements PopupMenuTheme {
 	}
 	
 	public String getDeleteItemsInDiskCache() {
-		return "Rimuovi elementi da scheda";
+		return "Rimuovi da scheda";
 	}
 
 	public String getDeleteItemsInMemoryCache() {
-		return "Rimuovi elementi in memoria";
+		return "Rimuovi da memoria";
 	}
 
 	public String getElaboratingDataText() {
