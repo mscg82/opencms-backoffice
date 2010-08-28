@@ -110,6 +110,10 @@ public class VirgilioTheme extends Theme implements PopupMenuTheme {
 		return "OK";
 	}
 
+	public String getMinWidth() {
+		return "50%";
+	}
+	
 	public int getPopupMenuFontColor() {
 		return Theme.LIGHT_BLUE;
 	}
@@ -129,7 +133,7 @@ public class VirgilioTheme extends Theme implements PopupMenuTheme {
 	public int getProgramInfoBorderColor() {
 		return 0x00909090;
 	}
-	
+
 	public int getProgramInfoMarginBottom() {
 		return 2;
 	}
@@ -161,11 +165,11 @@ public class VirgilioTheme extends Theme implements PopupMenuTheme {
 	public int getSelectionForegroundColor() {
 		return PopupMenuTheme.DEFAULT_SELECTED_FOREGROUND_COLOR;
 	}
-
+	
 	public String getTextForEmptyPrograms() {
 		return "Nessun programma presente per il canale selezionato";
 	}
-	
+
 	public String getUpdateErrorText() {
 		return "Si è verificato un errore durante l'aggiornamento del palinsesto.";
 	}
