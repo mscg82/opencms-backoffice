@@ -11,6 +11,7 @@ public interface PopupMenuTheme {
 	public static final int DEFAULT_BACKGROUND_ALPHA = 220;
 	public static final int DEFAULT_SELECTED_BACKGROUND_COLOR = Theme.BLUE;
 	public static final int DEFAULT_SELECTED_FOREGROUND_COLOR = Theme.WHITE;
+	public static final String DEFAULT_MIN_WIDTH = "auto";
 	
 	/**
 	 * Returns the margins, in pixels,
@@ -57,12 +58,27 @@ public interface PopupMenuTheme {
 	public int[] getMenuBorders();
 	
 	/**
+	 * Returns the minimun width of the popup menu.
+	 * The width can be expressed in  percentage,
+	 * in pixels or can be a predefined value.
+	 * Allowed values are:
+	 * <ul>
+	 *     <li><b>&lt;float value&gt;%</b> (i.e. 30.7%)</li>
+	 *     <li><b>&lt;int value&gt;px</b> (i.e. 200px)</li>
+	 *     <li><b>auto</b> (for auto calculated width)</li>
+	 * </ul>
+	 * No spaces are allowed between values and measure unit.
+	 * @return The minimun width of the popup menu.
+	 */
+	public String getMinWidth();
+
+	/**
 	 * Returns the color of the non-selected items.
 	 * 
 	 * @return The color of the non-selected items.
 	 */
 	public int getPopupMenuFontColor();
-
+	
 	/**
 	 * Returns the color of the background of
 	 * the selected menu item. A negative value

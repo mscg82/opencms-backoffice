@@ -285,13 +285,15 @@ public class PopupMenuDialog extends Dialog {
 	protected void keyRepeated(int keyCode) {
 		keyPressed(keyCode);
 	}
-
+	
 	protected int[] getMenuSize(Vector menu) {
 		int ret[] = {0, 0};
 		Theme theme = UIManager.getTheme();
 		int margins[] = PopupMenuTheme.DEFAULT_MARGINS;
+		String minWidth = PopupMenuTheme.DEFAULT_MIN_WIDTH;
 		if(theme instanceof PopupMenuTheme) {
 			margins = ((PopupMenuTheme)theme).getItemMargins();
+			minWidth = ((PopupMenuTheme)theme).getMinWidth();
 		}
 		
 		int menuSize = 0;
@@ -302,6 +304,22 @@ public class PopupMenuDialog extends Dialog {
 		
 		int maxWidth = getMaxMenuItemLength(menu);
 		ret[0] = margins[1] + maxWidth + margins[3];
+		int targetWidth = 0;
+		if(minWidth.equals(PopupMenuTheme.DEFAULT_MIN_WIDTH)) {
+			// auto width, do nothing
+		}
+		else if(minWidth.endsWith("%")) {
+			double widthPerc = Double.parseDouble(minWidth.substring(0, minWidth.length() - 1));
+			targetWidth = (int)Math.floor((getWidth() * widthPerc) / 100);
+		}
+		else if(minWidth.endsWith("px")) {
+			targetWidth = Integer.parseInt(minWidth.substring(0, minWidth.length() - 2));
+		}
+		else {
+			throw new IllegalArgumentException("Illegal value for menu minimum width");
+		}
+		if(ret[0] < targetWidth)
+			ret[0] = targetWidth;
 		ret[1] = (margins[0] + theme.getFont().getHeight() + margins[2]) * menuSize;
 		return ret;
 	}
