@@ -9,6 +9,9 @@ import it.virgilio.guidatv.util.Util;
 
 import java.util.Calendar;
 
+import org.j4me.ext.EmptyMenuOption;
+import org.j4me.ext.ExitApplicationMenuOption;
+import org.j4me.ext.OpenMenuMenuOption;
 import org.j4me.ui.DeviceScreen;
 import org.j4me.ui.UIManager;
 
@@ -22,7 +25,7 @@ public class WeekDaySelectionMenu extends BaseMenu {
 	 * Constructs a week day menu.
 	 */
 	public WeekDaySelectionMenu() {
-		super();
+		this(null);
 	}
 	
 	/**
@@ -31,7 +34,17 @@ public class WeekDaySelectionMenu extends BaseMenu {
 	 * @param previous is the screen to return to if the user cancels this.
 	 */
 	public WeekDaySelectionMenu(DeviceScreen previous) {
-		super(((VirgilioTheme)UIManager.getTheme()).getDaySelectionTitle(), previous);
+		this(((VirgilioTheme)UIManager.getTheme()).getDaySelectionTitle(), previous);
+	}
+
+	/**
+	 * Constructs a week day menu.
+	 * 
+	 * @param name is the title for this menu. It appears at the top of the screen in the title area.
+	 * @param previous is the screen to return to if the user cancels this.
+	 */
+	public WeekDaySelectionMenu(String name, DeviceScreen previous) {
+		super(name, previous);
 		
 		Calendar now = Calendar.getInstance();
 		int dayOfWeek = now.get(Calendar.DAY_OF_WEEK);
@@ -62,16 +75,14 @@ public class WeekDaySelectionMenu extends BaseMenu {
 		
 		// Select the item corresponding to actual day
 		setSelected(selectedDay);
-	}
-
-	/**
-	 * Constructs a week day menu.
-	 * 
-	 * @param name is the title for this menu. It appears at the top of the screen in the title area.
-	 * @param previous is the screen to return to if the user cancels this.
-	 */
-	public WeekDaySelectionMenu(String name, DeviceScreen previous) {
-		super(name, previous);
+		
+		// Build up the menu options
+		addLeftItem(new OpenMenuMenuOption(new SettingsMenu(this)));
+		addLeftItem(new EmptyMenuOption());
+		addLeftItem(new ExitApplicationMenuOption(UIManager.getTheme().getMenuTextForExit()));
+		
+		String rightText = getRightMenuText();
+		setMenuText(((VirgilioTheme)UIManager.getTheme()).getLeftSoftButtonText(), rightText);
 	}
 
 }

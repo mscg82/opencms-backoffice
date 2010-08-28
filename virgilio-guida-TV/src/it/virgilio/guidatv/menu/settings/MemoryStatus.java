@@ -7,9 +7,12 @@ import it.virgilio.guidatv.menu.BaseMenu;
 import it.virgilio.guidatv.theme.VirgilioTheme;
 import it.virgilio.guidatv.util.Util;
 
+import org.j4me.ext.EmptyMenuOption;
 import org.j4me.ui.DeviceScreen;
+import org.j4me.ui.MenuItem;
 import org.j4me.ui.UIManager;
 import org.j4me.ui.components.Label;
+import org.j4me.ui.components.MenuOption;
 
 /**
  * @author Giuseppe Miscione
@@ -40,7 +43,10 @@ public class MemoryStatus extends BaseMenu {
         	freeMemoryLabel = new Label("test");
         	append(freeMemoryLabel);
 
-			setMenuText(getLeftMenuText(), vt.getMemoryStatusFreeTextAction());			
+        	insertLeftItem(new MenuOption(new CleanMemoryMenuItem()), 0);
+        	insertLeftItem(new EmptyMenuOption(), 1);
+        	
+			setMenuText(vt.getLeftSoftButtonText(), null);
 		}
 		updateLabels(vt);
 	}
@@ -61,14 +67,25 @@ public class MemoryStatus extends BaseMenu {
         
         repaint();
 	}
+	
+	private class CleanMemoryMenuItem implements MenuItem {
+		private VirgilioTheme vt;
+		
+		public CleanMemoryMenuItem() {
+			vt = (VirgilioTheme)UIManager.getTheme();
+		}
 
-	protected void acceptNotify() {
-		System.gc();
-		try {
-			Thread.sleep(300);
-		} catch (InterruptedException e) { }
-		VirgilioTheme vt = (VirgilioTheme)UIManager.getTheme();
-		updateLabels(vt);
+		public String getText() {
+			return vt.getMemoryStatusFreeTextAction();
+		}
+
+		public void onSelection() {
+			System.gc();
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e) { }
+			updateLabels(vt);
+		}
 	}
 
 }

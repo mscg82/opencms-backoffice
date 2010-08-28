@@ -3,6 +3,7 @@
  */
 package it.virgilio.guidatv.menu;
 
+import org.j4me.ext.PopupMenu;
 import org.j4me.ui.DeviceScreen;
 import org.j4me.ui.Menu;
 import org.j4me.ui.components.Component;
@@ -17,7 +18,7 @@ import org.j4me.ui.components.MenuOption;
  * @author Giuseppe Miscione
  *
  */
-public abstract class BaseMenu extends Menu {
+public abstract class BaseMenu extends PopupMenu {
 	
 	protected boolean visible;
 	protected boolean preventKeyPropagation;
@@ -27,9 +28,17 @@ public abstract class BaseMenu extends Menu {
 	 * Constructs a menu
 	 */
 	public BaseMenu() {
-		visible = false;
-		preventKeyPropagation = false;
-		drawInterface = true;
+		this(null, null);
+	}
+	
+	/**
+	 * Constructs a menu.
+	 * 
+	 * @param name is the title for this menu, for example "Main Menu".  It
+	 *  appears at the top of the screen in the title area.
+	 */
+	public BaseMenu(String name) {
+		this(name, null);
 	}
 
 	/**

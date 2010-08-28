@@ -8,15 +8,12 @@ import it.virgilio.guidatv.programs.ProgramsManager;
 import it.virgilio.guidatv.theme.VirgilioTheme;
 import it.virgilio.guidatv.util.Util;
 
-import javax.microedition.lcdui.Graphics;
-
+import org.j4me.ext.EmptyMenuOption;
 import org.j4me.ui.DeviceScreen;
 import org.j4me.ui.MenuItem;
 import org.j4me.ui.UIManager;
-import org.j4me.ui.components.HorizontalRule;
 import org.j4me.ui.components.Label;
 import org.j4me.ui.components.MenuOption;
-import org.j4me.ui.components.Whitespace;
 
 /**
  * @author Giuseppe Miscione
@@ -30,7 +27,7 @@ public class CacheStatus extends BaseMenu {
 	public CacheStatus(DeviceScreen previous) {
 		super(
 			((VirgilioTheme)UIManager.getTheme()).getCacheStatusTitle(), 
-			previous);	
+			previous);
 	}
 	
 	public void showNotify() {
@@ -47,21 +44,11 @@ public class CacheStatus extends BaseMenu {
 			elementsOnDisk = new Label("test");
 			append(elementsOnDisk);
 			
-			append(new Whitespace(10));
+			insertLeftItem(new MenuOption(new FreeMemoryCache()), 0);
+			insertLeftItem(new MenuOption(new FreeDiskCache()), 1);
+			insertLeftItem(new EmptyMenuOption(), 2);
 			
-			HorizontalRule hr = new HorizontalRule();
-			hr.setHeight(3);
-			hr.setHorizontalAlignment(Graphics.HCENTER);
-			append(hr);
-			
-			append(new Whitespace(10));
-			
-			MenuOption fmc = appendMenuOption(new FreeMemoryCache());	
-			appendMenuOption(new FreeDiskCache());
-			
-			hasVerticalScrollbar();
-			
-			setSelected(fmc, true);			
+			setMenuText(vt.getLeftSoftButtonText(), null);
 		}
 		updateLabels(vt);
 	}
@@ -86,15 +73,18 @@ public class CacheStatus extends BaseMenu {
 	 *
 	 */
 	private class FreeMemoryCache implements MenuItem {
-
+		private VirgilioTheme vt;
+		
+		public FreeMemoryCache() {
+			vt = (VirgilioTheme)UIManager.getTheme();
+		}
+		
 		public String getText() {
-			VirgilioTheme vt = (VirgilioTheme)UIManager.getTheme();
 			return vt.getDeleteItemsInMemoryCache();
 		}
 
 		public void onSelection() {
 			ProgramsManager.getInstance().cleanMemoryCache();
-			VirgilioTheme vt = (VirgilioTheme)UIManager.getTheme();
 			updateLabels(vt);
 		}
 	}
@@ -107,9 +97,13 @@ public class CacheStatus extends BaseMenu {
 	 *
 	 */
 	private class FreeDiskCache implements MenuItem {
-
+		private VirgilioTheme vt;
+		
+		public FreeDiskCache() {
+			vt = (VirgilioTheme)UIManager.getTheme();
+		}
+		
 		public String getText() {
-			VirgilioTheme vt = (VirgilioTheme)UIManager.getTheme();
 			return vt.getDeleteItemsInDiskCache();
 		}
 
