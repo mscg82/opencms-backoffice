@@ -283,7 +283,8 @@ public class PopupMenuDialog extends Dialog {
 	}
 
 	protected void keyRepeated(int keyCode) {
-		keyPressed(keyCode);
+		//keyPressed(keyCode);
+		super.keyRepeated(keyCode);
 	}
 	
 	protected int[] getMenuSize(Vector menu) {
