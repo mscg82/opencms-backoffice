@@ -43,6 +43,18 @@ public class PopupMenuDialog extends Dialog {
 	 * Create a new dialog with popup menus
 	 */
 	public PopupMenuDialog() {
+		this(null);
+	}
+	
+	/**
+	 * Create a new dialog with popup menus
+	 * 
+	 * @param name is the title for this menu, for example "Main Menu".  It
+	 *  appears at the top of the screen in the title area.
+	 */
+	public PopupMenuDialog(String name) {
+		setTitle(name);
+		
 		leftMenuItems = new Vector();
 		rightMenuItems = new Vector();
 		
@@ -51,8 +63,10 @@ public class PopupMenuDialog extends Dialog {
 		
 		menuItemSelected = 0;
 	}
-	
+
 	protected void acceptNotify() {
+		if(getRightMenuText() == null)
+			return;
 		if(!leftMenuOpened && !rigthMenuOpened) {
 			if(rightMenuItems.size() == 1) {
 				// only one element in menu, execute it
@@ -61,7 +75,7 @@ public class PopupMenuDialog extends Dialog {
 			else {
 				// show rigth button menu
 				rigthMenuOpened = true;
-				menuItemSelected = 0;
+				selectFirst(rightMenuItems);
 			}
 		}
 		else {
@@ -73,14 +87,28 @@ public class PopupMenuDialog extends Dialog {
 	}
 	
 	public void addLeftItem(MenuOption item) {
+		item.visible(true);
 		leftMenuItems.addElement(item);
 	}
 	
+	public void insertLeftItem(MenuOption item, int position) {
+		item.visible(true);
+		leftMenuItems.insertElementAt(item, position);
+	}
+	
 	public void addRightItem(MenuOption item) {
+		item.visible(true);
 		rightMenuItems.addElement(item);
+	}
+	
+	public void insertRightItem(MenuOption item, int position) {
+		item.visible(true);
+		rightMenuItems.insertElementAt(item, position);
 	}
 
 	protected void declineNotify() {
+		if(getLeftMenuText() == null)
+			return;
 		if(!leftMenuOpened && !rigthMenuOpened) {
 			if(leftMenuItems.size() == 1) {
 				// only one element in menu, execute it
@@ -89,7 +117,7 @@ public class PopupMenuDialog extends Dialog {
 			else {
 				// show left button menu
 				leftMenuOpened = true;
-				menuItemSelected = 0;
+				selectFirst(leftMenuItems);
 			}
 		}
 		else {
@@ -155,9 +183,13 @@ public class PopupMenuDialog extends Dialog {
 		// Draw the items
 		int elHeight = margins[0] + theme.getFont().getHeight() + margins[2];
 
+		int yOffset = 0;
 		for(int i = 0, l = menu.size(); i < l; i++) {
 			MenuOption el = (MenuOption)menu.elementAt(i);
-			int elY = menuTop + i * elHeight;
+			if(!el.isShown())
+				continue;
+			int elY = menuTop + yOffset;
+			yOffset += elHeight;
 			if(i == menuItemSelected) {
 				if(selBgColor > 0) {
 					g.setColor(selBgColor);
@@ -193,6 +225,20 @@ public class PopupMenuDialog extends Dialog {
 		return ret;
 	}
 	
+	protected void selectFirst(Vector menu) {
+		menuItemSelected = getFirstSelectable(menu);
+	}
+	
+	protected int getFirstSelectable(Vector menu) {
+		for(int i = 0, l = menu.size(); i < l; i++) {
+			MenuOption el = (MenuOption)menu.elementAt(i);
+			if(el.isShown() && el.acceptsInput()) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	protected void keyPressed(int keyCode) {
 		if(keyCode == Dialog.DOWN || keyCode == Dialog.UP || keyCode == Dialog.FIRE) {
 			if(!leftMenuOpened && !rigthMenuOpened) {
@@ -211,7 +257,7 @@ public class PopupMenuDialog extends Dialog {
 					// select next highlightable element
 					for(int i = ((menuItemSelected + 1) % count); i != menuItemSelected; i = ((i + 1) % count)) {
 						MenuOption el = (MenuOption)menu.elementAt(i);
-						if(el.acceptsInput()) {
+						if(el.isShown() && el.acceptsInput()) {
 							menuItemSelected = i;
 							break;
 						}
@@ -221,7 +267,7 @@ public class PopupMenuDialog extends Dialog {
 					// select previous highlightable element
 					for(int i = ((menuItemSelected + count - 1) % count); i != menuItemSelected; i = ((i + count - 1) % count)) {
 						MenuOption el = (MenuOption)menu.elementAt(i);
-						if(el.acceptsInput()) {
+						if(el.isShown() && el.acceptsInput()) {
 							menuItemSelected = i;
 							break;
 						}
@@ -237,7 +283,7 @@ public class PopupMenuDialog extends Dialog {
 	}
 
 	protected void keyRepeated(int keyCode) {
-		super.keyRepeated(keyCode);
+		keyPressed(keyCode);
 	}
 
 	protected int[] getMenuSize(Vector menu) {
@@ -247,9 +293,16 @@ public class PopupMenuDialog extends Dialog {
 		if(theme instanceof PopupMenuTheme) {
 			margins = ((PopupMenuTheme)theme).getItemMargins();
 		}
+		
+		int menuSize = 0;
+		for(int i = 0, l = menu.size(); i < l; i++) {
+			MenuOption el = (MenuOption)menu.elementAt(i);
+			if(el.isShown()) menuSize++;
+		}
+		
 		int maxWidth = getMaxMenuItemLength(menu);
 		ret[0] = margins[1] + maxWidth + margins[3];
-		ret[1] = (margins[0] + theme.getFont().getHeight() + margins[2]) * menu.size();
+		ret[1] = (margins[0] + theme.getFont().getHeight() + margins[2]) * menuSize;
 		return ret;
 	}
 	
@@ -271,10 +324,10 @@ public class PopupMenuDialog extends Dialog {
 		String leftText = null;
 		String rightText = null;
 		try {
-			leftText = ((MenuOption)leftMenuItems.elementAt(0)).getLabel();
+			leftText = ((MenuOption)leftMenuItems.elementAt(getFirstSelectable(leftMenuItems))).getLabel();
 		} catch(Exception e){}
 		try {
-			rightText = ((MenuOption)rightMenuItems.elementAt(0)).getLabel();
+			rightText = ((MenuOption)rightMenuItems.elementAt(getFirstSelectable(rightMenuItems))).getLabel();
 		} catch(Exception e){}
 		setMenuText(leftText, rightText);
 	}

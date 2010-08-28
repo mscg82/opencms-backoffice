@@ -103,6 +103,19 @@ public class MenuOption
 	 */
 	public MenuOption (DeviceScreen choice)
 	{
+		this(choice, false);
+	}
+	
+	/**
+	 * Creates a new <code>MenuOption</code> component that encapsulates a
+	 * <code>DeviceScreen</code>.
+	 * 
+	 * @param choice is the command that is represented by this component.
+	 * @param submenu when <code>true</code> indicates this is a submenu of the
+	 *  current menu.
+	 */
+	public MenuOption (DeviceScreen choice, boolean submenu)
+	{
 		if ( choice == null )
 		{
 			throw new IllegalArgumentException("choice cannot be null");
@@ -110,6 +123,18 @@ public class MenuOption
 		
 		this.menuItem = null;
 		this.screen = choice;
+		this.submenu = submenu;
+	}
+	
+	/**
+	 * Creates a new <code>MenuOption</code> component that encapsulates a
+	 * <code>DeviceScreen</code>.
+	 * 
+	 * @param text is string that appears in the menu option.
+	 * @param choice is the command that is represented by this component.
+	 */
+	public MenuOption (String text, DeviceScreen choice) {
+		this(text, choice, false);
 	}
 
 	/**
@@ -118,8 +143,10 @@ public class MenuOption
 	 * 
 	 * @param text is string that appears in the menu option.
 	 * @param choice is the command that is represented by this component.
+	 * @param submenu when <code>true</code> indicates this is a submenu of the
+	 *  current menu.
 	 */
-	public MenuOption (String text, DeviceScreen choice)
+	public MenuOption (String text, DeviceScreen choice, boolean submenu)
 	{
 		if ( choice == null )
 		{
@@ -129,6 +156,7 @@ public class MenuOption
 		this.menuItem = null;
 		this.screen = choice;
 		this.screenText = text;
+		this.submenu = submenu;
 	}
 
 	/**
@@ -141,8 +169,7 @@ public class MenuOption
 	 */
 	public MenuOption (Menu choice, boolean submenu)
 	{
-		this( choice );
-		this.submenu = submenu;
+		this( (DeviceScreen)choice, submenu );
 	}
 	
 	/**
@@ -156,9 +183,7 @@ public class MenuOption
 	 */
 	public MenuOption (String text, Menu choice, boolean submenu)
 	{
-		this( choice );
-		this.submenu = submenu;
-		this.screenText = text;
+		this( text, (DeviceScreen)choice, submenu );
 	}
 
 	/**
