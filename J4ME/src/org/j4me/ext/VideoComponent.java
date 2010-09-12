@@ -65,6 +65,7 @@ public class VideoComponent extends Component {
 		if(videoPlayer != null && videoPlayer.getState() == Player.STARTED) {
 			videoPlayer.deallocate();
 			videoPlayer = null;
+			control = null;
 		}
 	}
 

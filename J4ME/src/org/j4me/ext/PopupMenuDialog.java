@@ -11,6 +11,7 @@ import javax.microedition.lcdui.Image;
 import org.j4me.ui.Dialog;
 import org.j4me.ui.Theme;
 import org.j4me.ui.UIManager;
+import org.j4me.ui.components.Component;
 import org.j4me.ui.components.MenuOption;
 
 /**
@@ -68,7 +69,13 @@ public class PopupMenuDialog extends Dialog {
 		if(getRightMenuText() == null)
 			return;
 		if(!leftMenuOpened && !rigthMenuOpened) {
-			if(rightMenuItems.size() == 1) {
+			if(rightMenuItems.size() == 0) {
+				Component selected = get(getSelected());
+				if(selected.acceptsInput()) {
+					selected.keyPressed(FIRE);
+				}
+			}
+			else if(rightMenuItems.size() == 1) {
 				// only one element in menu, execute it
 				((MenuOption)rightMenuItems.elementAt(0)).select();
 			}
