@@ -52,6 +52,26 @@ public class BackgroundImageTheme extends Theme {
 		setBackgroundPosition(position);
 	}
 
+	/**
+	 * Returns the combination of flags used to draw the 
+	 * background.
+	 * 
+	 * @return The combination of flags used to draw the 
+	 * background.
+	 */
+	public int getBackgroundPosition() {
+		return position;
+	}
+
+	/**
+	 * Returns the image used as background.
+	 * 
+	 * @return The image used as background.
+	 */
+	public Image getImage() {
+		return image;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.j4me.ui.Theme#paintBackground(javax.microedition.lcdui.Graphics)
 	 */
@@ -125,47 +145,6 @@ public class BackgroundImageTheme extends Theme {
 	}
 
 	/**
-	 * Returns the combination of flags used to draw the 
-	 * background.
-	 * 
-	 * @return The combination of flags used to draw the 
-	 * background.
-	 */
-	public int getBackgroundPosition() {
-		return position;
-	}
-
-	/**
-	 * Returns the image used as background.
-	 * 
-	 * @return The image used as background.
-	 */
-	public Image getImage() {
-		return image;
-	}
-
-	/**
-	 * Sets the combination of flags that will be used to
-	 * draw the background.
-	 * @param position The combination of flags that will be used to
-	 * draw the background.
-	 */
-	public void setBackgroundPosition(int position) {
-		this.position = position;
-	}
-
-	/**
-	 * Sets the image that will be used as
-	 * background.
-	 * @param image The image  that will be used as
-	 * background.
-	 */
-	public void setImage(Image image) {
-		this.image = image;
-		this.resizedImage = null;
-	}
-	
-	/**
 	 * Resize the provided image to the specified size.
 	 * 
 	 * @param src The source image.
@@ -203,6 +182,27 @@ public class BackgroundImageTheme extends Theme {
 		}
 		return resizedImage;
 
+	}
+
+	/**
+	 * Sets the combination of flags that will be used to
+	 * draw the background.
+	 * @param position The combination of flags that will be used to
+	 * draw the background.
+	 */
+	public void setBackgroundPosition(int position) {
+		this.position = position;
+	}
+	
+	/**
+	 * Sets the image that will be used as
+	 * background.
+	 * @param image The image  that will be used as
+	 * background.
+	 */
+	public void setImage(Image image) {
+		this.image = image;
+		this.resizedImage = null;
 	}
 
 }
