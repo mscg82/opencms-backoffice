@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Hashtable;
 
+import com.mscg.util.lang.Comparable;
 import com.mscg.util.lang.Comparator;
 import com.mscg.util.lang.comparator.ReverseComparator;
 

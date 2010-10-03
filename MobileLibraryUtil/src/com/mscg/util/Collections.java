@@ -2,6 +2,7 @@ package com.mscg.util;
 
 import java.util.Random;
 
+import com.mscg.util.lang.Comparable;
 import com.mscg.util.lang.Comparator;
 
 /**

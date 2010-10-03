@@ -1,5 +1,6 @@
 package com.mscg.util;
 
+import com.mscg.util.lang.Comparable;
 import com.mscg.util.lang.Comparator;
 
 /**

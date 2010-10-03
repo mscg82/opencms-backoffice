@@ -17,6 +17,8 @@
 
 package org.apache.commons.codec;
 
+import com.mscg.util.lang.Comparable;
+
 /**
  * Strings are comparable, and this comparator allows 
  * you to configure it with an instance of a class

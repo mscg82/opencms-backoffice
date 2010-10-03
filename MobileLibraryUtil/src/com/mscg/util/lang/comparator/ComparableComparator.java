@@ -1,6 +1,7 @@
 package com.mscg.util.lang.comparator;
 
-import com.mscg.util.lang.*;
+import com.mscg.util.lang.Comparable;
+import com.mscg.util.lang.Comparator;
 
 public class ComparableComparator implements Comparator {
 
