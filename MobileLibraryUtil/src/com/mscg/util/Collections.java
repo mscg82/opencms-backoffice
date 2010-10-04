@@ -11,12 +11,216 @@ import com.mscg.util.lang.Comparator;
  */
 public class Collections {
 
-	// Suppresses default constructor, ensuring non-instantiability.
-	private Collections() {
+	static class SynchronizedMap implements Map {
+		private Map innerMap;
+		
+		public SynchronizedMap(Map map) {
+			innerMap = map;
+		}
+
+		/**
+		 * 
+		 * @see com.mscg.util.Map#clear()
+		 */
+		public synchronized void clear() {
+			innerMap.clear();
+		}
+
+		/**
+		 * @param key
+		 * @return
+		 * @see com.mscg.util.Map#containsKey(java.lang.Object)
+		 */
+		public synchronized boolean containsKey(Object key) {
+			return innerMap.containsKey(key);
+		}
+
+		/**
+		 * @param value
+		 * @return
+		 * @see com.mscg.util.Map#containsValue(java.lang.Object)
+		 */
+		public synchronized boolean containsValue(Object value) {
+			return innerMap.containsValue(value);
+		}
+
+		/**
+		 * @return
+		 * @see com.mscg.util.Map#entrySet()
+		 */
+		public synchronized Set entrySet() {
+			return innerMap.entrySet();
+		}
+
+		/**
+		 * @param o
+		 * @return
+		 * @see com.mscg.util.Map#equals(java.lang.Object)
+		 */
+		public synchronized boolean equals(Object o) {
+			return innerMap.equals(o);
+		}
+
+		/**
+		 * @param key
+		 * @return
+		 * @see com.mscg.util.Map#get(java.lang.Object)
+		 */
+		public synchronized Object get(Object key) {
+			return innerMap.get(key);
+		}
+
+		/**
+		 * @return
+		 * @see com.mscg.util.Map#hashCode()
+		 */
+		public synchronized int hashCode() {
+			return innerMap.hashCode();
+		}
+
+		/**
+		 * @return
+		 * @see com.mscg.util.Map#isEmpty()
+		 */
+		public synchronized boolean isEmpty() {
+			return innerMap.isEmpty();
+		}
+
+		/**
+		 * @return
+		 * @see com.mscg.util.Map#keySet()
+		 */
+		public synchronized Set keySet() {
+			return innerMap.keySet();
+		}
+
+		/**
+		 * @param key
+		 * @param value
+		 * @return
+		 * @see com.mscg.util.Map#put(java.lang.Object, java.lang.Object)
+		 */
+		public synchronized Object put(Object key, Object value) {
+			return innerMap.put(key, value);
+		}
+
+		/**
+		 * @param m
+		 * @see com.mscg.util.Map#putAll(com.mscg.util.Map)
+		 */
+		public synchronized void putAll(Map m) {
+			innerMap.putAll(m);
+		}
+
+		/**
+		 * @param key
+		 * @return
+		 * @see com.mscg.util.Map#remove(java.lang.Object)
+		 */
+		public synchronized Object remove(Object key) {
+			return innerMap.remove(key);
+		}
+
+		/**
+		 * @return
+		 * @see com.mscg.util.Map#size()
+		 */
+		public synchronized int size() {
+			return innerMap.size();
+		}
+
+		/**
+		 * @return
+		 * @see com.mscg.util.Map#values()
+		 */
+		public synchronized Collection values() {
+			return innerMap.values();
+		}
 	}
 
 	// Algorithms
 
+	/**
+	 * @serial include
+	 */
+	static class UnmodifiableCollection implements Collection {
+		// use serialVersionUID from JDK 1.2.2 for interoperability
+		private static final long serialVersionUID = 1820017752578914078L;
+
+		final Collection c;
+
+		UnmodifiableCollection(Collection c) {
+			if (c == null)
+				throw new NullPointerException();
+			this.c = c;
+		}
+
+		public boolean add(Object e) {
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean addAll(Collection coll) {
+			throw new UnsupportedOperationException();
+		}
+
+		public void clear() {
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean contains(Object o) {
+			return c.contains(o);
+		}
+
+		public boolean containsAll(Collection coll) {
+			return c.containsAll(coll);
+		}
+
+		public boolean isEmpty() {
+			return c.isEmpty();
+		}
+
+		public Iterator iterator() {
+			return new Iterator() {
+				Iterator i = c.iterator();
+
+				public boolean hasNext() {
+					return i.hasNext();
+				}
+
+				public Object next() {
+					return i.next();
+				}
+
+				public void remove() {
+					throw new UnsupportedOperationException();
+				}
+			};
+		}
+
+		public boolean remove(Object o) {
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean removeAll(Collection coll) {
+			throw new UnsupportedOperationException();
+		}
+
+		public boolean retainAll(Collection coll) {
+			throw new UnsupportedOperationException();
+		}
+
+		public int size() {
+			return c.size();
+		}
+
+		public Object[] toArray() {
+			return c.toArray();
+		}
+
+		public String toString() {
+			return c.toString();
+		}
+	}
 	/*
 	 * Tuning parameters for algorithms - Many of the List algorithms have two
 	 * implementations, one of which is appropriate for RandomAccess lists, the
@@ -37,101 +241,10 @@ public class Collections {
 	private static final int ROTATE_THRESHOLD = 100;
 	private static final int COPY_THRESHOLD = 10;
 	private static final int REPLACEALL_THRESHOLD = 11;
+
 	private static final int INDEXOFSUBLIST_THRESHOLD = 35;
 
-	/**
-	 * Sorts the specified list into ascending order, according to the
-	 * <i>natural ordering</i> of its elements. All elements in the list must
-	 * implement the <tt>Comparable</tt> interface. Furthermore, all elements in
-	 * the list must be <i>mutually comparable</i> (that is,
-	 * <tt>e1.compareTo(e2)</tt> must not throw a <tt>ClassCastException</tt>
-	 * for any elements <tt>e1</tt> and <tt>e2</tt> in the list).
-	 * <p>
-	 * 
-	 * This sort is guaranteed to be <i>stable</i>: equal elements will not be
-	 * reordered as a result of the sort.
-	 * <p>
-	 * 
-	 * The specified list must be modifiable, but need not be resizable.
-	 * <p>
-	 * 
-	 * The sorting algorithm is a modified mergesort (in which the merge is
-	 * omitted if the highest element in the low sublist is less than the lowest
-	 * element in the high sublist). This algorithm offers guaranteed n log(n)
-	 * performance.
-	 * 
-	 * This implementation dumps the specified list into an array, sorts the
-	 * array, and iterates over the list resetting each element from the
-	 * corresponding position in the array. This avoids the n<sup>2</sup> log(n)
-	 * performance that would result from attempting to sort a linked list in
-	 * place.
-	 * 
-	 * @param list
-	 *            the list to be sorted.
-	 * @throws ClassCastException
-	 *             if the list contains elements that are not <i>mutually
-	 *             comparable</i> (for example, strings and integers).
-	 * @throws UnsupportedOperationException
-	 *             if the specified list's list-iterator does not support the
-	 *             <tt>set</tt> operation.
-	 * @see Comparable
-	 */
-	public static void sort(List list) {
-		Object[] a = list.toArray();
-		Arrays.sort(a);
-		ListIterator i = list.listIterator();
-		for (int j = 0; j < a.length; j++) {
-			i.next();
-			i.set((Comparable) a[j]);
-		}
-	}
-
-	/**
-	 * Sorts the specified list according to the order induced by the specified
-	 * comparator. All elements in the list must be <i>mutually comparable</i>
-	 * using the specified comparator (that is, <tt>c.compare(e1, e2)</tt> must
-	 * not throw a <tt>ClassCastException</tt> for any elements <tt>e1</tt> and
-	 * <tt>e2</tt> in the list).
-	 * <p>
-	 * 
-	 * This sort is guaranteed to be <i>stable</i>: equal elements will not be
-	 * reordered as a result of the sort.
-	 * <p>
-	 * 
-	 * The sorting algorithm is a modified mergesort (in which the merge is
-	 * omitted if the highest element in the low sublist is less than the lowest
-	 * element in the high sublist). This algorithm offers guaranteed n log(n)
-	 * performance.
-	 * 
-	 * The specified list must be modifiable, but need not be resizable. This
-	 * implementation dumps the specified list into an array, sorts the array,
-	 * and iterates over the list resetting each element from the corresponding
-	 * position in the array. This avoids the n<sup>2</sup> log(n) performance
-	 * that would result from attempting to sort a linked list in place.
-	 * 
-	 * @param list
-	 *            the list to be sorted.
-	 * @param c
-	 *            the comparator to determine the order of the list. A
-	 *            <tt>null</tt> value indicates that the elements' <i>natural
-	 *            ordering</i> should be used.
-	 * @throws ClassCastException
-	 *             if the list contains elements that are not <i>mutually
-	 *             comparable</i> using the specified comparator.
-	 * @throws UnsupportedOperationException
-	 *             if the specified list's list-iterator does not support the
-	 *             <tt>set</tt> operation.
-	 * @see Comparator
-	 */
-	public static void sort(List list, Comparator c) {
-		Object[] a = list.toArray();
-		Arrays.sort(a, (Comparator) c);
-		ListIterator i = list.listIterator();
-		for (int j = 0; j < a.length; j++) {
-			i.next();
-			i.set(a[j]);
-		}
-	}
+	private static Random r;
 
 	/**
 	 * Searches the specified list for the specified object using the binary
@@ -175,240 +288,6 @@ public class Collections {
 			return Collections.iteratorBinarySearch(list, key);
 	}
 
-	private static int indexedBinarySearch(List list, Object key) {
-		int low = 0;
-		int high = list.size() - 1;
-
-		while (low <= high) {
-			int mid = (low + high) >>> 1;
-			Comparable midVal = (Comparable) list.get(mid);
-			int cmp = midVal.compareTo(key);
-
-			if (cmp < 0)
-				low = mid + 1;
-			else if (cmp > 0)
-				high = mid - 1;
-			else
-				return mid; // key found
-		}
-		return -(low + 1); // key not found
-	}
-
-	private static int iteratorBinarySearch(List list, Object key) {
-		int low = 0;
-		int high = list.size() - 1;
-		ListIterator i = list.listIterator();
-
-		while (low <= high) {
-			int mid = (low + high) >>> 1;
-			Comparable midVal = get(i, mid);
-			int cmp = midVal.compareTo(key);
-
-			if (cmp < 0)
-				low = mid + 1;
-			else if (cmp > 0)
-				high = mid - 1;
-			else
-				return mid; // key found
-		}
-		return -(low + 1); // key not found
-	}
-
-	/**
-	 * Gets the ith element from the given list by repositioning the specified
-	 * list listIterator.
-	 */
-	private static Comparable get(ListIterator i, int index) {
-		Comparable obj = null;
-		int pos = i.nextIndex();
-		if (pos <= index) {
-			do {
-				obj = (Comparable) i.next();
-			} while (pos++ < index);
-		} else {
-			do {
-				obj = (Comparable) i.previous();
-			} while (--pos > index);
-		}
-		return obj;
-	}
-
-	/**
-	 * Reverses the order of the elements in the specified list.
-	 * <p>
-	 * 
-	 * This method runs in linear time.
-	 * 
-	 * @param list
-	 *            the list whose elements are to be reversed.
-	 * @throws UnsupportedOperationException
-	 *             if the specified list or its list-iterator does not support
-	 *             the <tt>set</tt> operation.
-	 */
-	public static void reverse(List list) {
-		int size = list.size();
-		if (size < REVERSE_THRESHOLD || list instanceof RandomAccess) {
-			for (int i = 0, mid = size >> 1, j = size - 1; i < mid; i++, j--)
-				swap(list, i, j);
-		} else {
-			ListIterator fwd = list.listIterator();
-			ListIterator rev = list.listIterator(size);
-			for (int i = 0, mid = list.size() >> 1; i < mid; i++) {
-				Object tmp = fwd.next();
-				fwd.set(rev.previous());
-				rev.set(tmp);
-			}
-		}
-	}
-
-	/**
-	 * Randomly permutes the specified list using a default source of
-	 * randomness. All permutations occur with approximately equal likelihood.
-	 * <p>
-	 * 
-	 * The hedge "approximately" is used in the foregoing description because
-	 * default source of randomness is only approximately an unbiased source of
-	 * independently chosen bits. If it were a perfect source of randomly chosen
-	 * bits, then the algorithm would choose permutations with perfect
-	 * uniformity.
-	 * <p>
-	 * 
-	 * This implementation traverses the list backwards, from the last element
-	 * up to the second, repeatedly swapping a randomly selected element into
-	 * the "current position". Elements are randomly selected from the portion
-	 * of the list that runs from the first element to the current position,
-	 * inclusive.
-	 * <p>
-	 * 
-	 * This method runs in linear time. If the specified list does not implement
-	 * the {@link RandomAccess} interface and is large, this implementation
-	 * dumps the specified list into an array before shuffling it, and dumps the
-	 * shuffled array back into the list. This avoids the quadratic behavior
-	 * that would result from shuffling a "sequential access" list in place.
-	 * 
-	 * @param list
-	 *            the list to be shuffled.
-	 * @throws UnsupportedOperationException
-	 *             if the specified list or its list-iterator does not support
-	 *             the <tt>set</tt> operation.
-	 */
-	public static void shuffle(List list) {
-		if (r == null) {
-			r = new Random();
-		}
-		shuffle(list, r);
-	}
-
-	private static Random r;
-
-	/**
-	 * Randomly permute the specified list using the specified source of
-	 * randomness. All permutations occur with equal likelihood assuming that
-	 * the source of randomness is fair.
-	 * <p>
-	 * 
-	 * This implementation traverses the list backwards, from the last element
-	 * up to the second, repeatedly swapping a randomly selected element into
-	 * the "current position". Elements are randomly selected from the portion
-	 * of the list that runs from the first element to the current position,
-	 * inclusive.
-	 * <p>
-	 * 
-	 * This method runs in linear time. If the specified list does not implement
-	 * the {@link RandomAccess} interface and is large, this implementation
-	 * dumps the specified list into an array before shuffling it, and dumps the
-	 * shuffled array back into the list. This avoids the quadratic behavior
-	 * that would result from shuffling a "sequential access" list in place.
-	 * 
-	 * @param list
-	 *            the list to be shuffled.
-	 * @param rnd
-	 *            the source of randomness to use to shuffle the list.
-	 * @throws UnsupportedOperationException
-	 *             if the specified list or its list-iterator does not support
-	 *             the <tt>set</tt> operation.
-	 */
-	public static void shuffle(List list, Random rnd) {
-		int size = list.size();
-		if (size < SHUFFLE_THRESHOLD || list instanceof RandomAccess) {
-			for (int i = size; i > 1; i--)
-				swap(list, i - 1, rnd.nextInt(i));
-		} else {
-			Object arr[] = list.toArray();
-
-			// Shuffle array
-			for (int i = size; i > 1; i--)
-				swap(arr, i - 1, rnd.nextInt(i));
-
-			// Dump array back into list
-			ListIterator it = list.listIterator();
-			for (int i = 0; i < arr.length; i++) {
-				it.next();
-				it.set(arr[i]);
-			}
-		}
-	}
-
-	/**
-	 * Swaps the elements at the specified positions in the specified list. (If
-	 * the specified positions are equal, invoking this method leaves the list
-	 * unchanged.)
-	 * 
-	 * @param list
-	 *            The list in which to swap elements.
-	 * @param i
-	 *            the index of one element to be swapped.
-	 * @param j
-	 *            the index of the other element to be swapped.
-	 * @throws IndexOutOfBoundsException
-	 *             if either <tt>i</tt> or <tt>j</tt> is out of range (i &lt; 0
-	 *             || i &gt;= list.size() || j &lt; 0 || j &gt;= list.size()).
-	 * @since 1.4
-	 */
-	public static void swap(List list, int i, int j) {
-		final List l = list;
-		l.set(i, l.set(j, l.get(i)));
-	}
-
-	/**
-	 * Swaps the two specified elements in the specified array.
-	 */
-	private static void swap(Object[] arr, int i, int j) {
-		Object tmp = arr[i];
-		arr[i] = arr[j];
-		arr[j] = tmp;
-	}
-
-	/**
-	 * Replaces all of the elements of the specified list with the specified
-	 * element.
-	 * <p>
-	 * 
-	 * This method runs in linear time.
-	 * 
-	 * @param list
-	 *            the list to be filled with the specified element.
-	 * @param obj
-	 *            The element with which to fill the specified list.
-	 * @throws UnsupportedOperationException
-	 *             if the specified list or its list-iterator does not support
-	 *             the <tt>set</tt> operation.
-	 */
-	public static void fill(List list, Object obj) {
-		int size = list.size();
-
-		if (size < FILL_THRESHOLD || list instanceof RandomAccess) {
-			for (int i = 0; i < size; i++)
-				list.set(i, obj);
-		} else {
-			ListIterator itr = list.listIterator();
-			for (int i = 0; i < size; i++) {
-				itr.next();
-				itr.set(obj);
-			}
-		}
-	}
-
 	/**
 	 * Copies all of the elements from one list into another. After the
 	 * operation, the index of each copied element in the destination list will
@@ -447,6 +326,290 @@ public class Collections {
 				di.set(si.next());
 			}
 		}
+	}
+
+	/**
+	 * Returns true if the specified arguments are equal, or both null.
+	 */
+	private static boolean eq(Object o1, Object o2) {
+		return (o1 == null ? o2 == null : o1.equals(o2));
+	}
+
+	/**
+	 * Replaces all of the elements of the specified list with the specified
+	 * element.
+	 * <p>
+	 * 
+	 * This method runs in linear time.
+	 * 
+	 * @param list
+	 *            the list to be filled with the specified element.
+	 * @param obj
+	 *            The element with which to fill the specified list.
+	 * @throws UnsupportedOperationException
+	 *             if the specified list or its list-iterator does not support
+	 *             the <tt>set</tt> operation.
+	 */
+	public static void fill(List list, Object obj) {
+		int size = list.size();
+
+		if (size < FILL_THRESHOLD || list instanceof RandomAccess) {
+			for (int i = 0; i < size; i++)
+				list.set(i, obj);
+		} else {
+			ListIterator itr = list.listIterator();
+			for (int i = 0; i < size; i++) {
+				itr.next();
+				itr.set(obj);
+			}
+		}
+	}
+
+	/**
+	 * Gets the ith element from the given list by repositioning the specified
+	 * list listIterator.
+	 */
+	private static Comparable get(ListIterator i, int index) {
+		Comparable obj = null;
+		int pos = i.nextIndex();
+		if (pos <= index) {
+			do {
+				obj = (Comparable) i.next();
+			} while (pos++ < index);
+		} else {
+			do {
+				obj = (Comparable) i.previous();
+			} while (--pos > index);
+		}
+		return obj;
+	}
+
+	private static int indexedBinarySearch(List list, Object key) {
+		int low = 0;
+		int high = list.size() - 1;
+
+		while (low <= high) {
+			int mid = (low + high) >>> 1;
+			Comparable midVal = (Comparable) list.get(mid);
+			int cmp = midVal.compareTo(key);
+
+			if (cmp < 0)
+				low = mid + 1;
+			else if (cmp > 0)
+				high = mid - 1;
+			else
+				return mid; // key found
+		}
+		return -(low + 1); // key not found
+	}
+
+	/**
+	 * Returns the starting position of the first occurrence of the specified
+	 * target list within the specified source list, or -1 if there is no such
+	 * occurrence. More formally, returns the lowest index <tt>i</tt> such that
+	 * <tt>source.subList(i, i+target.size()).equals(target)</tt>, or -1 if
+	 * there is no such index. (Returns -1 if
+	 * <tt>target.size() > source.size()</tt>.)
+	 * 
+	 * <p>
+	 * This implementation uses the "brute force" technique of scanning over the
+	 * source list, looking for a match with the target at each location in
+	 * turn.
+	 * 
+	 * @param source
+	 *            the list in which to search for the first occurrence of
+	 *            <tt>target</tt>.
+	 * @param target
+	 *            the list to search for as a subList of <tt>source</tt>.
+	 * @return the starting position of the first occurrence of the specified
+	 *         target list within the specified source list, or -1 if there is
+	 *         no such occurrence.
+	 * @since 1.4
+	 */
+	public static int indexOfSubList(List source, List target) {
+		int sourceSize = source.size();
+		int targetSize = target.size();
+		int maxCandidate = sourceSize - targetSize;
+
+		if (sourceSize < INDEXOFSUBLIST_THRESHOLD
+				|| (source instanceof RandomAccess && target instanceof RandomAccess)) {
+			nextCand: for (int candidate = 0; candidate <= maxCandidate; candidate++) {
+				for (int i = 0, j = candidate; i < targetSize; i++, j++)
+					if (!eq(target.get(i), source.get(j)))
+						continue nextCand; // Element mismatch, try next cand
+				return candidate; // All elements of candidate matched target
+			}
+		} else { // Iterator version of above algorithm
+			ListIterator si = source.listIterator();
+			nextCand: for (int candidate = 0; candidate <= maxCandidate; candidate++) {
+				ListIterator ti = target.listIterator();
+				for (int i = 0; i < targetSize; i++) {
+					if (!eq(ti.next(), si.next())) {
+						// Back up source iterator to next candidate
+						for (int j = 0; j < i; j++)
+							si.previous();
+						continue nextCand;
+					}
+				}
+				return candidate;
+			}
+		}
+		return -1; // No candidate matched the target
+	}
+
+	private static int iteratorBinarySearch(List list, Object key) {
+		int low = 0;
+		int high = list.size() - 1;
+		ListIterator i = list.listIterator();
+
+		while (low <= high) {
+			int mid = (low + high) >>> 1;
+			Comparable midVal = get(i, mid);
+			int cmp = midVal.compareTo(key);
+
+			if (cmp < 0)
+				low = mid + 1;
+			else if (cmp > 0)
+				high = mid - 1;
+			else
+				return mid; // key found
+		}
+		return -(low + 1); // key not found
+	}
+
+	/**
+	 * Returns the starting position of the last occurrence of the specified
+	 * target list within the specified source list, or -1 if there is no such
+	 * occurrence. More formally, returns the highest index <tt>i</tt> such that
+	 * <tt>source.subList(i, i+target.size()).equals(target)</tt>, or -1 if
+	 * there is no such index. (Returns -1 if
+	 * <tt>target.size() > source.size()</tt>.)
+	 * 
+	 * <p>
+	 * This implementation uses the "brute force" technique of iterating over
+	 * the source list, looking for a match with the target at each location in
+	 * turn.
+	 * 
+	 * @param source
+	 *            the list in which to search for the last occurrence of
+	 *            <tt>target</tt>.
+	 * @param target
+	 *            the list to search for as a subList of <tt>source</tt>.
+	 * @return the starting position of the last occurrence of the specified
+	 *         target list within the specified source list, or -1 if there is
+	 *         no such occurrence.
+	 * @since 1.4
+	 */
+	public static int lastIndexOfSubList(List source, List target) {
+		int sourceSize = source.size();
+		int targetSize = target.size();
+		int maxCandidate = sourceSize - targetSize;
+
+		if (sourceSize < INDEXOFSUBLIST_THRESHOLD
+				|| source instanceof RandomAccess) { // Index access version
+			nextCand: for (int candidate = maxCandidate; candidate >= 0; candidate--) {
+				for (int i = 0, j = candidate; i < targetSize; i++, j++)
+					if (!eq(target.get(i), source.get(j)))
+						continue nextCand; // Element mismatch, try next cand
+				return candidate; // All elements of candidate matched target
+			}
+		} else { // Iterator version of above algorithm
+			if (maxCandidate < 0)
+				return -1;
+			ListIterator si = source.listIterator(maxCandidate);
+			nextCand: for (int candidate = maxCandidate; candidate >= 0; candidate--) {
+				ListIterator ti = target.listIterator();
+				for (int i = 0; i < targetSize; i++) {
+					if (!eq(ti.next(), si.next())) {
+						if (candidate != 0) {
+							// Back up source iterator to next candidate
+							for (int j = 0; j <= i + 1; j++)
+								si.previous();
+						}
+						continue nextCand;
+					}
+				}
+				return candidate;
+			}
+		}
+		return -1; // No candidate matched the target
+	}
+
+	/**
+	 * Returns the maximum element of the given collection, according to the
+	 * <i>natural ordering</i> of its elements. All elements in the collection
+	 * must implement the <tt>Comparable</tt> interface. Furthermore, all
+	 * elements in the collection must be <i>mutually comparable</i> (that is,
+	 * <tt>e1.compareTo(e2)</tt> must not throw a <tt>ClassCastException</tt>
+	 * for any elements <tt>e1</tt> and <tt>e2</tt> in the collection).
+	 * <p>
+	 * 
+	 * This method iterates over the entire collection, hence it requires time
+	 * proportional to the size of the collection.
+	 * 
+	 * @param coll
+	 *            the collection whose maximum element is to be determined.
+	 * @return the maximum element of the given collection, according to the
+	 *         <i>natural ordering</i> of its elements.
+	 * @throws ClassCastException
+	 *             if the collection contains elements that are not <i>mutually
+	 *             comparable</i> (for example, strings and integers).
+	 * @throws NoSuchElementException
+	 *             if the collection is empty.
+	 * @see Comparable
+	 */
+	public static Object max(Collection coll) {
+		Iterator i = coll.iterator();
+		Comparable candidate = (Comparable) i.next();
+
+		while (i.hasNext()) {
+			Comparable next = (Comparable) i.next();
+			if (next.compareTo(candidate) > 0)
+				candidate = next;
+		}
+		return candidate;
+	}
+
+	/**
+	 * Returns the maximum element of the given collection, according to the
+	 * order induced by the specified comparator. All elements in the collection
+	 * must be <i>mutually comparable</i> by the specified comparator (that is,
+	 * <tt>comp.compare(e1, e2)</tt> must not throw a
+	 * <tt>ClassCastException</tt> for any elements <tt>e1</tt> and <tt>e2</tt>
+	 * in the collection).
+	 * <p>
+	 * 
+	 * This method iterates over the entire collection, hence it requires time
+	 * proportional to the size of the collection.
+	 * 
+	 * @param coll
+	 *            the collection whose maximum element is to be determined.
+	 * @param comp
+	 *            the comparator with which to determine the maximum element. A
+	 *            <tt>null</tt> value indicates that the elements' <i>natural
+	 *            ordering</i> should be used.
+	 * @return the maximum element of the given collection, according to the
+	 *         specified comparator.
+	 * @throws ClassCastException
+	 *             if the collection contains elements that are not <i>mutually
+	 *             comparable</i> using the specified comparator.
+	 * @throws NoSuchElementException
+	 *             if the collection is empty.
+	 * @see Comparable
+	 */
+	public static Object max(Collection coll, Comparator comp) {
+		if (comp == null)
+			return (max(coll));
+
+		Iterator i = coll.iterator();
+		Object candidate = i.next();
+
+		while (i.hasNext()) {
+			Object next = i.next();
+			if (comp.compare(next, candidate) > 0)
+				candidate = next;
+		}
+		return candidate;
 	}
 
 	/**
@@ -527,80 +690,92 @@ public class Collections {
 	}
 
 	/**
-	 * Returns the maximum element of the given collection, according to the
-	 * <i>natural ordering</i> of its elements. All elements in the collection
-	 * must implement the <tt>Comparable</tt> interface. Furthermore, all
-	 * elements in the collection must be <i>mutually comparable</i> (that is,
-	 * <tt>e1.compareTo(e2)</tt> must not throw a <tt>ClassCastException</tt>
-	 * for any elements <tt>e1</tt> and <tt>e2</tt> in the collection).
-	 * <p>
+	 * Replaces all occurrences of one specified value in a list with another.
+	 * More formally, replaces with <tt>newVal</tt> each element <tt>e</tt> in
+	 * <tt>list</tt> such that
+	 * <tt>(oldVal==null ? e==null : oldVal.equals(e))</tt>. (This method has no
+	 * effect on the size of the list.)
 	 * 
-	 * This method iterates over the entire collection, hence it requires time
-	 * proportional to the size of the collection.
-	 * 
-	 * @param coll
-	 *            the collection whose maximum element is to be determined.
-	 * @return the maximum element of the given collection, according to the
-	 *         <i>natural ordering</i> of its elements.
-	 * @throws ClassCastException
-	 *             if the collection contains elements that are not <i>mutually
-	 *             comparable</i> (for example, strings and integers).
-	 * @throws NoSuchElementException
-	 *             if the collection is empty.
-	 * @see Comparable
+	 * @param list
+	 *            the list in which replacement is to occur.
+	 * @param oldVal
+	 *            the old value to be replaced.
+	 * @param newVal
+	 *            the new value with which <tt>oldVal</tt> is to be replaced.
+	 * @return <tt>true</tt> if <tt>list</tt> contained one or more elements
+	 *         <tt>e</tt> such that
+	 *         <tt>(oldVal==null ?  e==null : oldVal.equals(e))</tt>.
+	 * @throws UnsupportedOperationException
+	 *             if the specified list or its list-iterator does not support
+	 *             the <tt>set</tt> operation.
+	 * @since 1.4
 	 */
-	public static Object max(Collection coll) {
-		Iterator i = coll.iterator();
-		Comparable candidate = (Comparable) i.next();
-
-		while (i.hasNext()) {
-			Comparable next = (Comparable) i.next();
-			if (next.compareTo(candidate) > 0)
-				candidate = next;
+	public static boolean replaceAll(List list, Object oldVal, Object newVal) {
+		boolean result = false;
+		int size = list.size();
+		if (size < REPLACEALL_THRESHOLD || list instanceof RandomAccess) {
+			if (oldVal == null) {
+				for (int i = 0; i < size; i++) {
+					if (list.get(i) == null) {
+						list.set(i, newVal);
+						result = true;
+					}
+				}
+			} else {
+				for (int i = 0; i < size; i++) {
+					if (oldVal.equals(list.get(i))) {
+						list.set(i, newVal);
+						result = true;
+					}
+				}
+			}
+		} else {
+			ListIterator itr = list.listIterator();
+			if (oldVal == null) {
+				for (int i = 0; i < size; i++) {
+					if (itr.next() == null) {
+						itr.set(newVal);
+						result = true;
+					}
+				}
+			} else {
+				for (int i = 0; i < size; i++) {
+					if (oldVal.equals(itr.next())) {
+						itr.set(newVal);
+						result = true;
+					}
+				}
+			}
 		}
-		return candidate;
+		return result;
 	}
 
 	/**
-	 * Returns the maximum element of the given collection, according to the
-	 * order induced by the specified comparator. All elements in the collection
-	 * must be <i>mutually comparable</i> by the specified comparator (that is,
-	 * <tt>comp.compare(e1, e2)</tt> must not throw a
-	 * <tt>ClassCastException</tt> for any elements <tt>e1</tt> and <tt>e2</tt>
-	 * in the collection).
+	 * Reverses the order of the elements in the specified list.
 	 * <p>
 	 * 
-	 * This method iterates over the entire collection, hence it requires time
-	 * proportional to the size of the collection.
+	 * This method runs in linear time.
 	 * 
-	 * @param coll
-	 *            the collection whose maximum element is to be determined.
-	 * @param comp
-	 *            the comparator with which to determine the maximum element. A
-	 *            <tt>null</tt> value indicates that the elements' <i>natural
-	 *            ordering</i> should be used.
-	 * @return the maximum element of the given collection, according to the
-	 *         specified comparator.
-	 * @throws ClassCastException
-	 *             if the collection contains elements that are not <i>mutually
-	 *             comparable</i> using the specified comparator.
-	 * @throws NoSuchElementException
-	 *             if the collection is empty.
-	 * @see Comparable
+	 * @param list
+	 *            the list whose elements are to be reversed.
+	 * @throws UnsupportedOperationException
+	 *             if the specified list or its list-iterator does not support
+	 *             the <tt>set</tt> operation.
 	 */
-	public static Object max(Collection coll, Comparator comp) {
-		if (comp == null)
-			return (max(coll));
-
-		Iterator i = coll.iterator();
-		Object candidate = i.next();
-
-		while (i.hasNext()) {
-			Object next = i.next();
-			if (comp.compare(next, candidate) > 0)
-				candidate = next;
+	public static void reverse(List list) {
+		int size = list.size();
+		if (size < REVERSE_THRESHOLD || list instanceof RandomAccess) {
+			for (int i = 0, mid = size >> 1, j = size - 1; i < mid; i++, j--)
+				swap(list, i, j);
+		} else {
+			ListIterator fwd = list.listIterator();
+			ListIterator rev = list.listIterator(size);
+			for (int i = 0, mid = list.size() >> 1; i < mid; i++) {
+				Object tmp = fwd.next();
+				fwd.set(rev.previous());
+				rev.set(tmp);
+			}
 		}
-		return candidate;
 	}
 
 	/**
@@ -715,180 +890,228 @@ public class Collections {
 	}
 
 	/**
-	 * Replaces all occurrences of one specified value in a list with another.
-	 * More formally, replaces with <tt>newVal</tt> each element <tt>e</tt> in
-	 * <tt>list</tt> such that
-	 * <tt>(oldVal==null ? e==null : oldVal.equals(e))</tt>. (This method has no
-	 * effect on the size of the list.)
+	 * Randomly permutes the specified list using a default source of
+	 * randomness. All permutations occur with approximately equal likelihood.
+	 * <p>
+	 * 
+	 * The hedge "approximately" is used in the foregoing description because
+	 * default source of randomness is only approximately an unbiased source of
+	 * independently chosen bits. If it were a perfect source of randomly chosen
+	 * bits, then the algorithm would choose permutations with perfect
+	 * uniformity.
+	 * <p>
+	 * 
+	 * This implementation traverses the list backwards, from the last element
+	 * up to the second, repeatedly swapping a randomly selected element into
+	 * the "current position". Elements are randomly selected from the portion
+	 * of the list that runs from the first element to the current position,
+	 * inclusive.
+	 * <p>
+	 * 
+	 * This method runs in linear time. If the specified list does not implement
+	 * the {@link RandomAccess} interface and is large, this implementation
+	 * dumps the specified list into an array before shuffling it, and dumps the
+	 * shuffled array back into the list. This avoids the quadratic behavior
+	 * that would result from shuffling a "sequential access" list in place.
 	 * 
 	 * @param list
-	 *            the list in which replacement is to occur.
-	 * @param oldVal
-	 *            the old value to be replaced.
-	 * @param newVal
-	 *            the new value with which <tt>oldVal</tt> is to be replaced.
-	 * @return <tt>true</tt> if <tt>list</tt> contained one or more elements
-	 *         <tt>e</tt> such that
-	 *         <tt>(oldVal==null ?  e==null : oldVal.equals(e))</tt>.
+	 *            the list to be shuffled.
 	 * @throws UnsupportedOperationException
 	 *             if the specified list or its list-iterator does not support
 	 *             the <tt>set</tt> operation.
-	 * @since 1.4
 	 */
-	public static boolean replaceAll(List list, Object oldVal, Object newVal) {
-		boolean result = false;
+	public static void shuffle(List list) {
+		if (r == null) {
+			r = new Random();
+		}
+		shuffle(list, r);
+	}
+
+	/**
+	 * Randomly permute the specified list using the specified source of
+	 * randomness. All permutations occur with equal likelihood assuming that
+	 * the source of randomness is fair.
+	 * <p>
+	 * 
+	 * This implementation traverses the list backwards, from the last element
+	 * up to the second, repeatedly swapping a randomly selected element into
+	 * the "current position". Elements are randomly selected from the portion
+	 * of the list that runs from the first element to the current position,
+	 * inclusive.
+	 * <p>
+	 * 
+	 * This method runs in linear time. If the specified list does not implement
+	 * the {@link RandomAccess} interface and is large, this implementation
+	 * dumps the specified list into an array before shuffling it, and dumps the
+	 * shuffled array back into the list. This avoids the quadratic behavior
+	 * that would result from shuffling a "sequential access" list in place.
+	 * 
+	 * @param list
+	 *            the list to be shuffled.
+	 * @param rnd
+	 *            the source of randomness to use to shuffle the list.
+	 * @throws UnsupportedOperationException
+	 *             if the specified list or its list-iterator does not support
+	 *             the <tt>set</tt> operation.
+	 */
+	public static void shuffle(List list, Random rnd) {
 		int size = list.size();
-		if (size < REPLACEALL_THRESHOLD || list instanceof RandomAccess) {
-			if (oldVal == null) {
-				for (int i = 0; i < size; i++) {
-					if (list.get(i) == null) {
-						list.set(i, newVal);
-						result = true;
-					}
-				}
-			} else {
-				for (int i = 0; i < size; i++) {
-					if (oldVal.equals(list.get(i))) {
-						list.set(i, newVal);
-						result = true;
-					}
-				}
-			}
+		if (size < SHUFFLE_THRESHOLD || list instanceof RandomAccess) {
+			for (int i = size; i > 1; i--)
+				swap(list, i - 1, rnd.nextInt(i));
 		} else {
-			ListIterator itr = list.listIterator();
-			if (oldVal == null) {
-				for (int i = 0; i < size; i++) {
-					if (itr.next() == null) {
-						itr.set(newVal);
-						result = true;
-					}
-				}
-			} else {
-				for (int i = 0; i < size; i++) {
-					if (oldVal.equals(itr.next())) {
-						itr.set(newVal);
-						result = true;
-					}
-				}
+			Object arr[] = list.toArray();
+
+			// Shuffle array
+			for (int i = size; i > 1; i--)
+				swap(arr, i - 1, rnd.nextInt(i));
+
+			// Dump array back into list
+			ListIterator it = list.listIterator();
+			for (int i = 0; i < arr.length; i++) {
+				it.next();
+				it.set(arr[i]);
 			}
 		}
-		return result;
 	}
 
 	/**
-	 * Returns the starting position of the first occurrence of the specified
-	 * target list within the specified source list, or -1 if there is no such
-	 * occurrence. More formally, returns the lowest index <tt>i</tt> such that
-	 * <tt>source.subList(i, i+target.size()).equals(target)</tt>, or -1 if
-	 * there is no such index. (Returns -1 if
-	 * <tt>target.size() > source.size()</tt>.)
-	 * 
+	 * Sorts the specified list into ascending order, according to the
+	 * <i>natural ordering</i> of its elements. All elements in the list must
+	 * implement the <tt>Comparable</tt> interface. Furthermore, all elements in
+	 * the list must be <i>mutually comparable</i> (that is,
+	 * <tt>e1.compareTo(e2)</tt> must not throw a <tt>ClassCastException</tt>
+	 * for any elements <tt>e1</tt> and <tt>e2</tt> in the list).
 	 * <p>
-	 * This implementation uses the "brute force" technique of scanning over the
-	 * source list, looking for a match with the target at each location in
-	 * turn.
 	 * 
-	 * @param source
-	 *            the list in which to search for the first occurrence of
-	 *            <tt>target</tt>.
-	 * @param target
-	 *            the list to search for as a subList of <tt>source</tt>.
-	 * @return the starting position of the first occurrence of the specified
-	 *         target list within the specified source list, or -1 if there is
-	 *         no such occurrence.
-	 * @since 1.4
+	 * This sort is guaranteed to be <i>stable</i>: equal elements will not be
+	 * reordered as a result of the sort.
+	 * <p>
+	 * 
+	 * The specified list must be modifiable, but need not be resizable.
+	 * <p>
+	 * 
+	 * The sorting algorithm is a modified mergesort (in which the merge is
+	 * omitted if the highest element in the low sublist is less than the lowest
+	 * element in the high sublist). This algorithm offers guaranteed n log(n)
+	 * performance.
+	 * 
+	 * This implementation dumps the specified list into an array, sorts the
+	 * array, and iterates over the list resetting each element from the
+	 * corresponding position in the array. This avoids the n<sup>2</sup> log(n)
+	 * performance that would result from attempting to sort a linked list in
+	 * place.
+	 * 
+	 * @param list
+	 *            the list to be sorted.
+	 * @throws ClassCastException
+	 *             if the list contains elements that are not <i>mutually
+	 *             comparable</i> (for example, strings and integers).
+	 * @throws UnsupportedOperationException
+	 *             if the specified list's list-iterator does not support the
+	 *             <tt>set</tt> operation.
+	 * @see Comparable
 	 */
-	public static int indexOfSubList(List source, List target) {
-		int sourceSize = source.size();
-		int targetSize = target.size();
-		int maxCandidate = sourceSize - targetSize;
-
-		if (sourceSize < INDEXOFSUBLIST_THRESHOLD
-				|| (source instanceof RandomAccess && target instanceof RandomAccess)) {
-			nextCand: for (int candidate = 0; candidate <= maxCandidate; candidate++) {
-				for (int i = 0, j = candidate; i < targetSize; i++, j++)
-					if (!eq(target.get(i), source.get(j)))
-						continue nextCand; // Element mismatch, try next cand
-				return candidate; // All elements of candidate matched target
-			}
-		} else { // Iterator version of above algorithm
-			ListIterator si = source.listIterator();
-			nextCand: for (int candidate = 0; candidate <= maxCandidate; candidate++) {
-				ListIterator ti = target.listIterator();
-				for (int i = 0; i < targetSize; i++) {
-					if (!eq(ti.next(), si.next())) {
-						// Back up source iterator to next candidate
-						for (int j = 0; j < i; j++)
-							si.previous();
-						continue nextCand;
-					}
-				}
-				return candidate;
-			}
+	public static void sort(List list) {
+		Object[] a = list.toArray();
+		Arrays.sort(a);
+		ListIterator i = list.listIterator();
+		for (int j = 0; j < a.length; j++) {
+			i.next();
+			i.set((Comparable) a[j]);
 		}
-		return -1; // No candidate matched the target
 	}
 
 	/**
-	 * Returns the starting position of the last occurrence of the specified
-	 * target list within the specified source list, or -1 if there is no such
-	 * occurrence. More formally, returns the highest index <tt>i</tt> such that
-	 * <tt>source.subList(i, i+target.size()).equals(target)</tt>, or -1 if
-	 * there is no such index. (Returns -1 if
-	 * <tt>target.size() > source.size()</tt>.)
-	 * 
+	 * Sorts the specified list according to the order induced by the specified
+	 * comparator. All elements in the list must be <i>mutually comparable</i>
+	 * using the specified comparator (that is, <tt>c.compare(e1, e2)</tt> must
+	 * not throw a <tt>ClassCastException</tt> for any elements <tt>e1</tt> and
+	 * <tt>e2</tt> in the list).
 	 * <p>
-	 * This implementation uses the "brute force" technique of iterating over
-	 * the source list, looking for a match with the target at each location in
-	 * turn.
 	 * 
-	 * @param source
-	 *            the list in which to search for the last occurrence of
-	 *            <tt>target</tt>.
-	 * @param target
-	 *            the list to search for as a subList of <tt>source</tt>.
-	 * @return the starting position of the last occurrence of the specified
-	 *         target list within the specified source list, or -1 if there is
-	 *         no such occurrence.
-	 * @since 1.4
+	 * This sort is guaranteed to be <i>stable</i>: equal elements will not be
+	 * reordered as a result of the sort.
+	 * <p>
+	 * 
+	 * The sorting algorithm is a modified mergesort (in which the merge is
+	 * omitted if the highest element in the low sublist is less than the lowest
+	 * element in the high sublist). This algorithm offers guaranteed n log(n)
+	 * performance.
+	 * 
+	 * The specified list must be modifiable, but need not be resizable. This
+	 * implementation dumps the specified list into an array, sorts the array,
+	 * and iterates over the list resetting each element from the corresponding
+	 * position in the array. This avoids the n<sup>2</sup> log(n) performance
+	 * that would result from attempting to sort a linked list in place.
+	 * 
+	 * @param list
+	 *            the list to be sorted.
+	 * @param c
+	 *            the comparator to determine the order of the list. A
+	 *            <tt>null</tt> value indicates that the elements' <i>natural
+	 *            ordering</i> should be used.
+	 * @throws ClassCastException
+	 *             if the list contains elements that are not <i>mutually
+	 *             comparable</i> using the specified comparator.
+	 * @throws UnsupportedOperationException
+	 *             if the specified list's list-iterator does not support the
+	 *             <tt>set</tt> operation.
+	 * @see Comparator
 	 */
-	public static int lastIndexOfSubList(List source, List target) {
-		int sourceSize = source.size();
-		int targetSize = target.size();
-		int maxCandidate = sourceSize - targetSize;
-
-		if (sourceSize < INDEXOFSUBLIST_THRESHOLD
-				|| source instanceof RandomAccess) { // Index access version
-			nextCand: for (int candidate = maxCandidate; candidate >= 0; candidate--) {
-				for (int i = 0, j = candidate; i < targetSize; i++, j++)
-					if (!eq(target.get(i), source.get(j)))
-						continue nextCand; // Element mismatch, try next cand
-				return candidate; // All elements of candidate matched target
-			}
-		} else { // Iterator version of above algorithm
-			if (maxCandidate < 0)
-				return -1;
-			ListIterator si = source.listIterator(maxCandidate);
-			nextCand: for (int candidate = maxCandidate; candidate >= 0; candidate--) {
-				ListIterator ti = target.listIterator();
-				for (int i = 0; i < targetSize; i++) {
-					if (!eq(ti.next(), si.next())) {
-						if (candidate != 0) {
-							// Back up source iterator to next candidate
-							for (int j = 0; j <= i + 1; j++)
-								si.previous();
-						}
-						continue nextCand;
-					}
-				}
-				return candidate;
-			}
+	public static void sort(List list, Comparator c) {
+		Object[] a = list.toArray();
+		Arrays.sort(a, (Comparator) c);
+		ListIterator i = list.listIterator();
+		for (int j = 0; j < a.length; j++) {
+			i.next();
+			i.set(a[j]);
 		}
-		return -1; // No candidate matched the target
 	}
 
 	// Unmodifiable Wrappers
 
+	/**
+	 * Swaps the elements at the specified positions in the specified list. (If
+	 * the specified positions are equal, invoking this method leaves the list
+	 * unchanged.)
+	 * 
+	 * @param list
+	 *            The list in which to swap elements.
+	 * @param i
+	 *            the index of one element to be swapped.
+	 * @param j
+	 *            the index of the other element to be swapped.
+	 * @throws IndexOutOfBoundsException
+	 *             if either <tt>i</tt> or <tt>j</tt> is out of range (i &lt; 0
+	 *             || i &gt;= list.size() || j &lt; 0 || j &gt;= list.size()).
+	 * @since 1.4
+	 */
+	public static void swap(List list, int i, int j) {
+		final List l = list;
+		l.set(i, l.set(j, l.get(i)));
+	}
+
+	/**
+	 * Swaps the two specified elements in the specified array.
+	 */
+	private static void swap(Object[] arr, int i, int j) {
+		Object tmp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = tmp;
+	}
+	
+	/**
+	 * Creates a synchronized wrapper for the provided map.
+	 * 
+	 * @param map The map that must be synchronized.
+	 * 
+	 * @return A synchronized wrapper for the provided map.
+	 */
+	public static Map synchronizedMap(Map map) {
+		return new SynchronizedMap(map);
+	}
+	
 	/**
 	 * Returns an unmodifiable view of the specified collection. This method
 	 * allows modules to provide users with "read-only" access to internal
@@ -917,92 +1140,7 @@ public class Collections {
 		return new UnmodifiableCollection(c);
 	}
 
-	/**
-	 * @serial include
-	 */
-	static class UnmodifiableCollection implements Collection {
-		// use serialVersionUID from JDK 1.2.2 for interoperability
-		private static final long serialVersionUID = 1820017752578914078L;
-
-		final Collection c;
-
-		UnmodifiableCollection(Collection c) {
-			if (c == null)
-				throw new NullPointerException();
-			this.c = c;
-		}
-
-		public int size() {
-			return c.size();
-		}
-
-		public boolean isEmpty() {
-			return c.isEmpty();
-		}
-
-		public boolean contains(Object o) {
-			return c.contains(o);
-		}
-
-		public Object[] toArray() {
-			return c.toArray();
-		}
-
-		public String toString() {
-			return c.toString();
-		}
-
-		public Iterator iterator() {
-			return new Iterator() {
-				Iterator i = c.iterator();
-
-				public boolean hasNext() {
-					return i.hasNext();
-				}
-
-				public Object next() {
-					return i.next();
-				}
-
-				public void remove() {
-					throw new UnsupportedOperationException();
-				}
-			};
-		}
-
-		public boolean add(Object e) {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean remove(Object o) {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean containsAll(Collection coll) {
-			return c.containsAll(coll);
-		}
-
-		public boolean addAll(Collection coll) {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean removeAll(Collection coll) {
-			throw new UnsupportedOperationException();
-		}
-
-		public boolean retainAll(Collection coll) {
-			throw new UnsupportedOperationException();
-		}
-
-		public void clear() {
-			throw new UnsupportedOperationException();
-		}
-	}
-
-	/**
-	 * Returns true if the specified arguments are equal, or both null.
-	 */
-	private static boolean eq(Object o1, Object o2) {
-		return (o1 == null ? o2 == null : o1.equals(o2));
+	// Suppresses default constructor, ensuring non-instantiability.
+	private Collections() {
 	}
 }

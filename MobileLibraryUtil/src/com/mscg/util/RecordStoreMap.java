@@ -30,7 +30,7 @@ public class RecordStoreMap implements Map, Closeable {
 	}
 	
 	public RecordStoreMap(String recordStoreName, boolean createIfNecessary) throws RecordStoreException {
-		innerMap = new HashMap();
+		innerMap = new LinkedHashMap();
 		recordStore = RecordStore.openRecordStore(recordStoreName, createIfNecessary);
 		try {
 			RecordEnumeration records = recordStore.enumerateRecords(null, null, true);
