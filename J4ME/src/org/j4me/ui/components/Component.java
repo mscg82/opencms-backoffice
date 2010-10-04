@@ -1,7 +1,11 @@
 package org.j4me.ui.components;
 
-import javax.microedition.lcdui.*;
-import org.j4me.ui.*;
+import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Graphics;
+
+import org.j4me.ui.DeviceScreen;
+import org.j4me.ui.Dialog;
+import org.j4me.ui.Theme;
 
 /**
  * Components are UI widgets that appear on forms.  Examples of components include
@@ -522,7 +526,11 @@ public abstract class Component
 		int bw = width - bs;
 		int bh = height - bs;
 		
+		int color = g.getColor();
+		g.setColor(theme.getBackgroundColor());
+		g.fillRect(bx, by, bw - 1, bh - 1);
 		g.drawRect( bx, by, bw - 1, bh - 1 );
+		g.setColor(color);
 		
 		// Return the offset from the edges of the component to the inside.
 		int offset = Math.max( HIGHLIGHTED_BORDER_WIDTH, rounding / 2 );

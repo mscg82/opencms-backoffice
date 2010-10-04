@@ -759,6 +759,17 @@ public class Theme
 	}
 	
 	/**
+	 * Returns the color of the text drawn in text boxes.
+	 * By default this is the same as the font color.
+	 * Override this method to change it.
+	 * 
+	 * @return The color of the text drawn in text boxes.
+	 */
+	public int getTextBoxColor() {
+		return getFontColor();
+	}
+	
+	/**
 	 * Fills a rectangle with linear gradient.  The gradient colors go
 	 * from <code>primaryColor</code> to <code>secondaryColor</code> at
 	 * <code>maxSecondary</code>.  So if <code>maxSecondary == 0.70</code> then a line

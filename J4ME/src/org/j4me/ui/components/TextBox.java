@@ -1,7 +1,15 @@
 package org.j4me.ui.components;
 
-import javax.microedition.lcdui.*;
-import org.j4me.ui.*;
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
+import javax.microedition.lcdui.Display;
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.TextField;
+
+import org.j4me.ui.DeviceScreen;
+import org.j4me.ui.Theme;
+import org.j4me.ui.UIManager;
 
 /**
  * A <code>TextBox</code> is a component for entering text, numbers, and keyboard data.
@@ -373,7 +381,7 @@ public class TextBox
 			int anchor = Graphics.LEFT | Graphics.TOP;
 	
 			g.clipRect( left, top, width, height );
-			g.setColor( theme.getFontColor() );
+			g.setColor( theme.getTextBoxColor() );
 			
 			// Determine the text to display inside the text box.
 			String display = contents;
