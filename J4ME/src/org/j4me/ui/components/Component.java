@@ -529,8 +529,8 @@ public abstract class Component
 		int color = g.getColor();
 		g.setColor(theme.getBackgroundColor());
 		g.fillRect(bx, by, bw - 1, bh - 1);
-		g.drawRect( bx, by, bw - 1, bh - 1 );
 		g.setColor(color);
+		g.drawRect( bx, by, bw - 1, bh - 1 );
 		
 		// Return the offset from the edges of the component to the inside.
 		int offset = Math.max( HIGHLIGHTED_BORDER_WIDTH, rounding / 2 );
