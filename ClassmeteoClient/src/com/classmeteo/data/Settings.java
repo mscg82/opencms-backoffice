@@ -5,6 +5,7 @@ import org.j4me.ui.components.Whitespace;
 import com.classmeteo.dialog.CurrentCondDialog;
 import com.classmeteo.dialog.SearchCityDialog;
 import com.classmeteo.dialog.SelectCityDialog;
+import com.classmeteo.dialog.SplashDialog;
 import com.mscg.util.Collections;
 import com.mscg.util.Map;
 import com.mscg.util.Properties;
@@ -20,6 +21,7 @@ public class Settings {
 	
 	private static Whitespace whitespace;
 	
+	private static SplashDialog splashScreen;
 	private static CurrentCondDialog currentCondDialog;
 	private static SelectCityDialog selectCityDialog;
 	private static SearchCityDialog searchCityDialog;
@@ -76,6 +78,16 @@ public class Settings {
 			selectCityDialog = new SelectCityDialog(null);
 		}
 		return selectCityDialog;
+	}
+
+	/**
+	 * @return the splashScreen
+	 */
+	public static SplashDialog getSplashScreen() {
+		if(splashScreen == null) {
+			splashScreen = new SplashDialog();
+		}
+		return splashScreen;
 	}
 
 	public static Properties getTranslation() {
