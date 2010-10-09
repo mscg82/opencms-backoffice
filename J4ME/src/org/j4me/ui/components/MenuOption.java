@@ -453,6 +453,13 @@ public class MenuOption
 	}
 	
 	/**
+	 * @return the menuItem
+	 */
+	public MenuItem getMenuItem() {
+		return menuItem;
+	}
+
+	/**
 	 * Called when the user presses any key.
 	 * 
 	 * @param key is code of the key that was pressed.

@@ -375,7 +375,7 @@ public abstract class Component
 	/**
 	 * Forces this component to repaint itself.
 	 */
-	public void repaint ()
+	public synchronized void repaint ()
 	{
 		if ( isShown() && (screen != null) )
 		{
