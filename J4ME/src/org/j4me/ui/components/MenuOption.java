@@ -303,10 +303,11 @@ public class MenuOption
 		// Paint the background for the menu item.
 		int backgroundColor = selected ?
 				theme.getHighlightColor() :
-				theme.getBackgroundColor();
-		g.setColor( backgroundColor );
-		
-		g.fillRect( 0, 0, width, height );
+				theme.getMenuOptionBackgroundColor();
+		if(backgroundColor > 0) {
+			g.setColor( backgroundColor );
+			g.fillRect( 0, 0, width, height );
+		}		
 
 		// Calculate the dimensions of the text and submenu arrow.
 		int[] submenuDimensions = getSubmenuIndicatorSize( theme, width, height );
@@ -368,7 +369,7 @@ public class MenuOption
 	{
 		// Set the font color.
 		int fontColor = selected ?
-				theme.getBackgroundColor() :
+				theme.getMenuOptionSelectedTextColor() :
 				theme.getFontColor();
 		text.setFontColor( fontColor );
 		

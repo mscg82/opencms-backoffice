@@ -770,6 +770,31 @@ public class Theme
 	}
 	
 	/**
+	 * Returns the color with which the backgound of the
+	 * menu options will be drawn. By default this is the
+	 * same as the background color. If negative, the background
+	 * will be transparent.
+	 * Override this method to change it.
+	 * 
+	 * @return The color with which the backgound of the
+	 * menu options
+	 */
+	public int getMenuOptionBackgroundColor() {
+		return getBackgroundColor();
+	}
+	
+	/**
+	 * Returns the color of the text in selected menu options.
+	 * By default this is the same as the background color.
+	 * Override this method to change it.
+	 * 
+	 * @return The color of the text in selected menu options.
+	 */
+	public int getMenuOptionSelectedTextColor() {
+		return getBackgroundColor();
+	}
+	
+	/**
 	 * Fills a rectangle with linear gradient.  The gradient colors go
 	 * from <code>primaryColor</code> to <code>secondaryColor</code> at
 	 * <code>maxSecondary</code>.  So if <code>maxSecondary == 0.70</code> then a line

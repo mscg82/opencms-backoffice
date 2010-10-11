@@ -78,8 +78,8 @@ public class BackgroundImageTheme extends Theme {
 	public void paintBackground(Graphics g) {
 		super.paintBackground(g);
 		if(image != null) {
-			int x = g.getClipX();
-			int y = g.getClipY();
+			int x = 0;//g.getClipX();
+			int y = 0;//g.getClipY();
 			int w = g.getClipWidth();
 			int h = g.getClipHeight();
 			
