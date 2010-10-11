@@ -10,6 +10,9 @@ import org.j4me.ui.Theme;
 public class ClassMeteoAppTheme extends BackgroundImageTheme implements PopupMenuTheme {
 	
 	private static final int[] margins = {2, 3, 2, 3};
+	
+	private static final int[] currentCondPaddings = {0, 0, 6, 0};
+	
 //	private static final int[] borderColors = {
 //		PopupMenuTheme.DEFAULT_BORDER_COLOR,
 //		PopupMenuTheme.DEFAULT_BORDER_COLOR,
@@ -21,8 +24,13 @@ public class ClassMeteoAppTheme extends BackgroundImageTheme implements PopupMen
 //		Theme.GREEN,
 //		Theme.YELLOW};
 	
+	public static int[] getCurrentCondPaddings() {
+		return currentCondPaddings;
+	}
 	private Font font;
 	private Font bold;
+	
+	private Font bigBold;
 	
 	/**
 	 * Creates a new instance of a {@link ClassMeteoAppTheme}.
@@ -32,18 +40,19 @@ public class ClassMeteoAppTheme extends BackgroundImageTheme implements PopupMen
 		Font base = Font.getDefaultFont();
 		int face = base.getFace();
 		
-		font = Font.getFont( face, Font.STYLE_PLAIN, Font.SIZE_SMALL );
+		font = Font.getFont( face, Font.STYLE_PLAIN, Font.SIZE_MEDIUM );
 		bold = Font.getFont( font.getFace(), Font.STYLE_BOLD, font.getSize() );
+		bigBold = Font.getFont( font.getFace(), Font.STYLE_BOLD, Font.SIZE_LARGE);
 		
-//		try {
-//			Image bkg = Image.createImage("/img/bkg_with_logo.png");
-//			setImage(bkg);
-//			setBackgroundPosition(BackgroundImageTheme.FULLSCREEN);
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
+		try {
+			Image bkg = Image.createImage("/img/bkg.png");
+			setImage(bkg);
+			setBackgroundPosition(BackgroundImageTheme.FULLSCREEN);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	/**
 	 * Creates a new instance of a {@link ClassMeteoAppTheme}.
 	 * @param image The image that will be used as background.
@@ -63,10 +72,10 @@ public class ClassMeteoAppTheme extends BackgroundImageTheme implements PopupMen
 	}
 
 	/**
-	 * @return the font
+	 * @return the bigBold font
 	 */
-	public Font getFont() {
-		return font;
+	public Font getBigBoldFont() {
+		return bigBold;
 	}
 	
 	/**
@@ -74,6 +83,21 @@ public class ClassMeteoAppTheme extends BackgroundImageTheme implements PopupMen
 	 */
 	public Font getBoldFont() {
 		return bold;
+	}
+
+	/**
+	 * @return the font
+	 */
+	public Font getFont() {
+		return font;
+	}
+
+	public int getFontColor() {
+		return Theme.BLACK;
+	}
+
+	public int getHighlightColor() {
+		return Theme.ORANGE;
 	}
 
 	public int[] getItemMargins() {
@@ -96,10 +120,18 @@ public class ClassMeteoAppTheme extends BackgroundImageTheme implements PopupMen
 		return PopupMenuTheme.DEFAULT_MENUBORDERS;
 	}
 
+	public int getMenuOptionBackgroundColor() {
+		return -1;
+	}
+
+	public int getMenuOptionSelectedTextColor() {
+		return Theme.WHITE;
+	}
+	
 	public String getMinWidth() {
 		return "auto";
 	}
-
+	
 	public int getPopupMenuFontColor() {
 		return Theme.LIGHT_BLUE;
 	}
@@ -112,16 +144,16 @@ public class ClassMeteoAppTheme extends BackgroundImageTheme implements PopupMen
 		return PopupMenuTheme.DEFAULT_SELECTED_FOREGROUND_COLOR;
 	}
 
-//	public int getFontColor() {
-//		return Theme.WHITE;
-//	}
+	public int getSpinnerEndColor() {
+		return Theme.ORANGE;
+	}
+
+	public int getSpinnerStartColor() {
+		return Theme.WHITE;
+	}
 	
 	public int getTextBoxColor() {
 		return Theme.BLACK;
 	}
-
-//	public int getHighlightColor() {
-//		return Theme.BLACK;
-//	}
 
 }

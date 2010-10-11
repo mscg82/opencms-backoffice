@@ -1,6 +1,7 @@
 package com.classmeteo.dialog;
 
 import org.j4me.ext.ChainedMenuItem;
+import org.j4me.ext.EmptyMenuOption;
 import org.j4me.ext.ExitApplicationMenuOption;
 import org.j4me.ext.OpenMenuMenuOption;
 import org.j4me.ext.UpdatablePopupMenuDialog;
@@ -27,7 +28,8 @@ public class SelectCityDialog extends UpdatablePopupMenuDialog {
 	private TextBox citySelector;
 	
 	private MenuOption searchCity;
-	private MenuOption gotoCurrent;
+	
+	private String rightMenuText;
 	
 	public SelectCityDialog(DeviceScreen previous) {
 		Properties tr = Settings.getTranslation();
@@ -42,7 +44,6 @@ public class SelectCityDialog extends UpdatablePopupMenuDialog {
 		citySelector.setLabel(tr.getProperty("cityselector.textbox.title"));
 		
 		searchCity = new OpenMenuMenuOption(tr.getProperty("menu.search"), Settings.getSearchCityDialog());
-		gotoCurrent = new OpenMenuMenuOption(tr.getProperty("menu.goto.current"), Settings.getCurrentCondDialog());
 	}
 
 	/**
@@ -71,12 +72,15 @@ public class SelectCityDialog extends UpdatablePopupMenuDialog {
 		Properties tr = Settings.getTranslation();
 		this.previous = previous;
 		
+		getLeftMenuItems().removeAllElements();
+
 		if(this.previous == null) {
 			addLeftItem(new ExitApplicationMenuOption(tr.getProperty("menu.exit")));
 		}
 		else {
-			addLeftItem(new OpenMenuMenuOption(tr.getProperty("menu.exit"), previous));
+			addLeftItem(new OpenMenuMenuOption(tr.getProperty("menu.prev"), previous));
 		}
+		updateMenuText();
 	}
 
 	/* (non-Javadoc)
@@ -93,6 +97,7 @@ public class SelectCityDialog extends UpdatablePopupMenuDialog {
 	public void updateComponents() {
 		deleteAll();
 		//append(Settings.getWhiteSpace());
+		append(Settings.getLogo());
 		append(citySelector);
 		Map savedLocations = Settings.getSavedLocations();
 		if(savedLocations.size() != 0) {
@@ -117,21 +122,33 @@ public class SelectCityDialog extends UpdatablePopupMenuDialog {
 				if(citySelector.getString().length() >= 3) {
 					Settings.getSearchCityDialog().setPrevious(this);
 					addRightItem(searchCity);
-					setDefaultMenuText();
+					rightMenuText = searchCity.getLabel();
+				}
+				else {
+					rightMenuText = null;
 				}
 			}
 			else {
-				MenuOption mo = (MenuOption)sel;
 				Properties tr = Settings.getTranslation();
-				addRightItem(gotoCurrent);
+				SavedCityMenuItem mi = (SavedCityMenuItem)((MenuOption)sel).getMenuItem();
+				MenuOption mo = new MenuOption(mi);
+				mo.setLabel(tr.getProperty("menu.goto.current"));
+				addRightItem(mo);
+				addRightItem(new EmptyMenuOption());
 				addRightItem(new MenuOption(
 					new ChainedMenuItem(
 						new RemoveCityMenuItem(tr.getProperty("menu.remove"), ((SavedCityMenuItem)mo.getMenuItem()).getCityId()),
 						new RepaintScreenMenuItem("", this))));
-				setMenuText(getLeftMenuText(), tr.getProperty("menu.actionbutton"));
+				rightMenuText = tr.getProperty("menu.actionbutton");
 			}
+			updateMenuText();
 		}
 		invalidate();
+	}
+	
+	private void updateMenuText() {
+		setDefaultMenuText();
+		setMenuText(getLeftMenuText(), rightMenuText);		
 	}
 	
 }

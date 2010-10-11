@@ -8,9 +8,9 @@ import org.j4me.ui.components.MenuOption;
 import org.j4me.ui.components.ProgressBar;
 
 import com.classmeteo.data.Settings;
+import com.classmeteo.data.WebServiceAccessor;
 import com.classmeteo.items.RetrievedCityMenuItem;
 import com.classmeteo.ws.ClassMeteoFluxesWS;
-import com.classmeteo.ws.ClassMeteoFluxesWS_Stub;
 import com.classmeteo.ws.MasterLocList;
 import com.classmeteo.ws.MasterLocWS;
 import com.mscg.util.Properties;
@@ -24,11 +24,12 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 		 */
 		public void run() {
 			try {
-				ClassMeteoFluxesWS client = new ClassMeteoFluxesWS_Stub();
+				ClassMeteoFluxesWS client = WebServiceAccessor.getClient();
 				MasterLocList locsList = client.getMasterLocByNameLike(Settings.getSelectCityDialog().getSelectedCityName(), new Integer(15));
 				synchronized (spinner) {
 					spinner.setMaxValue(1);					
 					SearchCityDialog.this.deleteAll();
+					//SearchCityDialog.this.append(Settings.getLogo());
 				}
 				//SearchCityDialog.this.append(Settings.getWhiteSpace());
 				MasterLocWS locs[] = locsList.getLocations();
@@ -37,7 +38,10 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 					String name = loc.getPrsntNm() + ", " +
 						((loc.getStCd() == null || loc.getStCd().trim().length() == 0 || "*".equals(loc.getStCd())) ? "" : loc.getStCd() + ", ") +
 						loc.getCntryCd(); 
-					SearchCityDialog.this.append(new MenuOption(new RetrievedCityMenuItem(name, loc.getLocId())));
+					MenuOption mo = new MenuOption(new RetrievedCityMenuItem(name, loc.getLocId()));
+					SearchCityDialog.this.append(mo);
+					if(i == 0)
+						SearchCityDialog.this.setSelected(mo);
 				}
 				SearchCityDialog.this.invalidate();
 				SearchCityDialog.this.repaint();
@@ -94,6 +98,7 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 		
 		spinner.setMaxValue(0);
 		//append(Settings.getWhiteSpace());
+		append(Settings.getLogo());
 		append(spinner);
 		
 		new CitiesSearchThread().start();

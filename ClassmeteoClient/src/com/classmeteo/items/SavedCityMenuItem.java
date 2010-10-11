@@ -13,6 +13,7 @@ public class SavedCityMenuItem extends GenericMenuItem {
 
 	public void onSelection() {
 		Settings.setActualLocation(cityId);
+		Settings.setActualLocationName(getText());
 		Settings.getCurrentCondDialog().show();
 	}
 

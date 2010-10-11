@@ -1,8 +1,13 @@
 package com.classmeteo.data;
 
+import java.io.IOException;
+
+import org.j4me.ui.components.Picture;
 import org.j4me.ui.components.Whitespace;
 
 import com.classmeteo.dialog.CurrentCondDialog;
+import com.classmeteo.dialog.DailyDialog;
+import com.classmeteo.dialog.HourlyDialog;
 import com.classmeteo.dialog.SearchCityDialog;
 import com.classmeteo.dialog.SelectCityDialog;
 import com.classmeteo.dialog.SplashDialog;
@@ -18,13 +23,32 @@ public class Settings {
 	private static Map savedLocations;
 	
 	private static String actualLocation;
+	/**
+	 * @return the actualLocationName
+	 */
+	public static String getActualLocationName() {
+		return actualLocationName;
+	}
+
+	/**
+	 * @param actualLocationName the actualLocationName to set
+	 */
+	public static void setActualLocationName(String actualLocationName) {
+		Settings.actualLocationName = actualLocationName;
+	}
+
+	private static String actualLocationName;
 	
 	private static Whitespace whitespace;
 	
 	private static SplashDialog splashScreen;
 	private static CurrentCondDialog currentCondDialog;
+	private static HourlyDialog hourlyDialog;
+	private static DailyDialog dailyDialog;
 	private static SelectCityDialog selectCityDialog;
 	private static SearchCityDialog searchCityDialog;
+	
+	private static Picture logo;
 	
 	public static void close() {
 		try {
@@ -51,6 +75,41 @@ public class Settings {
 			currentCondDialog = new CurrentCondDialog();
 		}
 		return currentCondDialog;
+	}
+
+	/**
+	 * @return the dailyDialog
+	 */
+	public static DailyDialog getDailyDialog() {
+		if(dailyDialog == null) {
+			dailyDialog = new DailyDialog();
+		}
+		return dailyDialog;
+	}
+
+	/**
+	 * @return the hourlyDialog
+	 */
+	public static HourlyDialog getHourlyDialog() {
+		if(hourlyDialog == null) {
+			hourlyDialog = new HourlyDialog();
+		}
+		return hourlyDialog;
+	}
+
+	/**
+	 * @return the logo
+	 */
+	public static Picture getLogo() {
+		if(logo == null) {
+			logo = new Picture();
+			try {
+				logo.setImage("/img/logo.png");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return logo;
 	}
 
 	/**
@@ -121,24 +180,45 @@ public class Settings {
 	}
 	
 	/**
+	 * @param dailyDialog the dailyDialog to set
+	 */
+	public static void setDailyDialog(DailyDialog dailyDialog) {
+		Settings.dailyDialog = dailyDialog;
+	}
+
+	/**
+	 * @param logo the logo to set
+	 */
+	public static void setLogo(Picture logo) {
+		Settings.logo = logo;
+	}
+
+	/**
 	 * @param savedLocations the savedLocations to set
 	 */
 	public static void setSavedLocations(Map savedLocations) {
 		Settings.savedLocations = savedLocations;
 	}
-	
+
 	/**
 	 * @param searchCityDialog the searchCityDialog to set
 	 */
 	public static void setSearchCityDialog(SearchCityDialog searchCityDialog) {
 		Settings.searchCityDialog = searchCityDialog;
 	}
-
+	
 	/**
 	 * @param selectCityDialog the selectCityDialog to set
 	 */
 	public static void setSelectCityDialog(SelectCityDialog selectCityDialog) {
 		Settings.selectCityDialog = selectCityDialog;
+	}
+
+	/**
+	 * @param splashScreen the splashScreen to set
+	 */
+	public static void setSplashScreen(SplashDialog splashScreen) {
+		Settings.splashScreen = splashScreen;
 	}
 	
 	public static void setTranslation(Properties translation) {
