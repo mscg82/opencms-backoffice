@@ -1,9 +1,12 @@
 package org.j4me.ui.components;
 
-import java.util.*;
-import javax.microedition.lcdui.*;
-import org.j4me.ui.*;
-import org.j4me.util.*;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import javax.microedition.lcdui.Graphics;
+
+import org.j4me.ui.Theme;
+import org.j4me.util.MathFunc;
 
 /**
  * Displays a progress bar that indicates the state of a background
@@ -407,8 +410,8 @@ public class ProgressBar
 		// component color.  (spinnerHour + 1) is at full color while one
 		// more is at the background color.  This gives the illusion of
 		// it moving clockwise.
-		int background = theme.getBackgroundColor();
-		int foreground = theme.getBorderColor();
+		int background = theme.getSpinnerStartColor();
+		int foreground = theme.getSpinnerEndColor();
 		
 		int redStart   = (background & 0x00FF0000) >> 16;
 		int greenStart = (background & 0x0000FF00) >> 8;

@@ -68,6 +68,69 @@ public class Theme
 	private static final int SCROLLBAR_WIDTH = 6;
 	
 	/**
+	 * Fills a rectangle with linear gradient.  The gradient colors go
+	 * from <code>primaryColor</code> to <code>secondaryColor</code> at
+	 * <code>maxSecondary</code>.  So if <code>maxSecondary == 0.70</code> then a line
+	 * across the fill rectangle 70% of the way would be
+	 * <code>secondaryColor</code>.
+	 * 
+	 * @param g is the <code>Graphics</code> object for painting.
+	 * @param x is the left edge of the rectangle.
+	 * @param y is the top edge of the rectangle.
+	 * @param width is the width of the rectangle.
+	 * @param height is the height of the rectangle.
+	 * @param fillVertically is <code>true</code> if the gradient goes from
+	 *  top-to-bottom or <code>false</code> for left-to-right.
+	 * @param primaryColor is the main color.
+	 * @param secondaryColor is the highlight color.
+	 * @param maxSecondary is between 0.00 and 1.00 and says how far down
+	 *  the fill will <code>secondaryColor</code> peak.
+	 */
+	public static void gradientFill (
+			Graphics g,
+			int x, int y, int width, int height,
+			boolean fillVertically,
+			int primaryColor, int secondaryColor, double maxSecondary)
+	{
+		// Break the primary color into red, green, and blue.
+		int pr = (primaryColor & 0x00FF0000) >> 16;
+		int pg = (primaryColor & 0x0000FF00) >> 8;
+		int pb = (primaryColor & 0x000000FF);
+		
+		// Break the secondary color into red, green, and blue.
+		int sr = (secondaryColor & 0x00FF0000) >> 16;
+		int sg = (secondaryColor & 0x0000FF00) >> 8;
+		int sb = (secondaryColor & 0x000000FF);
+		
+		// Draw a horizonal line for each pixel from the top to the bottom.
+		int end = (fillVertically ? height : width);
+		
+		for ( int i = 0; i < end; i++ )
+		{
+			// Calculate the color for this line.
+			double p = (double)i / (double)end;
+			double v = Math.abs( maxSecondary - p );
+			double v2 = 1.0 - v;
+			
+			int red   = (int)( pr * v + sr * v2 );
+			int green = (int)( pg * v + sg * v2 );
+			int blue  = (int)( pb * v + sb * v2 );
+			
+			g.setColor( red, green, blue );
+			
+			// Draw the line.
+			if ( fillVertically )
+			{
+				g.drawLine( x, y + i, x + width, y + i );
+			}
+			else  // horizontal
+			{
+				g.drawLine( x + i, y, x + i, y + height );
+			}
+		}
+	}
+	
+	/**
 	 * The font used for writing text in the normal canvas area.  It
 	 * is the default font used by components.
 	 */
@@ -99,6 +162,36 @@ public class Theme
 		menuFont = Font.getFont( face, Font.STYLE_PLAIN, size );
 		titleFont = Font.getFont( face, Font.STYLE_BOLD, size );
 	}
+
+	/**
+	 * Returns the color used as the background for the canvas section
+	 * of the screen.  This is the area that is not the title bar
+	 * at the top or menu bar at the bottom.  Colors are defined as
+	 * 0xAARRGGBB; the first-byte alpha-channel is ignored.
+	 * <p>
+	 * Override this method to change it.
+	 * 
+	 * @return The color of the title border.
+	 */
+	public int getBackgroundColor ()
+	{
+		return WHITE;
+	}
+	
+	/**
+	 * Returns the color used for borders in the canvas section of the
+	 * UI.  An example of a border is the outline around a text box.
+	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel
+	 * is ignored.
+	 * <p>
+	 * Override this method to change it. 
+	 * 
+	 * @return The color of the borders in the UI.
+	 */
+	public int getBorderColor ()
+	{
+		return NAVY;
+	}
 	
 	/**
 	 * Gets the basic default font.  This font is used for writing menu
@@ -110,39 +203,6 @@ public class Theme
 	public Font getFont ()
 	{
 		return defaultFont;
-	}
-
-	/**
-	 * Returns the font used in the menu bar at the bottom of the canvas.
-	 * <p>
-	 * By default this font is the system font.
-	 * Override this font to change the style of the title text.
-	 * 
-	 * @return The font used for writing menu text.
-	 * 
-	 * @see #getMenuFontColor()
-	 * @see #paintMenuBar(Graphics, String, boolean, String, boolean, int, int)
-	 */
-	public Font getMenuFont ()
-	{
-		return menuFont;
-	}
-	
-	/**
-	 * Returns the font used for writing the title in the screen's title
-	 * area.
-	 * <p>
-	 * By default this font is the system font in bold.
-	 * Override this font to change the style of the title text.
-	 * 
-	 * @return The font used for writing the title in the title area at
-	 *  the top of the screen.
-	 * @see #getTitleFontColor()
-	 * @see #paintTrackbar(Graphics, int, int, int, int)
-	 */
-	public Font getTitleFont ()
-	{
-		return titleFont;
 	}
 	
 	/**
@@ -157,6 +217,86 @@ public class Theme
 	public int getFontColor ()
 	{
 		return NAVY;
+	}
+	
+	/**
+	 * Returns the main color used in painting components.  For example
+	 * a progress bar will use this color to show the completed progress.
+	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel
+	 * is ignored.
+	 * <p>
+	 * Override this method to change it. 
+	 * 
+	 * @return The primary color used to paint components.
+	 */
+	public int getHighlightColor ()
+	{
+		return LIGHT_BLUE;
+	}
+	
+	/**
+	 * Returns the primary color of the background of the menu  bar.  A second
+	 * color defined by <code>getMenuBarHighlightColor</code> is overlaid with
+	 * a vertical gradient.
+	 * <p>
+	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
+	 * <p>
+	 * Override this method to change it.
+	 * 
+	 * @return The color of the border around the menu bar.
+	 * 
+	 * @see #getMenuBarHighlightColor()
+	 */
+	public int getMenuBarBackgroundColor ()
+	{
+		return NAVY;
+	}
+
+	/**
+	 * Returns the color of the border around the menu bar.
+	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
+	 * <p>
+	 * Override this method to change it.
+	 * 
+	 * @return The color of the border around the menu bar.
+	 * @see #paintMenuBar(Graphics, String, boolean, String, boolean, int, int)
+	 */
+	public int getMenuBarBorderColor ()
+	{
+		return getFontColor();
+	}
+	
+	/**
+	 * Returns the highlight color applied as a vertical gradient to the menu
+	 * bar.
+	 * <p>
+	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
+	 * <p>
+	 * Override this method to change it.
+	 * 
+	 * @return The highlight color of the menu bar background.
+	 * 
+	 * @see #getMenuBarBackgroundColor()
+	 */
+	public int getMenuBarHighlightColor ()
+	{
+		return LIGHT_BLUE;
+	}
+	
+	/**
+	 * Returns the font used in the menu bar at the bottom of the canvas.
+	 * <p>
+	 * By default this font is the system font.
+	 * Override this font to change the style of the title text.
+	 * 
+	 * @return The font used for writing menu text.
+	 * 
+	 * @see #getMenuFontColor()
+	 * @see #paintMenuBar(Graphics, String, boolean, String, boolean, int, int)
+	 */
+	public Font getMenuFont ()
+	{
+		return menuFont;
 	}
 	
 	/**
@@ -190,80 +330,172 @@ public class Theme
 	{
 		return SILVER;
 	}
+
+	/**
+	 * Gets the height of the menu bar in pixels.  This method is called
+	 * whenever the menu is going to be painted.
+	 * 
+	 * @return The height of the menu bar in pixels.
+	 * 
+	 * @see #paintMenuBar(Graphics, String, boolean, String, boolean, int, int)
+	 */
+	public int getMenuHeight ()
+	{
+		return getMenuFont().getHeight() + 2;
+	}
 	
 	/**
-	 * The color of the text written with the font returned by <code>getTitleFont</code>.
-	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
-	 * <p>
-	 * Override this method to change the text color.
-	 *  
-	 * @return The color of text written with the font from <code>getTitleFont</code>.
-	 * @see #getTitleFont()
-	 * @see #paintTrackbar(Graphics, int, int, int, int)
+	 * Returns the color with which the backgound of the
+	 * menu options will be drawn. By default this is the
+	 * same as the background color. If negative, the background
+	 * will be transparent.
+	 * Override this method to change it.
+	 * 
+	 * @return The color with which the backgound of the
+	 * menu options
 	 */
-	public int getTitleFontColor ()
+	public int getMenuOptionBackgroundColor() {
+		return getBackgroundColor();
+	}
+	
+	/**
+	 * Returns the color of the text in selected menu options.
+	 * By default this is the same as the background color.
+	 * Override this method to change it.
+	 * 
+	 * @return The color of the text in selected menu options.
+	 */
+	public int getMenuOptionSelectedTextColor() {
+		return getBackgroundColor();
+	}
+	
+	/**
+	 * Gets the localized menu text for Cancel buttons that appear on
+	 * forms.  By default this is "Cancel".
+	 * 
+	 * @return The text used for the Cancel button on forms.
+	 */
+	public String getMenuTextForCancel ()
 	{
-		return getMenuFontColor();
+		return "Cancel";
+	}
+	
+	/**
+	 * Gets the localized menu text for Exit buttons that appear on
+	 * forms.  By default this is "Exit".
+	 * 
+	 * @return The text used for the OK button on forms.
+	 */
+	public String getMenuTextForExit ()
+	{
+		return "Exit";
+	}
+	
+	/**
+	 * Gets the localized menu text for OK buttons that appear on
+	 * forms.  By default this is "OK".
+	 * 
+	 * @return The text used for the OK button on forms.
+	 */
+	public String getMenuTextForOK ()
+	{
+		return "OK";
+	}
+	
+	/**
+	 * Returns the color of the background of the scrollbar.  This
+	 * is the area without the trackbar on it.
+	 * <p>
+	 * By default this is the same as the scrollbar's border color.
+	 * Override this method to change it.
+	 * 
+	 * @return The color of the scrollbar background.
+	 * @see #paintVerticalScrollbar(Graphics, int, int, int, int, int, int)
+	 */
+	public int getScrollbarBackgroundColor ()
+	{
+		return getMenuBarBackgroundColor();
 	}
 
 	/**
-	 * Returns the color used for borders in the canvas section of the
-	 * UI.  An example of a border is the outline around a text box.
-	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel
-	 * is ignored.
+	 * Returns the color of the border around the scrollbar.
+	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
 	 * <p>
-	 * Override this method to change it. 
+	 * By default this is the same as the  border color.
+	 * Override this method to change it.
 	 * 
-	 * @return The color of the borders in the UI.
+	 * @return The color of the border around the scrollbar.
+	 * @see #paintVerticalScrollbar(Graphics, int, int, int, int, int, int)
 	 */
-	public int getBorderColor ()
+	public int getScrollbarBorderColor ()
 	{
-		return NAVY;
+		return getBorderColor();
 	}
-	
+
 	/**
-	 * Returns the color used as the background for the canvas section
-	 * of the screen.  This is the area that is not the title bar
-	 * at the top or menu bar at the bottom.  Colors are defined as
-	 * 0xAARRGGBB; the first-byte alpha-channel is ignored.
+	 * Returns the highlight color applied as a horizontal gradient to the
+	 * scrollbar.
+	 * <p>
+	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
 	 * <p>
 	 * Override this method to change it.
 	 * 
-	 * @return The color of the title border.
+	 * @return The highlight color of the scrollbar background.
+	 * 
+	 * @see #getScrollbarBackgroundColor()
 	 */
-	public int getBackgroundColor ()
+	public int getScrollbarHighlightColor ()
 	{
-		return WHITE;
+		return getMenuFontHighlightColor();
 	}
 	
 	/**
-	 * Returns the main color used in painting components.  For example
-	 * a progress bar will use this color to show the completed progress.
-	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel
-	 * is ignored.
+	 * Returns the color of the trackbar within the scrollbar.  The
+	 * trackbar is the block that moves up and down the scrollbar
+	 * to visually inform the user of where in the scrolling they are.
 	 * <p>
-	 * Override this method to change it. 
+	 * By default this is the same as the menu bar's background color.
+	 * Override this method to change it.
 	 * 
-	 * @return The primary color used to paint components.
+	 * @return The color of the scrollbar's trackbar.
+	 * @see #paintVerticalScrollbar(Graphics, int, int, int, int, int, int)
 	 */
-	public int getHighlightColor ()
+	public int getScrollbarTrackbarColor ()
 	{
-		return LIGHT_BLUE;
+		return getMenuBarHighlightColor();
 	}
 	
 	/**
-	 * Returns the color of the border around the title bar.
-	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
-	 * <p>
-	 * By default this is the same color as the menu border.  Override
-	 * this method to change it.
+	 * Returns the color used as end color in the spinner.
+	 * By default this is the same as the border color.
+	 * Override this method to change it.
 	 * 
-	 * @return The color of the title border.
-	 * @see #paintTrackbar(Graphics, int, int, int, int)
+	 * @return The color used as end color in the spinner.
 	 */
-	public int getTitleBarBorderColor ()
-	{
-		return getMenuBarBorderColor();
+	public int getSpinnerEndColor() {
+		return getBorderColor();
+	}
+	
+	/**
+	 * Returns the color used as start color in the spinner.
+	 * By default this is the same as the background color.
+	 * Override this method to change it.
+	 * 
+	 * @return The color used as start color in the spinner.
+	 */
+	public int getSpinnerStartColor() {
+		return getBackgroundColor();
+	}
+	
+	/**
+	 * Returns the color of the text drawn in text boxes.
+	 * By default this is the same as the font color.
+	 * Override this method to change it.
+	 * 
+	 * @return The color of the text drawn in text boxes.
+	 */
+	public int getTextBoxColor() {
+		return getFontColor();
 	}
 	
 	/**
@@ -284,7 +516,22 @@ public class Theme
 	{
 		return getMenuBarBackgroundColor();
 	}
-
+	
+	/**
+	 * Returns the color of the border around the title bar.
+	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
+	 * <p>
+	 * By default this is the same color as the menu border.  Override
+	 * this method to change it.
+	 * 
+	 * @return The color of the title border.
+	 * @see #paintTrackbar(Graphics, int, int, int, int)
+	 */
+	public int getTitleBarBorderColor ()
+	{
+		return getMenuBarBorderColor();
+	}
+	
 	/**
 	 * Returns the highlight color applied as a vertical gradient to the title
 	 * bar.
@@ -304,54 +551,37 @@ public class Theme
 	}
 	
 	/**
-	 * Returns the color of the border around the menu bar.
-	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
+	 * Returns the font used for writing the title in the screen's title
+	 * area.
 	 * <p>
-	 * Override this method to change it.
+	 * By default this font is the system font in bold.
+	 * Override this font to change the style of the title text.
 	 * 
-	 * @return The color of the border around the menu bar.
-	 * @see #paintMenuBar(Graphics, String, boolean, String, boolean, int, int)
+	 * @return The font used for writing the title in the title area at
+	 *  the top of the screen.
+	 * @see #getTitleFontColor()
+	 * @see #paintTrackbar(Graphics, int, int, int, int)
 	 */
-	public int getMenuBarBorderColor ()
+	public Font getTitleFont ()
 	{
-		return getFontColor();
+		return titleFont;
 	}
-	
+
 	/**
-	 * Returns the primary color of the background of the menu  bar.  A second
-	 * color defined by <code>getMenuBarHighlightColor</code> is overlaid with
-	 * a vertical gradient.
-	 * <p>
+	 * The color of the text written with the font returned by <code>getTitleFont</code>.
 	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
 	 * <p>
-	 * Override this method to change it.
-	 * 
-	 * @return The color of the border around the menu bar.
-	 * 
-	 * @see #getMenuBarHighlightColor()
+	 * Override this method to change the text color.
+	 *  
+	 * @return The color of text written with the font from <code>getTitleFont</code>.
+	 * @see #getTitleFont()
+	 * @see #paintTrackbar(Graphics, int, int, int, int)
 	 */
-	public int getMenuBarBackgroundColor ()
+	public int getTitleFontColor ()
 	{
-		return NAVY;
+		return getMenuFontColor();
 	}
-	
-	/**
-	 * Returns the highlight color applied as a vertical gradient to the menu
-	 * bar.
-	 * <p>
-	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
-	 * <p>
-	 * Override this method to change it.
-	 * 
-	 * @return The highlight color of the menu bar background.
-	 * 
-	 * @see #getMenuBarBackgroundColor()
-	 */
-	public int getMenuBarHighlightColor ()
-	{
-		return LIGHT_BLUE;
-	}
-	
+
 	/**
 	 * Gets the height of the title bar in pixels.  This method is called
 	 * whenever the title is set and the title bar is going to be painted.
@@ -365,78 +595,43 @@ public class Theme
 	}
 	
 	/**
-	 * Paints the title bar of the canvas.  This method is called only
-	 * when the title has been set through <code>setTitle</code> and the canvas
-	 * is not in full screen mode.
-	 * <p>
-	 * The supplied <code>Graphics</code> will be set with an appropriate clip
-	 * and translated such that (0,0) is the top-left corner of the title
-	 * bar.
-	 * <p>
-	 * Override this method to change the appearance of the title bar.
-	 * For example background or logo images can be placed throughout the
-	 * application by painting them here.
+	 * Returns the width of the vertical scrollbar.
 	 * 
-	 * @param g is the <code>Graphics</code> object to paint with.
-	 * @param title is the text for the title bar as defined by the
-	 *  canvas class.
-	 * @param width is the width of the title bar in pixels.
-	 * @param height is the height of the title bar in pixels.
+	 * @return The number of pixels wide the scrollbar is.
 	 */
-	public void paintTitleBar (Graphics g, String title, int width, int height)
+	public int getVerticalScrollbarWidth ()
 	{
-		// Fill the background of the title bar.
-		paintTitleBarBackground( g, 0, 0, width, height );
-		
-		// Draw a line below the title bar to separate it from the canvas.
-		g.setColor( getTitleBarBorderColor() );
-		g.drawLine( 0, height - 1, width, height - 1 );
-
-		// Write the title text.
-		g.setFont( getTitleFont() );
-		g.setColor( getTitleFontColor() );
-		g.drawString( title, width / 2, 1, Graphics.HCENTER | Graphics.TOP );
+		return SCROLLBAR_WIDTH;
 	}
 	
 	/**
-	 * Paints the background area of the title bar.  The text will be
-	 * added later by the calling <code>paintTitleBar</code> method.
-	 *
+	 * Paints the background of the main section of the screen.  This includes
+	 * everything except for the title bar at the top and menu bar at the bottom.
+	 * However, if this canvas is in full screen mode, then this method paints the entire
+	 * screen.
+	 * <p>
+	 * After this method is called, the screen's <code>paintCanvas</code> method will be.
+	 * <p>
+	 * By default this method paints the entire background the color specified
+	 * by <code>getBackgroundColor</code>.  Override this implementation to provide
+	 * a different background for the entire application, such as an image.
+	 * 
 	 * @param g is the <code>Graphics</code> object to paint with.
-	 * @param x is the top-left X-coordinate pixel of the title bar.
-	 * @param y is the top-left Y-coordinate pixel of the title bar.
-	 * @param width is the width of the title bar in pixels.
-	 * @param height is the height of the title bar in pixels.
-	 * 
-	 * @see #paintTrackbar(Graphics, int, int, int, int)
 	 */
-	protected void paintTitleBarBackground (Graphics g, int x, int y, int width, int height)
+	public void paintBackground (Graphics g)
 	{
-		// This code would paint the title bar a solid background.
-		//	int background = getTitleBackgroundColor();
-		//	g.setColor( background );
-		//	g.fillRect( x, y, width, height );
+		int color = getBackgroundColor();
 		
-		// Paint a gradient background.
-		int primary = getTitleBarBackgroundColor();
-		int secondary = getTitleBarHighlightColor();
+		int x = g.getClipX();
+		int y = g.getClipY();
+		int w = g.getClipWidth();
+		int h = g.getClipHeight();
 		
-		gradientFill( g, 0, 0, width, height, true, primary, secondary, TITLE_BAR_SECONDARY_COLOR_MAX );
+		// Clear the canvas.
+		g.setColor( color );
+		g.fillRect( x, y, w, h );
 	}
-
-	/**
-	 * Gets the height of the menu bar in pixels.  This method is called
-	 * whenever the menu is going to be painted.
-	 * 
-	 * @return The height of the menu bar in pixels.
-	 * 
-	 * @see #paintMenuBar(Graphics, String, boolean, String, boolean, int, int)
-	 */
-	public int getMenuHeight ()
-	{
-		return getMenuFont().getHeight() + 2;
-	}
-
+	
 	/**
 	 * Paints the menu bar at the bottom of the canvas.  This method is
 	 * not called if the canvas is in full screen mode.
@@ -520,64 +715,118 @@ public class Theme
 	}
 	
 	/**
-	 * Gets the localized menu text for OK buttons that appear on
-	 * forms.  By default this is "OK".
+	 * Paints the background area of the scrollbar.  This does not include
+	 * the trackbar (which will be painted later by <code>paintScrollbarTrackbar</code>).
+	 *
+	 * @param g is the <code>Graphics</code> object to paint with.
+	 * @param x is the top-left X-coordinate pixel of the scrollbar.
+	 * @param y is the top-left Y-coordinate pixel of the scrollbar.
+	 * @param width is the width of the scrollbar in pixels.
+	 * @param height is the height of the scrollbar in pixels.
 	 * 
-	 * @return The text used for the OK button on forms.
+	 * @see #paintVerticalScrollbar(Graphics, int, int, int, int, int, int)
+	 * @see #paintTrackbar(Graphics, int, int, int, int)
 	 */
-	public String getMenuTextForOK ()
+	protected void paintScrollbarBackground (Graphics g, int x, int y, int width, int height)
 	{
-		return "OK";
+		// This code would paint the scrollbar a solid background.
+		//	int background = getScrollbarBackgroundColor();
+		//	g.setColor( background );
+		//	g.fillRect( x, y, width, height );
+		
+		// Paint a gradient background.
+		int primary = getScrollbarBackgroundColor();
+		int secondary = getScrollbarHighlightColor();
+		
+		gradientFill( g, x, y, width, height, false, primary, secondary, SCROLLBAR_SECONDARY_COLOR_MAX );
 	}
 	
 	/**
-	 * Gets the localized menu text for Exit buttons that appear on
-	 * forms.  By default this is "Exit".
-	 * 
-	 * @return The text used for the OK button on forms.
-	 */
-	public String getMenuTextForExit ()
-	{
-		return "Exit";
-	}
-	
-	/**
-	 * Gets the localized menu text for Cancel buttons that appear on
-	 * forms.  By default this is "Cancel".
-	 * 
-	 * @return The text used for the Cancel button on forms.
-	 */
-	public String getMenuTextForCancel ()
-	{
-		return "Cancel";
-	}
-	
-	/**
-	 * Paints the background of the main section of the screen.  This includes
-	 * everything except for the title bar at the top and menu bar at the bottom.
-	 * However, if this canvas is in full screen mode, then this method paints the entire
-	 * screen.
+	 * Paints the title bar of the canvas.  This method is called only
+	 * when the title has been set through <code>setTitle</code> and the canvas
+	 * is not in full screen mode.
 	 * <p>
-	 * After this method is called, the screen's <code>paintCanvas</code> method will be.
+	 * The supplied <code>Graphics</code> will be set with an appropriate clip
+	 * and translated such that (0,0) is the top-left corner of the title
+	 * bar.
 	 * <p>
-	 * By default this method paints the entire background the color specified
-	 * by <code>getBackgroundColor</code>.  Override this implementation to provide
-	 * a different background for the entire application, such as an image.
+	 * Override this method to change the appearance of the title bar.
+	 * For example background or logo images can be placed throughout the
+	 * application by painting them here.
 	 * 
 	 * @param g is the <code>Graphics</code> object to paint with.
+	 * @param title is the text for the title bar as defined by the
+	 *  canvas class.
+	 * @param width is the width of the title bar in pixels.
+	 * @param height is the height of the title bar in pixels.
 	 */
-	public void paintBackground (Graphics g)
+	public void paintTitleBar (Graphics g, String title, int width, int height)
 	{
-		int color = getBackgroundColor();
+		// Fill the background of the title bar.
+		paintTitleBarBackground( g, 0, 0, width, height );
 		
-		int x = g.getClipX();
-		int y = g.getClipY();
-		int w = g.getClipWidth();
-		int h = g.getClipHeight();
+		// Draw a line below the title bar to separate it from the canvas.
+		g.setColor( getTitleBarBorderColor() );
+		g.drawLine( 0, height - 1, width, height - 1 );
+
+		// Write the title text.
+		g.setFont( getTitleFont() );
+		g.setColor( getTitleFontColor() );
+		g.drawString( title, width / 2, 1, Graphics.HCENTER | Graphics.TOP );
+	}
+	
+	/**
+	 * Paints the background area of the title bar.  The text will be
+	 * added later by the calling <code>paintTitleBar</code> method.
+	 *
+	 * @param g is the <code>Graphics</code> object to paint with.
+	 * @param x is the top-left X-coordinate pixel of the title bar.
+	 * @param y is the top-left Y-coordinate pixel of the title bar.
+	 * @param width is the width of the title bar in pixels.
+	 * @param height is the height of the title bar in pixels.
+	 * 
+	 * @see #paintTrackbar(Graphics, int, int, int, int)
+	 */
+	protected void paintTitleBarBackground (Graphics g, int x, int y, int width, int height)
+	{
+		// This code would paint the title bar a solid background.
+		//	int background = getTitleBackgroundColor();
+		//	g.setColor( background );
+		//	g.fillRect( x, y, width, height );
 		
-		// Clear the canvas.
-		g.setColor( color );
-		g.fillRect( x, y, w, h );
+		// Paint a gradient background.
+		int primary = getTitleBarBackgroundColor();
+		int secondary = getTitleBarHighlightColor();
+		
+		gradientFill( g, 0, 0, width, height, true, primary, secondary, TITLE_BAR_SECONDARY_COLOR_MAX );
+	}
+	
+	/**
+	 * Paints the trackbar on the scrollbar.  The trackbar is the sliding bit
+	 * found on the scrollbar that shows the user where the current screen
+	 * is relative to the scrolling.
+	 *
+	 * @param g is the <code>Graphics</code> object to paint with.
+	 * @param x is the top-left X-coordinate pixel of the trackbar.
+	 * @param y is the top-left Y-coordinate pixel of the trackbar.
+	 * @param width is the width of the trackbar in pixels.
+	 * @param height is the height of the trackbar in pixels.
+	 * 
+	 * @see #paintVerticalScrollbar(Graphics, int, int, int, int, int, int)
+	 * @see #paintScrollbarBackground(Graphics, int, int, int, int)
+	 */
+	protected void paintTrackbar (Graphics g, int x, int y, int width, int height)
+	{
+		// This code would paint the scrollbar a solid background.
+		//	int trackbar = getScrollbarTrackbarColor();
+		//	g.setColor( trackbar );
+		//	g.fillRect( x, y, width, height );
+		
+		// Paint a gradient background.
+		int primary = getScrollbarTrackbarColor();
+		int secondary = getScrollbarBorderColor();
+		
+		gradientFill( g, x, y, width, height, false, primary, secondary, 0.80 );
 	}
 	
 	/**
@@ -628,232 +877,5 @@ public class Theme
 		
 		// Draw the trackbar.
 		paintTrackbar( g, left, center - rangeStart, scrollbarWidth, trackbarHeight );
-	}
-	
-	/**
-	 * Paints the background area of the scrollbar.  This does not include
-	 * the trackbar (which will be painted later by <code>paintScrollbarTrackbar</code>).
-	 *
-	 * @param g is the <code>Graphics</code> object to paint with.
-	 * @param x is the top-left X-coordinate pixel of the scrollbar.
-	 * @param y is the top-left Y-coordinate pixel of the scrollbar.
-	 * @param width is the width of the scrollbar in pixels.
-	 * @param height is the height of the scrollbar in pixels.
-	 * 
-	 * @see #paintVerticalScrollbar(Graphics, int, int, int, int, int, int)
-	 * @see #paintTrackbar(Graphics, int, int, int, int)
-	 */
-	protected void paintScrollbarBackground (Graphics g, int x, int y, int width, int height)
-	{
-		// This code would paint the scrollbar a solid background.
-		//	int background = getScrollbarBackgroundColor();
-		//	g.setColor( background );
-		//	g.fillRect( x, y, width, height );
-		
-		// Paint a gradient background.
-		int primary = getScrollbarBackgroundColor();
-		int secondary = getScrollbarHighlightColor();
-		
-		gradientFill( g, x, y, width, height, false, primary, secondary, SCROLLBAR_SECONDARY_COLOR_MAX );
-	}
-	
-	/**
-	 * Paints the trackbar on the scrollbar.  The trackbar is the sliding bit
-	 * found on the scrollbar that shows the user where the current screen
-	 * is relative to the scrolling.
-	 *
-	 * @param g is the <code>Graphics</code> object to paint with.
-	 * @param x is the top-left X-coordinate pixel of the trackbar.
-	 * @param y is the top-left Y-coordinate pixel of the trackbar.
-	 * @param width is the width of the trackbar in pixels.
-	 * @param height is the height of the trackbar in pixels.
-	 * 
-	 * @see #paintVerticalScrollbar(Graphics, int, int, int, int, int, int)
-	 * @see #paintScrollbarBackground(Graphics, int, int, int, int)
-	 */
-	protected void paintTrackbar (Graphics g, int x, int y, int width, int height)
-	{
-		// This code would paint the scrollbar a solid background.
-		//	int trackbar = getScrollbarTrackbarColor();
-		//	g.setColor( trackbar );
-		//	g.fillRect( x, y, width, height );
-		
-		// Paint a gradient background.
-		int primary = getScrollbarTrackbarColor();
-		int secondary = getScrollbarBorderColor();
-		
-		gradientFill( g, x, y, width, height, false, primary, secondary, 0.80 );
-	}
-
-	/**
-	 * Returns the width of the vertical scrollbar.
-	 * 
-	 * @return The number of pixels wide the scrollbar is.
-	 */
-	public int getVerticalScrollbarWidth ()
-	{
-		return SCROLLBAR_WIDTH;
-	}
-
-	/**
-	 * Returns the color of the border around the scrollbar.
-	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
-	 * <p>
-	 * By default this is the same as the  border color.
-	 * Override this method to change it.
-	 * 
-	 * @return The color of the border around the scrollbar.
-	 * @see #paintVerticalScrollbar(Graphics, int, int, int, int, int, int)
-	 */
-	public int getScrollbarBorderColor ()
-	{
-		return getBorderColor();
-	}
-	
-	/**
-	 * Returns the color of the background of the scrollbar.  This
-	 * is the area without the trackbar on it.
-	 * <p>
-	 * By default this is the same as the scrollbar's border color.
-	 * Override this method to change it.
-	 * 
-	 * @return The color of the scrollbar background.
-	 * @see #paintVerticalScrollbar(Graphics, int, int, int, int, int, int)
-	 */
-	public int getScrollbarBackgroundColor ()
-	{
-		return getMenuBarBackgroundColor();
-	}
-	
-	/**
-	 * Returns the highlight color applied as a horizontal gradient to the
-	 * scrollbar.
-	 * <p>
-	 * Colors are defined as 0xAARRGGBB; the first-byte alpha-channel is ignored.
-	 * <p>
-	 * Override this method to change it.
-	 * 
-	 * @return The highlight color of the scrollbar background.
-	 * 
-	 * @see #getScrollbarBackgroundColor()
-	 */
-	public int getScrollbarHighlightColor ()
-	{
-		return getMenuFontHighlightColor();
-	}
-	
-	/**
-	 * Returns the color of the trackbar within the scrollbar.  The
-	 * trackbar is the block that moves up and down the scrollbar
-	 * to visually inform the user of where in the scrolling they are.
-	 * <p>
-	 * By default this is the same as the menu bar's background color.
-	 * Override this method to change it.
-	 * 
-	 * @return The color of the scrollbar's trackbar.
-	 * @see #paintVerticalScrollbar(Graphics, int, int, int, int, int, int)
-	 */
-	public int getScrollbarTrackbarColor ()
-	{
-		return getMenuBarHighlightColor();
-	}
-	
-	/**
-	 * Returns the color of the text drawn in text boxes.
-	 * By default this is the same as the font color.
-	 * Override this method to change it.
-	 * 
-	 * @return The color of the text drawn in text boxes.
-	 */
-	public int getTextBoxColor() {
-		return getFontColor();
-	}
-	
-	/**
-	 * Returns the color with which the backgound of the
-	 * menu options will be drawn. By default this is the
-	 * same as the background color. If negative, the background
-	 * will be transparent.
-	 * Override this method to change it.
-	 * 
-	 * @return The color with which the backgound of the
-	 * menu options
-	 */
-	public int getMenuOptionBackgroundColor() {
-		return getBackgroundColor();
-	}
-	
-	/**
-	 * Returns the color of the text in selected menu options.
-	 * By default this is the same as the background color.
-	 * Override this method to change it.
-	 * 
-	 * @return The color of the text in selected menu options.
-	 */
-	public int getMenuOptionSelectedTextColor() {
-		return getBackgroundColor();
-	}
-	
-	/**
-	 * Fills a rectangle with linear gradient.  The gradient colors go
-	 * from <code>primaryColor</code> to <code>secondaryColor</code> at
-	 * <code>maxSecondary</code>.  So if <code>maxSecondary == 0.70</code> then a line
-	 * across the fill rectangle 70% of the way would be
-	 * <code>secondaryColor</code>.
-	 * 
-	 * @param g is the <code>Graphics</code> object for painting.
-	 * @param x is the left edge of the rectangle.
-	 * @param y is the top edge of the rectangle.
-	 * @param width is the width of the rectangle.
-	 * @param height is the height of the rectangle.
-	 * @param fillVertically is <code>true</code> if the gradient goes from
-	 *  top-to-bottom or <code>false</code> for left-to-right.
-	 * @param primaryColor is the main color.
-	 * @param secondaryColor is the highlight color.
-	 * @param maxSecondary is between 0.00 and 1.00 and says how far down
-	 *  the fill will <code>secondaryColor</code> peak.
-	 */
-	public static void gradientFill (
-			Graphics g,
-			int x, int y, int width, int height,
-			boolean fillVertically,
-			int primaryColor, int secondaryColor, double maxSecondary)
-	{
-		// Break the primary color into red, green, and blue.
-		int pr = (primaryColor & 0x00FF0000) >> 16;
-		int pg = (primaryColor & 0x0000FF00) >> 8;
-		int pb = (primaryColor & 0x000000FF);
-		
-		// Break the secondary color into red, green, and blue.
-		int sr = (secondaryColor & 0x00FF0000) >> 16;
-		int sg = (secondaryColor & 0x0000FF00) >> 8;
-		int sb = (secondaryColor & 0x000000FF);
-		
-		// Draw a horizonal line for each pixel from the top to the bottom.
-		int end = (fillVertically ? height : width);
-		
-		for ( int i = 0; i < end; i++ )
-		{
-			// Calculate the color for this line.
-			double p = (double)i / (double)end;
-			double v = Math.abs( maxSecondary - p );
-			double v2 = 1.0 - v;
-			
-			int red   = (int)( pr * v + sr * v2 );
-			int green = (int)( pg * v + sg * v2 );
-			int blue  = (int)( pb * v + sb * v2 );
-			
-			g.setColor( red, green, blue );
-			
-			// Draw the line.
-			if ( fillVertically )
-			{
-				g.drawLine( x, y + i, x + width, y + i );
-			}
-			else  // horizontal
-			{
-				g.drawLine( x + i, y, x + i, y + height );
-			}
-		}
 	}
 }
