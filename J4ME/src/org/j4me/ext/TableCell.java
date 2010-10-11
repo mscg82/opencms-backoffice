@@ -1,5 +1,7 @@
 package org.j4me.ext;
 
+import java.util.Vector;
+
 import org.j4me.ui.components.Component;
 
 /**
@@ -23,9 +25,14 @@ public class TableCell {
 	public static final int DEFAULT_PADDIGS[] = {-1, -1, -1, -1};
 
 	/**
-	 * The component hold in the cell.
+	 * The components hold in the cell.
 	 */
-	private Component component;
+	private Vector components;
+	
+	/**
+	 * The heights of the components hold in the cell.
+	 */
+	private Vector componentsHeights;
 	
 	/**
 	 * The margins of the cell.
@@ -51,19 +58,67 @@ public class TableCell {
 	 * hold in the cell.
 	 */
 	public TableCell(Component component) {
-		setComponent(component);
+		components = new Vector(1);
+		componentsHeights = new Vector(1);
+		addComponent(component);
 		setMargins(DEFAULT_MARGINS);
 		setPaddings(DEFAULT_PADDIGS);
 	}
 
 	/**
-	 * Returns the component hold in the cell.
+	 * Adds the component in the cell.
 	 * 
-	 * @return The component hold in the cell
-	 * or <code>null</code> if the cell is empty.
+	 * @param component The {@link Component} that
+	 * will be set in the cell.
 	 */
-	public Component getComponent() {
-		return component;
+	public void addComponent(Component component) {
+		if(component != null) {
+			this.components.addElement(component);
+			this.componentsHeights.addElement(new Integer(0));
+		}
+	}
+
+	/**
+	 * Removes all the elements from this cell.
+	 */
+	public void clearComponents() {
+		this.components = new Vector();
+	}
+
+	/**
+	 * Returns the elements at the specified index
+	 * stored in this cell.
+	 * 
+	 * @param index The index of the element.
+	 * @return The elements at the specified index
+	 * stored in this cell.
+	 * @throws IndexOutOfBoundsException If the index falls
+	 * outside the vector size.
+	 */
+	public Component getComponent(int index) throws IndexOutOfBoundsException {
+		return (Component)components.elementAt(index);
+	}
+
+	/**
+	 * Returns the element height at the specified index.
+	 * @param index The index of the element whose height will be
+	 * retrieved.
+	 * @return The element height at the specified index.
+	 * @throws IndexOutOfBoundsException If the idnex falls outside
+	 * the size of the vector.
+	 */
+	public int getComponentHeight(int index) throws IndexOutOfBoundsException {
+		return ((Integer)this.componentsHeights.elementAt(index)).intValue();
+	}
+
+	/**
+	 * Returns the components hold in the cell.
+	 * 
+	 * @return The components hold in the cell
+	 * or a void vector if the cell is empty.
+	 */
+	public Vector getComponents() {
+		return components;
 	}
 
 	/**
@@ -77,7 +132,7 @@ public class TableCell {
 	public int[] getMargins() {
 		return margins;
 	}
-
+	
 	/**
 	 * Returns the paddings of the cell. If a
 	 * padding value is negative, the table-default
@@ -89,18 +144,17 @@ public class TableCell {
 	public int[] getPaddings() {
 		return paddings;
 	}
-
+	
 	/**
-	 * Sets the component in the cell.
+	 * Sets the element height at the specified index.
 	 * 
-	 * @param component The {@link Component} that
-	 * will be set in the cell or <code>null</code>
-	 * to empty the cell.
+	 * @param index The index of the component.
+	 * @param height The height of the component.
 	 */
-	public void setComponent(Component component) {
-		this.component = component;
+	public void setComponentsHeight(int index, int height) {
+		this.componentsHeights.setElementAt(new Integer(height), index);
 	}
-
+	
 	/**
 	 * Sets the margins value for this cell.
 	 * To draw the table-default value of a margin,
@@ -113,7 +167,7 @@ public class TableCell {
 	public void setMargins(int[] margins) {
 		this.margins = margins;
 	}
-
+	
 	/**
 	 * Sets the paddings value for this cell.
 	 * To draw the table-default value of a padding,

@@ -3,6 +3,7 @@
  */
 package org.j4me.ext;
 
+import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.microedition.lcdui.Graphics;
@@ -117,7 +118,7 @@ public class TableLayout extends Component {
 			throw new NullPointerException("Component cannot be null");
 		TableCell rowData[] = (TableCell[])rows.elementAt(row);
 		TableCell cell = rowData[column];
-		cell.setComponent(component);
+		cell.addComponent(component);
 		this.invalidate();
 		return cell;
 	}
@@ -208,11 +209,19 @@ public class TableLayout extends Component {
 					int paddingRight  = (row[j].getPaddings()[1] >= 0 ? row[j].getPaddings()[1] : getCellPadding());
 					int paddingBottom = (row[j].getPaddings()[2] >= 0 ? row[j].getPaddings()[2] : getCellPadding());
 					int paddingLeft   = (row[j].getPaddings()[3] >= 0 ? row[j].getPaddings()[3] : getCellPadding());
-					Component c = row[j].getComponent();
-					if(c != null) {
-						int tmp[] = c.getPreferredSize(theme, widths[j] - paddingLeft - paddingRight, viewportHeight);
-						rowHeight = (int)Math.max(tmp[1] + paddingTop + paddingBottom, rowHeight);
+					Vector components = row[j].getComponents();
+					int cellHeight = 0;
+					int k = 0;
+					for(Enumeration en = components.elements(); en.hasMoreElements();) {
+						Component c = (Component)en.nextElement();
+						if(c != null) {
+							int tmp[] = c.getPreferredSize(theme, widths[j] - paddingLeft - paddingRight, viewportHeight);
+							row[j].setComponentsHeight(k, tmp[1]);
+							cellHeight += tmp[1];
+						}
+						k++;
 					}
+					rowHeight = (int)Math.max(cellHeight + paddingTop + paddingBottom, rowHeight);
 				}
 				rowHeights[i] = rowHeight;
 				size[1] += rowHeight;
@@ -246,9 +255,12 @@ public class TableLayout extends Component {
 			for(int i = 0, l = rows.size(); i < l; i++) {
 				TableCell row[] = (TableCell[]) rows.elementAt(i);
 				for(int j = 0; j < row.length; j++) {
-					Component c = row[j].getComponent();
-					if(c != null)
-						new InvalidableComponent(c).invalidateComponent();
+					Vector components = row[j].getComponents();
+					for(Enumeration en = components.elements(); en.hasMoreElements();) {
+						Component c = (Component)en.nextElement(); 
+						if(c != null)
+							new InvalidableComponent(c).invalidateComponent();
+					}
 				}
 			}
 			super.invalidate();
@@ -279,20 +291,27 @@ public class TableLayout extends Component {
 				int paddingRight  = (row[j].getPaddings()[1] >= 0 ? row[j].getPaddings()[1] : getCellPadding());
 				int paddingBottom = (row[j].getPaddings()[2] >= 0 ? row[j].getPaddings()[2] : getCellPadding());
 				int paddingLeft   = (row[j].getPaddings()[3] >= 0 ? row[j].getPaddings()[3] : getCellPadding());
-				Component c = row[j].getComponent();
-				if(c != null) {
-					if((offsetY + rowHeights[i] >= clipTop) && (offsetY <= clipBottom)){
-						c.visible(true);
-						c.paint(g, theme, getScreen(),
-							offsetX + paddingLeft,
-							offsetY + paddingTop,
-							widths[j] - paddingLeft - paddingRight,
-							rowHeights[i] - paddingTop - paddingBottom,
-							selected);
+				Vector components = row[j].getComponents();
+				int k = 0;
+				int cellOffset = 0;
+				for(Enumeration en = components.elements(); en.hasMoreElements();) {
+					Component c = (Component)en.nextElement();
+					if(c != null) {
+						if((offsetY + rowHeights[i] >= clipTop) && (offsetY <= clipBottom)){
+							c.visible(true);
+							c.paint(g, theme, getScreen(),
+									offsetX + paddingLeft,
+									offsetY + paddingTop + cellOffset,
+									widths[j] - paddingLeft - paddingRight,
+									rowHeights[i] - paddingTop - paddingBottom,
+									selected);
+						}
+						else {
+							c.visible(false);
+						}
 					}
-					else {
-						c.visible(false);
-					}
+					cellOffset += row[j].getComponentHeight(k);
+					k++;
 				}
 				offsetX += widths[j];
 			}
@@ -301,20 +320,20 @@ public class TableLayout extends Component {
 	}
 	
 	/**
-	 * Removes a component from the table and returns it.
+	 * Removes the components from the table cell and returns them.
 	 * 
 	 * @param row The row from which the component will be removed.
 	 * @param column The column from which the component will be removed.
-	 * @return The {@link Component} that was removed.
+	 * @return The vector of components that was removed.
 	 * @throws IndexOutOfBoundsException If the row or column index
 	 * fall outside the table actual size.
 	 */
-	public Component removeComponent(int row, int column) throws IndexOutOfBoundsException {
+	public Vector removeComponents(int row, int column) throws IndexOutOfBoundsException {
 		TableCell rowData[] = (TableCell[])rows.elementAt(row);
 		TableCell cell = rowData[column];
-		Component ret = cell.getComponent(); 
-		cell.setComponent(null);
-		return ret;
+		Vector components = cell.getComponents();
+		cell.clearComponents();
+		return components;
 	}
 
 	/**
