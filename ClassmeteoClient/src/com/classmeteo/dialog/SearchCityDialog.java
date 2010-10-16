@@ -7,9 +7,11 @@ import org.j4me.ui.DeviceScreen;
 import org.j4me.ui.components.MenuOption;
 import org.j4me.ui.components.ProgressBar;
 
+import com.classmeteo.data.InterruptibleThread;
 import com.classmeteo.data.Settings;
 import com.classmeteo.data.WebServiceAccessor;
 import com.classmeteo.items.RetrievedCityMenuItem;
+import com.classmeteo.items.StopThreadMenuItem;
 import com.classmeteo.ws.ClassMeteoFluxesWS;
 import com.classmeteo.ws.MasterLocList;
 import com.classmeteo.ws.MasterLocWS;
@@ -17,7 +19,7 @@ import com.mscg.util.Properties;
 
 public class SearchCityDialog extends UpdatablePopupMenuDialog {
 	
-	private class CitiesSearchThread extends Thread {
+	private class CitiesSearchThread extends InterruptibleThread {
 
 		/* (non-Javadoc)
 		 * @see java.lang.Thread#run()
@@ -43,8 +45,18 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 					if(i == 0)
 						SearchCityDialog.this.setSelected(mo);
 				}
-				SearchCityDialog.this.invalidate();
-				SearchCityDialog.this.repaint();
+				getLeftMenuItems().removeAllElements();
+				getRightMenuItems().removeAllElements();
+								
+				if(!isInterrupted()) {
+					Properties tr = Settings.getTranslation();
+					setMenuText(tr.getProperty("menu.prev"), tr.getProperty("menu.select"));
+					SearchCityDialog.this.invalidate();
+					SearchCityDialog.this.repaint();
+				}
+				else {
+					SearchCityDialog.this.deleteAll();
+				}
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
@@ -52,6 +64,7 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 		
 	}
 	
+	private InterruptibleThread updateThread;	
 	private ProgressBar spinner;
 	private DeviceScreen previous;
 
@@ -91,9 +104,6 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 	public void showNotify() {
 		super.showNotify();
 		
-		Properties tr = Settings.getTranslation();
-		setMenuText(tr.getProperty("menu.prev"), tr.getProperty("menu.select"));
-		
 		deleteAll();
 		
 		spinner.setMaxValue(0);
@@ -101,7 +111,14 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 		append(Settings.getLogo());
 		append(spinner);
 		
-		new CitiesSearchThread().start();
+		updateThread = new CitiesSearchThread();
+		
+		Properties tr = Settings.getTranslation();
+		addLeftItem(new MenuOption(new StopThreadMenuItem(tr.getProperty("menu.prev"), updateThread)));
+		
+		setDefaultMenuText();
+		
+		updateThread.start();
 		
 	}
 	

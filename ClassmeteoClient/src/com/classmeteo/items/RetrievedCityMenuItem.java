@@ -1,6 +1,7 @@
 package com.classmeteo.items;
 
 import com.classmeteo.data.Settings;
+import com.classmeteo.dialog.SelectCityDialog;
 
 public class RetrievedCityMenuItem extends SavedCityMenuItem {
 
@@ -13,7 +14,9 @@ public class RetrievedCityMenuItem extends SavedCityMenuItem {
 	 */
 	public void onSelection() {
 		Settings.getSavedLocations().put(cityId, text);
-		Settings.getSelectCityDialog().show();
+		SelectCityDialog dialog = Settings.getSelectCityDialog();
+		dialog.setSelectLast(true);
+		dialog.show();
 	}
 
 }

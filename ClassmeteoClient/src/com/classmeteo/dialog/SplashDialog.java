@@ -57,7 +57,9 @@ public class SplashDialog extends Dialog {
 					Thread.sleep(3000);
 				} catch(Exception e){}
 				
-				Settings.getSelectCityDialog().show();
+				SelectCityDialog dialog = Settings.getSelectCityDialog();
+				dialog.setUpdateSelection(true);
+				dialog.show();
 			}
 			
 		}.start();

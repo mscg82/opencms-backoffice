@@ -15,6 +15,24 @@ public class Util {
 	}
 	
 	/**
+	 * Converts a string with an inches measure
+	 * into an integer with the corresponding
+	 * millimeters.
+	 * 
+	 * @param inches The string with the measure in inches.
+	 * @return an integer with the equivalent millimeters.
+	 */
+	public static int convertToMM(String inches) {
+		if(inches.startsWith("."))
+			inches = "0" + inches;
+		double inc = 0.0;
+		try {
+			inc = Double.parseDouble(inches);
+		} catch(Exception e) {}
+		return (int)Math.floor((inc * 25.4) + 0.5);
+	}
+	
+	/**
 	 * Formats a double value into a string using the
 	 * specified number of fractional digits.
 	 * 

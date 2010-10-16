@@ -31,6 +31,9 @@ public class SelectCityDialog extends UpdatablePopupMenuDialog {
 	
 	private String rightMenuText;
 	
+	private boolean selectLast;
+	private boolean updateSelection;
+	
 	public SelectCityDialog(DeviceScreen previous) {
 		Properties tr = Settings.getTranslation();
 		setPrevious(previous);
@@ -44,6 +47,9 @@ public class SelectCityDialog extends UpdatablePopupMenuDialog {
 		citySelector.setLabel(tr.getProperty("cityselector.textbox.title"));
 		
 		searchCity = new OpenMenuMenuOption(tr.getProperty("menu.search"), Settings.getSearchCityDialog());
+		
+		selectLast = false;
+		updateSelection = false;
 	}
 
 	/**
@@ -55,6 +61,20 @@ public class SelectCityDialog extends UpdatablePopupMenuDialog {
 
 	public String getSelectedCityName() {
 		return citySelector.getString();
+	}
+
+	/**
+	 * @return the selectLast
+	 */
+	public synchronized boolean isSelectLast() {
+		return selectLast;
+	}
+
+	/**
+	 * @return the updateSelection
+	 */
+	public synchronized boolean isUpdateSelection() {
+		return updateSelection;
 	}
 	
 	/* (non-Javadoc)
@@ -83,6 +103,21 @@ public class SelectCityDialog extends UpdatablePopupMenuDialog {
 		updateMenuText();
 	}
 
+	/**
+	 * @param selectLast the selectLast to set
+	 */
+	public synchronized void setSelectLast(boolean selectLast) {
+		this.selectLast = selectLast;
+		setUpdateSelection(selectLast);
+	}
+	
+	/**
+	 * @param updateSelection the updateSelection to set
+	 */
+	public synchronized void setUpdateSelection(boolean updateSelection) {
+		this.updateSelection = updateSelection;
+	}
+
 	/* (non-Javadoc)
 	 * @see org.j4me.ui.DeviceScreen#showNotify()
 	 */
@@ -90,26 +125,46 @@ public class SelectCityDialog extends UpdatablePopupMenuDialog {
 		super.showNotify();
 		
 		updateComponents();
-		setSelected(citySelector);
-		updateMenu();
 	}
-	
+
 	public void updateComponents() {
 		deleteAll();
+		
+		Component selectedComponent = null;
+		
 		//append(Settings.getWhiteSpace());
 		append(Settings.getLogo());
 		append(citySelector);
+		selectedComponent = citySelector;
+		updateMenu();
 		Map savedLocations = Settings.getSavedLocations();
 		if(savedLocations.size() != 0) {
 			Label l = new Label(Settings.getTranslation().getProperty("cityselector.list.title"));
 			l.setFont(((ClassMeteoAppTheme)UIManager.getTheme()).getBoldFont());
 			append(l);
+			boolean first = true;
 			for(Iterator it = savedLocations.entrySet().iterator(); it.hasNext();) {
 				Map.Entry entry = (Map.Entry)it.next();
 				RecordStoreMapValue value = (RecordStoreMapValue)entry.getValue();
 				String values[] = value.getStrings();
-				append(new MenuOption(new SavedCityMenuItem(values[1], values[0])));
+				MenuOption mo = new MenuOption(new SavedCityMenuItem(values[1], values[0]));
+				append(mo);
+				if(first) {
+					selectedComponent = mo;
+					first = false;
+				}
 			}
+			if(isSelectLast()) 
+				selectedComponent = get(size() - 1);
+				
+			if(!isUpdateSelection())
+				selectedComponent = citySelector;
+			else
+				setSelected(citySelector);
+
+			setSelectLast(false);
+			setSelected(selectedComponent);
+			updateMenu();
 		}
 		super.updateComponents();
 	}
