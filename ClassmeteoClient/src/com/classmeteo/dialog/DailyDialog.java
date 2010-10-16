@@ -29,7 +29,7 @@ import com.classmeteo.ws.ClassMeteoFluxesWS;
 import com.classmeteo.ws.DailyForecastWS;
 import com.mscg.util.Properties;
 
-public class DailyDialog extends GenericForecastDialog implements OnChangeListener {
+public class DailyDialog extends HorizontalScrollForecastDialog implements OnChangeListener {
 	
 	private class DailyDialogUpdateThread extends InterruptibleThread {
 
@@ -128,9 +128,7 @@ public class DailyDialog extends GenericForecastDialog implements OnChangeListen
 
 	public void init() {
 		Properties tr = Settings.getTranslation(); 		
-		setTitle(tr.getProperty("forecast.title.daily"));
-		
-		
+		setTitle(tr.getProperty("forecast.title.daily"));		
 	}
 
 	public void initInterface() {
@@ -325,6 +323,22 @@ public class DailyDialog extends GenericForecastDialog implements OnChangeListen
 			// download forecast data
 			updateThread.start();
 		}
-	}	
+	}
+
+	public void scrollLeft() {
+		try {
+			int selectedDay = daySelector.getSelectedIndex();
+			if(selectedDay > 0)
+				daySelector.setSelectedIndex(selectedDay - 1);
+		} catch(Exception e){}
+	}
+
+	public void scrollRigth() {
+		try {
+			int selectedDay = daySelector.getSelectedIndex();
+			if(selectedDay < daySelector.getSize() - 1)
+				daySelector.setSelectedIndex(selectedDay + 1);
+		} catch(Exception e){}
+	}
 	
 }
