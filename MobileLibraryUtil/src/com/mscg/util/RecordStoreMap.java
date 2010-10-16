@@ -21,7 +21,7 @@ import com.mscg.io.Closeable;
  *
  */
 public class RecordStoreMap implements Map, Closeable {
-
+	
 	private Map innerMap;
 	private RecordStore recordStore;
 
@@ -31,6 +31,8 @@ public class RecordStoreMap implements Map, Closeable {
 	
 	public RecordStoreMap(String recordStoreName, boolean createIfNecessary) throws RecordStoreException {
 		innerMap = new LinkedHashMap();
+	    Map tmpMap = new LinkedHashMap();
+	    List keys = new LinkedList();
 		recordStore = RecordStore.openRecordStore(recordStoreName, createIfNecessary);
 		try {
 			RecordEnumeration records = recordStore.enumerateRecords(null, null, true);
@@ -40,7 +42,14 @@ public class RecordStoreMap implements Map, Closeable {
 				ByteArrayInputStream bis = new ByteArrayInputStream(buffer);
 				DataInputStream dis = new DataInputStream(bis);
 				RecordStoreMapValue value = new RecordStoreMapValue(this, index, buffer);
-				innerMap.put(dis.readUTF(), value);
+				String key = dis.readUTF(); 
+				tmpMap.put(key, value);
+				keys.add(key);
+			}
+			Collections.reverse(keys);
+			for(Iterator it = keys.iterator(); it.hasNext();) {
+				String key = (String) it.next();
+				innerMap.put(key, tmpMap.get(key));
 			}
 		} catch(Exception e) {
 			e.printStackTrace();
