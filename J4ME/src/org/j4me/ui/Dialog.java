@@ -900,7 +900,7 @@ public abstract class Dialog
 				}
 			}
 			
-			// return highlightedComponent;
+			//return highlightedComponent;
 			
 			// If we made it here highlight the first component.
 			return 0;
