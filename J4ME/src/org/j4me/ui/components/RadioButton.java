@@ -225,7 +225,7 @@ public class RadioButton
 	{
 		return selected;
 	}
-
+	
 	/**
 	 * Returns the value of the element that is selected.
 	 * 
@@ -234,6 +234,15 @@ public class RadioButton
 	public String getSelectedValue ()
 	{
 		return getString( selected );
+	}
+
+	/**
+	 * Returns the number of items in this radio button.
+	 * 
+	 * @return The number of items in this radio button.
+	 */
+	public int getSize() {
+		return choices.size();
 	}
 
 	/**

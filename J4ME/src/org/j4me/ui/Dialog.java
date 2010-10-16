@@ -852,10 +852,10 @@ public abstract class Dialog
 				}
 			}
 			
-			//return highlightedComponent;
+			return highlightedComponent;
 			
 			// If we made it here highlight the last component.
-			return components - 1;
+			//return components - 1;
 		}
 		else  // up
 		{
@@ -900,10 +900,10 @@ public abstract class Dialog
 				}
 			}
 			
-			//return highlightedComponent;
+			return highlightedComponent;
 			
 			// If we made it here highlight the first component.
-			return 0;
+			//return 0;
 		}
 	}
 	
@@ -966,63 +966,73 @@ public abstract class Dialog
 			// Calculate how far to scroll to get to the next highlighted component.
 			if ( down )
 			{
-				int currentBottom = absoluteHeights[current + 1];
-				
-				if ( currentBottom > bottomOfScreen )
-				{
-					// The current component actually is clipped by the bottom of
-					// the screen (because it is too big to show all at once).
-					// Just scroll down we can see more of it.
+				if(current == highlightedComponent) {
 					scroll = max;
 				}
-				else
-				{
-					// Get the screen position of the next highlightable component.
-					int nextTop = absoluteHeights[highlightedComponent];
-					int nextBottom = absoluteHeights[highlightedComponent + 1];
+				else {
+					int currentBottom = absoluteHeights[current + 1];
 					
-					if ( (nextTop > topOfScreen) && (nextBottom < bottomOfScreen) )
+					if ( currentBottom > bottomOfScreen )
 					{
-						// Don't scroll if the next highlighted component fits
-						// completely on the screen already.
-						scroll = 0;
+						// The current component actually is clipped by the bottom of
+						// the screen (because it is too big to show all at once).
+						// Just scroll down we can see more of it.
+						scroll = max;
 					}
 					else
 					{
-						scroll = nextBottom - currentBottom;
+						// Get the screen position of the next highlightable component.
+						int nextTop = absoluteHeights[highlightedComponent];
+						int nextBottom = absoluteHeights[highlightedComponent + 1];
+						
+						if ( (nextTop > topOfScreen) && (nextBottom < bottomOfScreen) )
+						{
+							// Don't scroll if the next highlighted component fits
+							// completely on the screen already.
+							scroll = 0;
+						}
+						else
+						{
+							scroll = nextBottom - currentBottom;
+						}
 					}
 				}
 			}
 			else  // up
 			{
-				int currentTop = absoluteHeights[current];
-				
-				if ( currentTop < topOfScreen )
-				{
-					// The current component actually is clipped by the top of
-					// the screen (because it is too big to show all at once).
-					// Just scroll up we can see more of it.
+				if(current == highlightedComponent) {
 					scroll = max;
 				}
-				else
-				{
-					if ( highlightedComponent == 0 )
+				else {
+					int currentTop = absoluteHeights[current];
+					
+					if ( currentTop < topOfScreen )
 					{
-						// Scroll to the very top of the dialog.
-						scroll = topOfScreen;
+						// The current component actually is clipped by the top of
+						// the screen (because it is too big to show all at once).
+						// Just scroll up we can see more of it.
+						scroll = max;
 					}
 					else
 					{
-						// Get the bottom of the component above the next highlighted one.
-						int previousBottom = absoluteHeights[highlightedComponent] - spacing;
-						
-						scroll = topOfScreen - previousBottom;
-						
-						// Don't scroll if the next highlighted component fits
-						// completely on the screen already.
-						if ( previousBottom >= topOfScreen )
+						if ( highlightedComponent == 0 )
 						{
-							scroll = 0;
+							// Scroll to the very top of the dialog.
+							scroll = topOfScreen;
+						}
+						else
+						{
+							// Get the bottom of the component above the next highlighted one.
+							int previousBottom = absoluteHeights[highlightedComponent] - spacing;
+							
+							scroll = topOfScreen - previousBottom;
+							
+							// Don't scroll if the next highlighted component fits
+							// completely on the screen already.
+							if ( previousBottom >= topOfScreen )
+							{
+								scroll = 0;
+							}
 						}
 					}
 				}
