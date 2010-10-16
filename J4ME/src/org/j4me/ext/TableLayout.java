@@ -291,6 +291,7 @@ public class TableLayout extends Component {
 				int paddingRight  = (row[j].getPaddings()[1] >= 0 ? row[j].getPaddings()[1] : getCellPadding());
 				int paddingBottom = (row[j].getPaddings()[2] >= 0 ? row[j].getPaddings()[2] : getCellPadding());
 				int paddingLeft   = (row[j].getPaddings()[3] >= 0 ? row[j].getPaddings()[3] : getCellPadding());
+				
 				Vector components = row[j].getComponents();
 				int k = 0;
 				int cellOffset = 0;
@@ -313,6 +314,33 @@ public class TableLayout extends Component {
 					cellOffset += row[j].getComponentHeight(k);
 					k++;
 				}
+				
+				int borderTop    = row[j].getBorders()[0];
+				int borderRight  = row[j].getBorders()[1];
+				int borderBottom = row[j].getBorders()[2];
+				int borderLeft   = row[j].getBorders()[3];
+
+				// draw the cell borders, if necessary
+				int origColor = g.getColor();
+				if(borderTop >= 0) {
+					g.setColor(borderTop);
+					g.drawLine(offsetX, offsetY, offsetX + widths[j], offsetY);
+				}
+				if(borderRight >= 0) {
+					g.setColor(borderRight);
+					g.drawLine(offsetX + widths[j], offsetY, offsetX + widths[j], offsetY + rowHeights[i]);
+				}
+				if(borderBottom >= 0) {
+					g.setColor(borderBottom);
+					g.drawLine(offsetX, offsetY + rowHeights[i], offsetX + widths[j], offsetY + rowHeights[i]);
+				}
+				if(borderLeft >= 0) {
+					g.setColor(borderLeft);
+					g.drawLine(offsetX, offsetY, offsetX, offsetY + rowHeights[i]);
+				}
+				
+				g.setColor(origColor);
+				
 				offsetX += widths[j];
 			}
 			offsetY += rowHeights[i];

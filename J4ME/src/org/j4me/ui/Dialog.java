@@ -852,6 +852,8 @@ public abstract class Dialog
 				}
 			}
 			
+			//return highlightedComponent;
+			
 			// If we made it here highlight the last component.
 			return components - 1;
 		}
@@ -897,6 +899,8 @@ public abstract class Dialog
 					}
 				}
 			}
+			
+			// return highlightedComponent;
 			
 			// If we made it here highlight the first component.
 			return 0;

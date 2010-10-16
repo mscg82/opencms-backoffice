@@ -1,8 +1,14 @@
 package org.j4me.ui.components;
 
-import java.util.*;
-import javax.microedition.lcdui.*;
-import org.j4me.ui.*;
+import java.util.Enumeration;
+import java.util.Vector;
+
+import javax.microedition.lcdui.Graphics;
+
+import org.j4me.ui.DeviceScreen;
+import org.j4me.ui.Menu;
+import org.j4me.ui.MenuItem;
+import org.j4me.ui.Theme;
 
 /**
  * A <code>RadioButton</code> component lets a user select exactly one choice
@@ -21,6 +27,75 @@ import org.j4me.ui.*;
 public class RadioButton
 	extends Component
 {
+	
+	/**
+	 * The listener interface that will be notified
+	 * when the user changes the selection on the
+	 * radio button.
+	 * 
+	 * @author Giuseppe Miscione
+	 *
+	 */
+	public static interface OnChangeListener {
+		
+		/**
+		 * The event raised when the user changes the
+		 * selection in the radio button.
+		 * 
+		 * @param radioButton The {@link RadioButton} object
+		 * on which the selection is changed.
+		 */
+		public void onSelectionChanged(RadioButton radioButton);
+		
+	}
+	
+	/**
+	 * Objects are used by the input screen to show the list of choices
+	 * and set the value of the one the user selected.
+	 */
+	private final class RadioItem
+		implements MenuItem
+	{
+		private final String text;
+		private final int index;
+
+		/**
+		 * Constructs a radio item to place in a <code>Menu</code>.
+		 * 
+		 * @param choice is the name for this menu item.
+		 * @param index is the element number in <code>choices</code> this
+		 *  menu item represents.
+		 */
+		public RadioItem (String choice, int index)
+		{
+			this.text = choice;
+			this.index = index;
+		}
+		
+		/**
+		 * The text for this choice.
+		 */
+		public String getText ()
+		{
+			return text;
+		}
+
+		/**
+		 * Called when the user selects this radio item.  It sets the
+		 * radio button component's selected value to this item. 
+		 */
+		public void onSelection ()
+		{
+			// Select this item in the radio button component.
+			RadioButton.this.setSelectedIndex( index );
+			
+			// Show the screen with the radio button component on it.
+			DeviceScreen screen = RadioButton.this.getScreen(); 
+			screen.show();
+			screen.repaint();
+		}
+	}
+	
 	/**
 	 * The label that appears above the radio button.  For example it might
 	 * say "Log Levels".  If this is <code>null</code> then no label will appear.
@@ -38,17 +113,65 @@ public class RadioButton
 	protected int selected;
 	
 	/**
+	 * The change listener.
+	 */
+	protected OnChangeListener listener;
+	
+	/**
 	 * This component appears as a <code>TextBox</code>.  Only editing is done
 	 * differently.  This component takes the user to another screen based
 	 * on <code>Menu</code>.
 	 */
 	private TextBox box = new TextBox();
-	
+
 	/**
 	 * Constructs a radio button component.
 	 */
 	public RadioButton ()
 	{
+	}
+	
+	/**
+	 * @return <code>true</code> because this component accepts user input.
+	 */
+	public boolean acceptsInput ()
+	{
+		return true;
+	}
+
+	/**
+	 * Appends an element to the list of choices.
+	 * 
+	 * @param choice is the string to be added.
+	 * @return The assigned index of the element.
+	 */
+	public int append (String choice)
+	{
+		if ( choice == null )
+		{
+			throw new IllegalArgumentException("Cannot append null choice");
+		}
+		
+		choices.addElement( choice );
+		return choices.size() - 1;
+	}
+
+	/**
+	 * Deletes the element referenced by <code>elementNum</code>.
+	 * 
+	 * @param elementNum is the index of the element to be deleted.
+	 */
+	public void delete (int elementNum)
+	{
+		choices.removeElementAt( elementNum );
+	}
+	
+	/**
+	 * Deletes all elements from the list of choices.
+	 */
+	public void deleteAll ()
+	{
+		choices.removeAllElements();
 	}
 
 	/**
@@ -68,36 +191,49 @@ public class RadioButton
 	}
 	
 	/**
-	 * @param label is the text that appears above the radio button.
-	 *  If <code>null</code> there will be no text.
+	 * @return the listener
 	 */
-	public void setLabel (String label)
+	public OnChangeListener getListener() {
+		return listener;
+	}
+
+	/**
+	 * Returns the ideal size for a radio button component.
+	 * 
+	 * @see org.j4me.ui.components.Component#getPreferredComponentSize(org.j4me.ui.Theme, int, int)
+	 */
+	protected int[] getPreferredComponentSize (Theme theme, int viewportWidth, int viewportHeight)
 	{
-		if ( label == null )
+		int[] dimensions = box.getPreferredSize( theme, viewportWidth, viewportHeight );
+		
+		// Add the height of the label above the component.
+		if ( label != null )
 		{
-			this.label = null;
-		}
-		else
-		{
-			if ( this.label == null )
-			{
-				this.label = new Label();
-			}
-			
-			this.label.setLabel( label );
+			int[] labelDimensions = label.getPreferredComponentSize( theme, viewportWidth, viewportHeight );
+			dimensions[1] += labelDimensions[1];
 		}
 		
-		invalidate();
+		return dimensions;
 	}
 	
 	/**
-	 * Returns the number of elements to choose from.
+	 * Returns the index number of the element that is selected.
 	 * 
-	 * @return The number of elements to choose from.
+	 * @return The index of selected element.
 	 */
-	public int size ()
+	public int getSelectedIndex ()
 	{
-		return choices.size();
+		return selected;
+	}
+
+	/**
+	 * Returns the value of the element that is selected.
+	 * 
+	 * @return The value of the selected element.
+	 */
+	public String getSelectedValue ()
+	{
+		return getString( selected );
 	}
 
 	/**
@@ -111,131 +247,6 @@ public class RadioButton
 	{
 		String value = (String)choices.elementAt( elementNum );
 		return value;
-	}
-	
-	/**
-	 * Appends an element to the list of choices.
-	 * 
-	 * @param choice is the string to be added.
-	 * @return The assigned index of the element.
-	 */
-	public int append (String choice)
-	{
-		if ( choice == null )
-		{
-			throw new IllegalArgumentException("Cannot append null choice");
-		}
-		
-		choices.addElement( choice );
-		return choices.size() - 1;
-	}
-
-	/**
-	 * Inserts an element into the list of choices just prior to the
-	 * element specified.
-	 * 
-	 * @param elementNum is the index of the element where insertion
-	 *  is to occur.
-	 * @param choice is the string to be inserted.
-	 */
-	public void insert (int elementNum, String choice)
-	{
-		if ( choice == null )
-		{
-			throw new IllegalArgumentException("Cannot insert null choice");
-		}
-		
-		choices.insertElementAt( choice, elementNum );
-	}
-	
-	/**
-	 * Deletes the element referenced by <code>elementNum</code>.
-	 * 
-	 * @param elementNum is the index of the element to be deleted.
-	 */
-	public void delete (int elementNum)
-	{
-		choices.removeElementAt( elementNum );
-	}
-
-	/**
-	 * Deletes all elements from the list of choices.
-	 */
-	public void deleteAll ()
-	{
-		choices.removeAllElements();
-	}
-
-	/**
-	 * Sets the element referenced by <code>elementNum</code>, replacing the
-	 * previous contents of the element.
-	 * 
-	 * @param elementNum the index of the element to be set.
-	 * @param choice is the string to be set.
-	 */
-	public void set (int elementNum, String choice)
-	{
-		if ( choice == null )
-		{
-			throw new IllegalArgumentException("Cannot set null choice");
-		}
-		
-		choices.setElementAt( choice, elementNum );
-	}
-
-	/**
-	 * Returns the index number of the element that is selected.
-	 * 
-	 * @return The index of selected element.
-	 */
-	public int getSelectedIndex ()
-	{
-		return selected;
-	}
-	
-	/**
-	 * Returns the value of the element that is selected.
-	 * 
-	 * @return The value of the selected element.
-	 */
-	public String getSelectedValue ()
-	{
-		return getString( selected );
-	}
-
-	/**
-	 * Sets the index of the selected element.
-	 * 
-	 * @param elementNum is the currently selected element.
-	 */
-	public void setSelectedIndex (int elementNum)
-	{
-		if ( (elementNum < 0) || (elementNum >= choices.size()) )
-		{
-			throw new IndexOutOfBoundsException("elementNum not a possible choice");
-		}
-		
-		this.selected = elementNum;
-	}
-	
-	/**
-	 * An event raised whenever the component is made visible on the screen.
-	 * This is called before the <code>paintComponent</code> method.
-	 * 
-	 * @see Component#showNotify()
-	 */
-	protected void showNotify ()
-	{
-		// Pass the event to contained components.
-		if ( label != null )
-		{
-			label.visible( true );
-		}
-		
-		box.visible( true );
-		
-		// Continue processing the event.
-		super.showNotify();
 	}
 
 	/**
@@ -256,7 +267,43 @@ public class RadioButton
 		// Continue processing the event.
 		super.hideNotify();
 	}
+	
+	/**
+	 * Inserts an element into the list of choices just prior to the
+	 * element specified.
+	 * 
+	 * @param elementNum is the index of the element where insertion
+	 *  is to occur.
+	 * @param choice is the string to be inserted.
+	 */
+	public void insert (int elementNum, String choice)
+	{
+		if ( choice == null )
+		{
+			throw new IllegalArgumentException("Cannot insert null choice");
+		}
+		
+		choices.insertElementAt( choice, elementNum );
+	}
 
+	/**
+	 * Called when a key is pressed.
+	 * 
+	 * @param keyCode is the key code of the key that was pressed.
+	 */
+	public void keyPressed (int keyCode)
+	{
+		if ( (keyCode > 0) || (keyCode == DeviceScreen.FIRE) )
+		{
+			select();
+		}
+		else
+		{
+			// Continue processing the key event.
+			super.keyPressed( keyCode );
+		}
+	}
+	
 	/**
 	 * Paints the radio button component.  It is shown as a text box with the
 	 * currently selected value in it.
@@ -330,51 +377,6 @@ public class RadioButton
 	}
 
 	/**
-	 * Returns the ideal size for a radio button component.
-	 * 
-	 * @see org.j4me.ui.components.Component#getPreferredComponentSize(org.j4me.ui.Theme, int, int)
-	 */
-	protected int[] getPreferredComponentSize (Theme theme, int viewportWidth, int viewportHeight)
-	{
-		int[] dimensions = box.getPreferredSize( theme, viewportWidth, viewportHeight );
-		
-		// Add the height of the label above the component.
-		if ( label != null )
-		{
-			int[] labelDimensions = label.getPreferredComponentSize( theme, viewportWidth, viewportHeight );
-			dimensions[1] += labelDimensions[1];
-		}
-		
-		return dimensions;
-	}
-	
-	/**
-	 * @return <code>true</code> because this component accepts user input.
-	 */
-	public boolean acceptsInput ()
-	{
-		return true;
-	}
-	
-	/**
-	 * Called when a key is pressed.
-	 * 
-	 * @param keyCode is the key code of the key that was pressed.
-	 */
-	public void keyPressed (int keyCode)
-	{
-		if ( (keyCode == DeviceScreen.UP) || (keyCode == DeviceScreen.DOWN) )
-		{
-			// Continue processing the key event.
-			super.keyPressed( keyCode );
-		}
-		else
-		{
-			select();
-		}
-	}
-	
-	/**
 	 * Called when the pointer is pressed.
 	 * 
 	 * @param x is the horizontal location where the pointer was pressed
@@ -390,7 +392,7 @@ public class RadioButton
 		// Stop processing the pointer event.
 		//   i.e. do not call super.pointerPressed( x, y );
 	}
-	
+
 	/**
 	 * Called when the radio button's value is being edited.  This method
 	 * replaces the current screen with a menu of all the available options.
@@ -422,51 +424,111 @@ public class RadioButton
 		// Replace this screen with the menu. 
 		list.show();
 	}
-	
-	/**
-	 * Objects are used by the input screen to show the list of choices
-	 * and set the value of the one the user selected.
-	 */
-	private final class RadioItem
-		implements MenuItem
-	{
-		private final String text;
-		private final int index;
 
-		/**
-		 * Constructs a radio item to place in a <code>Menu</code>.
-		 * 
-		 * @param choice is the name for this menu item.
-		 * @param index is the element number in <code>choices</code> this
-		 *  menu item represents.
-		 */
-		public RadioItem (String choice, int index)
+	/**
+	 * Sets the element referenced by <code>elementNum</code>, replacing the
+	 * previous contents of the element.
+	 * 
+	 * @param elementNum the index of the element to be set.
+	 * @param choice is the string to be set.
+	 */
+	public void set (int elementNum, String choice)
+	{
+		if ( choice == null )
 		{
-			this.text = choice;
-			this.index = index;
+			throw new IllegalArgumentException("Cannot set null choice");
 		}
 		
-		/**
-		 * The text for this choice.
-		 */
-		public String getText ()
+		choices.setElementAt( choice, elementNum );
+	}
+	
+	/**
+	 * @param label is the text that appears above the radio button.
+	 *  If <code>null</code> there will be no text.
+	 */
+	public void setLabel (String label)
+	{
+		if ( label == null )
 		{
-			return text;
+			this.label = null;
 		}
-
-		/**
-		 * Called when the user selects this radio item.  It sets the
-		 * radio button component's selected value to this item. 
-		 */
-		public void onSelection ()
+		else
 		{
-			// Select this item in the radio button component.
-			RadioButton.this.setSelectedIndex( index );
+			if ( this.label == null )
+			{
+				this.label = new Label();
+			}
 			
-			// Show the screen with the radio button component on it.
-			DeviceScreen screen = RadioButton.this.getScreen(); 
-			screen.show();
-			screen.repaint();
+			this.label.setLabel( label );
 		}
+		
+		invalidate();
+	}
+	
+	/**
+	 * @param listener the listener to set
+	 */
+	public void setListener(OnChangeListener listener) {
+		this.listener = listener;
+	}
+	
+	/**
+	 * Sets the index of the selected element.
+	 * 
+	 * @param elementNum is the currently selected element.
+	 */
+	public void setSelectedIndex (int elementNum) {
+		setSelectedIndex(elementNum, true);
+	}
+	
+	/**
+	 * Sets the index of the selected element.
+	 * 
+	 * @param elementNum is the currently selected element.
+	 * @param notify a boolean switch to indicate if the
+	 * event listener should be notified of this update.
+	 */
+	public void setSelectedIndex (int elementNum, boolean notify)
+	{
+		if ( (elementNum < 0) || (elementNum >= choices.size()) )
+		{
+			throw new IndexOutOfBoundsException("elementNum not a possible choice");
+		}
+		
+		this.selected = elementNum;
+		
+		if(notify && this.getListener() != null) {
+			this.getListener().onSelectionChanged(this);
+		}
+	}
+	
+	/**
+	 * An event raised whenever the component is made visible on the screen.
+	 * This is called before the <code>paintComponent</code> method.
+	 * 
+	 * @see Component#showNotify()
+	 */
+	protected void showNotify ()
+	{
+		// Pass the event to contained components.
+		if ( label != null )
+		{
+			label.visible( true );
+		}
+		
+		box.visible( true );
+		
+		// Continue processing the event.
+		super.showNotify();
+	}
+	
+	/**
+	 * Returns the number of elements to choose from.
+	 * 
+	 * @return The number of elements to choose from.
+	 */
+	public int size ()
+	{
+		return choices.size();
 	}
 }

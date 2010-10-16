@@ -23,7 +23,12 @@ public class TableCell {
 	 * The default value for paddings.
 	 */
 	public static final int DEFAULT_PADDIGS[] = {-1, -1, -1, -1};
-
+	
+	/**
+	 * The default values for cell borders
+	 */
+	public static final int DEFAULT_BORDERS[] = {-1, -1, -1, -1};
+	
 	/**
 	 * The components hold in the cell.
 	 */
@@ -45,6 +50,11 @@ public class TableCell {
 	private int paddings[];
 	
 	/**
+	 * The borders of the cell
+	 */
+	private int borders[];
+	
+	/**
 	 * Builds an empty cell.
 	 */
 	public TableCell() {
@@ -63,6 +73,7 @@ public class TableCell {
 		addComponent(component);
 		setMargins(DEFAULT_MARGINS);
 		setPaddings(DEFAULT_PADDIGS);
+		setBorders(DEFAULT_BORDERS);
 	}
 
 	/**
@@ -83,6 +94,17 @@ public class TableCell {
 	 */
 	public void clearComponents() {
 		this.components = new Vector();
+	}
+
+	/**
+	 * Returns the border colors of the cell. If a
+	 * border value is negative, this border won't be painted.
+	 * 
+	 * @return Returns an array with the top, right,
+	 * bottom and left border colors of the cell.
+	 */
+	public int[] getBorders() {
+		return borders;
 	}
 
 	/**
@@ -132,7 +154,7 @@ public class TableCell {
 	public int[] getMargins() {
 		return margins;
 	}
-	
+
 	/**
 	 * Returns the paddings of the cell. If a
 	 * padding value is negative, the table-default
@@ -146,13 +168,33 @@ public class TableCell {
 	}
 	
 	/**
+	 * Sets the border colors value for this cell.
+	 * A negative value of a border color makes this
+	 * border transparent..
+	 * 
+	 * @param margins An array with the top, right,
+	 * bottom and left border colors.
+	 * 
+	 * @return this cell object, so that multiple
+	 * layout setting calls can be chianed.
+	 */
+	public TableCell setBorders(int[] borders) {
+		this.borders = borders;
+		return this;
+	}
+	
+	/**
 	 * Sets the element height at the specified index.
 	 * 
 	 * @param index The index of the component.
 	 * @param height The height of the component.
+	 * 
+	 * @return this cell object, so that multiple
+	 * layout setting calls can be chianed.
 	 */
-	public void setComponentsHeight(int index, int height) {
+	public TableCell setComponentsHeight(int index, int height) {
 		this.componentsHeights.setElementAt(new Integer(height), index);
+		return this;
 	}
 	
 	/**
@@ -163,9 +205,13 @@ public class TableCell {
 	 * 
 	 * @param margins An array with the top, right,
 	 * bottom and left margins.
+	 * 
+	 * @return this cell object, so that multiple
+	 * layout setting calls can be chianed.
 	 */
-	public void setMargins(int[] margins) {
+	public TableCell setMargins(int[] margins) {
 		this.margins = margins;
+		return this;
 	}
 	
 	/**
@@ -176,8 +222,12 @@ public class TableCell {
 	 * 
 	 * @param margins An array with the top, right,
 	 * bottom and left paddings.
+	 * 
+	 * @return this cell object, so that multiple
+	 * layout setting calls can be chianed.
 	 */
-	public void setPaddings(int[] paddings) {
+	public TableCell setPaddings(int[] paddings) {
 		this.paddings = paddings;
+		return this;
 	}
 }
