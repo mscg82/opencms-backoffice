@@ -193,40 +193,40 @@ public class TableLayout extends Component {
 	 * @see org.j4me.ui.components.Component#getPreferredComponentSize(org.j4me.ui.Theme, int, int)
 	 */
 	protected int[] getPreferredComponentSize(Theme theme, int viewportWidth, int viewportHeight) {
-		if(size == null || rowHeights == null) {
-			size = new int[]{viewportWidth, 0};
-			rowHeights = new int[rows.size()];
-			int widths[] = new int[colWidths.size()];
-			for(int i = 0, l = colWidths.size(); i < l; i++) {
-				Double w = (Double)this.colWidths.elementAt(i);
-				widths[i] = (int)Math.floor(w.doubleValue() * viewportWidth);
-			}
-			for(int i = 0, l = rows.size(); i < l; i++) {
-				int rowHeight = 0;
-				TableCell row[] = (TableCell[])rows.elementAt(i);
-				for(int j = 0; j < row.length; j++) {
-					int paddingTop    = (row[j].getPaddings()[0] >= 0 ? row[j].getPaddings()[0] : getCellPadding());
-					int paddingRight  = (row[j].getPaddings()[1] >= 0 ? row[j].getPaddings()[1] : getCellPadding());
-					int paddingBottom = (row[j].getPaddings()[2] >= 0 ? row[j].getPaddings()[2] : getCellPadding());
-					int paddingLeft   = (row[j].getPaddings()[3] >= 0 ? row[j].getPaddings()[3] : getCellPadding());
-					Vector components = row[j].getComponents();
-					int cellHeight = 0;
-					int k = 0;
-					for(Enumeration en = components.elements(); en.hasMoreElements();) {
-						Component c = (Component)en.nextElement();
-						if(c != null) {
-							int tmp[] = c.getPreferredSize(theme, widths[j] - paddingLeft - paddingRight, viewportHeight);
-							row[j].setComponentsHeight(k, tmp[1]);
-							cellHeight += tmp[1];
-						}
-						k++;
-					}
-					rowHeight = (int)Math.max(cellHeight + paddingTop + paddingBottom, rowHeight);
-				}
-				rowHeights[i] = rowHeight;
-				size[1] += rowHeight;
-			}
+		//if(size == null || rowHeights == null) {
+		size = new int[]{viewportWidth, 0};
+		rowHeights = new int[rows.size()];
+		int widths[] = new int[colWidths.size()];
+		for(int i = 0, l = colWidths.size(); i < l; i++) {
+			Double w = (Double)this.colWidths.elementAt(i);
+			widths[i] = (int)Math.floor(w.doubleValue() * viewportWidth);
 		}
+		for(int i = 0, l = rows.size(); i < l; i++) {
+			int rowHeight = 0;
+			TableCell row[] = (TableCell[])rows.elementAt(i);
+			for(int j = 0; j < row.length; j++) {
+				int paddingTop    = (row[j].getPaddings()[0] >= 0 ? row[j].getPaddings()[0] : getCellPadding());
+				int paddingRight  = (row[j].getPaddings()[1] >= 0 ? row[j].getPaddings()[1] : getCellPadding());
+				int paddingBottom = (row[j].getPaddings()[2] >= 0 ? row[j].getPaddings()[2] : getCellPadding());
+				int paddingLeft   = (row[j].getPaddings()[3] >= 0 ? row[j].getPaddings()[3] : getCellPadding());
+				Vector components = row[j].getComponents();
+				int cellHeight = 0;
+				int k = 0;
+				for(Enumeration en = components.elements(); en.hasMoreElements();) {
+					Component c = (Component)en.nextElement();
+					if(c != null) {
+						int tmp[] = c.getPreferredSize(theme, widths[j] - paddingLeft - paddingRight, viewportHeight);
+						row[j].setComponentsHeight(k, tmp[1]);
+						cellHeight += tmp[1];
+					}
+					k++;
+				}
+				rowHeight = (int)Math.max(cellHeight + paddingTop + paddingBottom, rowHeight);
+			}
+			rowHeights[i] = rowHeight;
+			size[1] += rowHeight;
+		}
+		//}
 		return size;
 	}
 	
