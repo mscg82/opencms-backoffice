@@ -1,6 +1,6 @@
 package com.classmeteo.dialog;
 
-import java.rmi.RemoteException;
+import java.io.IOException;
 
 import org.j4me.ext.UpdatablePopupMenuDialog;
 import org.j4me.ui.DeviceScreen;
@@ -26,13 +26,14 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 		 * @see java.lang.Thread#run()
 		 */
 		public void run() {
+			Properties tr = Settings.getTranslation(); 		
 			try {
 				ClassMeteoFluxesWS client = WebServiceAccessor.getClient();
 				MasterLocList locsList = client.getMasterLocByNameLike(Settings.getSelectCityDialog().getSelectedCityName(), new Integer(15));
 				synchronized (spinner) {
-					spinner.setMaxValue(1);					
-					SearchCityDialog.this.deleteAll();
-					//SearchCityDialog.this.append(Settings.getLogo());
+					deleteAll();
+					spinner.setMaxValue(1);
+					repaint();
 				}
 				if(!isInterrupted()) {
 					//SearchCityDialog.this.append(Settings.getWhiteSpace());
@@ -51,16 +52,11 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 						getLeftMenuItems().removeAllElements();
 						getRightMenuItems().removeAllElements();
 									
-						Properties tr = Settings.getTranslation();
 						setMenuText(tr.getProperty("menu.prev"), tr.getProperty("menu.select"));
 					}
 					else {
 						SearchCityDialog.this.append(Settings.getLogo());
-						SearchCityDialog.this.append(
-							new Label(
-								Settings.getTranslation().getProperty("citysearch.list.empty")
-							)
-						);
+						SearchCityDialog.this.append(new Label(tr.getProperty("citysearch.list.empty")));
 					}
 					SearchCityDialog.this.invalidate();
 					SearchCityDialog.this.repaint();
@@ -68,8 +64,22 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 				else {
 					SearchCityDialog.this.deleteAll();
 				}
-			} catch (RemoteException e) {
+			} catch(IOException e) {
 				e.printStackTrace();
+				synchronized (spinner) {
+					deleteAll();
+					spinner.setMaxValue(1);
+					repaint();
+				}
+				append(new Label(tr.getProperty("error.network")));
+			} catch(Exception e) {
+				e.printStackTrace();
+				synchronized (spinner) {
+					deleteAll();
+					spinner.setMaxValue(1);
+					repaint();
+				}
+				append(new Label(tr.getProperty("error.generic")));
 			}
 		}
 		
