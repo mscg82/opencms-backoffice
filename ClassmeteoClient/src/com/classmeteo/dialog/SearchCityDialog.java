@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 
 import org.j4me.ext.UpdatablePopupMenuDialog;
 import org.j4me.ui.DeviceScreen;
+import org.j4me.ui.components.Label;
 import org.j4me.ui.components.MenuOption;
 import org.j4me.ui.components.ProgressBar;
 
@@ -36,21 +37,31 @@ public class SearchCityDialog extends UpdatablePopupMenuDialog {
 				if(!isInterrupted()) {
 					//SearchCityDialog.this.append(Settings.getWhiteSpace());
 					MasterLocWS locs[] = locsList.getLocations();
-					for(int i = 0; i < locs.length; i++) {
-						MasterLocWS loc = locs[i];
-						String name = loc.getPrsntNm() + ", " +
-							((loc.getStCd() == null || loc.getStCd().trim().length() == 0 || "*".equals(loc.getStCd())) ? "" : loc.getStCd() + ", ") +
-							loc.getCntryCd(); 
-						MenuOption mo = new MenuOption(new RetrievedCityMenuItem(name, loc.getLocId()));
-						SearchCityDialog.this.append(mo);
-						if(i == 0)
-							SearchCityDialog.this.setSelected(mo);
+					if(locs != null && locs.length != 0) {
+						for(int i = 0; i < locs.length; i++) {
+							MasterLocWS loc = locs[i];
+							String name = loc.getPrsntNm() + ", " +
+								((loc.getStCd() == null || loc.getStCd().trim().length() == 0 || "*".equals(loc.getStCd())) ? "" : loc.getStCd() + ", ") +
+								loc.getCntryCd(); 
+							MenuOption mo = new MenuOption(new RetrievedCityMenuItem(name, loc.getLocId()));
+							SearchCityDialog.this.append(mo);
+							if(i == 0)
+								SearchCityDialog.this.setSelected(mo);
+						}
+						getLeftMenuItems().removeAllElements();
+						getRightMenuItems().removeAllElements();
+									
+						Properties tr = Settings.getTranslation();
+						setMenuText(tr.getProperty("menu.prev"), tr.getProperty("menu.select"));
 					}
-					getLeftMenuItems().removeAllElements();
-					getRightMenuItems().removeAllElements();
-								
-					Properties tr = Settings.getTranslation();
-					setMenuText(tr.getProperty("menu.prev"), tr.getProperty("menu.select"));
+					else {
+						SearchCityDialog.this.append(Settings.getLogo());
+						SearchCityDialog.this.append(
+							new Label(
+								Settings.getTranslation().getProperty("citysearch.list.empty")
+							)
+						);
+					}
 					SearchCityDialog.this.invalidate();
 					SearchCityDialog.this.repaint();
 				}
