@@ -1,0 +1,6 @@
+#Sun Apr 10 00:29:25 CEST 2011
+eclipse.preferences.version=1
+jarsExcludedFromWebInfLib=
+launchConfigExternalUrlPrefix=http\://localhost\:8080/test_GWT_mvn/
+warSrcDir=src/main/webapp
+warSrcDirIsOutput=true
