@@ -16,7 +16,7 @@ public class TestBucket {
     public static void main(String[] args) {
         BucketManager bm = null;
         try {
-            bm = new BucketManager(2048, 102400, "TestBucket");
+            bm = new BucketManager(2048, 204800, "TestBucket");
 
             Thread threads[] = new Thread[4];
             threads[0] = new FileWriterThread(bm, "./out1.tmp", 2);

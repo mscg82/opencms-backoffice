@@ -22,10 +22,12 @@ public class BucketManager implements Closeable {
     protected int tokensNumber;
     protected ThreadGroup threadGroup;
     protected Thread refillerThread;
-
+    protected Thread refillerAwakerThread;
+    protected Object refillerSemaphore;
 
     public BucketManager(int tokenSize, int maxBandwidth, String name) throws IllegalArgumentException,
                                                                               BucketManagerInitException {
+        refillerSemaphore = new Object();
         try {
             if(maxBandwidth < tokenSize)
                 throw new IllegalArgumentException("Max bandwidth must be greater than the token size");
@@ -45,6 +47,9 @@ public class BucketManager implements Closeable {
             refillerThread = new RefillerThread(threadGroup, "Refiller");
             refillerThread.start();
 
+            refillerAwakerThread = new RefillerAwakerThread(threadGroup, "RefillerAwaker");
+            refillerAwakerThread.start();
+
         } catch(IllegalArgumentException e) {
             throw e;
         } catch(Exception e) {
@@ -57,7 +62,49 @@ public class BucketManager implements Closeable {
     }
 
     public void close() throws IOException {
+        refillerAwakerThread.interrupt();
         refillerThread.interrupt();
+    }
+
+    protected class RefillerAwakerThread extends Thread {
+
+        public RefillerAwakerThread(String name) {
+            super(name);
+            setDaemon(true);
+        }
+
+        public RefillerAwakerThread(ThreadGroup group, String name) {
+            super(group, name);
+            setDaemon(true);
+        }
+
+        @Override
+        public void run() {
+            NDC.push(getThreadGroup().getName() + "-" + getName());
+            if(LOG.isDebugEnabled())
+                LOG.debug("Refiller awaker thread has been started");
+            try {
+                while(!isInterrupted()) {
+                    long now = System.currentTimeMillis();
+                    if(LOG.isDebugEnabled())
+                        LOG.debug("Awaking refiller thread");
+                    synchronized (refillerSemaphore) {
+                        refillerSemaphore.notifyAll();
+                    }
+                    long elapsed = System.currentTimeMillis() - now;
+                    Thread.sleep(1000l - elapsed);
+                }
+            } catch(InterruptedException e){
+
+            } finally {
+                if(LOG.isInfoEnabled())
+                    LOG.info("Exiting from refiller awaker thread");
+
+                NDC.pop();
+                NDC.remove();
+            }
+        }
+
     }
 
     protected class RefillerThread extends Thread {
@@ -77,37 +124,24 @@ public class BucketManager implements Closeable {
             NDC.push(getThreadGroup().getName() + "-" + getName());
             if(LOG.isDebugEnabled())
                 LOG.debug("Refiller thread has been started");
-            int runs = 0;
-            int totalCount = 0;
             try {
+                int elementsInserted = 0;
                 while(!isInterrupted()) {
-                    long start = System.currentTimeMillis();
-
+                    tokens.put(new Token(tokenSize));
+                    elementsInserted++;
                     if(LOG.isDebugEnabled())
-                        LOG.debug("Refilling buffer");
+                        LOG.debug("Elements refilled so far: " + elementsInserted);
 
-                    int counts = 0;
-                    while(!isInterrupted() && counts < tokensNumber / 4 && tokens.offer(new Token(tokenSize))){
-                        counts++;
-                    }
-                    totalCount += tokensNumber / 4;
-
-                    runs = (runs + 1) % 4;
-                    if(runs == 0) {
-                        // its the forth run, so refill the entire buffer, if any space has been left empty
-                        while(!isInterrupted() && totalCount < tokensNumber && tokens.offer(new Token(tokenSize))){
-                            counts++;
-                            totalCount++;
+                    if(elementsInserted >= tokensNumber) {
+                        // we exceeded the maximum number of refill tokens, so wait
+                        if(LOG.isDebugEnabled())
+                            LOG.debug("Maximum number of refills exceeded, waiting...");
+                        synchronized (refillerSemaphore) {
+                            refillerSemaphore.wait();
                         }
-                        totalCount = 0;
-                    }
-
-                    if(LOG.isDebugEnabled())
-                        LOG.debug(Integer.toString(counts) + " tokens have been created");
-
-                    if(!isInterrupted()) {
-                        long elapsed = System.currentTimeMillis() - start;
-                        Thread.sleep(250l - elapsed);
+                        if(LOG.isDebugEnabled())
+                            LOG.debug("Restarting refill");
+                        elementsInserted = 0;
                     }
                 }
             } catch(InterruptedException e){

@@ -22,7 +22,7 @@
 	</logger>
 	
 	<logger name="com.mscg.bucket.BucketManager">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 
 	<root>
