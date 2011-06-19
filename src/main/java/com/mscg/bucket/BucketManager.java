@@ -25,7 +25,6 @@ public class BucketManager implements Closeable {
     protected int tokensNumber;
     protected ThreadGroup threadGroup;
     protected Thread refillerThread;
-    protected Thread refillerAwakerThread;
     protected Object refillerSemaphore;
 
     public BucketManager(int tokenSize, int maxBandwidth, String name) throws IllegalArgumentException,
@@ -50,9 +49,6 @@ public class BucketManager implements Closeable {
             refillerThread = new RefillerThread(threadGroup, "Refiller");
             refillerThread.start();
 
-            refillerAwakerThread = new RefillerAwakerThread(threadGroup, "RefillerAwaker");
-            refillerAwakerThread.start();
-
         } catch (IllegalArgumentException e) {
             throw e;
         } catch (Exception e) {
@@ -69,51 +65,7 @@ public class BucketManager implements Closeable {
     }
 
     public void close() throws IOException {
-        refillerAwakerThread.interrupt();
         refillerThread.interrupt();
-    }
-
-    protected class RefillerAwakerThread extends Thread {
-
-        public RefillerAwakerThread(String name) {
-            super(name);
-            setDaemon(true);
-        }
-
-        public RefillerAwakerThread(ThreadGroup group, String name) {
-            super(group, name);
-            setDaemon(true);
-        }
-
-        @Override
-        public void run() {
-            NDC.push(getThreadGroup().getName() + "-" + getName());
-            if(LOG.isDebugEnabled())
-                LOG.debug("Refiller awaker thread has been started");
-            try {
-                long elapsed = 0l;
-                while(!isInterrupted()) {
-                    Thread.sleep(1000l - elapsed);
-
-                    long now = System.currentTimeMillis();
-                    if(LOG.isDebugEnabled())
-                        LOG.debug("Awaking refiller thread");
-                    synchronized (refillerSemaphore) {
-                        refillerSemaphore.notifyAll();
-                    }
-                    elapsed = System.currentTimeMillis() - now;
-                }
-            } catch (InterruptedException e) {
-
-            } finally {
-                if(LOG.isInfoEnabled())
-                    LOG.info("Exiting from refiller awaker thread");
-
-                NDC.pop();
-                NDC.remove();
-            }
-        }
-
     }
 
     protected class RefillerThread extends Thread {
@@ -141,7 +93,7 @@ public class BucketManager implements Closeable {
                         if(LOG.isDebugEnabled())
                             LOG.debug("Maximum number of refills exceeded, waiting...");
                         synchronized (refillerSemaphore) {
-                            refillerSemaphore.wait();
+                            refillerSemaphore.wait(1000l);
                         }
                         if(LOG.isDebugEnabled())
                             LOG.debug("Restarting refill");
@@ -323,7 +275,7 @@ public class BucketManager implements Closeable {
             try {
                 int writeable = getWriteableBytes(1);
                 if(writeable == 1)
-                    super.write(b);
+                    out.write(b);
                 else
                     throw new IOException("Cannot get enough writable bytes from the bucket manager");
             } catch (InterruptedException e) {
@@ -338,7 +290,7 @@ public class BucketManager implements Closeable {
                 while(offset < len) {
                     int writeable = getWriteableBytes(len - offset);
                     if(writeable > 0) {
-                        super.write(b, off + offset, writeable);
+                        out.write(b, off + offset, writeable);
                         offset += writeable;
                     } else
                         throw new IOException("Cannot get enough writable bytes from the bucket manager");

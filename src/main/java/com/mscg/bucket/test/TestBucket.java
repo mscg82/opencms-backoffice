@@ -16,10 +16,10 @@ public class TestBucket {
     public static void main(String[] args) {
         BucketManager bm = null;
         try {
-            bm = new BucketManager(2048, 800 * 1024, "TestBucket");
+            bm = new BucketManager(2048, 200 * 1024, "TestBucket");
 
             Thread threads[] = new Thread[4];
-            threads[0] = new FileWriterThread(bm, "./out1.tmp", 2);
+            threads[0] = new FileWriterThread(bm, "./out1.tmp", 20);
 //            threads[1] = new FileWriterThread(bm, "./out2.tmp", 2);
 //            threads[2] = new FileWriterThread(bm, "./out3.tmp", 2);
 //            threads[3] = new FileWriterThread(bm, "./out4.tmp", 2);
