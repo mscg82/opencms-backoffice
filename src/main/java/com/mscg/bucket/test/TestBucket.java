@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+import org.apache.log4j.NDC;
+
 import com.mscg.bucket.BucketManager;
 
 public class TestBucket {
@@ -14,11 +16,11 @@ public class TestBucket {
     public static void main(String[] args) {
         BucketManager bm = null;
         try {
-            bm = new BucketManager(2048, 204800, "TestBucket");
+            bm = new BucketManager(2048, 102400, "TestBucket");
 
             Thread threads[] = new Thread[4];
             threads[0] = new FileWriterThread(bm, "./out1.tmp", 2);
-            threads[1] = new FileWriterThread(bm, "./out2.tmp", 2);
+//            threads[1] = new FileWriterThread(bm, "./out2.tmp", 2);
 //            threads[2] = new FileWriterThread(bm, "./out3.tmp", 2);
 //            threads[3] = new FileWriterThread(bm, "./out4.tmp", 2);
             for(int i = 0; i < threads.length; i++) {
@@ -53,6 +55,7 @@ public class TestBucket {
 
         @Override
         public void run() {
+            NDC.push("Writer-" + filename);
             OutputStream os = null;
             try {
                 byte buffer[] = new byte[102400];
@@ -89,6 +92,8 @@ public class TestBucket {
             } catch(Exception e) {
                 e.printStackTrace();
             } finally {
+                NDC.pop();
+                NDC.remove();
                 try {
                     os.close();
                 } catch (Exception e) { }

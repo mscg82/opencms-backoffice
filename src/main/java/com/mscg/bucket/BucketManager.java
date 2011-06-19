@@ -3,10 +3,7 @@ package com.mscg.bucket;
 import java.io.Closeable;
 import java.io.FilterOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -80,6 +77,8 @@ public class BucketManager implements Closeable {
             NDC.push(getThreadGroup().getName() + "-" + getName());
             if(LOG.isDebugEnabled())
                 LOG.debug("Refiller thread has been started");
+            int runs = 0;
+            int totalCount = 0;
             try {
                 while(!isInterrupted()) {
                     long start = System.currentTimeMillis();
@@ -88,8 +87,19 @@ public class BucketManager implements Closeable {
                         LOG.debug("Refilling buffer");
 
                     int counts = 0;
-                    while(!isInterrupted() && counts < tokensNumber && tokens.offer(new Token(tokenSize))){
+                    while(!isInterrupted() && counts < tokensNumber / 4 && tokens.offer(new Token(tokenSize))){
                         counts++;
+                    }
+                    totalCount += tokensNumber / 4;
+
+                    runs = (runs + 1) % 4;
+                    if(runs == 0) {
+                        // its the forth run, so refill the entire buffer, if any space has been left empty
+                        while(!isInterrupted() && totalCount < tokensNumber && tokens.offer(new Token(tokenSize))){
+                            counts++;
+                            totalCount++;
+                        }
+                        totalCount = 0;
                     }
 
                     if(LOG.isDebugEnabled())
@@ -97,7 +107,7 @@ public class BucketManager implements Closeable {
 
                     if(!isInterrupted()) {
                         long elapsed = System.currentTimeMillis() - start;
-                        Thread.sleep(1000l - elapsed);
+                        Thread.sleep(250l - elapsed);
                     }
                 }
             } catch(InterruptedException e){
@@ -114,130 +124,57 @@ public class BucketManager implements Closeable {
 
     }
 
-    protected class DataSenderThread extends Thread {
-
-        protected InputStream source;
-        protected OutputStream output;
-        protected IOException exception;
-
-        public DataSenderThread(String name, InputStream source, OutputStream output) {
-            super(name);
-            init(source, output);
-        }
-
-        public DataSenderThread(ThreadGroup group, String name, InputStream source, OutputStream output) {
-            super(group, name);
-            init(source, output);
-        }
-
-        protected void init(InputStream source, OutputStream output) {
-            this.source = source;
-            this.output = output;
-        }
-
-        @Override
-        public void run() {
-            NDC.push(getThreadGroup().getName() + "-" + getName());
-            if(LOG.isDebugEnabled())
-                LOG.debug("Data sender thread has been started");
-            byte buffer[] = new byte[tokenSize];
-            int bytesRead = 0;
-            try {
-                while(!isInterrupted()) {
-                    tokens.take();
-
-                    if(LOG.isDebugEnabled())
-                        LOG.debug("A token for " + tokenSize + " bytes have been acquired.");
-
-                    bytesRead = source.read(buffer, 0, tokenSize);
-                    if(bytesRead <= 0)
-                        break;
-                    output.write(buffer, 0, bytesRead);
-                }
-            } catch(InterruptedException e) {
-
-            } catch(IOException e) {
-                setException(e);
-            } finally {
-                if(LOG.isInfoEnabled())
-                    LOG.info("Exiting from data sender thread");
-                NDC.pop();
-                NDC.remove();
-            }
-        }
-
-        /**
-         * @return the exception
-         */
-        public synchronized IOException getException() {
-            return exception;
-        }
-
-        /**
-         * @param exception the exception to set
-         */
-        protected synchronized void setException(IOException exception) {
-            this.exception = exception;
-        }
-
-    }
-
     protected class LimitedSpeedOutputStream extends FilterOutputStream {
 
-        protected PipedInputStream inStream;
-        protected PipedOutputStream outStream;
-        protected DataSenderThread dataSenderThread;
+        protected int availableBytes;
+        protected int tokensUsed;
 
-        public LimitedSpeedOutputStream(OutputStream out) throws IOException {
+        public LimitedSpeedOutputStream(OutputStream out) {
             super(out);
-            inStream = new ExtendedPipedInputStream(10 * tokenSize);
-            outStream = new PipedOutputStream(inStream);
+        }
 
-            dataSenderThread = new DataSenderThread(threadGroup, "DataSender", inStream, out);
-            dataSenderThread.start();
+        protected int getWriteableBytes(int desiredBytes) throws InterruptedException {
+            if(availableBytes == 0) {
+                Token token = tokens.take();
+                tokensUsed++;
+                if(LOG.isDebugEnabled())
+                    LOG.debug("A token (" + tokensUsed + ") for " + token.getTokenSize() + " bytes have been acquired.");
+                availableBytes = token.getTokenSize();
+            }
+            int writeable = Math.min(availableBytes, desiredBytes);
+            availableBytes -= writeable;
+            return writeable;
         }
 
         @Override
         public void write(int b) throws IOException {
-            if(dataSenderThread.getException() != null)
-                throw dataSenderThread.getException();
-            outStream.write(b);
+            try {
+                int writeable = getWriteableBytes(1);
+                if(writeable == 1)
+                    super.write(b);
+                else
+                    throw new IOException("Cannot get enough writable bytes from the bucket manager");
+            } catch(InterruptedException e) {
+                throw new IOException("Bucket manager was interrupted: " + e.getMessage());
+            }
         }
 
         @Override
         public void write(byte[] b, int off, int len) throws IOException {
-            if(dataSenderThread.getException() != null)
-                throw dataSenderThread.getException();
-            outStream.write(b, off, len);
-        }
-
-        @Override
-        public void flush() throws IOException {
             try {
-                outStream.flush();
-            } catch(Exception e){}
-            super.flush();
-            if(dataSenderThread.getException() != null)
-                throw dataSenderThread.getException();
-        }
-
-        @Override
-        public void close() throws IOException {
-            try {
-                outStream.flush();
-            } catch(Exception e){}
-            try {
-                outStream.close();
-            } catch(Exception e){}
-            try {
-                dataSenderThread.join();
-            } catch (InterruptedException e) {}
-            try {
-                inStream.close();
-            } catch(Exception e){}
-            super.close();
-            if(dataSenderThread.getException() != null)
-                throw dataSenderThread.getException();
+                int offset = 0;
+                while(offset < len) {
+                    int writeable = getWriteableBytes(len - offset);
+                    if(writeable > 0) {
+                        super.write(b, off + offset, writeable);
+                        offset += writeable;
+                    }
+                    else
+                        throw new IOException("Cannot get enough writable bytes from the bucket manager");
+                }
+            } catch(InterruptedException e) {
+                throw new IOException("Bucket manager was interrupted: " + e.getMessage());
+            }
         }
 
     }
