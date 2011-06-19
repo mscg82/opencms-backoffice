@@ -16,7 +16,7 @@ public class TestBucket {
     public static void main(String[] args) {
         BucketManager bm = null;
         try {
-            bm = new BucketManager(2048, 204800, "TestBucket");
+            bm = new BucketManager(2048, 800 * 1024, "TestBucket");
 
             Thread threads[] = new Thread[4];
             threads[0] = new FileWriterThread(bm, "./out1.tmp", 2);
@@ -58,7 +58,7 @@ public class TestBucket {
             NDC.push("Writer-" + filename);
             OutputStream os = null;
             try {
-                byte buffer[] = new byte[102400];
+                byte buffer[] = new byte[1024];
                 for(int i = 0; i < buffer.length; i++) {
                     buffer[i] = (byte)(Math.random() * 255);
                 }
@@ -70,6 +70,7 @@ public class TestBucket {
                     outFile.createNewFile();
                 }
                 os = new FileOutputStream(outFile);
+//                os = bm.getThreadedLimitedSpeedOutputStream(os);
                 os = bm.getLimitedSpeedOutputStream(os);
                 long start = System.currentTimeMillis();
                 while(sizeWritten < totalSize) {
@@ -77,8 +78,8 @@ public class TestBucket {
                     os.write(buffer, 0, sizeToWrite);
                     sizeWritten += sizeToWrite;
                 }
+                os.flush();
                 long elapsed = Math.max(System.currentTimeMillis() - start, 1l);
-                os.close();
                 double speed = ((double)outFile.length()) / elapsed / 1.024d;
 
                 StringBuilder sb = new StringBuilder();

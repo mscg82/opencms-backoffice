@@ -10,7 +10,7 @@
 	<appender name="LOG" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="token-bucket.log" />
 		<param name="Append" value="true" />
-		<param name="MaxFileSize" value="500KB" />
+		<param name="MaxFileSize" value="2MB" />
 		<param name="MaxBackupIndex" value="2" />		
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="%d{DATE} %5p [%c{1}\:%4L][%x] %m%n" />
@@ -22,7 +22,7 @@
 	</logger>
 	
 	<logger name="com.mscg.bucket.BucketManager">
-		<level value="info" />
+		<level value="debug" />
 	</logger>
 
 	<root>

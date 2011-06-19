@@ -3,7 +3,10 @@ package com.mscg.bucket;
 import java.io.Closeable;
 import java.io.FilterOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -50,15 +53,19 @@ public class BucketManager implements Closeable {
             refillerAwakerThread = new RefillerAwakerThread(threadGroup, "RefillerAwaker");
             refillerAwakerThread.start();
 
-        } catch(IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             throw e;
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new BucketManagerInitException(e);
         }
     }
 
     public OutputStream getLimitedSpeedOutputStream(OutputStream os) throws IOException {
         return new LimitedSpeedOutputStream(os);
+    }
+
+    public OutputStream getThreadedLimitedSpeedOutputStream(OutputStream os) throws IOException {
+        return new ThreadedLimitedSpeedOutputStream(os);
     }
 
     public void close() throws IOException {
@@ -84,17 +91,19 @@ public class BucketManager implements Closeable {
             if(LOG.isDebugEnabled())
                 LOG.debug("Refiller awaker thread has been started");
             try {
+                long elapsed = 0l;
                 while(!isInterrupted()) {
+                    Thread.sleep(1000l - elapsed);
+
                     long now = System.currentTimeMillis();
                     if(LOG.isDebugEnabled())
                         LOG.debug("Awaking refiller thread");
                     synchronized (refillerSemaphore) {
                         refillerSemaphore.notifyAll();
                     }
-                    long elapsed = System.currentTimeMillis() - now;
-                    Thread.sleep(1000l - elapsed);
+                    elapsed = System.currentTimeMillis() - now;
                 }
-            } catch(InterruptedException e){
+            } catch (InterruptedException e) {
 
             } finally {
                 if(LOG.isInfoEnabled())
@@ -125,13 +134,8 @@ public class BucketManager implements Closeable {
             if(LOG.isDebugEnabled())
                 LOG.debug("Refiller thread has been started");
             try {
-                int elementsInserted = 0;
+                int elementsInserted = tokensNumber;
                 while(!isInterrupted()) {
-                    tokens.put(new Token(tokenSize));
-                    elementsInserted++;
-                    if(LOG.isDebugEnabled())
-                        LOG.debug("Elements refilled so far: " + elementsInserted);
-
                     if(elementsInserted >= tokensNumber) {
                         // we exceeded the maximum number of refill tokens, so wait
                         if(LOG.isDebugEnabled())
@@ -143,8 +147,14 @@ public class BucketManager implements Closeable {
                             LOG.debug("Restarting refill");
                         elementsInserted = 0;
                     }
+
+                    tokens.put(new Token(tokenSize));
+                    elementsInserted++;
+                    if(LOG.isDebugEnabled())
+                        LOG.debug("Elements refilled so far: " + elementsInserted);
+
                 }
-            } catch(InterruptedException e){
+            } catch (InterruptedException e) {
 
             } finally {
                 if(LOG.isInfoEnabled())
@@ -154,6 +164,134 @@ public class BucketManager implements Closeable {
                 NDC.remove();
             }
 
+        }
+
+    }
+
+    protected class DataSenderThread extends Thread {
+
+        protected InputStream source;
+        protected OutputStream output;
+        protected IOException exception;
+
+        public DataSenderThread(String name, InputStream source, OutputStream output) {
+            super(name);
+            init(source, output);
+        }
+
+        public DataSenderThread(ThreadGroup group, String name, InputStream source, OutputStream output) {
+            super(group, name);
+            init(source, output);
+        }
+
+        protected void init(InputStream source, OutputStream output) {
+            this.source = source;
+            this.output = output;
+        }
+
+        @Override
+        public void run() {
+            NDC.push(getThreadGroup().getName() + "-" + getName());
+            if(LOG.isDebugEnabled())
+                LOG.debug("Data sender thread has been started");
+            byte buffer[] = new byte[tokenSize];
+            int bytesRead = 0;
+            try {
+                while(!isInterrupted()) {
+                    tokens.take();
+
+                    if(LOG.isDebugEnabled())
+                        LOG.debug("A token for " + tokenSize + " bytes have been acquired.");
+
+                    bytesRead = source.read(buffer, 0, tokenSize);
+                    if(bytesRead <= 0)
+                        break;
+                    output.write(buffer, 0, bytesRead);
+                }
+            } catch(InterruptedException e) {
+
+            } catch(IOException e) {
+                setException(e);
+            } finally {
+                if(LOG.isInfoEnabled())
+                    LOG.info("Exiting from data sender thread");
+                NDC.pop();
+                NDC.remove();
+            }
+        }
+
+        /**
+         * @return the exception
+         */
+        public synchronized IOException getException() {
+            return exception;
+        }
+
+        /**
+         * @param exception the exception to set
+         */
+        protected synchronized void setException(IOException exception) {
+            this.exception = exception;
+        }
+
+    }
+
+    protected class ThreadedLimitedSpeedOutputStream extends FilterOutputStream {
+
+        protected PipedInputStream inStream;
+        protected PipedOutputStream outStream;
+        protected DataSenderThread dataSenderThread;
+
+        public ThreadedLimitedSpeedOutputStream(OutputStream out) throws IOException {
+            super(out);
+            inStream = new ExtendedPipedInputStream(10 * tokenSize);
+            outStream = new PipedOutputStream(inStream);
+
+            dataSenderThread = new DataSenderThread(threadGroup, "DataSender", inStream, out);
+            dataSenderThread.start();
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            if(dataSenderThread.getException() != null)
+                throw dataSenderThread.getException();
+            outStream.write(b);
+        }
+
+        @Override
+        public void write(byte[] b, int off, int len) throws IOException {
+            if(dataSenderThread.getException() != null)
+                throw dataSenderThread.getException();
+            outStream.write(b, off, len);
+        }
+
+        @Override
+        public void flush() throws IOException {
+            try {
+                outStream.flush();
+            } catch(Exception e){}
+            super.flush();
+            if(dataSenderThread.getException() != null)
+                throw dataSenderThread.getException();
+        }
+
+        @Override
+        public void close() throws IOException {
+            try {
+                outStream.flush();
+            } catch(Exception e){}
+            try {
+                outStream.close();
+            } catch(Exception e){}
+            try {
+                dataSenderThread.join();
+            } catch (InterruptedException e) {}
+            try {
+                inStream.close();
+            } catch(Exception e){}
+            super.close();
+            if(dataSenderThread.getException() != null)
+                throw dataSenderThread.getException();
         }
 
     }
@@ -188,7 +326,7 @@ public class BucketManager implements Closeable {
                     super.write(b);
                 else
                     throw new IOException("Cannot get enough writable bytes from the bucket manager");
-            } catch(InterruptedException e) {
+            } catch (InterruptedException e) {
                 throw new IOException("Bucket manager was interrupted: " + e.getMessage());
             }
         }
@@ -202,11 +340,10 @@ public class BucketManager implements Closeable {
                     if(writeable > 0) {
                         super.write(b, off + offset, writeable);
                         offset += writeable;
-                    }
-                    else
+                    } else
                         throw new IOException("Cannot get enough writable bytes from the bucket manager");
                 }
-            } catch(InterruptedException e) {
+            } catch (InterruptedException e) {
                 throw new IOException("Bucket manager was interrupted: " + e.getMessage());
             }
         }
