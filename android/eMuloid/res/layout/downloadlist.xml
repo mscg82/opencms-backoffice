@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/main_bg_tile">
+    
+    <!-- Top bar -->
+    <include layout="@layout/topbar_layout" /> 
+    
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  style="@style/download_list">
+    
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="fill_parent"
+                      android:layout_height="wrap_content"
+                      style="@style/download_list_categories_box">
+            
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/arrow_down"
+                       style="@style/top_list_image" />
+            
+            <TextView android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      android:layout_gravity="center_vertical"
+                      android:text="@string/download_list_downloads"
+                      style="@style/download_list_categories_text" />
+                      
+            <Spinner android:id="@+id/download_categories"
+                     android:layout_width="wrap_content"
+                     android:layout_height="wrap_content"
+                     style="@style/download_list_categories" />
+                     
+        </LinearLayout>
+        
+        <ListView android:id="@+id/downloads"
+                  style="@style/downloadList" />
+    </LinearLayout> 
+</LinearLayout>

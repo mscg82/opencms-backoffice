@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="list_element_bg_color_top">#FF3A3A3A</color>
+    <color name="list_element_bg_color_bottom">#FF181818</color>
+    <color name="list_element_bg_color_top_sel">#FFBBBBBB</color>
+    <color name="list_element_bg_color_bottom_sel">#FF5A5A5A</color>
+	<color name="default_day">#00FFFFFF</color>
+	<color name="actual_day">#30FFFFFF</color>
+	<color name="start_hour">#FFFFFFFF</color>
+	<color name="start_hour_back">#FF14B214</color>
+	<color name="start_hour_border">#FFDDDDDD</color>
+	<color name="end_hour">#FF000000</color>
+	<color name="end_hour_back">#FFB21414</color>
+	<color name="end_hour_border">#FFDDDDDD</color>
+	<color name="default_program">#00FFFFFF</color>
+	<color name="actual_program">#30FFFFFF</color>
+</resources>

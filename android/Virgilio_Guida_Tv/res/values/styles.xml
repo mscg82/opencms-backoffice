@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="textStyle">
+	   <item name="android:textSize">16sp</item>
+	   <item name="android:textColor">#FFFFFF</item>
+    </style>
+    
+    <style name="daysListIntro" parent="textStyle">
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingBottom">15dp</item>
+    </style>
+    
+	<style name="daysListStyle" parent="textStyle">
+	   <item name="android:padding">10dp</item>
+	</style>
+
+	<style name="startHourStyle" parent="daysListStyle">
+	   <item name="android:textColor">@color/start_hour</item>
+	   <item name="android:background">@drawable/start_hour_background</item>
+	</style>
+
+	<style name="endHourStyle" parent="daysListStyle">
+	   <item name="android:textColor">@color/end_hour</item>
+	   <item name="android:background">@drawable/end_hour_background</item>
+	</style>
+
+	<style name="programNameStyle" parent="textStyle">
+	   <item name="android:textStyle">bold</item>
+	   <item name="android:paddingTop">5dp</item>
+	   <item name="android:paddingLeft">10dp</item>
+	</style>
+
+	<style name="programCategoryStyle" parent="textStyle">
+	   <item name="android:paddingLeft">10dp</item>
+	   <item name="android:paddingBottom">5dp</item>
+	</style>
+	
+	<style name="programNameBoxStyle">
+	</style>
+	
+	<style name="detailsScroll">
+	   <item name="android:paddingTop">@dimen/details_scroll_paddingTop</item>
+	   <item name="android:paddingBottom">@dimen/details_scroll_paddingBottom</item>
+	</style>
+	
+	<style name="detailsText" parent="textStyle">
+    </style>
+
+	<style name="detailsTitle" parent="detailsText">
+	   <item name="android:textStyle">bold</item>
+    </style>
+	
+	<style name="cacheManagerText" parent="textStyle">
+	   <item name="android:paddingTop">5dp</item>
+	   <item name="android:paddingBottom">5dp</item>
+	   <item name="android:textStyle">bold</item>
+	</style>
+	
+	<style name="cacheManagerTextBold" parent="cacheManagerText">
+       <item name="android:textStyle">bold</item>
+    </style>
+</resources>

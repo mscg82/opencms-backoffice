@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry kind="lib" path="/Net Helper/lib/commons-io/commons-io-2.0.jar" sourcepath="/Net Helper/lib/commons-io/commons-io-2.0-sources.jar"/>
+	<classpathentry kind="src" path="Net Helper_src"/>
+	<classpathentry kind="lib" path="/Net Helper - HTML cleaner/lib/htmlcleaner/htmlcleaner-2.2.jar" sourcepath="/Net Helper - HTML cleaner/lib/htmlcleaner/htmlcleaner-2.2-all.zip"/>
+	<classpathentry kind="src" path="Net Helper - HTML cleaner_src"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

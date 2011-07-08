@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content">
+
+    <!-- Left darker border -->
+    <LinearLayout android:orientation="vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="fill_parent"
+              android:background="@drawable/topbar_darker">
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="fill_parent"
+                      android:layout_height="fill_parent"
+                      android:background="@drawable/top_bg_darker">
+            <LinearLayout android:orientation="vertical"
+                          android:layout_width="4px"
+                          android:layout_height="fill_parent"
+                          android:background="@drawable/topbar_tile" />
+        </LinearLayout>
+    </LinearLayout>
+    
+    <!-- Right lighter data section -->
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="fill_parent"
+                  android:layout_height="fill_parent"
+                  android:background="@drawable/topbar">
+        
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="fill_parent"
+                      android:layout_height="fill_parent"
+                      android:background="@drawable/top_bg">
+            
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          style="@style/top_list_first">
+	            
+	            <!-- Server status -->          
+	            <LinearLayout android:orientation="horizontal"
+	                          android:layout_width="wrap_content"
+	                          android:layout_height="wrap_content"
+	                          android:layout_weight="1">
+	                          
+	                <ImageView android:id="@+id/server_status_img"
+	                           android:layout_width="wrap_content"
+	                           android:layout_height="wrap_content"
+	                           android:src="@drawable/server_disconnected"
+	                           style="@style/top_list_image" />
+	                <TextView android:id="@+id/server_name"
+	                          android:layout_width="wrap_content"
+	                          android:layout_height="wrap_content"
+	                          android:layout_weight="1"
+	                          android:text="@string/server_disconnected"
+	                          style="@style/smallText" />
+	                          
+	            </LinearLayout>
+	            
+	            <!-- Kad status -->
+	            <LinearLayout android:orientation="horizontal"
+	                          android:layout_width="wrap_content"
+	                          android:layout_height="wrap_content">
+	                          
+	                <ImageView android:layout_width="wrap_content"
+	                           android:layout_height="wrap_content"
+	                           android:src="@drawable/h_kad_small"
+	                           style="@style/top_list_image" />
+	                <TextView android:id="@+id/kad_status"
+	                          android:layout_width="wrap_content"
+	                          android:layout_height="wrap_content"
+	                          android:layout_weight="1"
+	                          android:text="@string/server_disconnected"
+	                          style="@style/smallText" />
+	                          
+	            </LinearLayout>
+            </LinearLayout>
+            
+            
+            <!-- Download speed -->
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          style="@style/top_list">
+                          
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/arrow_down"
+                           style="@style/top_list_image" />
+                           
+                <LinearLayout android:id="@+id/download_speed_wrap"
+                              android:layout_width="wrap_content"
+                              style="@style/speedLayoutBg">
+                    <LinearLayout android:id="@+id/download_speed"
+                                  android:layout_width="0px"
+                                  android:layout_height="fill_parent"
+                                  android:background="@drawable/download_speed_gr" />
+                </LinearLayout>
+                
+                <TextView android:id="@+id/download_speed_txt"
+                          android:layout_height="wrap_content"
+                          android:text=""
+                          style="@style/speedText" />
+                          
+            </LinearLayout>
+            
+            <!-- Upload speed -->
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="fill_parent"
+                          android:layout_height="wrap_content"
+                          style="@style/top_list">
+                          
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:src="@drawable/arrow_up"
+                           style="@style/top_list_image" />
+                           
+                <LinearLayout android:id="@+id/upload_speed_wrap"
+                              android:layout_width="wrap_content"
+                              style="@style/speedLayoutBg">
+                    <LinearLayout android:id="@+id/upload_speed"
+                                  android:layout_width="0px"
+                                  android:layout_height="fill_parent"
+                                  android:layout_gravity="center_vertical"
+                                  android:background="@drawable/upload_speed_gr" />
+                </LinearLayout>
+                
+                <TextView android:id="@+id/upload_speed_txt"
+                          android:layout_height="wrap_content"
+                          android:text=""
+                          style="@style/speedText" />
+                          
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>  

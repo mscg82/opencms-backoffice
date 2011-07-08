@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+    
+    <TextView
+        android:id="@+id/channelsListIntro"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        style="@style/daysListIntro" />
+       
+    <ListView
+        android:id="@+id/channelsList"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textFilterEnabled="true"
+        android:fastScrollEnabled="true" />
+
+    <EditText
+        android:id="@+id/channelListSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/search_channels_hint"
+        android:visibility="gone" />
+
+</LinearLayout>

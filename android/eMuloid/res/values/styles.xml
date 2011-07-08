@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="v_holder">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    
+    <style name="v_spacer">
+        <item name="android:layout_height">20dp</item>
+    </style>
+
+    <style name="textStyle">
+	   <item name="android:textSize">16dp</item>
+	   <item name="android:textColor">#FFFFFF</item>
+    </style>
+    
+    <style name="smallText" parent="textStyle">
+        <item name="android:textSize">10dp</item>
+    </style>
+    
+    <style name="speedText" parent="smallText">
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:layout_width">70dp</item>
+    </style>
+    
+    <style name="speedLayoutBg">
+        <item name="android:layout_height">8px</item>
+        <item name="android:background">#FF99CCFF</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+    
+    <style name="login_wrapper">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingLeft">13dp</item>
+        <item name="android:paddingRight">13dp</item>
+        <item name="android:paddingBottom">12dp</item>
+    </style>
+    
+    <style name="top_list_image">
+        <item name="android:paddingRight">3dp</item>
+    </style>
+    
+    <style name="top_list">
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+        <item name="android:paddingBottom">5dp</item>
+    </style>
+    
+    <style name="top_list_first" parent="top_list">
+        <item name="android:paddingTop">5dp</item>
+    </style>
+    
+    <style name="download_list">
+        <item name="android:paddingTop">5dp</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+    </style>
+    
+    <style name="download_list_categories_box">
+        <item name="android:background">#FF000000</item>
+        <item name="android:paddingTop">2dp</item>
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+    </style>
+    
+    <style name="download_list_categories_text" parent="smallText">
+        <item name="android:paddingRight">7dp</item>
+    </style>
+    
+    <style name="download_list_categories">
+        <item name="android:background">@drawable/category</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:paddingRight">2dp</item>
+    </style>
+    
+    <style name="category_dropdown" parent="smallText">
+        <item name="android:paddingLeft">16px</item>
+        <item name="android:paddingRight">7px</item>
+    </style>
+    
+    <style name="downloadList">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">170dp</item>
+    </style>
+    
+    <style name="downloadListItem">
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:background">#FF005784</item>
+    </style>
+    
+    <style name="downloadListItemInner">
+        <item name="android:paddingTop">3dp</item>
+        <item name="android:paddingBottom">3dp</item>
+        <item name="android:background">#FF1F76A5</item>
+    </style>
+    
+    <style name="downloadInfo">
+        <item name="android:paddingLeft">2dp</item>
+    </style>
+
+    <style name="downloadText" parent="smallText">
+        <item name="android:paddingLeft">2dp</item>
+    </style>
+    
+    <style name="downloadInfoText" parent="smallText">
+        <item name="android:layout_weight">1</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+</resources>
