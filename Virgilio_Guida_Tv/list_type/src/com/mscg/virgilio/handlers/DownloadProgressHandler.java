@@ -7,8 +7,8 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.mscg.virgilio.GenericActivity;
+import com.mscg.virgilio.ListTypeSelection;
 import com.mscg.virgilio.R;
-import com.mscg.virgilio.VirgilioGuidaTvChannelSelection;
 import com.mscg.virgilio.programs.Programs;
 
 public class DownloadProgressHandler extends Handler {
@@ -62,7 +62,7 @@ public class DownloadProgressHandler extends Handler {
         case END_SAVE:
             if (context.getProgressDialog() != null)
                 context.getProgressDialog().dismiss();
-            Intent intent = new Intent(context, VirgilioGuidaTvChannelSelection.class);
+            Intent intent = new Intent(context, ListTypeSelection.class);
             intent.putExtra(PROGRAMS, ((Programs) b.getSerializable(PROGRAMS)).getDate());
             context.startActivity(intent);
             break;
