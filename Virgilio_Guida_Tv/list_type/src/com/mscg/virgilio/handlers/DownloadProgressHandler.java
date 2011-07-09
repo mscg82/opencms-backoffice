@@ -27,6 +27,7 @@ public class DownloadProgressHandler extends Handler {
     public static final int START_DELETE = 7;
     public static final int DELETE_PROGRESS = 8;
     public static final int END_DELETE = 9;
+    public static final int SCROLL_LIST = 10;
 
     private GenericActivity context;
 

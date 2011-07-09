@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.collections.Transformer;
@@ -14,9 +15,10 @@ import android.util.Log;
 
 public class Util {
 
-    public static final SimpleDateFormat programsDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    public static final SimpleDateFormat programsLastUpdateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-    public static final SimpleDateFormat programTimeFormat = new SimpleDateFormat("HH:mm");
+    public static final SimpleDateFormat programsDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ITALIAN);
+    public static final SimpleDateFormat programsLastUpdateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ITALIAN);
+    //public static final SimpleDateFormat programTimeFormat = new SimpleDateFormat("HH:mm", Locale.ITALIAN);
+    public static final SimpleDateFormat completeProgramTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ITALIAN);
 
     private static Map adaptedDates = LazyMap.decorate(new LRUMap(10), new DateAdapterTransformer());
 

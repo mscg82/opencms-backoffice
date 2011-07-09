@@ -1,5 +1,7 @@
 package com.mscg.virgilio;
 
+import java.util.Date;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +15,7 @@ import com.mscg.virgilio.listener.ProgramSelectionClickListener;
 import com.mscg.virgilio.programs.Channel;
 import com.mscg.virgilio.programs.TVProgram;
 import com.mscg.virgilio.util.CacheManager;
+import com.mscg.virgilio.util.ListViewScrollerThread;
 
 public class VirgilioGuidaTvPrograms extends GenericActivity {
 
@@ -59,8 +62,27 @@ public class VirgilioGuidaTvPrograms extends GenericActivity {
                 programsAdapter = new ProgramsListItemAdapter(this, R.layout.program_list_layout, channel.getTVPrograms());
                 programsListView.setAdapter(programsAdapter);
                 programsListView.setOnItemClickListener(new ProgramSelectionClickListener(this, guiHandler));
+
+                // auto select the program actually playing on TV
+                int index = 0;
+                Date now = new Date();
+                boolean found = false;
+                for(TVProgram program : channel.getTVPrograms()) {
+                    if(now.compareTo(program.getStartTime()) >= 0 && //now >= program.getStartTime()
+                       now.compareTo(program.getEndTime()) <= 0) {   //now <= program.getEndTime()
+                        found = true;
+                        break;
+                    }
+                    index++;
+                }
+                if(found)
+                    new ListViewScrollerThread(index, guiHandler).start();
             }
         }
+    }
+
+    public ListView getProgramsListView() {
+        return programsListView;
     }
 
     @Override
