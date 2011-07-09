@@ -8,9 +8,9 @@ import java.util.Date;
 
 /**
  * This class stores informations about a specific TV program.
- * 
+ *
  * @author Giuseppe Miscione
- * 
+ *
  */
 public class TVProgram implements Serializable {
 
@@ -24,6 +24,7 @@ public class TVProgram implements Serializable {
     private String category;
     private Channel channel;
     private ProgramDetails programDetails;
+    private boolean playing;
 
     public TVProgram(long id, String strId, String name, Date startTime, Date endTime, String category) {
         setId(id);
@@ -128,6 +129,10 @@ public class TVProgram implements Serializable {
         return result;
     }
 
+    public boolean isPlaying() {
+        return playing;
+    }
+
     public void setCategory(String category) {
         this.category = category;
     }
@@ -146,6 +151,10 @@ public class TVProgram implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setPlaying(boolean playing) {
+        this.playing = playing;
     }
 
     public void setProgramDetails(ProgramDetails programDetails) {

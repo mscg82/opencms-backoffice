@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -16,6 +17,8 @@ import com.mscg.virgilio.util.ProgramLinearLayout;
 public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
 
     private SimpleDateFormat hourFormatter;
+    private Drawable playingBg;
+    private Drawable normalBg;
 
     public ProgramsListItemAdapter(Context context, int textViewResourceId, TVProgram[] objects) {
         this(context, textViewResourceId, Arrays.asList(objects));
@@ -25,6 +28,10 @@ public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
         super(context, textViewResourceId, objects);
 
         hourFormatter = new SimpleDateFormat(context.getString(R.string.hours_format));
+
+        playingBg = getContext().getResources().getDrawable(R.drawable.list_element_playing_bg);
+        normalBg = getContext().getResources().getDrawable(R.drawable.list_element_bg);
+
     }
 
     @Override
@@ -73,6 +80,15 @@ public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
         holder.endHour.setText(hourFormatter.format(program.getEndTime()));
         holder.programName.setText(program.getName());
         holder.programCategory.setText(program.getCategory());
+
+        if(program.isPlaying()) {
+            if(itemView.getBackground() != playingBg)
+                itemView.setBackgroundDrawable(playingBg);
+        }
+        else {
+            if(itemView.getBackground() != normalBg)
+                itemView.setBackgroundDrawable(normalBg);
+        }
 
         return itemView;
     }

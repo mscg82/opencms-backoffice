@@ -6,6 +6,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.View.OnKeyListener;
+import android.view.View.OnTouchListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -17,7 +22,7 @@ import com.mscg.virgilio.programs.TVProgram;
 import com.mscg.virgilio.util.CacheManager;
 import com.mscg.virgilio.util.ListViewScrollerThread;
 
-public class VirgilioGuidaTvPrograms extends GenericActivity {
+public class VirgilioGuidaTvPrograms extends GenericActivity implements OnTouchListener, OnKeyListener {
 
     public static final String CHANNEL = VirgilioGuidaTvPrograms.class.getCanonicalName() + ".channel";
     public static final String PROGRAMS = VirgilioGuidaTvPrograms.class.getCanonicalName() + ".programs";
@@ -26,6 +31,7 @@ public class VirgilioGuidaTvPrograms extends GenericActivity {
     private ListView programsListView;
 
     private Handler guiHandler;
+    private ListViewScrollerThread listViewScrollerThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +76,23 @@ public class VirgilioGuidaTvPrograms extends GenericActivity {
                 for(TVProgram program : channel.getTVPrograms()) {
                     if(now.compareTo(program.getStartTime()) >= 0 && //now >= program.getStartTime()
                        now.compareTo(program.getEndTime()) <= 0) {   //now <= program.getEndTime()
+                        program.setPlaying(true);
                         found = true;
-                        break;
                     }
-                    index++;
+                    else {
+                        program.setPlaying(false);
+                        index++;
+                    }
                 }
-                if(found)
-                    new ListViewScrollerThread(index, guiHandler).start();
+                if(found) {
+                    listViewScrollerThread = new ListViewScrollerThread(index, guiHandler);
+                    programsListView.setOnTouchListener(this);
+                    programsListView.setOnKeyListener(this);
+                    listViewScrollerThread.start();
+                }
+                else {
+                    listViewScrollerThread = null;
+                }
             }
         }
     }
@@ -94,6 +110,25 @@ public class VirgilioGuidaTvPrograms extends GenericActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return interruptScroll();
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        return interruptScroll();
+    }
+
+    private boolean interruptScroll() {
+        if(listViewScrollerThread != null && listViewScrollerThread.isAlive()) {
+            listViewScrollerThread.interrupt();
+            listViewScrollerThread = null;
+            return true;
+        }
+        return false;
     }
 
 }

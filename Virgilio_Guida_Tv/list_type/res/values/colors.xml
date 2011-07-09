@@ -5,6 +5,10 @@
     <color name="list_element_bg_color_bottom">#FF181818</color>
     <color name="list_element_bg_color_top_sel">#FFBBBBBB</color>
     <color name="list_element_bg_color_bottom_sel">#FF5A5A5A</color>
+    <color name="list_element_playing_bg_color_top">#FF954A21</color>
+    <color name="list_element_playing_bg_color_bottom">#FF21150F</color>
+    <color name="list_element_playing_bg_color_top_sel">#FFD6B3A0</color>
+    <color name="list_element_playing_bg_color_bottom_sel">#FF7D5037</color>
 	<color name="default_day">#00FFFFFF</color>
 	<color name="actual_day">#30FFFFFF</color>
 	<color name="start_hour">#FFFFFFFF</color>
