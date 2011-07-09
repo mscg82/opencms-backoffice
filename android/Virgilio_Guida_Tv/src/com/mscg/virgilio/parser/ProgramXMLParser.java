@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -27,7 +29,7 @@ import com.mscg.virgilio.util.Util;
 
 /**
  * @author Giuseppe Miscione
- * 
+ *
  */
 public class ProgramXMLParser {
 
@@ -64,6 +66,8 @@ public class ProgramXMLParser {
     private class XMLHandler extends DefaultHandler {
 
         private Channel channel;
+        private Calendar programsDay;
+        private String programsDayStr;
 
         @Override
         public void characters(char[] ch, int start, int length) throws SAXException {
@@ -86,8 +90,12 @@ public class ProgramXMLParser {
                 try {
                     date = Util.programsDateFormat.parse(dateStr);
                 } catch (ParseException e) {
+                    throw new SAXException("Cannot parse program date", e);
                 }
                 programs.setDate(date);
+                programsDay = new GregorianCalendar();
+                programsDay.setTime(date);
+                programsDayStr = dateStr + " ";
 
                 // Parse the update date associated with the programs list
                 String lastUpdateStr = attributes.getValue("last-update");
@@ -103,16 +111,35 @@ public class ProgramXMLParser {
                 channel = new Channel(attributes.getValue("id"), attributes.getValue("n"), types);
                 programs.addChannel(channel);
             } else if ("pr".equals(qName)) {
-                Date startTime = null;
-                try {
-                    startTime = Util.programTimeFormat.parse(attributes.getValue("st"));
-                } catch (ParseException e) {
+                Date startTime;
+                Date endTime;
+
+                String startTimeStr = attributes.getValue("st");
+                String endTimeStr = attributes.getValue("et");
+
+                String startProgramDayStr = programsDayStr;
+                String endProgramDayStr = programsDayStr;
+
+                if(startTimeStr.compareTo(endTimeStr) > 0) {
+                    // endTime is in the next day, so add 1 day
+                    Calendar programDay = new GregorianCalendar();
+                    programDay.setTimeInMillis(programsDay.getTimeInMillis());
+                    programDay.add(Calendar.DAY_OF_MONTH, 1);
+                    endProgramDayStr = Util.programsDateFormat.format(programDay.getTime()) + " ";
                 }
-                Date endTime = null;
+
                 try {
-                    endTime = Util.programTimeFormat.parse(attributes.getValue("et"));
+                    startTime = Util.completeProgramTimeFormat.parse(startProgramDayStr + startTimeStr);
                 } catch (ParseException e) {
+                    throw new SAXException("Cannot parse program start date", e);
                 }
+
+                try {
+                    endTime = Util.completeProgramTimeFormat.parse(endProgramDayStr + endTimeStr);
+                } catch (ParseException e) {
+                    throw new SAXException("Cannot parse program end date", e);
+                }
+
                 TVProgram tvpr = new TVProgram(attributes.getValue("id"), attributes.getValue("n"), startTime, endTime,
                                                attributes.getValue("c"));
                 channel.addTVProgram(tvpr);

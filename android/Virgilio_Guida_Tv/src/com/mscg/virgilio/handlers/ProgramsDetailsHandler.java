@@ -18,6 +18,7 @@ import com.mscg.virgilio.VirgilioGuidaTvPrograms;
 import com.mscg.virgilio.listener.DetailsButtonsListener;
 import com.mscg.virgilio.programs.ProgramDetails;
 import com.mscg.virgilio.programs.TVProgram;
+import com.mscg.virgilio.util.ListViewScrollerThread;
 
 public class ProgramsDetailsHandler extends Handler {
 
@@ -136,6 +137,10 @@ public class ProgramsDetailsHandler extends Handler {
             ad.setMessage(errorText + " " + b.getString(DownloadProgressHandler.MESSAGE));
             ad.setCancelable(true);
             ad.show();
+            break;
+        case DownloadProgressHandler.SCROLL_LIST:
+            int scrollPosition = b.getInt(ListViewScrollerThread.SCROLL_POSITION);
+            context.getProgramsListView().setSelection(scrollPosition);
             break;
         }
     }
