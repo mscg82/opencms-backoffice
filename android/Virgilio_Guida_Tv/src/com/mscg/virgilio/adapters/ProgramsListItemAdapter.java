@@ -17,8 +17,6 @@ import com.mscg.virgilio.util.ProgramLinearLayout;
 public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
 
     private SimpleDateFormat hourFormatter;
-    private Drawable playingBg;
-    private Drawable normalBg;
 
     public ProgramsListItemAdapter(Context context, int textViewResourceId, TVProgram[] objects) {
         this(context, textViewResourceId, Arrays.asList(objects));
@@ -28,10 +26,6 @@ public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
         super(context, textViewResourceId, objects);
 
         hourFormatter = new SimpleDateFormat(context.getString(R.string.hours_format));
-
-        playingBg = getContext().getResources().getDrawable(R.drawable.list_element_playing_bg);
-        normalBg = getContext().getResources().getDrawable(R.drawable.list_element_bg);
-
     }
 
     @Override
@@ -48,6 +42,8 @@ public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
             holder.endHour = (TextView) itemView.findViewById(R.id.endHour);
             holder.programName = (TextView) itemView.findViewById(R.id.programName);
             holder.programCategory = (TextView) itemView.findViewById(R.id.programCategory);
+            holder.playingBg = getContext().getResources().getDrawable(R.drawable.list_element_playing_bg);
+            holder.normalBg = getContext().getResources().getDrawable(R.drawable.list_element_bg);
             itemView.setTag(holder);
         } else {
             itemView = (ProgramLinearLayout) convertView;
@@ -57,37 +53,18 @@ public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
         TVProgram program = getItem(position);
         itemView.setTvProgram(program);
 
-        // Calendar day = new GregorianCalendar();
-        // day.setTime(program.getChannel().getPrograms().getDate());
-        //
-        // Calendar startTime = new
-        // GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        // startTime.setTimeInMillis(day.getTimeInMillis() +
-        // program.getStartTime().getTime());
-        //
-        // Calendar endTime = new
-        // GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        // endTime.setTimeInMillis(day.getTimeInMillis() +
-        // program.getEndTime().getTime());
-        //
-        // Calendar now = new GregorianCalendar(TimeZone.getTimeZone("GMT"));
-        // if(now.compareTo(startTime) >= 0 && now.compareTo(endTime) <= 0)
-        // itemView.setBackgroundColor(R.color.actual_program);
-        // else
-        // itemView.setBackgroundColor(R.color.default_program);
-
         holder.startHour.setText(hourFormatter.format(program.getStartTime()));
         holder.endHour.setText(hourFormatter.format(program.getEndTime()));
         holder.programName.setText(program.getName());
         holder.programCategory.setText(program.getCategory());
 
         if(program.isPlaying()) {
-            if(itemView.getBackground() != playingBg)
-                itemView.setBackgroundDrawable(playingBg);
+            if(itemView.getBackground() != holder.playingBg)
+                itemView.setBackgroundDrawable(holder.playingBg);
         }
         else {
-            if(itemView.getBackground() != normalBg)
-                itemView.setBackgroundDrawable(normalBg);
+            if(itemView.getBackground() != holder.normalBg)
+                itemView.setBackgroundDrawable(holder.normalBg);
         }
 
         return itemView;
@@ -98,6 +75,9 @@ public class ProgramsListItemAdapter extends GenericListItemAdapter<TVProgram> {
         TextView endHour;
         TextView programName;
         TextView programCategory;
+
+        Drawable playingBg;
+        Drawable normalBg;
     }
 
 }

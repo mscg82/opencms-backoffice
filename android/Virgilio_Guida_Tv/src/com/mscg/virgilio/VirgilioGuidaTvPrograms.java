@@ -70,21 +70,21 @@ public class VirgilioGuidaTvPrograms extends GenericActivity implements OnTouchL
                 programsListView.setOnItemClickListener(new ProgramSelectionClickListener(this, guiHandler));
 
                 // auto select the program actually playing on TV
-                int index = 0;
+                int index = -1;
+                int i = 0;
                 Date now = new Date();
-                boolean found = false;
                 for(TVProgram program : channel.getTVPrograms()) {
                     if(now.compareTo(program.getStartTime()) >= 0 && //now >= program.getStartTime()
                        now.compareTo(program.getEndTime()) <= 0) {   //now <= program.getEndTime()
                         program.setPlaying(true);
-                        found = true;
+                        index = i;
                     }
-                    else {
+                    else
                         program.setPlaying(false);
-                        index++;
-                    }
+
+                    i++;
                 }
-                if(found) {
+                if(index >= 0) {
                     listViewScrollerThread = new ListViewScrollerThread(index, guiHandler);
                     programsListView.setOnTouchListener(this);
                     programsListView.setOnKeyListener(this);
