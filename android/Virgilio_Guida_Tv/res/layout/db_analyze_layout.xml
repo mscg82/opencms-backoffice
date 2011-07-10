@@ -14,7 +14,7 @@
                   android:layout_height="wrap_content"
                   android:layout_weight="1" 
                   android:text="@string/db_analyze_select_all"
-                  android:textStyle="bold" />
+                  style="@style/detailsTitle" />
                   
         <CheckBox android:id="@+id/analyze_db_select_all"
                   android:layout_width="wrap_content"
