@@ -11,17 +11,23 @@ public class ListViewScrollerThread extends Thread {
     public static final String SCROLL_POSITION = ListViewScrollerThread.class.getCanonicalName() + ".SCROLL_POSITION";
 
     private int targetIndex;
+    private int startIndex;
     private Handler guiHandler;
 
-    public ListViewScrollerThread(int targetIndex, Handler guiHandler) {
+    public ListViewScrollerThread(int targetIndex, int startIndex, Handler guiHandler) {
         super();
         this.targetIndex = targetIndex;
+        this.startIndex = startIndex;
         this.guiHandler = guiHandler;
     }
 
     @Override
     public void run() {
-        for(int i = 0; !isInterrupted() && i <= targetIndex; i++) {
+        int increment = (startIndex < targetIndex ? 1 : -1);
+        for(int i = startIndex;
+            !isInterrupted() && (startIndex < targetIndex ? i <= targetIndex : i >= targetIndex);
+            i += increment) {
+
             Message msg = guiHandler.obtainMessage();
             Bundle b = new Bundle();
             b.putInt(DownloadProgressHandler.TYPE, DownloadProgressHandler.SCROLL_LIST);

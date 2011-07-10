@@ -31,6 +31,7 @@
     <string name="programs_list_title_simple">Virgilio Guida Tv - Programmi</string>
     <string name="programs_list_title">Virgilio Guida Tv - ${channelName} - Programmi</string>
     <string name="hours_format">HH:mm</string>
+    <string name="goto_playing_program">In onda</string>
     
     <string name="cache_management_title">Pagina di gestione cache</string>
     <string name="memory_programs">Palinsesti nella cache in memoria:</string>
