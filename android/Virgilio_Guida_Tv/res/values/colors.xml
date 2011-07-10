@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="view_background">#FF00355E</color>
     <color name="transparent">#00FFFFFF</color>
-    <color name="list_element_bg_color_top">#FF3A3A3A</color>
-    <color name="list_element_bg_color_bottom">#FF181818</color>
-    <color name="list_element_bg_color_top_sel">#FFBBBBBB</color>
-    <color name="list_element_bg_color_bottom_sel">#FF5A5A5A</color>
-    <color name="list_element_playing_bg_color_top">#FF954A21</color>
-    <color name="list_element_playing_bg_color_bottom">#FF21150F</color>
-    <color name="list_element_playing_bg_color_top_sel">#FFD6B3A0</color>
-    <color name="list_element_playing_bg_color_bottom_sel">#FF7D5037</color>
+    <color name="list_element_bg_color_top">#FF1E4667</color>
+    <color name="list_element_bg_color_bottom">#FF001322</color>
+    <color name="list_element_bg_color_top_sel">#FFFFFFFF</color>
+    <color name="list_element_bg_color_bottom_sel">#FF54827D</color>
+    <color name="list_element_playing_bg_color_top">#FF4BBCFB</color>
+    <color name="list_element_playing_bg_color_bottom">#FF00517F</color>
+    <color name="list_element_playing_bg_color_top_sel">#FFFFFFFF</color>
+    <color name="list_element_playing_bg_color_bottom_sel">#FF54827D</color>
 	<color name="default_day">#00FFFFFF</color>
 	<color name="actual_day">#30FFFFFF</color>
 	<color name="start_hour">#FFFFFFFF</color>
