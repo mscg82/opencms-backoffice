@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnKeyListener;
@@ -32,6 +34,7 @@ public class VirgilioGuidaTvPrograms extends GenericActivity implements OnTouchL
 
     private Handler guiHandler;
     private ListViewScrollerThread listViewScrollerThread;
+    private Channel channel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +43,12 @@ public class VirgilioGuidaTvPrograms extends GenericActivity implements OnTouchL
         setContentView(R.layout.program_selection);
 
         programsListView = (ListView) findViewById(R.id.programsList);
-        Intent intent = getIntent();
+        programsListView.setOnTouchListener(this);
+        programsListView.setOnKeyListener(this);
 
+        Intent intent = getIntent();
+        channel = null;
         if (intent != null) {
-            Channel channel = null;
             try {
                 long programsID = intent.getLongExtra(PROGRAMS, -1);
                 long channelID = intent.getLongExtra(CHANNEL, -1);
@@ -69,31 +74,41 @@ public class VirgilioGuidaTvPrograms extends GenericActivity implements OnTouchL
                 programsListView.setAdapter(programsAdapter);
                 programsListView.setOnItemClickListener(new ProgramSelectionClickListener(this, guiHandler));
 
-                // auto select the program actually playing on TV
-                int index = 0;
-                Date now = new Date();
-                boolean found = false;
-                for(TVProgram program : channel.getTVPrograms()) {
-                    if(now.compareTo(program.getStartTime()) >= 0 && //now >= program.getStartTime()
-                       now.compareTo(program.getEndTime()) <= 0) {   //now <= program.getEndTime()
-                        program.setPlaying(true);
-                        found = true;
-                    }
-                    else {
-                        program.setPlaying(false);
-                        index++;
-                    }
-                }
-                if(found) {
-                    listViewScrollerThread = new ListViewScrollerThread(index, guiHandler);
-                    programsListView.setOnTouchListener(this);
-                    programsListView.setOnKeyListener(this);
-                    listViewScrollerThread.start();
-                }
-                else {
-                    listViewScrollerThread = null;
-                }
+                autoScrollToPlayingProgram();
             }
+        }
+    }
+
+    private void autoScrollToPlayingProgram() {
+        if(listViewScrollerThread != null) {
+            try {
+                listViewScrollerThread.interrupt();
+            } catch(Exception e){}
+            listViewScrollerThread = null;
+        }
+
+        // auto select the program actually playing on TV
+        int index = -1;
+        int i = 0;
+        Date now = new Date();
+        for(TVProgram program : channel.getTVPrograms()) {
+            if(now.compareTo(program.getStartTime()) >= 0 && //now >= program.getStartTime()
+               now.compareTo(program.getEndTime()) <= 0) {   //now <= program.getEndTime()
+                program.setPlaying(true);
+                index = i;
+            }
+            else
+                program.setPlaying(false);
+
+            i++;
+        }
+        if(index >= 0) {
+            int startIndex = Math.max(programsListView.getFirstVisiblePosition(), 0);
+            listViewScrollerThread = new ListViewScrollerThread(index, startIndex, guiHandler);
+            listViewScrollerThread.start();
+        }
+        else {
+            listViewScrollerThread = null;
         }
     }
 
@@ -127,6 +142,28 @@ public class VirgilioGuidaTvPrograms extends GenericActivity implements OnTouchL
             listViewScrollerThread.interrupt();
             listViewScrollerThread = null;
             return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+
+        gotoPlaying.setVisible(true);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean ret = super.onOptionsItemSelected(item);
+        if(!ret) {
+            switch (item.getItemId()) {
+            case MENU_GOTO_PLAYING:
+                autoScrollToPlayingProgram();
+                return true;
+            }
         }
         return false;
     }
