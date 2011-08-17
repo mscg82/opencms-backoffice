@@ -1,0 +1,22 @@
+<config>
+    <server>
+        <connector>
+            <host>0.0.0.0</host>
+            <port>8080</port>
+        </connector>
+        
+        <thread-pool>
+            <min-threads>2</min-threads>
+            <max-threads>5</max-threads>
+            <low-threads>1</low-threads>
+            <shrink>1</shrink>
+        </thread-pool>
+    </server>
+    
+    <users>
+        <mscg>
+            <password-enc>3489231b7975617f6ae4b6a8da5c1e04</password-enc>
+        </mscg>
+    </users>
+    
+</config>

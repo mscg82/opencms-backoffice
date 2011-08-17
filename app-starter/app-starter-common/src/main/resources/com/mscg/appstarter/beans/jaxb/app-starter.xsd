@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    
+    <xs:complexType name="ServerMessage">
+        <xs:sequence>
+            <xs:element name="exceptionClass" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="messageBody" type="xs:string" minOccurs="1" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Login">
+        <xs:sequence>
+            <xs:element name="username"   type="xs:string" minOccurs="0" />
+            <xs:element name="nonce"      type="xs:string" minOccurs="0" />
+            <xs:element name="identifier" type="xs:string" minOccurs="0" />
+            <xs:element name="sessionID"  type="xs:string" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:complexType name="Response">
+        <xs:sequence>
+            <xs:element name="message" type="ServerMessage" minOccurs="0" />
+            <xs:element name="login" type="Login" minOccurs="0" />
+        </xs:sequence>
+        <xs:attribute name="status" type="xs:int" />
+    </xs:complexType>
+    
+    <xs:complexType name="Request">
+        <xs:sequence>
+            <xs:element name="login" type="Login" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:element name="wrapper">
+	    <xs:complexType>
+	        <xs:sequence>
+	            <xs:element name="response" type="Response" minOccurs="0" />
+	            <xs:element name="request"  type="Request" minOccurs="0"/>
+	        </xs:sequence>
+	    </xs:complexType>
+    </xs:element>
+    
+</xs:schema>
