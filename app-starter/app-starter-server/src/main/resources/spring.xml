@@ -27,5 +27,7 @@
     </bean>
     
     <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
+    
+    <bean id="sessionsHolder" class="com.mscg.appstarter.server.util.SessionsHolder" />
 
 </beans>

@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,15 +14,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mscg.appstarter.beans.jaxb.Wrapper;
-import com.mscg.appstarter.server.Settings;
 import com.mscg.appstarter.server.exception.InvalidRequestException;
 import com.mscg.appstarter.server.util.Constants;
 import com.mscg.appstarter.server.util.SessionsHolder;
+import com.mscg.appstarter.server.util.Settings;
 import com.mscg.appstarter.util.Util;
 
 @Controller
 @RequestMapping("/auth")
 public class Login extends GenericController {
+
+    private SessionsHolder sessionsHolder;
+
+    @Autowired
+    public void setSessionsHolder(SessionsHolder sessionHolder) {
+        this.sessionsHolder = sessionHolder;
+    }
 
     @RequestMapping(value="/logout",method={RequestMethod.GET, RequestMethod.POST})
     public String logout(Model model, @RequestBody String requestBody) {
@@ -37,7 +45,7 @@ public class Login extends GenericController {
             if(Util.isEmptyOrWhitespaceOnly(login.getSessionID()))
                 throw new InvalidRequestException("Session ID not specified", 501);
 
-            SessionsHolder.removeSession(login.getSessionID());
+            sessionsHolder.removeSession(login.getSessionID());
 
             wrapper.getResponse().setStatus(200);
 
@@ -97,7 +105,7 @@ public class Login extends GenericController {
                 wrapper.getResponse().getLogin().setSessionID(uuid.toString());
                 wrapper.getResponse().setStatus(200);
 
-                SessionsHolder.storeSession(wrapper.getResponse().getLogin().getSessionID(),
+                sessionsHolder.storeSession(wrapper.getResponse().getLogin().getSessionID(),
                                             wrapper.getResponse().getLogin().getUsername());
             }
         } catch (InvalidRequestException e) {

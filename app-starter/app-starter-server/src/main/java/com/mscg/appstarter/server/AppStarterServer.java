@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import com.mscg.appstarter.server.util.Constants;
+import com.mscg.appstarter.server.util.Settings;
 
 public class AppStarterServer {
 

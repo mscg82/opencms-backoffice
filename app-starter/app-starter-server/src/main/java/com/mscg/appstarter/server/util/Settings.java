@@ -1,4 +1,4 @@
-package com.mscg.appstarter.server;
+package com.mscg.appstarter.server.util;
 
 import java.net.URL;
 

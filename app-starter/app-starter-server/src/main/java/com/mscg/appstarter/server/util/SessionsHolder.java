@@ -1,26 +1,53 @@
 package com.mscg.appstarter.server.util;
 
-import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class SessionsHolder {
 
-    private static Map<String, String> sessions;
+    private Map<String, SessionInfo> sessions;
 
-    static {
-        sessions = Collections.synchronizedMap(new LinkedHashMap<String, String>());
+    public SessionsHolder() {
+        sessions = new LinkedHashMap<String, SessionInfo>();
     }
 
-    public static void storeSession(String sessionID, String username) {
-        sessions.put(sessionID, username);
+    public synchronized void storeSession(String sessionID, String username) {
+        sessions.put(sessionID, new SessionInfo(System.currentTimeMillis(), username));
     }
 
-    public static String getSessionUser(String sessionID) {
-        return sessions.get(sessionID);
+    public synchronized String getSessionUser(String sessionID) {
+        SessionInfo sessionInfo = sessions.get(sessionID);
+        sessionInfo.lastUsage = System.currentTimeMillis();
+        return sessionInfo.username;
     }
 
-    public static void removeSession(String sessionID) {
+    public synchronized void removeSession(String sessionID) {
         sessions.remove(sessionID);
+    }
+
+    public synchronized int cleanOlderSessions(long timeout) {
+        int removed = 0;
+        long lastValid = System.currentTimeMillis() - timeout;
+        for(Iterator<Map.Entry<String, SessionInfo>> it = sessions.entrySet().iterator(); it.hasNext();) {
+            Map.Entry<String, SessionInfo> entry = it.next();
+            SessionInfo info = entry.getValue();
+            if(info.lastUsage < lastValid) {
+                it.remove();
+                removed++;
+            }
+        }
+        return removed;
+    }
+
+    private static class SessionInfo {
+        long lastUsage;
+        String username;
+
+        public SessionInfo(long lastUsage, String username) {
+            this.lastUsage = lastUsage;
+            this.username = username;
+        }
+
     }
 }
