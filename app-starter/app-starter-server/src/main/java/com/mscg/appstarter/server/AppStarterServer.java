@@ -40,7 +40,7 @@ public class AppStarterServer {
             LOG.debug("Binding Spring servlet to root context...");
             Context context = new Context(server, "/", Context.SESSIONS);
             ServletHolder servletHolder = new ServletHolder(new DispatcherServlet());
-            servletHolder.setInitParameter("contextConfigLocation", "classpath:/spring.xml");
+            servletHolder.setInitParameter("contextConfigLocation", "classpath:/springconfig/*.xml");
             context.addServlet(servletHolder, "/*");
             LOG.debug("Spring context created");
 
