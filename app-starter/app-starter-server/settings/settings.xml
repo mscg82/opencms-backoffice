@@ -19,4 +19,8 @@
         </mscg>
     </users>
     
+    <sessions>
+        <timeout>300000</timeout>
+    </sessions>
+    
 </config>

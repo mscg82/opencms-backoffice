@@ -1,6 +1,6 @@
 package com.mscg.appstarter.server.util;
 
-import java.net.URL;
+import java.io.File;
 
 import org.apache.commons.configuration.CompositeConfiguration;
 import org.apache.commons.configuration.Configuration;
@@ -17,10 +17,10 @@ public class Settings {
 
     static {
         config = new CompositeConfiguration();
-        URL configURL = Thread.currentThread().getContextClassLoader().getResource("settings.xml");
+        File settingsFile = new File("./settings/settings.xml");
         ((CompositeConfiguration)config).addConfiguration(new SystemConfiguration());
         try {
-            ((CompositeConfiguration)config).addConfiguration(new XMLConfiguration(configURL));
+            ((CompositeConfiguration)config).addConfiguration(new XMLConfiguration(settingsFile));
         } catch(Exception e) {
             LOG.warn("Cannot load configuration file", e);
         }

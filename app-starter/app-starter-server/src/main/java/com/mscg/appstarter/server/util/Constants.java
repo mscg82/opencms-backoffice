@@ -11,4 +11,6 @@ public class Constants {
 
     public static final String PLAIN_PASSWORD = "users.${username}.password";
     public static final String ENC_PASSWORD = "users.${username}.password-enc";
+
+    public static final String SESSIONS_TIMEOUT = "sessions.timeout";
 }
