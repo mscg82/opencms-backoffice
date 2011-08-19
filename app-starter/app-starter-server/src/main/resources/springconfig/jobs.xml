@@ -17,10 +17,19 @@
 		<property name="cronExpression" value="0 0/1 * * * ?" />
 	</bean>
 	
+	<bean name="rereadSettingsJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="com.mscg.appstarter.server.job.RereadSettingsJob" />
+    </bean>
+    <bean id="rereadSettingsJobTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="rereadSettingsJob" />
+        <property name="cronExpression" value="0/1 * * * * ?" />
+    </bean>
+	
 	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
     <property name="triggers">
         <list>
             <ref bean="sessionCleanerJobTrigger" />
+            <ref bean="rereadSettingsJobTrigger" />
         </list>
     </property>
 </bean>

@@ -4,8 +4,8 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.mscg.appstarter.server.util.Constants;
-import com.mscg.appstarter.server.util.SessionsHolder;
 import com.mscg.appstarter.server.util.Settings;
+import com.mscg.appstarter.server.util.session.SessionsHolder;
 
 public class SessionCleanerJob extends GenericJob {
 

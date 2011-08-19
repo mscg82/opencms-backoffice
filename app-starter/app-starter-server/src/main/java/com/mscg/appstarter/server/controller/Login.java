@@ -1,12 +1,12 @@
 package com.mscg.appstarter.server.controller;
 
 import java.io.StringReader;
+import java.util.Iterator;
 import java.util.UUID;
 
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.codec.digest.DigestUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,20 +16,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.mscg.appstarter.beans.jaxb.Wrapper;
 import com.mscg.appstarter.server.exception.InvalidRequestException;
 import com.mscg.appstarter.server.util.Constants;
-import com.mscg.appstarter.server.util.SessionsHolder;
 import com.mscg.appstarter.server.util.Settings;
 import com.mscg.appstarter.util.Util;
 
 @Controller
 @RequestMapping("/auth")
 public class Login extends GenericController {
-
-    private SessionsHolder sessionsHolder;
-
-    @Autowired
-    public void setSessionsHolder(SessionsHolder sessionHolder) {
-        this.sessionsHolder = sessionHolder;
-    }
 
     @RequestMapping(value="/logout",method={RequestMethod.GET, RequestMethod.POST})
     public String logout(Model model, @RequestBody String requestBody) {
@@ -70,6 +62,10 @@ public class Login extends GenericController {
 
             if(Util.isEmptyOrWhitespaceOnly(login.getUsername()))
                 throw new InvalidRequestException("Username not specified", 501);
+            Iterator<String> keys = Settings.getConfig().getKeys(Constants.USER_DATA.replace("${username}",
+                                                                                             login.getUsername()));
+            if(Util.isEmpty(keys))
+                throw new InvalidRequestException("Invalid username", 502);
 
             if(Util.isEmptyOrWhitespaceOnly(login.getNonce())) {
                 // generate a nonce and send it back to client
@@ -82,12 +78,12 @@ public class Login extends GenericController {
             else {
                 // check if the identifier is correct
                 if(Util.isEmptyOrWhitespaceOnly(login.getNonce()))
-                    throw new InvalidRequestException("Nonce non specified", 502);
+                    throw new InvalidRequestException("Nonce non specified", 503);
                 if(Util.isEmptyOrWhitespaceOnly(login.getIdentifier()))
-                    throw new InvalidRequestException("Identifier non specified", 502);
+                    throw new InvalidRequestException("Identifier non specified", 504);
 
                 String encPassword = Settings.getConfig().getString(Constants.ENC_PASSWORD.replace("${username}",
-                                                                                           login.getUsername()));;
+                                                                                           login.getUsername()));
                 if(Util.isEmptyOrWhitespaceOnly(encPassword)) {
                     String password = Settings.getConfig().getString(Constants.PLAIN_PASSWORD.replace("${username}",
                                                                                                       login.getUsername()));

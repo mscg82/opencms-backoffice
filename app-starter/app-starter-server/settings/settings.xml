@@ -23,4 +23,19 @@
         <timeout>300000</timeout>
     </sessions>
     
+    <applications>
+        <terminate-on-exit>true</terminate-on-exit>
+    
+        <application>
+            <id>100</id>
+            <name>Notepad++</name>
+            <commandline><![CDATA["C:/Program Files/Notepad++/notepad++.exe"]]></commandline>
+        </application>
+        <application>
+            <id>200</id>
+            <name>Chrome</name>
+            <commandline><![CDATA["C:/Users/Giuseppe Miscione/AppData/Local/Google/Chrome/Application/chrome.exe"]]></commandline>
+        </application>
+    </applications>
+    
 </config>

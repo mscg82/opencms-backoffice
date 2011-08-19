@@ -1,4 +1,4 @@
-package com.mscg.appstarter.server.util;
+package com.mscg.appstarter.server.util.session;
 
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -18,6 +18,8 @@ public class SessionsHolder {
 
     public synchronized String getSessionUser(String sessionID) {
         SessionInfo sessionInfo = sessions.get(sessionID);
+        if(sessionInfo == null)
+            return null;
         sessionInfo.lastUsage = System.currentTimeMillis();
         return sessionInfo.username;
     }

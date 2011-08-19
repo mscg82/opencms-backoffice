@@ -1,6 +1,7 @@
 package com.mscg.appstarter.util;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 public class Util {
 
@@ -22,6 +23,10 @@ public class Util {
 
     public static boolean isEmpty(Collection collection) {
         return collection == null || collection.isEmpty();
+    }
+
+    public static boolean isEmpty(Iterator iterator) {
+        return iterator == null || !iterator.hasNext();
     }
 
 }
