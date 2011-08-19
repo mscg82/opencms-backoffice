@@ -21,6 +21,7 @@
     
     <sessions>
         <timeout>300000</timeout>
+        <temp-timeout>60000</temp-timeout>
     </sessions>
     
     <applications>

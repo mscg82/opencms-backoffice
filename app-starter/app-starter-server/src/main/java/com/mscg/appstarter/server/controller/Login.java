@@ -67,42 +67,50 @@ public class Login extends GenericController {
             if(Util.isEmpty(keys))
                 throw new InvalidRequestException("Invalid username", 502);
 
-            if(Util.isEmptyOrWhitespaceOnly(login.getNonce())) {
+            if(Util.isEmptyOrWhitespaceOnly(login.getIdentifier())) {
                 // generate a nonce and send it back to client
-                UUID uuid = UUID.randomUUID();
+                String nonce = UUID.randomUUID().toString();
+                String tempSession = UUID.randomUUID().toString();
+                sessionsHolder.storeTempSession(tempSession, nonce);
                 wrapper.getResponse().setLogin(objectFactory.createLogin());
                 wrapper.getResponse().getLogin().setUsername(login.getUsername());
-                wrapper.getResponse().getLogin().setNonce(uuid.toString());
+                wrapper.getResponse().getLogin().setNonce(nonce);
+                wrapper.getResponse().getLogin().setSessionID(tempSession);
                 wrapper.getResponse().setStatus(200);
             }
             else {
                 // check if the identifier is correct
-                if(Util.isEmptyOrWhitespaceOnly(login.getNonce()))
-                    throw new InvalidRequestException("Nonce non specified", 503);
-                if(Util.isEmptyOrWhitespaceOnly(login.getIdentifier()))
-                    throw new InvalidRequestException("Identifier non specified", 504);
+                if(Util.isEmptyOrWhitespaceOnly(login.getSessionID()))
+                    throw new InvalidRequestException("Temporary session ID non specified", 503);
+                try {
+                    String nonce = sessionsHolder.getTempSessionData(login.getSessionID());
+                    if(Util.isEmptyOrWhitespaceOnly(nonce))
+                        throw new InvalidRequestException("Invalid login session", 504);
 
-                String encPassword = Settings.getConfig().getString(Constants.ENC_PASSWORD.replace("${username}",
-                                                                                           login.getUsername()));
-                if(Util.isEmptyOrWhitespaceOnly(encPassword)) {
-                    String password = Settings.getConfig().getString(Constants.PLAIN_PASSWORD.replace("${username}",
-                                                                                                      login.getUsername()));
-                    encPassword = DigestUtils.md5Hex(password);
+                    String encPassword = Settings.getConfig().getString(Constants.ENC_PASSWORD.replace("${username}",
+                                                                                               login.getUsername()));
+                    if(Util.isEmptyOrWhitespaceOnly(encPassword)) {
+                        String password = Settings.getConfig().getString(Constants.PLAIN_PASSWORD.replace("${username}",
+                                                                                                          login.getUsername()));
+                        encPassword = DigestUtils.md5Hex(password);
+                    }
+
+                    String verify = DigestUtils.md5Hex(login.getUsername() + nonce + encPassword);
+                    if(!login.getIdentifier().equals(verify))
+                        throw new InvalidRequestException("Unauthorized access", 401);
+
+                    // login is correct, generate a session id and send to client
+                    String uuid = UUID.randomUUID().toString();
+                    wrapper.getResponse().setLogin(objectFactory.createLogin());
+                    wrapper.getResponse().getLogin().setUsername(login.getUsername());
+                    wrapper.getResponse().getLogin().setSessionID(uuid);
+                    wrapper.getResponse().setStatus(200);
+
+                    sessionsHolder.storeSession(wrapper.getResponse().getLogin().getSessionID(),
+                                                wrapper.getResponse().getLogin().getUsername());
+                } finally {
+                    sessionsHolder.removeTempSession(login.getSessionID());
                 }
-
-                String verify = DigestUtils.md5Hex(login.getUsername() + login.getNonce() + encPassword);
-                if(!login.getIdentifier().equals(verify))
-                    throw new InvalidRequestException("Unauthorized access", 401);
-
-                // login is correct, generate a session id and send to client
-                UUID uuid = UUID.randomUUID();
-                wrapper.getResponse().setLogin(objectFactory.createLogin());
-                wrapper.getResponse().getLogin().setUsername(login.getUsername());
-                wrapper.getResponse().getLogin().setSessionID(uuid.toString());
-                wrapper.getResponse().setStatus(200);
-
-                sessionsHolder.storeSession(wrapper.getResponse().getLogin().getSessionID(),
-                                            wrapper.getResponse().getLogin().getUsername());
             }
         } catch (InvalidRequestException e) {
             LOG.error("Invalid login parameters", e);

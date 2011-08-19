@@ -17,6 +17,7 @@ public class Constants {
     public static final String ENC_PASSWORD   = "users.${username}.password-enc";
 
     public static final String SESSIONS_TIMEOUT = "sessions.timeout";
+    public static final String TEMP_SESSIONS_TIMEOUT = "sessions.temp-timeout";
 
     public static final String TERMINATE_APP_ONEXIT = "applications.terminate-on-exit";
 

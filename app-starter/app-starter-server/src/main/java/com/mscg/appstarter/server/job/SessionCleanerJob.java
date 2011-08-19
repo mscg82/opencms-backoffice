@@ -3,8 +3,6 @@ package com.mscg.appstarter.server.job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-import com.mscg.appstarter.server.util.Constants;
-import com.mscg.appstarter.server.util.Settings;
 import com.mscg.appstarter.server.util.session.SessionsHolder;
 
 public class SessionCleanerJob extends GenericJob {
@@ -29,9 +27,8 @@ public class SessionCleanerJob extends GenericJob {
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         try {
             LOG.debug("Removing unused sessions...");
-            long sessionTimeout = Settings.getConfig().getLong(Constants.SESSIONS_TIMEOUT);
-            int removed = sessionsHolder.cleanOlderSessions(sessionTimeout);
-            LOG.info("Removed " + removed + " sessions older than " + sessionTimeout + " ms");
+            int removed = sessionsHolder.cleanOlderSessions();
+            LOG.info("Removed " + removed + " older sessions");
         } catch(Exception e) {
             LOG.error("An error occurred while removing older sessions", e);
         }
