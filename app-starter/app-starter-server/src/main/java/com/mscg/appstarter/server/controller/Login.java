@@ -17,6 +17,7 @@ import com.mscg.appstarter.beans.jaxb.Wrapper;
 import com.mscg.appstarter.server.exception.InvalidRequestException;
 import com.mscg.appstarter.server.util.Constants;
 import com.mscg.appstarter.server.util.Settings;
+import com.mscg.appstarter.util.ResponseCode;
 import com.mscg.appstarter.util.Util;
 
 @Controller
@@ -32,14 +33,14 @@ public class Login extends GenericController {
             com.mscg.appstarter.beans.jaxb.Login login = request.getRequest().getLogin();
 
             if(Util.isEmptyOrWhitespaceOnly(login.getUsername()))
-                throw new InvalidRequestException("Username not specified", 501);
+                throw new InvalidRequestException("Username not specified", ResponseCode.ERR_MISSING_LOGIN_DATA);
 
             if(Util.isEmptyOrWhitespaceOnly(login.getSessionID()))
-                throw new InvalidRequestException("Session ID not specified", 501);
+                throw new InvalidRequestException("Session ID not specified", ResponseCode.ERR_MISSING_LOGIN_DATA);
 
             sessionsHolder.removeSession(login.getSessionID());
 
-            wrapper.getResponse().setStatus(200);
+            wrapper.getResponse().setStatus(ResponseCode.OK.getStatus());
 
         } catch (InvalidRequestException e) {
             LOG.error("Invalid logout parameters", e);
@@ -61,11 +62,11 @@ public class Login extends GenericController {
             com.mscg.appstarter.beans.jaxb.Login login = request.getRequest().getLogin();
 
             if(Util.isEmptyOrWhitespaceOnly(login.getUsername()))
-                throw new InvalidRequestException("Username not specified", 501);
+                throw new InvalidRequestException("Username not specified", ResponseCode.ERR_MISSING_LOGIN_DATA);
             Iterator<String> keys = Settings.getConfig().getKeys(Constants.USER_DATA.replace("${username}",
                                                                                              login.getUsername()));
             if(Util.isEmpty(keys))
-                throw new InvalidRequestException("Invalid username", 502);
+                throw new InvalidRequestException("Invalid username", ResponseCode.ERR_INVALID_USERNAME);
 
             if(Util.isEmptyOrWhitespaceOnly(login.getIdentifier())) {
                 // generate a nonce and send it back to client
@@ -76,16 +77,16 @@ public class Login extends GenericController {
                 wrapper.getResponse().getLogin().setUsername(login.getUsername());
                 wrapper.getResponse().getLogin().setNonce(nonce);
                 wrapper.getResponse().getLogin().setSessionID(tempSession);
-                wrapper.getResponse().setStatus(200);
+                wrapper.getResponse().setStatus(ResponseCode.OK.getStatus());
             }
             else {
                 // check if the identifier is correct
                 if(Util.isEmptyOrWhitespaceOnly(login.getSessionID()))
-                    throw new InvalidRequestException("Temporary session ID non specified", 503);
+                    throw new InvalidRequestException("Temporary session ID non specified", ResponseCode.ERR_MISSING_LOGIN_SESSION);
                 try {
                     String nonce = sessionsHolder.getTempSessionData(login.getSessionID());
                     if(Util.isEmptyOrWhitespaceOnly(nonce))
-                        throw new InvalidRequestException("Invalid login session", 504);
+                        throw new InvalidRequestException("Invalid login session", ResponseCode.ERR_INVALID_LOGIN_SESSION);
 
                     String encPassword = Settings.getConfig().getString(Constants.ENC_PASSWORD.replace("${username}",
                                                                                                login.getUsername()));
@@ -97,14 +98,14 @@ public class Login extends GenericController {
 
                     String verify = DigestUtils.md5Hex(login.getUsername() + nonce + encPassword);
                     if(!login.getIdentifier().equals(verify))
-                        throw new InvalidRequestException("Unauthorized access", 401);
+                        throw new InvalidRequestException("Unauthorized access", ResponseCode.ERR_UNAUTHORIZED_ACCESS);
 
                     // login is correct, generate a session id and send to client
                     String uuid = UUID.randomUUID().toString();
                     wrapper.getResponse().setLogin(objectFactory.createLogin());
                     wrapper.getResponse().getLogin().setUsername(login.getUsername());
                     wrapper.getResponse().getLogin().setSessionID(uuid);
-                    wrapper.getResponse().setStatus(200);
+                    wrapper.getResponse().setStatus(ResponseCode.OK.getStatus());
 
                     sessionsHolder.storeSession(wrapper.getResponse().getLogin().getSessionID(),
                                                 wrapper.getResponse().getLogin().getUsername());

@@ -1,32 +1,34 @@
 package com.mscg.appstarter.server.exception;
 
+import com.mscg.appstarter.util.ResponseCode;
+
 public class InvalidRequestException extends Exception {
 
     private static final long serialVersionUID = 7078341586902212055L;
 
-    protected Integer errorCode;
+    protected ResponseCode errorCode;
 
-    public InvalidRequestException(Integer errorCode) {
+    public InvalidRequestException(ResponseCode errorCode) {
         super();
         this.errorCode = errorCode;
     }
 
-    public InvalidRequestException(String message, Throwable cause, Integer errorCode) {
+    public InvalidRequestException(String message, Throwable cause, ResponseCode errorCode) {
         super(message, cause);
         this.errorCode = errorCode;
     }
 
-    public InvalidRequestException(String message, Integer errorCode) {
+    public InvalidRequestException(String message, ResponseCode errorCode) {
         super(message);
         this.errorCode = errorCode;
     }
 
-    public InvalidRequestException(Throwable cause, Integer errorCode) {
+    public InvalidRequestException(Throwable cause, ResponseCode errorCode) {
         super(cause);
         this.errorCode = errorCode;
     }
 
-    public Integer getErrorCode() {
+    public ResponseCode getErrorCode() {
         return errorCode;
     }
 

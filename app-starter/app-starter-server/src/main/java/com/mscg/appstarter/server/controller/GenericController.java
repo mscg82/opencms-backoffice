@@ -11,6 +11,7 @@ import com.mscg.appstarter.beans.jaxb.ObjectFactory;
 import com.mscg.appstarter.beans.jaxb.Wrapper;
 import com.mscg.appstarter.server.exception.InvalidRequestException;
 import com.mscg.appstarter.server.util.session.SessionsHolder;
+import com.mscg.appstarter.util.ResponseCode;
 import com.mscg.appstarter.util.Util;
 
 @Controller
@@ -46,14 +47,14 @@ public abstract class GenericController {
     }
 
     protected Wrapper getWrapperForException(Exception e) {
-        return getWrapperForException(e, 500);
+        return getWrapperForException(e, ResponseCode.ERR_APPLICATION_ERROR);
     }
 
-    protected Wrapper getWrapperForException(Exception e, Integer code) {
+    protected Wrapper getWrapperForException(Exception e, ResponseCode code) {
         Wrapper wrapper = objectFactory.createWrapper();
         wrapper.setResponse(objectFactory.createResponse());
         wrapper.getResponse().setMessage(objectFactory.createServerMessage());
-        wrapper.getResponse().setStatus(code);
+        wrapper.getResponse().setStatus(code.getStatus());
         wrapper.getResponse().getMessage().setExceptionClass(e.getClass().getCanonicalName());
         wrapper.getResponse().getMessage().setMessageBody(e.getMessage());
 
@@ -62,16 +63,16 @@ public abstract class GenericController {
 
     protected void checkSession(Wrapper wrapper) throws InvalidRequestException {
         if(wrapper.getRequest() == null)
-            throw new InvalidRequestException("Missing request data", 400);
+            throw new InvalidRequestException("Missing request data", ResponseCode.ERR_MISSING_LOGIN_DATA);
         Login login = wrapper.getRequest().getLogin();
         if(login == null)
-            throw new InvalidRequestException("Missing login data", 400);
+            throw new InvalidRequestException("Missing login data", ResponseCode.ERR_MISSING_LOGIN_DATA);
         if(Util.isEmptyOrWhitespaceOnly(login.getUsername()) ||
            Util.isEmptyOrWhitespaceOnly(login.getSessionID()))
-            throw new InvalidRequestException("Missing session informations", 401);
+            throw new InvalidRequestException("Missing session informations", ResponseCode.ERR_UNAUTHORIZED_ACCESS);
 
         String username = sessionsHolder.getSessionUser(login.getSessionID());
         if(!login.getUsername().equals(username))
-            throw new InvalidRequestException("Unauthorized access", 401);
+            throw new InvalidRequestException("Unauthorized access", ResponseCode.ERR_UNAUTHORIZED_ACCESS);
     }
 }

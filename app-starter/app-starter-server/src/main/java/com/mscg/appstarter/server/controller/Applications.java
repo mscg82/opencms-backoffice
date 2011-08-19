@@ -20,6 +20,7 @@ import com.mscg.appstarter.server.exception.ApplicationNotRunningException;
 import com.mscg.appstarter.server.exception.InvalidRequestException;
 import com.mscg.appstarter.server.util.application.ApplicationInfo;
 import com.mscg.appstarter.server.util.application.ApplicationsHolder;
+import com.mscg.appstarter.util.ResponseCode;
 
 @Controller
 @RequestMapping("/applications")
@@ -51,7 +52,7 @@ public class Applications extends GenericController {
                 wrapper.getResponse().getApplications().getApplication().add(appInfoXML);
             }
 
-            wrapper.getResponse().setStatus(200);
+            wrapper.getResponse().setStatus(ResponseCode.OK.getStatus());
 
         } catch (InvalidRequestException e) {
             LOG.error("Invalid login parameters", e);
@@ -85,20 +86,20 @@ public class Applications extends GenericController {
             appInfoXML.setName(appInfo.getName());
             appInfoXML.setRunning(applicationsHolder.isApplicationRunning(appInfo.getId()));
             wrapper.getResponse().getApplications().getApplication().add(appInfoXML);
-            wrapper.getResponse().setStatus(200);
+            wrapper.getResponse().setStatus(ResponseCode.OK.getStatus());
 
         } catch (InvalidRequestException e) {
             LOG.error("Invalid login parameters", e);
             wrapper = getWrapperForException(e);
         } catch (ApplicationNotConfiguredException e) {
             LOG.error("Cannot launch application", e);
-            wrapper = getWrapperForException(e, 510);
+            wrapper = getWrapperForException(e, ResponseCode.ERR_APPLICATION_NOT_CONFIGURED);
         } catch (ApplicationAlreadyRunningException e) {
             LOG.error("Application already running", e);
-            wrapper = getWrapperForException(e, 520);
+            wrapper = getWrapperForException(e, ResponseCode.ERR_APPLICATION_ALREADY_RUNNING);
         } catch (ApplicationLaunchException e) {
             LOG.error("Cannot launch application", e);
-            wrapper = getWrapperForException(e, 530);
+            wrapper = getWrapperForException(e, ResponseCode.ERR_APPLICATION_LAUNCH_ERROR);
         } catch (Exception e) {
             LOG.error("Cannot execute launch application action", e);
             wrapper = getWrapperForException(e);
@@ -128,17 +129,17 @@ public class Applications extends GenericController {
             appInfoXML.setName(appInfo.getName());
             appInfoXML.setRunning(applicationsHolder.isApplicationRunning(appInfo.getId()));
             wrapper.getResponse().getApplications().getApplication().add(appInfoXML);
-            wrapper.getResponse().setStatus(200);
+            wrapper.getResponse().setStatus(ResponseCode.OK.getStatus());
 
         } catch (InvalidRequestException e) {
             LOG.error("Invalid login parameters", e);
             wrapper = getWrapperForException(e);
         } catch (ApplicationNotConfiguredException e) {
             LOG.error("Cannot stop application", e);
-            wrapper = getWrapperForException(e, 510);
+            wrapper = getWrapperForException(e, ResponseCode.ERR_APPLICATION_NOT_CONFIGURED);
         } catch (ApplicationNotRunningException e) {
             LOG.error("Application not running", e);
-            wrapper = getWrapperForException(e, 540);
+            wrapper = getWrapperForException(e, ResponseCode.ERR_APPLICATION_NOT_RUNNING);
         } catch (Exception e) {
             LOG.error("Cannot execute terminate application action", e);
             wrapper = getWrapperForException(e);
