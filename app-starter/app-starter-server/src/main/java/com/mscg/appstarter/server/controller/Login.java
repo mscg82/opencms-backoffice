@@ -124,4 +124,36 @@ public class Login extends GenericController {
         return "response";
     }
 
+    @RequestMapping(value="/ping",method={RequestMethod.GET, RequestMethod.POST})
+    public String pingSession(Model model, @RequestBody String requestBody) {
+        Wrapper wrapper = objectFactory.createWrapper();
+        wrapper.setResponse(objectFactory.createResponse());
+        try {
+            Wrapper request = (Wrapper)unmarshaller.unmarshal(new StreamSource(new StringReader(requestBody)));
+            com.mscg.appstarter.beans.jaxb.Login login = request.getRequest().getLogin();
+
+            if(Util.isEmptyOrWhitespaceOnly(login.getUsername()))
+                throw new InvalidRequestException("Username not specified", ResponseCode.ERR_MISSING_LOGIN_DATA);
+
+            if(Util.isEmptyOrWhitespaceOnly(login.getSessionID()))
+                throw new InvalidRequestException("Session ID not specified", ResponseCode.ERR_MISSING_LOGIN_DATA);
+
+            String user = sessionsHolder.getSessionUser(login.getSessionID());
+
+            if(Util.isEmptyOrWhitespaceOnly(user))
+                throw new InvalidRequestException("Invalid user session", ResponseCode.ERR_INVALID_USER_SESSION);
+
+            wrapper.getResponse().setStatus(ResponseCode.OK.getStatus());
+
+        } catch (InvalidRequestException e) {
+            LOG.error("Invalid ping parameters", e);
+            wrapper = getWrapperForException(e);
+        } catch (Exception e) {
+            LOG.error("Cannot execute ping action", e);
+            wrapper = getWrapperForException(e);
+        }
+        model.addAttribute("object", wrapper);
+        return "response";
+    }
+
 }
