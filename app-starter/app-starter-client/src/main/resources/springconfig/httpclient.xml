@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="connManagerThread"
+          class="org.apache.commons.httpclient.util.IdleConnectionTimeoutThread"
+          depends-on="placeholderConfig"
+          init-method="start">
+          
+        <property name="connectionTimeout" value="${http.connections.timeout}" />
+        <property name="timeoutInterval" value="${http.connections.interval.timeout}" />
+    </bean>
+    
+    <bean id="connectionManagerParams"
+          class="org.apache.commons.httpclient.params.HttpConnectionManagerParams">
+    
+        <property name="maxTotalConnections" value="${http.connection.maxtotal}" />
+        <property name="connectionTimeout" value="${http.connections.timeout}" />
+    </bean>
+    
+    <bean id="connectionManager"
+          class="org.apache.commons.httpclient.MultiThreadedHttpConnectionManager"
+          depends-on="connManagerThread">
+               
+          <property name="params" ref="connectionManagerParams" />
+    </bean>
+                  
+    <!-- Bind the connection manager to the connection manager thread -->
+    <bean id="connectionManagerInit"
+          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+        <property name="targetObject" ref="connManagerThread" />
+        <property name="targetMethod" value="addConnectionManager" />
+        <property name="arguments">
+            <list>
+                <ref bean="connectionManager" />
+            </list>
+        </property>
+    </bean>
+    
+    <bean id="httpClient" class="org.apache.commons.httpclient.HttpClient" depends-on="connectionManagerInit">
+        <constructor-arg ref="connectionManager" />
+    </bean>
+
+</beans>

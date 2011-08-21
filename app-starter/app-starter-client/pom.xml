@@ -16,6 +16,26 @@
   		<type>jar</type>
   		<scope>compile</scope>
   	</dependency>
+  	<dependency>
+  		<groupId>com.mscg</groupId>
+  		<artifactId>app-starter-common</artifactId>
+  		<version>1.0.0</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework</groupId>
+  		<artifactId>spring-context</artifactId>
+  		<version>3.0.5.RELEASE</version>
+  		<type>jar</type>
+  		<scope>compile</scope>
+  	</dependency>
+  	<dependency>
+  		<groupId>org.springframework.ws</groupId>
+  		<artifactId>spring-oxm-tiger</artifactId>
+  		<version>1.5.10</version>
+  		<scope>compile</scope>
+  	</dependency>
   </dependencies>
   <build>
         <plugins>
