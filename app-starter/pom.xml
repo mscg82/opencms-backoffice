@@ -46,5 +46,6 @@
 	<modules>
 		<module>app-starter-server</module>
 		<module>app-starter-common</module>
+		<module>app-starter-client</module>
 	</modules>
 </project>
