@@ -21,6 +21,16 @@ public class AppStarterClient {
             ApplicationContext xmlApplicationContext = new ClassPathXmlApplicationContext(contextPaths, true, base);
             LOG.info("Spring context started with " + xmlApplicationContext.getBeanDefinitionCount() + " bean definitions");
 
+//            AppStarterInterfacer appStarterInterfacer = (AppStarterInterfacer)xmlApplicationContext.getBean("appStarterInterfacer");
+//            if(appStarterInterfacer.login("mscg", "mscgpp82")) {
+//                System.out.println("Logged successfully, logging out...");
+//                appStarterInterfacer.logout("mscg");
+//                System.out.println("Logged out.");
+//            }
+//            else {
+//                System.out.println("Wrong credentials");
+//            }
+
         } catch(Exception e) {
             e.printStackTrace();
             LOG.error("An error occurred during the application execution", e);
