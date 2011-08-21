@@ -146,6 +146,9 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
                                                                       HttpException {
         Response response = null;
 
+        if(LOG.isDebugEnabled())
+            LOG.debug("Sending request to \"" + url + "\"...");
+
         StringWriter requestBody = new StringWriter();
         marshaller.marshal(wrapper, new StreamResult(requestBody));
 
@@ -155,10 +158,6 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
         RequestEntity requestEntity = new StringRequestEntity(requestBody.toString(),
                                                               "text/xml",
                                                               "UTF-8");
-
-        if(LOG.isDebugEnabled())
-            LOG.debug("Sending request to \"" + url + "\"...");
-
         PostMethod post = new PostMethod(url);
         post.setRequestEntity(requestEntity);
         int responseCode = httpClient.executeMethod(post);
