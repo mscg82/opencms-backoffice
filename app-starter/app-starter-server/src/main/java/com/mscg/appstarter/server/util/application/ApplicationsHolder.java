@@ -18,10 +18,10 @@ import org.apache.commons.exec.PumpStreamHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.mscg.appstarter.server.exception.ApplicationAlreadyRunningException;
-import com.mscg.appstarter.server.exception.ApplicationLaunchException;
-import com.mscg.appstarter.server.exception.ApplicationNotConfiguredException;
-import com.mscg.appstarter.server.exception.ApplicationNotRunningException;
+import com.mscg.appstarter.exception.ApplicationAlreadyRunningException;
+import com.mscg.appstarter.exception.ApplicationLaunchException;
+import com.mscg.appstarter.exception.ApplicationNotConfiguredException;
+import com.mscg.appstarter.exception.ApplicationNotRunningException;
 import com.mscg.appstarter.server.util.Constants;
 import com.mscg.appstarter.server.util.Settings;
 

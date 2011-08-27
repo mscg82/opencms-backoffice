@@ -1,9 +1,11 @@
 package com.mscg.appstarter.client.interfacer;
 
 import java.io.IOException;
+import java.util.List;
 
-import com.mscg.appstarter.client.interfacer.exception.InvalidRequestException;
-import com.mscg.appstarter.client.interfacer.exception.InvalidResponseException;
+import com.mscg.appstarter.beans.jaxb.ApplicationInfo;
+import com.mscg.appstarter.exception.InvalidRequestException;
+import com.mscg.appstarter.exception.InvalidResponseException;
 
 public interface AppStarterInterfacer {
 
@@ -22,5 +24,17 @@ public interface AppStarterInterfacer {
     public boolean ping(String username) throws InvalidRequestException,
                                                 InvalidResponseException,
                                                 IOException;
+
+    public List<ApplicationInfo> listApplications(String username) throws InvalidRequestException,
+                                                                          InvalidResponseException,
+                                                                          IOException;
+
+    public ApplicationInfo launchApplication(String username, int applicationID) throws InvalidRequestException,
+                                                                                        InvalidResponseException,
+                                                                                        IOException;
+
+    public ApplicationInfo closeApplication(String username, int applicationID) throws InvalidRequestException,
+                                                                                       InvalidResponseException,
+                                                                                       IOException;
 
 }

@@ -1,8 +1,11 @@
 package com.mscg.appstarter.client.interfacer.impl.httpclient3;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.List;
 
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -16,13 +19,14 @@ import org.apache.commons.httpclient.methods.RequestEntity;
 import org.apache.commons.httpclient.methods.StringRequestEntity;
 import org.springframework.oxm.XmlMappingException;
 
+import com.mscg.appstarter.beans.jaxb.ApplicationInfo;
 import com.mscg.appstarter.beans.jaxb.Response;
 import com.mscg.appstarter.beans.jaxb.ServerMessage;
 import com.mscg.appstarter.beans.jaxb.Wrapper;
 import com.mscg.appstarter.client.interfacer.GenericAppStarterInterfacer;
 import com.mscg.appstarter.client.interfacer.InterfacerUrl;
-import com.mscg.appstarter.client.interfacer.exception.InvalidRequestException;
-import com.mscg.appstarter.client.interfacer.exception.InvalidResponseException;
+import com.mscg.appstarter.exception.InvalidRequestException;
+import com.mscg.appstarter.exception.InvalidResponseException;
 import com.mscg.appstarter.util.ResponseCode;
 
 public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterfacer {
@@ -52,43 +56,37 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
 
         String url = baseUrl + InterfacerUrl.LOGIN_URL.getRelativeUrl();
 
-        try {
-            //first request, get the nonce
-            Wrapper wrapper = objectFactory.createWrapper();
-            wrapper.setRequest(objectFactory.createRequest());
-            wrapper.getRequest().setLogin(objectFactory.createLogin());
-            wrapper.getRequest().getLogin().setUsername(username);
+        //first request, get the nonce
+        Wrapper wrapper = objectFactory.createWrapper();
+        wrapper.setRequest(objectFactory.createRequest());
+        wrapper.getRequest().setLogin(objectFactory.createLogin());
+        wrapper.getRequest().getLogin().setUsername(username);
 
-            Response response = sendRequest(url, wrapper);
+        Response response = sendRequest(url, wrapper);
+        if(response.getLogin() == null)
+            throw new InvalidResponseException("Missing login node", ResponseCode.ERR_APPLICATION_ERROR);
+
+        // second request, log with encrypted password
+        String nonce = response.getLogin().getNonce();
+        String tempSessID = response.getLogin().getSessionID();
+        String identifier = DigestUtils.md5Hex(username + nonce + DigestUtils.md5Hex(password));
+        wrapper.getRequest().getLogin().setSessionID(tempSessID);
+        wrapper.getRequest().getLogin().setIdentifier(identifier);
+
+        try {
+            response = sendRequest(url, wrapper);
             if(response.getLogin() == null)
                 throw new InvalidResponseException("Missing login node", ResponseCode.ERR_APPLICATION_ERROR);
-
-            // second request, log with encrypted password
-            String nonce = response.getLogin().getNonce();
-            String tempSessID = response.getLogin().getSessionID();
-            String identifier = DigestUtils.md5Hex(username + nonce + DigestUtils.md5Hex(password));
-            wrapper.getRequest().getLogin().setSessionID(tempSessID);
-            wrapper.getRequest().getLogin().setIdentifier(identifier);
-
-            try {
-                response = sendRequest(url, wrapper);
-                if(response.getLogin() == null)
-                    throw new InvalidResponseException("Missing login node", ResponseCode.ERR_APPLICATION_ERROR);
-                // correct login, store session ID and return true
-                usernameToSessionID.put(username, response.getLogin().getSessionID());
-                ret = true;
-            } catch(InvalidResponseException e) {
-                if(e.getResponseCode() == ResponseCode.ERR_UNAUTHORIZED_ACCESS) {
-                    // wrong credentials, return false
-                    ret = false;
-                }
-                else
-                    throw e;
+            // correct login, store session ID and return true
+            usernameToSessionID.put(username, response.getLogin().getSessionID());
+            ret = true;
+        } catch(InvalidResponseException e) {
+            if(e.getResponseCode() == ResponseCode.ERR_UNAUTHORIZED_ACCESS) {
+                // wrong credentials, return false
+                ret = false;
             }
-
-        } catch (XmlMappingException e) {
-            throw new InvalidRequestException("Cannot create request body", e,
-                                              ResponseCode.ERR_APPLICATION_ERROR);
+            else
+                throw e;
         }
 
         return ret;
@@ -142,8 +140,82 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
         return ret;
     }
 
-    protected Response sendRequest(String url, Wrapper wrapper) throws InvalidResponseException, IOException,
-                                                                      HttpException {
+    public List<ApplicationInfo> listApplications(String username) throws InvalidRequestException,
+                                                                          InvalidResponseException,
+                                                                          IOException {
+        List<ApplicationInfo> ret = null;
+
+        String sessionID = usernameToSessionID.get(username);
+        Wrapper wrapper = objectFactory.createWrapper();
+        wrapper.setRequest(objectFactory.createRequest());
+        wrapper.getRequest().setLogin(objectFactory.createLogin());
+        wrapper.getRequest().getLogin().setUsername(username);
+        wrapper.getRequest().getLogin().setSessionID(sessionID);
+
+        String url = baseUrl + InterfacerUrl.LIST_APP_URL.getRelativeUrl();
+
+        Response response = sendRequest(url, wrapper);
+        if(response.getApplications() == null)
+            throw new InvalidRequestException("Missing applications list node",
+                                              ResponseCode.ERR_APPLICATION_ERROR);
+
+        ret = response.getApplications().getApplication();
+
+        return ret;
+    }
+
+    public ApplicationInfo launchApplication(String username, int applicationID) throws InvalidRequestException,
+                                                                                        InvalidResponseException,
+                                                                                        IOException {
+        ApplicationInfo ret = null;
+
+        String sessionID = usernameToSessionID.get(username);
+        Wrapper wrapper = objectFactory.createWrapper();
+        wrapper.setRequest(objectFactory.createRequest());
+        wrapper.getRequest().setLogin(objectFactory.createLogin());
+        wrapper.getRequest().getLogin().setUsername(username);
+        wrapper.getRequest().getLogin().setSessionID(sessionID);
+
+        String url = baseUrl + InterfacerUrl.LAUNCH_APP_URL.getRelativeUrl().replace("${appID}",
+                                                                                     Integer.toString(applicationID));
+
+        Response response = sendRequest(url, wrapper);
+        if(response.getApplications() == null)
+            throw new InvalidRequestException("Missing applications list node",
+                                              ResponseCode.ERR_APPLICATION_ERROR);
+
+        ret = response.getApplications().getApplication().get(0);
+
+        return ret;
+    }
+
+    public ApplicationInfo closeApplication(String username, int applicationID) throws InvalidRequestException,
+                                                                                       InvalidResponseException,
+                                                                                       IOException {
+        ApplicationInfo ret = null;
+
+        String sessionID = usernameToSessionID.get(username);
+        Wrapper wrapper = objectFactory.createWrapper();
+        wrapper.setRequest(objectFactory.createRequest());
+        wrapper.getRequest().setLogin(objectFactory.createLogin());
+        wrapper.getRequest().getLogin().setUsername(username);
+        wrapper.getRequest().getLogin().setSessionID(sessionID);
+
+        String url = baseUrl + InterfacerUrl.CLOSE_APP_URL.getRelativeUrl().replace("${appID}",
+         Integer.toString(applicationID));
+
+        Response response = sendRequest(url, wrapper);
+        if(response.getApplications() == null)
+            throw new InvalidRequestException("Missing applications list node",
+                                              ResponseCode.ERR_APPLICATION_ERROR);
+
+        ret = response.getApplications().getApplication().get(0);
+
+        return ret;
+    }
+
+    protected Response sendRequest(String url, Wrapper wrapper) throws InvalidResponseException, InvalidRequestException,
+                                                                       IOException, HttpException {
         Response response = null;
 
         if(LOG.isDebugEnabled())
@@ -171,7 +243,23 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
         InputStream is = null;
         try {
             is = post.getResponseBodyAsStream();
+
+            if(LOG.isTraceEnabled()) {
+                ByteArrayOutputStream bos = new ByteArrayOutputStream((int)post.getResponseContentLength());
+                byte buffer[] = new byte[10240];
+                int bytesread = 0;
+                while((bytesread = is.read(buffer)) > 0) {
+                    bos.write(buffer, 0, bytesread);
+                }
+                is.close();
+                byte responseBytes[] = bos.toByteArray();
+                String responseStr = new String(responseBytes, "UTF-8");
+                LOG.trace("Response body:\n" + responseStr);
+                is = new ByteArrayInputStream(responseBytes);
+            }
+
             response = ((Wrapper)unmarshaller.unmarshal(new StreamSource(is))).getResponse();
+
             if(response == null)
                 throw new InvalidResponseException("Missing response node", ResponseCode.ERR_APPLICATION_ERROR);
             ResponseCode serverResponseCode = ResponseCode.fromStatus(response.getStatus());
@@ -186,6 +274,9 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
                                     ": " + message.getExceptionClass();
                 throw new InvalidResponseException(excMessage, serverResponseCode);
             }
+        } catch (XmlMappingException e) {
+            throw new InvalidRequestException("Cannot create request body", e,
+                                              ResponseCode.ERR_APPLICATION_ERROR);
         } finally {
             try {
                 is.close();

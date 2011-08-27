@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import com.mscg.appstarter.beans.jaxb.Login;
 import com.mscg.appstarter.beans.jaxb.ObjectFactory;
 import com.mscg.appstarter.beans.jaxb.Wrapper;
-import com.mscg.appstarter.server.exception.InvalidRequestException;
+import com.mscg.appstarter.exception.InvalidRequestException;
 import com.mscg.appstarter.server.util.session.SessionsHolder;
 import com.mscg.appstarter.util.ResponseCode;
 import com.mscg.appstarter.util.Util;

@@ -1,4 +1,4 @@
-package com.mscg.appstarter.server.exception;
+package com.mscg.appstarter.exception;
 
 public class ApplicationAlreadyRunningException extends ApplicationLaunchException {
 

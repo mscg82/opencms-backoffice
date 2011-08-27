@@ -1,4 +1,4 @@
-package com.mscg.appstarter.client.interfacer.exception;
+package com.mscg.appstarter.exception;
 
 import com.mscg.appstarter.util.ResponseCode;
 

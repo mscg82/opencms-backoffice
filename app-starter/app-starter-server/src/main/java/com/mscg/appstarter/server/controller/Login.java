@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mscg.appstarter.beans.jaxb.Wrapper;
-import com.mscg.appstarter.server.exception.InvalidRequestException;
+import com.mscg.appstarter.exception.InvalidRequestException;
 import com.mscg.appstarter.server.util.Constants;
 import com.mscg.appstarter.server.util.Settings;
 import com.mscg.appstarter.util.ResponseCode;

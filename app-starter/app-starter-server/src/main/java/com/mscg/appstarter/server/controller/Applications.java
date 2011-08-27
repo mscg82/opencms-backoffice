@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mscg.appstarter.beans.jaxb.Wrapper;
-import com.mscg.appstarter.server.exception.ApplicationAlreadyRunningException;
-import com.mscg.appstarter.server.exception.ApplicationLaunchException;
-import com.mscg.appstarter.server.exception.ApplicationNotConfiguredException;
-import com.mscg.appstarter.server.exception.ApplicationNotRunningException;
-import com.mscg.appstarter.server.exception.InvalidRequestException;
+import com.mscg.appstarter.exception.ApplicationAlreadyRunningException;
+import com.mscg.appstarter.exception.ApplicationLaunchException;
+import com.mscg.appstarter.exception.ApplicationNotConfiguredException;
+import com.mscg.appstarter.exception.ApplicationNotRunningException;
+import com.mscg.appstarter.exception.InvalidRequestException;
 import com.mscg.appstarter.server.util.application.ApplicationInfo;
 import com.mscg.appstarter.server.util.application.ApplicationsHolder;
 import com.mscg.appstarter.util.ResponseCode;
