@@ -34,7 +34,7 @@ public class Applications extends GenericController {
     }
 
     @RequestMapping(value="/list", method={RequestMethod.GET, RequestMethod.POST})
-    public String listAppications(Model model, @RequestBody String requestBody) {
+    public String listApplications(Model model, @RequestBody String requestBody) {
         Wrapper wrapper = objectFactory.createWrapper();
         wrapper.setResponse(objectFactory.createResponse());
         try {
