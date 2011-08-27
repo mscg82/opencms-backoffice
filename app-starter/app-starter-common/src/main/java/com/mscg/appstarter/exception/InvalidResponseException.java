@@ -6,7 +6,7 @@ public class InvalidResponseException extends Exception {
 
     private static final long serialVersionUID = 6987098189821362573L;
 
-    private ResponseCode responseCode;
+    protected ResponseCode responseCode;
 
     public InvalidResponseException(ResponseCode responseCode) {
         super();

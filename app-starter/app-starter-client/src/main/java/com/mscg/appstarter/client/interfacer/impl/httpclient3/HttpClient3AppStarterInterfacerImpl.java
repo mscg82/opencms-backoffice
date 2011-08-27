@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.lang.reflect.Constructor;
 import java.util.List;
 
 import javax.xml.transform.stream.StreamResult;
@@ -25,6 +26,10 @@ import com.mscg.appstarter.beans.jaxb.ServerMessage;
 import com.mscg.appstarter.beans.jaxb.Wrapper;
 import com.mscg.appstarter.client.interfacer.GenericAppStarterInterfacer;
 import com.mscg.appstarter.client.interfacer.InterfacerUrl;
+import com.mscg.appstarter.exception.ApplicationAlreadyRunningException;
+import com.mscg.appstarter.exception.ApplicationLaunchException;
+import com.mscg.appstarter.exception.ApplicationNotConfiguredException;
+import com.mscg.appstarter.exception.ApplicationNotRunningException;
 import com.mscg.appstarter.exception.InvalidRequestException;
 import com.mscg.appstarter.exception.InvalidResponseException;
 import com.mscg.appstarter.util.ResponseCode;
@@ -51,7 +56,8 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
 
     public boolean login(String username, String password) throws InvalidRequestException,
                                                                   InvalidResponseException,
-                                                                  IOException {
+                                                                  IOException,
+                                                                  Exception {
         boolean ret = false;
 
         String url = baseUrl + InterfacerUrl.LOGIN_URL.getRelativeUrl();
@@ -94,7 +100,8 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
 
     public void logout(String username) throws InvalidRequestException,
                                                InvalidResponseException,
-                                               IOException {
+                                               IOException,
+                                               Exception {
 
         String sessionID = usernameToSessionID.get(username);
         Wrapper wrapper = objectFactory.createWrapper();
@@ -111,7 +118,8 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
 
     public boolean ping(String username) throws InvalidRequestException,
                                                 InvalidResponseException,
-                                                IOException {
+                                                IOException,
+                                                Exception {
 
         boolean ret = false;
 
@@ -142,7 +150,8 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
 
     public List<ApplicationInfo> listApplications(String username) throws InvalidRequestException,
                                                                           InvalidResponseException,
-                                                                          IOException {
+                                                                          IOException,
+                                                                          Exception {
         List<ApplicationInfo> ret = null;
 
         String sessionID = usernameToSessionID.get(username);
@@ -166,7 +175,10 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
 
     public ApplicationInfo launchApplication(String username, int applicationID) throws InvalidRequestException,
                                                                                         InvalidResponseException,
-                                                                                        IOException {
+                                                                                        ApplicationNotConfiguredException,
+                                                                                        ApplicationAlreadyRunningException,
+                                                                                        IOException,
+                                                                                        Exception {
         ApplicationInfo ret = null;
 
         String sessionID = usernameToSessionID.get(username);
@@ -191,7 +203,10 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
 
     public ApplicationInfo closeApplication(String username, int applicationID) throws InvalidRequestException,
                                                                                        InvalidResponseException,
-                                                                                       IOException {
+                                                                                       ApplicationNotConfiguredException,
+                                                                                       ApplicationNotRunningException,
+                                                                                       IOException,
+                                                                                       Exception {
         ApplicationInfo ret = null;
 
         String sessionID = usernameToSessionID.get(username);
@@ -214,8 +229,10 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
         return ret;
     }
 
-    protected Response sendRequest(String url, Wrapper wrapper) throws InvalidResponseException, InvalidRequestException,
-                                                                       IOException, HttpException {
+    protected Response sendRequest(String url, Wrapper wrapper) throws InvalidResponseException,
+                                                                       InvalidRequestException,
+                                                                       IOException, HttpException,
+                                                                       Exception{
         Response response = null;
 
         if(LOG.isDebugEnabled())
@@ -270,9 +287,39 @@ public class HttpClient3AppStarterInterfacerImpl extends GenericAppStarterInterf
             if(serverResponseCode != ResponseCode.OK) {
                 // propagate the server error
                 ServerMessage message = response.getMessage();
-                String excMessage = (message.getMessageBody() == null ? "" : message.getMessageBody()) +
-                                    ": " + message.getExceptionClass();
-                throw new InvalidResponseException(excMessage, serverResponseCode);
+                String excClassName = message.getExceptionClass();
+
+                Exception exc = null;
+                try {
+                    Class<Exception> excClass = (Class<Exception>) Thread.currentThread().
+                                                                          getContextClassLoader().
+                                                                          loadClass(excClassName);
+
+                    if(InvalidRequestException.class.isAssignableFrom(excClass)) {
+                        // convert InvalidRequestException to InvalidResponseException
+                        exc = new InvalidResponseException(message.getMessageBody(), serverResponseCode);
+                    }
+                    else if(ApplicationLaunchException.class.isAssignableFrom(excClass)) {
+                        // get the ApplicationLaunchException(String) constructor
+                        // and launch exception
+                        Constructor<Exception> constr = excClass.getConstructor(String.class);
+                        exc = constr.newInstance(message.getMessageBody());
+                    }
+                    else {
+                        // launch a generic exception (use the code in the following catch block
+                        throw new Exception();
+                    }
+
+
+                } catch(Exception e) {
+                    // cannot load the exception class, so launch a generic one
+                    String excMessage = (message.getMessageBody() == null ? "" : message.getMessageBody()) +
+                                        ": " + message.getExceptionClass();
+                    exc = new InvalidResponseException(excMessage, serverResponseCode);
+                }
+
+                if(exc != null)
+                    throw exc;
             }
         } catch (XmlMappingException e) {
             throw new InvalidRequestException("Cannot create request body", e,

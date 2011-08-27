@@ -12,6 +12,9 @@ import org.springframework.context.support.GenericApplicationContext;
 
 import com.mscg.appstarter.beans.jaxb.ApplicationInfo;
 import com.mscg.appstarter.client.interfacer.AppStarterInterfacer;
+import com.mscg.appstarter.exception.ApplicationAlreadyRunningException;
+import com.mscg.appstarter.exception.ApplicationNotConfiguredException;
+import com.mscg.appstarter.exception.ApplicationNotRunningException;
 
 public class AppStarterClient {
 
@@ -79,10 +82,18 @@ public class AppStarterClient {
                         if(-1 == app)
                             continue;
 
-                        if("l".equalsIgnoreCase(op))
-                            appStarterInterfacer.launchApplication(username, app);
-                        else if("c".equalsIgnoreCase(op))
-                            appStarterInterfacer.closeApplication(username, app);
+                        try {
+                            if("l".equalsIgnoreCase(op))
+                                appStarterInterfacer.launchApplication(username, app);
+                            else if("c".equalsIgnoreCase(op))
+                                appStarterInterfacer.closeApplication(username, app);
+                        } catch(ApplicationNotConfiguredException e) {
+                            System.err.println("The selected application ID is not configured.");
+                        } catch(ApplicationNotRunningException e) {
+                            System.err.println("The selected application is not running.");
+                        } catch(ApplicationAlreadyRunningException e) {
+                            System.err.println("The selected application is already running.");
+                        }
                     } catch(Exception e) {
                         e.printStackTrace();
                     }
