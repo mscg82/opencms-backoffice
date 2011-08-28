@@ -11,6 +11,8 @@
             <low-threads>1</low-threads>
             <shrink>1</shrink>
         </thread-pool>
+        
+        <temp-folder><![CDATA[./tmp]]></temp-folder>
     </server>
     
     <users>

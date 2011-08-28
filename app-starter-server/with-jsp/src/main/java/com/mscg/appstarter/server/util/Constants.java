@@ -11,6 +11,7 @@ public class Constants {
     public static final String MAX_THREADS = "server.thread-pool.max-threads";
     public static final String LOW_THREADS = "server.thread-pool.low-threads";
     public static final String SHRINK_THREADS = "server.thread-pool.shrink";
+    public static final String SERVER_TEMP_FOLDER = "server.temp-folder";
 
     public static final String USER_DATA      = "users.${username}";
     public static final String PLAIN_PASSWORD = "users.${username}.password";

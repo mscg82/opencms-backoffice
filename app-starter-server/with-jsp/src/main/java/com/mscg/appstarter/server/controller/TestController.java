@@ -31,4 +31,9 @@ public class TestController {
         return "response";
     }
 
+    @RequestMapping(value="/jsp", method={RequestMethod.GET, RequestMethod.POST})
+    public String testJSP(Model model) {
+        return "test";
+    }
+
 }

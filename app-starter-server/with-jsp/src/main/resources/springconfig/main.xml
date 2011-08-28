@@ -26,8 +26,18 @@
         <constructor-arg ref="jaxbMarshaller" />
     </bean>
     
-    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
-    
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" >
+        <property name="order" value="1" />
+    </bean>
+    <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+        <property name="viewClass" value="com.mscg.appstarter.server.util.view.ClasspathResourceView" />
+        <property name="prefix" value="classpath:view/jsp/" />
+        <property name="suffix" value=".jsp" />
+        <property name="order" value="2" />
+    </bean>
+    <bean class="com.mscg.appstarter.server.util.view.TempFolderWatcher" init-method="deleteTempFolder"
+                                                                         destroy-method="deleteTempFolder" />
+        
     <bean id="sessionsHolder" class="com.mscg.appstarter.server.util.session.SessionsHolder" />
     <bean id="applicationsHolder" class="com.mscg.appstarter.server.util.application.ApplicationsHolder" />
 
