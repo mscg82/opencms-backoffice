@@ -58,10 +58,10 @@ public class ClasspathResourceView extends InternalResourceView {
                     os.close();
                     os = null;
                 }
-                String resourcePath = tempFile.getCanonicalPath().replace('\\', '/');
-                int index = resourcePath.indexOf('/');
-                if(index > 0)
-                    resourcePath = resourcePath.substring(index);
+                String resourcePath = tempFile.getCanonicalPath();
+                String tempParentPath = tempFolder.getParentFile().getCanonicalPath();
+                resourcePath = resourcePath.substring(tempParentPath.length()).replace('\\', '/');
+
                 ret = super.getRequestDispatcher(request, resourcePath);
 
             } catch (Exception e) {

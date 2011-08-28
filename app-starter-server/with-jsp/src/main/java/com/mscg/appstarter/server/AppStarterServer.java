@@ -2,6 +2,7 @@ package com.mscg.appstarter.server;
 
 import java.io.File;
 
+import org.apache.jasper.servlet.JspServlet;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.nio.SelectChannelConnector;
@@ -46,6 +47,12 @@ public class AppStarterServer {
 
             LOG.debug("Binding Spring servlet to root context...");
             Context context = new Context(server, "/", Context.SESSIONS);
+
+            ServletHolder jspServletHolder = new ServletHolder(new JspServlet());
+            jspServletHolder.setInitParameter("fork", "false");
+            jspServletHolder.setInitParameter("keepgenerated", "true");
+            context.addServlet(jspServletHolder, "*.jsp");
+
             ServletHolder servletHolder = new ServletHolder(new DispatcherServlet());
             servletHolder.setInitParameter("contextConfigLocation", "classpath:/springconfig/main.xml,classpath:/springconfig/jobs.xml");
             context.addServlet(servletHolder, "/*");
