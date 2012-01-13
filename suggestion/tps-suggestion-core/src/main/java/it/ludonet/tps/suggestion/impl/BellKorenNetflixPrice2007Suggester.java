@@ -13,7 +13,7 @@ import java.util.List;
  * <p>
  * for the Netflix prize in 2007.
  */
-public class BellKorenNetflixPrice2007SuggesterImpl extends GlobalEffectRemoverSuggester
+public class BellKorenNetflixPrice2007Suggester extends GlobalEffectRemoverSuggester
  {
 
   /**
