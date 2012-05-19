@@ -19,7 +19,7 @@
 <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.debug.881194588" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.debug">
 <targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.debug.1218644239" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.debug"/>
 <builder buildPath="${workspace_loc:/feezy-installer/Debug}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.2075840714" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
-<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.1368061919" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
+<tool command="as" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} ..\resources\resources.res" id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug.1368061919" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.debug">
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.1059003777" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.262020686" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
@@ -50,7 +50,7 @@
 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.466187822" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug.545095752" name="MinGW C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.mingw.exe.debug"/>
-<tool id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1933675866" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
+<tool command="g++" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" id="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug.1933675866" name="MinGW C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.mingw.exe.debug">
 <option id="gnu.cpp.link.option.paths.1100428566" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/curl-client/dependencies/lib}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/curl-client/Debug}&quot;"/>
@@ -65,7 +65,10 @@
 <listOptionValue builtIn="false" value="wldap32"/>
 <listOptionValue builtIn="false" value="wsock32"/>
 </option>
-<option id="gnu.cpp.link.option.flags.1229534602" superClass="gnu.cpp.link.option.flags" value="-mwindows" valueType="string"/>
+<option id="gnu.cpp.link.option.flags.1229534602" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-mwindows" valueType="string"/>
+<option id="gnu.cpp.link.option.userobjs.1203653164" name="Other objects" superClass="gnu.cpp.link.option.userobjs" valueType="userObjs">
+<listOptionValue builtIn="false" value="&quot;resources\resources.res&quot;"/>
+</option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.767072775" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -514,7 +517,7 @@
 <toolChain id="cdt.managedbuild.toolchain.gnu.mingw.exe.release.520972817" name="MinGW GCC" superClass="cdt.managedbuild.toolchain.gnu.mingw.exe.release">
 <targetPlatform id="cdt.managedbuild.target.gnu.platform.mingw.exe.release.1814678395" name="Debug Platform" superClass="cdt.managedbuild.target.gnu.platform.mingw.exe.release"/>
 <builder buildPath="${workspace_loc:/feezy-installer/Release}" id="cdt.managedbuild.tool.gnu.builder.mingw.base.862384093" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="CDT Internal Builder" superClass="cdt.managedbuild.tool.gnu.builder.mingw.base"/>
-<tool id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release.1327893228" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release">
+<tool commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS} ..\resources\resources.res" id="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release.1327893228" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.mingw.exe.release">
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.275779762" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.archiver.mingw.base.33108385" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.mingw.base"/>
@@ -560,7 +563,10 @@
 <listOptionValue builtIn="false" value="wldap32"/>
 <listOptionValue builtIn="false" value="wsock32"/>
 </option>
-<option id="gnu.cpp.link.option.flags.36985516" superClass="gnu.cpp.link.option.flags" value="-mwindows" valueType="string"/>
+<option id="gnu.cpp.link.option.flags.36985516" name="Linker flags" superClass="gnu.cpp.link.option.flags" value="-mwindows" valueType="string"/>
+<option id="gnu.cpp.link.option.userobjs.992078709" name="Other objects" superClass="gnu.cpp.link.option.userobjs" valueType="userObjs">
+<listOptionValue builtIn="false" value="&quot;resources\resources.res&quot;"/>
+</option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1557428109" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>

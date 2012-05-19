@@ -1,0 +1,25 @@
+feezy_ico ICON "icon/ico_48x48.ico"
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "041004E4"
+    BEGIN
+      VALUE "CompanyName", "Oneitalia S.p.A."
+      VALUE "FileDescription", "Feezy installer"
+      VALUE "FileVersion", "1.0"
+      VALUE "InternalName", "feezy-installer"
+      VALUE "LegalCopyright", "Feezy installer"
+      VALUE "OriginalFilename", "feezy-installer.exe"
+      VALUE "ProductName", "Feezy installer"
+      VALUE "ProductVersion", "1.0"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x410, 1252
+  END
+END
