@@ -5,6 +5,7 @@
 #include <string>
 #include <CurlClient.h>
 #include <WriteToFileCurlWriteHandler.h>
+#include "WindowsConsoleWriterStatisticsHandler.h"
 
 using namespace std;
 
@@ -104,10 +105,13 @@ bool downloadAndInstallSilverlight(bool installed, string tempPath, CurlClient &
 
 	string installerFile(tempPath + "\\Silverlight.exe");
 
+
+	client.setStatisticsHandler(new WindowsConsoleWriterStatisticsHandler("Percentuale di download dell'installer di Silverlight: "));
 	client.setWriteHandler(new WriteToFileCurlWriteHandler(installerFile));
 	client.setUrl("http://silverlight.dlservice.microsoft.com/download/E/4/4/E44E1840-4BBE-4CFE-AA06-E739131D6B7E/10411.00/runtime/Silverlight.exe");
     CurlResult result = client.executeCall();
     client.cleanWriteHandler();
+    client.cleanStatisticsHandler();
     if(!result.isOkResponse()) {
     	message = "Non e' stato possibile scaricare il file di installazione di Silverlight.\n";
     	message += "Ti preghiamo di riprovare piu' tardi.";
@@ -128,10 +132,12 @@ bool downloadAndInstallSilverlight(bool installed, string tempPath, CurlClient &
 bool downloadAndInstallFeezy(string silverlightFolder, string tempPath, CurlClient &client) {
 	string feezyApp(tempPath + "\\FeezyApp.xap");
 
+	client.setStatisticsHandler(new WindowsConsoleWriterStatisticsHandler("Percentuale download dell' applicazione Feezy: "));
 	client.setWriteHandler(new WriteToFileCurlWriteHandler(feezyApp));
 	client.setUrl("https://www.feezy.it/client/FeezyApp.xap");
 	CurlResult result = client.executeCall();
 	client.cleanWriteHandler();
+	client.cleanStatisticsHandler();
 	if(!result.isOkResponse()) {
 		string message("Non e' stato possibile scaricare l'applicazione Feezy.\n");
 		message += "Ti preghiamo di riprovare piu' tardi.";
