@@ -1,4 +1,3 @@
-feezy_ico ICON "icon/ico_48x48.ico"
 1 VERSIONINFO
 FILEVERSION     1,0,0,0
 PRODUCTVERSION  1,0,0,0
@@ -23,3 +22,4 @@ BEGIN
     VALUE "Translation", 0x410, 1252
   END
 END
+2 ICON "icon/ico_48x48.ico"

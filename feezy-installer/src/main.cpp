@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <objidl.h>
 #include <shlobj.h>
 #include <vector>
 #include <sstream>
@@ -58,7 +59,7 @@ vector<string> splitString(const string &source, const string &delimiter) {
 	return ret;
 }
 
-bool launchProcessAndWait(string commandline) {
+bool launchProcess(string commandline, bool waitForProcess = true) {
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;
 	ZeroMemory(&si, sizeof(si));
@@ -76,8 +77,10 @@ bool launchProcessAndWait(string commandline) {
 		return false;
 	}
 
-	// Wait for the process to exit
-	WaitForSingleObject(pi.hProcess, INFINITE);
+	if(waitForProcess) {
+		// Wait for the process to exit
+		WaitForSingleObject(pi.hProcess, INFINITE);
+	}
 
 	// Close process and thread handles.
 	CloseHandle(pi.hProcess);
@@ -122,11 +125,23 @@ bool downloadAndInstallSilverlight(bool installed, string tempPath, CurlClient &
     // launch the installer and wait for the process to complete
     string quotedInstallerFile("\"");
     quotedInstallerFile += installerFile + "\"";
-    launchProcessAndWait(quotedInstallerFile);
+    launchProcess(quotedInstallerFile);
 
     DeleteFile(installerFile.c_str());
 
 	return true;
+}
+
+bool moveWindowToForeground(string windowTitle) {
+	HWND window = FindWindowEx(NULL, NULL, NULL, windowTitle.c_str());
+	if(window != NULL) {
+		DWORD hMyThread = GetCurrentThreadId();
+		DWORD hOtherThread = GetWindowThreadProcessId(window, NULL);
+		AttachThreadInput( hMyThread,hOtherThread,TRUE );
+		SetForegroundWindow(window);
+		AttachThreadInput( hMyThread,hOtherThread,FALSE);
+	}
+	return false;
 }
 
 bool downloadAndInstallFeezy(string silverlightFolder, string tempPath, CurlClient &client) {
@@ -152,12 +167,45 @@ bool downloadAndInstallFeezy(string silverlightFolder, string tempPath, CurlClie
 	installCommandLine += "\"/origin:https://www.feezy.it/client/FeezyApp.xap\" ";
 	installCommandLine += "/shortcut:desktop+startmenu";
 
-	bool ret = launchProcessAndWait(installCommandLine);
+	bool ret = launchProcess(installCommandLine);
+
+	// search the link on the desktop
+	TCHAR desktopFolderChars[MAX_PATH];
+	ret = SUCCEEDED(SHGetFolderPath(NULL, CSIDL_DESKTOPDIRECTORY, NULL, 0, desktopFolderChars));
+	string desktopFolder(desktopFolderChars);
+	string linkName;
+	if(ret) {
+		WIN32_FIND_DATA ffd;
+		string links(desktopFolder + "\\*.lnk");
+		HANDLE hFind = INVALID_HANDLE_VALUE;
+		hFind = FindFirstFile(links.c_str(), &ffd);
+		ret = false;
+		if(hFind != INVALID_HANDLE_VALUE) {
+			do {
+				if(strcasecmp(ffd.cFileName, "feezy.lnk") == 0) {
+					ret = true;
+					linkName = desktopFolder + "\\" + ffd.cFileName;
+					break;
+				}
+			} while(FindNextFile(hFind, &ffd));
+		}
+		FindClose(hFind);
+	}
+
 	if(ret) {
 		string message("Feezy e' ora installato sul tuo PC!\n");
-		message += "Utilizza il link che e' stato creato sul desktop per iniziare ad ascoltare la tua musica.\n\n";
-		message += "FEEZY. PERCHE' NOI AMIAMO LA MUSICA!";
-		MessageBox(NULL, message.c_str(), TEXT("Installazione completata"), MB_OK | MB_ICONASTERISK);
+		message += "Potrai utilizzare il link che e' stato creato sul desktop per iniziare ad ascoltare la tua musica.\n\n";
+		message += "FEEZY. PERCHE' NOI AMIAMO LA MUSICA!\n\n";
+		message += "Vuoi lanciare Feezy ora?";
+		int result = MessageBox(NULL, message.c_str(), TEXT("Installazione completata"),
+				                MB_YESNO | MB_ICONASTERISK);
+
+		if(result == IDYES) {
+			int launch = (int)ShellExecute(NULL, "open", linkName.c_str(), NULL, NULL, SW_SHOWNORMAL);
+			if(launch > 32) { // launch has succeeded
+				moveWindowToForeground("Feezy");
+			}
+		}
 	}
 
 	DeleteFile(feezyApp.c_str());
