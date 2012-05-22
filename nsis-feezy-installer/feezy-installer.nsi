@@ -72,8 +72,7 @@ VIAddVersionKey LegalCopyright ""
 !macroend
 
 Function launchFeezyAfterInstall
-    Push $0
-    
+    Push $0   
     StrCpy $0 $DESKTOP\Feezy.lnk
     IfFileExists $0 0 linkAbsent
         ExecShell "open" $0 "" SW_SHOWDEFAULT
@@ -81,11 +80,11 @@ Function launchFeezyAfterInstall
     Pop $0
 FunctionEnd
 
-Function installFeezy
-    DetailPrint $(FEEZY_DOWNLOAD)
-    
+Function installFeezy    
     Push $0
     Push $1
+    
+    DetailPrint $(FEEZY_DOWNLOAD)
     
     StrCpy $0 $TEMP\FeezyApp.xap
     
@@ -115,11 +114,11 @@ Function installFeezy
     Pop $0
 FunctionEnd
 
-Function installSilverlight
-    DetailPrint $(SL_DOWNLOAD)
-    
+Function installSilverlight    
     Push $0
     Push $1
+    
+    DetailPrint $(SL_DOWNLOAD)
     
     StrCpy $0 $TEMP\Silverlight.exe
     
@@ -181,8 +180,7 @@ Section -Main SEC0000
         Call installFeezy
     ${Endif}
     
-    Pop $0
-    
+    Pop $0   
 SectionEnd
 
 # Installer functions
