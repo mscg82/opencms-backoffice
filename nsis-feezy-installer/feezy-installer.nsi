@@ -162,7 +162,7 @@ Section -Main SEC0000
         DetailPrint "$(SL_VERSION) $0"
         MessageBox MB_OKCANCEL $(SL_UPDATE_MANDATORY) IDOK okToInstall IDCANCEL cancelInstall
     ${Else}
-        Goto okToInstall
+        Goto installFeezy
     ${Endif}
     
     cancelInstall:
@@ -176,9 +176,10 @@ Section -Main SEC0000
     ReadRegStr $0 HKLM Software\Microsoft\Silverlight "Version"
     ${If} $0 < "5.0"
         !insertmacro ABORT_WITH_MESSAGE "$(INSTALLATION_ABORTED)"
-    ${Else}
-        Call installFeezy
     ${Endif}
+    
+    installFeezy:
+    Call installFeezy
     
     Pop $0   
 SectionEnd
