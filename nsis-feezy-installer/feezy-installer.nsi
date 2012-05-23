@@ -48,8 +48,8 @@ ReserveFile "${NSISDIR}\Plugins\AdvSplash.dll"
 
 !insertmacro MUI_RESERVEFILE_LANGDLL
 
-LicenseLangString LicenseFile ${LANG_ENGLISH} "text\English\license.txt" 
-LicenseLangString LicenseFile ${LANG_ITALIAN} "text\Italian\license.txt" 
+LicenseLangString LicenseFile ${LANG_ENGLISH} "text\English\license.rtf" 
+LicenseLangString LicenseFile ${LANG_ITALIAN} "text\Italian\license.rtf" 
 
 # Installer attributes
 OutFile installer\feezy-installer.exe
