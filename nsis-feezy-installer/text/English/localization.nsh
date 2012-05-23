@@ -19,7 +19,7 @@ prior to continue with the installation.$\n$\n\
 Select OK to continue with download and installation or Cancel to exit."
 !insertmacro LANG_STRING FEEZY_DOWNLOAD "Feezy application download in progress..."
 !insertmacro LANG_STRING FEEZY_INSTALL "Feezy application installation in progess..."
-!insertmacro LANG_STRING LAUNCH_FEEZY_NOW "Launch Feezy!"
+!insertmacro LANG_STRING LAUNCH_FEEZY_NOW "Launch Feezy now!"
 !insertmacro LANG_STRING FINISH_PAGE_TEXT "Feezy was installed successfully!$\n$\n\
 You can launch it using the link created on your desktop$\n$\n\
 FEEZY, BECAUSE WE LOVE MUSIC"
