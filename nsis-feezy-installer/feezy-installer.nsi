@@ -8,8 +8,8 @@ RequestExecutionLevel admin
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
 !define VERSION 1.0
-!define COMPANY Oneitalia
-!define URL http://www.oneitalia.it
+!define COMPANY "Oneitalia S.p.a."
+!define URL http://www.feezy.it
 
 # MUI Symbol Definitions
 !define MUI_ICON img\ico_48x48.ico
@@ -43,12 +43,12 @@ ReserveFile "${NSISDIR}\Plugins\AdvSplash.dll"
 !insertmacro MUI_PAGE_FINISH
 
 # Installer languages
-!insertmacro LANG_LOAD "English"
+#!insertmacro LANG_LOAD "English"
 !insertmacro LANG_LOAD "Italian"
 
 !insertmacro MUI_RESERVEFILE_LANGDLL
 
-LicenseLangString LicenseFile ${LANG_ENGLISH} "text\English\license.rtf" 
+#LicenseLangString LicenseFile ${LANG_ENGLISH} "text\English\license.rtf" 
 LicenseLangString LicenseFile ${LANG_ITALIAN} "text\Italian\license.rtf" 
 
 # Installer attributes
