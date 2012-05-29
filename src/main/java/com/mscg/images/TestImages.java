@@ -9,9 +9,12 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
+import com.mscg.images.filters.ImageFilter;
+import com.mscg.images.filters.MeanImageFilter;
+
 public class TestImages {
 
-    public static void main1(String[] args) {
+    public static void main2(String[] args) {
         ColorHSL colorHSL = ColorHelper.RGBtoHSL(ColorRGB.fromIntColor(ColorHelper.getRGB(255, 255, 36)));
         //colorHSL.hue = 42;
         ColorRGB colorRGB = ColorHelper.HSLtoRGB(colorHSL);
@@ -19,10 +22,44 @@ public class TestImages {
         System.out.println("rgb: " + colorRGB.red + ", " + colorRGB.green + ", " + colorRGB.blue);
     }
 
+    public static void main(String[] args) {
+        ImageFilter filter = new MeanImageFilter(5);
+        InputStream imageIS = null;
+        OutputStream imageOS = null;
+        try {
+            imageIS = Thread.currentThread().getContextClassLoader().getResourceAsStream("test.jpg");
+            BufferedImage bufferedImage = ImageIO.read(imageIS);
+            System.out.println("Image size: " + bufferedImage.getWidth() + "x" + bufferedImage.getHeight());
+            System.out.println("Image type: " + bufferedImage.getType());
+
+            BufferedImage outImage = new BufferedImage(bufferedImage.getWidth(),
+                                                       bufferedImage.getHeight(),
+                                                       bufferedImage.getType());
+
+            filter.apply(bufferedImage, outImage);
+
+            File output = new File("./filtered.jpg");
+            if(!output.exists())
+                output.createNewFile();
+            imageOS = new BufferedOutputStream(new FileOutputStream(output));
+            ImageIO.write(outImage, "jpg", imageOS);
+            imageOS.flush();
+            imageOS.close();
+
+        } catch(Exception e) {
+            try {
+                imageIS.close();
+            } catch(Exception e2){}
+            try {
+                imageOS.close();
+            } catch(Exception e2){}
+        }
+    }
+
     /**
      * @param args
      */
-    public static void main(String[] args) {
+    public static void main1(String[] args) {
         InputStream imageIS = null;
         OutputStream imageOS = null;
         try {
@@ -47,7 +84,7 @@ public class TestImages {
 //                    outImage1.setRGB(i, j, ColorHelper.greyScaleRGB(rgb));
 //                    outImage2.setRGB(i, j, ColorHelper.greyScaleHSL(rgb));
 //                    outImage3.setRGB(i, j, ColorHelper.greyScaleHSV(rgb));
-                    float factor = 1.5f;
+                    float factor = 0.6f;
                     outImage1.setRGB(i, j, ColorHelper.changeBrightnessRGB(rgb, factor));
                     outImage2.setRGB(i, j, ColorHelper.changeBrightnessHSL(rgb, factor));
                     outImage3.setRGB(i, j, ColorHelper.changeBrightnessHSV(rgb, factor));

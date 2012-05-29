@@ -9,8 +9,8 @@ public class ColorRGB {
     public static ColorRGB fromIntColor(int color) {
         ColorRGB colorRGB = new ColorRGB();
         colorRGB.red = ColorHelper.getRed(color);
-        colorRGB.green = ColorHelper.getBlue(color);
-        colorRGB.blue = ColorHelper.getGreen(color);
+        colorRGB.green = ColorHelper.getGreen(color);
+        colorRGB.blue = ColorHelper.getBlue(color);
         return colorRGB;
     }
 

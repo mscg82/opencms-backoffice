@@ -1,5 +1,6 @@
 package com.mscg.images;
 
+
 public class ColorHelper {
 
     public static enum ColorChannel {
@@ -125,8 +126,7 @@ public class ColorHelper {
     }
 
     public static ColorHSL RGBtoHSL(ColorRGB colorRGB) {
-        float r, g, b, h = 0, s = 0, l; // this function works with floats
-                                        // between 0 and 1
+        float r, g, b, h = 0, s = 0, l; // this function works with floats between 0 and 1
         r = colorRGB.red / 255.0f;
         g = colorRGB.green / 255.0f;
         b = colorRGB.blue / 255.0f;
@@ -161,7 +161,7 @@ public class ColorHelper {
         }
 
         ColorHSL colorHSL = new ColorHSL();
-        colorHSL.hue = 255 - Math.round(h * 255.0f);
+        colorHSL.hue = Math.round(h * 255.0f);
         colorHSL.saturation = Math.round(s * 255.0f);
         colorHSL.lightness = Math.round(l * 255.0f);
 
@@ -169,8 +169,7 @@ public class ColorHelper {
     }
 
     public static ColorRGB HSLtoRGB(ColorHSL colorHSL) {
-        float r, g, b, h, s, l; // this function works with floats between 0 and
-                                // 1
+        float r, g, b, h, s, l; // this function works with floats between 0 and 1
         float temp1, temp2, tempr, tempg, tempb;
         h = colorHSL.hue / 255.0f;
         s = colorHSL.saturation / 255.0f;
@@ -266,7 +265,7 @@ public class ColorHelper {
         }
 
         ColorHSV colorHSV = new ColorHSV();
-        colorHSV.hue = 255 - Math.round(h * 255.0f);
+        colorHSV.hue = Math.round(h * 255.0f);
         colorHSV.saturation = Math.round(s * 255.0f);
         colorHSV.value = Math.round(v * 255.0f);
         return colorHSV;
