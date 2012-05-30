@@ -9,8 +9,11 @@ import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
 
+import com.mscg.images.colors.ColorHSL;
+import com.mscg.images.colors.ColorHelper;
+import com.mscg.images.colors.ColorRGB;
+import com.mscg.images.filters.EmbossImageFilter;
 import com.mscg.images.filters.ImageFilter;
-import com.mscg.images.filters.MeanImageFilter;
 
 public class TestImages {
 
@@ -23,7 +26,7 @@ public class TestImages {
     }
 
     public static void main(String[] args) {
-        ImageFilter filter = new MeanImageFilter(5);
+        ImageFilter filter = new EmbossImageFilter(3, 128.0f);
         InputStream imageIS = null;
         OutputStream imageOS = null;
         try {

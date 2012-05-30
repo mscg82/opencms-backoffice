@@ -2,16 +2,22 @@ package com.mscg.images.filters;
 
 import java.awt.image.BufferedImage;
 
-import com.mscg.images.ColorRGB;
+import com.mscg.images.colors.ColorRGB;
 
 public class ConvolutionImageFilter implements WeightImageFilter {
 
     protected float [][]filterData;
+    protected float bias;
 
     public ConvolutionImageFilter(int size) {
+        this(size, 0.0f);
+    }
+
+    public ConvolutionImageFilter(int size, float bias) {
         if(size < 0 || size % 2 == 0)
             throw new IllegalArgumentException("The image filter size must be a positive and odd number");
         this.filterData = new float[size][size];
+        this.bias = bias;
     }
 
     protected void init() {
@@ -65,12 +71,27 @@ public class ConvolutionImageFilter implements WeightImageFilter {
                     }
                 }
                 ColorRGB destinationColor = new ColorRGB();
-                destinationColor.red = Math.max(0, Math.min(255, Math.round(r)));
-                destinationColor.green = Math.max(0, Math.min(255, Math.round(g)));
-                destinationColor.blue = Math.max(0, Math.min(255, Math.round(b)));
+                destinationColor.red = Math.max(0, Math.min(255, Math.round(r + bias)));
+                destinationColor.green = Math.max(0, Math.min(255, Math.round(g + bias)));
+                destinationColor.blue = Math.max(0, Math.min(255, Math.round(b + bias)));
                 outputImage.setRGB(i, j, destinationColor.toIntColor());
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        int size = getSize();
+        for(int i = 0; i < size; i++) {
+            for(int j = 0; j < size; j++) {
+                if(j != 0)
+                    sb.append(" ");
+                sb.append(String.format("%7.4f", filterData[i][j]));
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
 }

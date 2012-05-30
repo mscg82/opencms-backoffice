@@ -3,7 +3,11 @@ package com.mscg.images.filters;
 public class BlurImageFilter extends ConvolutionImageFilter {
 
     public BlurImageFilter(int size) {
-        super(size);
+        this(size, 0.0f);
+    }
+
+    public BlurImageFilter(int size, float bias) {
+        super(size, bias);
 
         for(int i = 0; i < size; i++) {
             if(i <= size / 2) {

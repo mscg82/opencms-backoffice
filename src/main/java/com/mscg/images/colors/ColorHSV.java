@@ -1,4 +1,4 @@
-package com.mscg.images;
+package com.mscg.images.colors;
 
 public class ColorHSV {
 
