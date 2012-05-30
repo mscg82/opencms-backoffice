@@ -1,6 +1,6 @@
 package com.mscg.images.filters;
 
-public class SharpenImageFilter extends BaseImageFilter {
+public class SharpenImageFilter extends ConvolutionImageFilter {
 
     public SharpenImageFilter(int size) {
         this(size, 0);

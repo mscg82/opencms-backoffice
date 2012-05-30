@@ -4,11 +4,11 @@ import java.awt.image.BufferedImage;
 
 import com.mscg.images.ColorRGB;
 
-public class BaseImageFilter implements ImageFilter {
+public class ConvolutionImageFilter implements WeightImageFilter {
 
     protected float [][]filterData;
 
-    public BaseImageFilter(int size) {
+    public ConvolutionImageFilter(int size) {
         if(size < 0 || size % 2 == 0)
             throw new IllegalArgumentException("The image filter size must be a positive and odd number");
         this.filterData = new float[size][size];

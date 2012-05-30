@@ -1,6 +1,6 @@
 package com.mscg.images.filters;
 
-public class MeanImageFilter extends BaseImageFilter {
+public class MeanImageFilter extends ConvolutionImageFilter {
 
     public MeanImageFilter(int size) {
         super(size);

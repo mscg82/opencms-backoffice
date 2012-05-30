@@ -1,6 +1,6 @@
 package com.mscg.images.filters;
 
-public class BlurImageFilter extends BaseImageFilter {
+public class BlurImageFilter extends ConvolutionImageFilter {
 
     public BlurImageFilter(int size) {
         super(size);

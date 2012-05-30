@@ -2,11 +2,11 @@ package com.mscg.images.filters;
 
 import java.awt.image.BufferedImage;
 
-public class ReverseWeightImageFilter implements ImageFilter {
+public class ReverseWeightImageFilter implements WeightImageFilter {
 
-    private ImageFilter innerFilter;
+    private final WeightImageFilter innerFilter;
 
-    public ReverseWeightImageFilter(ImageFilter innerFilter) {
+    public ReverseWeightImageFilter(WeightImageFilter innerFilter) {
         this.innerFilter = innerFilter;
     }
 

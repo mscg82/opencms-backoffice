@@ -1,6 +1,6 @@
 package com.mscg.images.filters;
 
-public class IdentityImageFilter extends BaseImageFilter {
+public class IdentityImageFilter extends ConvolutionImageFilter {
 
     public IdentityImageFilter(int size) {
         super(size);

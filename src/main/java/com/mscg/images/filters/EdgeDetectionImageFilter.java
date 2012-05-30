@@ -1,6 +1,6 @@
 package com.mscg.images.filters;
 
-public class EdgeDetectionImageFilter extends BaseImageFilter {
+public class EdgeDetectionImageFilter extends ConvolutionImageFilter {
 
     public EdgeDetectionImageFilter(int size) {
         super(size);
