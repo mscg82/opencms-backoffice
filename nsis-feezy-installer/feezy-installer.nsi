@@ -80,52 +80,52 @@ Function launchFeezyAfterInstall
     Pop $0
 FunctionEnd
 
-#Function installFeezy    
-#    Push $0
-#    Push $1
-#    
-#    DetailPrint $(FEEZY_DOWNLOAD)
-#    
-#    StrCpy $0 $TEMP\FeezyApp.xap
-#    
-#    NSISdl::download \
-#        /TRANSLATE2 "$(DL_DOWNLOADING)" "$(DL_CONNECTING)" "$(DL_SECOND)" "$(DL_MINUTE)" "$(DL_HOUR)" \
-#        "$(DL_SECONDS)" "$(DL_MINUTES)" "$(DL_HOURS)" "$(DL_REMAINING)" \
-#        https://www.feezy.it/client/FeezyApp.xap $0
-#    
-#    Pop $1
-#    ${If} $1 == "success"
-#        Goto downloadOk
-#    ${ElseIf} $1 == "cancel"
-#        MessageBox MB_OK $(DOWNLOAD_CANCELLED)
-#        !insertmacro ABORT_WITH_MESSAGE "$(INSTALLATION_ABORTED)"
-#    ${Else}
-#        MessageBox MB_OK $(DOWNLOAD_ERROR)
-#        !insertmacro ABORT_WITH_MESSAGE "$(INSTALLATION_ABORTED)"
-#    ${EndIf}
-#        
-#    downloadOk:
-#    DetailPrint $(FEEZY_INSTALL)
-#    ExecWait '"$PROGRAMFILES\Microsoft Silverlight\sllauncher.exe" /install:$0 /origin:https://www.feezy.it/client/FeezyApp.xap /shortcut:desktop+startmenu'  
-#    
-#    Delete $0
-#    
-#    Pop $1
-#    Pop $0
-#FunctionEnd
-
-Function installFeezy
+Function installFeezy    
     Push $0
-
-    DetailPrint $(FEEZY_INSTALL)
+    Push $1
+    
+    DetailPrint $(FEEZY_DOWNLOAD)
+    
     StrCpy $0 $TEMP\FeezyApp.xap
-    SetOutPath $TEMP
-    File FeezyApp.xap
-    ExecWait '"$PROGRAMFILES\Microsoft Silverlight\sllauncher.exe" /install:$0 /origin:https://www.feezy.it/client/FeezyApp.xap /shortcut:desktop+startmenu'
+    
+    NSISdl::download \
+        /TRANSLATE2 "$(DL_DOWNLOADING)" "$(DL_CONNECTING)" "$(DL_SECOND)" "$(DL_MINUTE)" "$(DL_HOUR)" \
+        "$(DL_SECONDS)" "$(DL_MINUTES)" "$(DL_HOURS)" "$(DL_REMAINING)" \
+        https://www.feezy.it/client/FeezyApp.xap $0
+    
+    Pop $1
+    ${If} $1 == "success"
+        Goto downloadOk
+    ${ElseIf} $1 == "cancel"
+        MessageBox MB_OK $(DOWNLOAD_CANCELLED)
+        !insertmacro ABORT_WITH_MESSAGE "$(INSTALLATION_ABORTED)"
+    ${Else}
+        MessageBox MB_OK $(DOWNLOAD_ERROR)
+        !insertmacro ABORT_WITH_MESSAGE "$(INSTALLATION_ABORTED)"
+    ${EndIf}
+        
+    downloadOk:
+    DetailPrint $(FEEZY_INSTALL)
+    ExecWait '"$PROGRAMFILES\Microsoft Silverlight\sllauncher.exe" /install:$0 /origin:https://www.feezy.it/client/FeezyApp.xap /shortcut:desktop+startmenu'  
+    
     Delete $0
-
+    
+    Pop $1
     Pop $0
 FunctionEnd
+
+;Function installFeezy
+;    Push $0
+;
+;    DetailPrint $(FEEZY_INSTALL)
+;    StrCpy $0 $TEMP\FeezyApp.xap
+;    SetOutPath $TEMP
+;    File FeezyApp.xap
+;    ExecWait '"$PROGRAMFILES\Microsoft Silverlight\sllauncher.exe" /install:$0 /origin:https://www.feezy.it/client/FeezyApp.xap /shortcut:desktop+startmenu'
+;    Delete $0
+;
+;    Pop $0
+;FunctionEnd
 
 Function installSilverlight    
     Push $0
