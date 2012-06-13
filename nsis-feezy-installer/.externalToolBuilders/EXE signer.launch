@@ -3,7 +3,7 @@
 <booleanAttribute key="org.eclipse.debug.ui.ATTR_LAUNCH_IN_BACKGROUND" value="false"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="C:\Programmi\Microsoft SDKs\Windows\v7.1\Bin\signtool.exe"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_RUN_BUILD_KINDS" value="full,incremental,"/>
-<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="sign /t http://timestamp.digicert.com /f ..\cert\ONEITACODESIGNING.p12 /p SSL2471ITALIA feezy-installer-signed.exe"/>
+<stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="sign /t http://timestamp.digicert.com /f ..\cert\ONEITACODESIGNING.p12 /p SSL2471ITALIA feezy-installer.exe"/>
 <booleanAttribute key="org.eclipse.ui.externaltools.ATTR_TRIGGERS_CONFIGURED" value="true"/>
 <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${workspace_loc:/nsis-feezy-installer/installer}"/>
 </launchConfiguration>
