@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="/Net Helper/lib/commons-io/commons-io-2.0.jar" sourcepath="/Net Helper/lib/commons-io/commons-io-2.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Giuseppe Miscione/Documents/Eclipse/common/commons-collections/commons-collections-3.2.1_recompiled.jar" sourcepath="C:/Users/Giuseppe Miscione/Documents/Eclipse/common/commons-collections/commons-collections-3.2.1-sources.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="C:/Users/Giuseppe Miscione/Documents/Eclipse/common/commons-collections/commons-collections-3.2.1_recompiled.jar" sourcepath="C:/Users/Giuseppe Miscione/Documents/Eclipse/common/commons-collections/commons-collections-3.2.1-sources.jar"/>
-	<classpathentry kind="lib" path="/Net Helper/lib/commons-io/commons-io-2.0.jar" sourcepath="/Net Helper/lib/commons-io/commons-io-2.0-sources.jar"/>
 	<classpathentry kind="src" path="Net Helper_src"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
