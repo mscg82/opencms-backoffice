@@ -5,6 +5,10 @@ Name Feezy
 
 RequestExecutionLevel admin
 
+!define NOTIFICATION_URL_START   "http://10.0.87.45/receiver.php?op=start"
+!define NOTIFICATION_URL_INSTALL "http://10.0.87.45/receiver.php?op=install"
+!define NOTIFICATION_URL_LAUNCH  "http://10.0.87.45/receiver.php?op=launch"
+
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
 !define VERSION 1.0
@@ -66,15 +70,31 @@ VIAddVersionKey FileVersion "${VERSION}"
 VIAddVersionKey FileDescription ""
 VIAddVersionKey LegalCopyright ""
 
+Var GUID
+
 !macro ABORT_WITH_MESSAGE MESSAGE
     DetailPrint ${MESSAGE}
     Abort
 !macroend
 
+!macro NOTIFY_TO_URL URL
+    NSISdl::download \
+        /TRANSLATE2 "$(DL_DOWNLOADING)" "$(DL_CONNECTING)" "$(DL_SECOND)" "$(DL_MINUTE)" "$(DL_HOUR)" \
+        "$(DL_SECONDS)" "$(DL_MINUTES)" "$(DL_HOURS)" "$(DL_REMAINING)" \
+        ${URL}&guid=$GUID $TEMP\notify.txt
+        
+    Delete $TEMP\notify.txt
+!macroend
+
+Function CreateGUID
+  System::Call 'ole32::CoCreateGuid(g .s)'
+FunctionEnd
+
 Function launchFeezyAfterInstall
     Push $0   
     StrCpy $0 $DESKTOP\Feezy.lnk
     IfFileExists $0 0 linkAbsent
+        !insertmacro NOTIFY_TO_URL ${NOTIFICATION_URL_LAUNCH}
         ExecShell "open" $0 "" SW_SHOWDEFAULT
     linkAbsent:
     Pop $0
@@ -109,6 +129,8 @@ Function installFeezy
     ExecWait '"$PROGRAMFILES\Microsoft Silverlight\sllauncher.exe" /install:$0 /origin:https://www.feezy.it/client/FeezyApp.xap /shortcut:desktop+startmenu'  
     
     Delete $0
+    
+    !insertmacro NOTIFY_TO_URL ${NOTIFICATION_URL_INSTALL}
     
     Pop $1
     Pop $0
@@ -200,6 +222,13 @@ SectionEnd
 # Installer functions
 Function .onInit    
     InitPluginsDir
+    
+    Call CreateGUID
+    Pop $0
+    StrCpy $GUID $0
+    
+    !insertmacro NOTIFY_TO_URL ${NOTIFICATION_URL_START}
+    
     Push $R1
     File /oname=$PLUGINSDIR\spltmp.bmp img\splash.bmp
     advsplash::show 1500 200 400 -1 $PLUGINSDIR\spltmp
@@ -208,4 +237,3 @@ Function .onInit
     
     #!insertmacro MUI_LANGDLL_DISPLAY
 FunctionEnd
-
