@@ -5,9 +5,9 @@ Name Feezy
 
 RequestExecutionLevel admin
 
-!define NOTIFICATION_URL_START   "http://10.0.87.45/receiver.php?op=start"
-!define NOTIFICATION_URL_INSTALL "http://10.0.87.45/receiver.php?op=install"
-!define NOTIFICATION_URL_LAUNCH  "http://10.0.87.45/receiver.php?op=launch"
+!define NOTIFICATION_URL_START   "https://www.feezy.it/client/installer/report/?op=start"
+!define NOTIFICATION_URL_INSTALL "https://www.feezy.it/client/installer/report/?op=install"
+!define NOTIFICATION_URL_LAUNCH  "https://www.feezy.it/client/installer/report/?op=launch"
 
 # General Symbol Definitions
 !define REGKEY "SOFTWARE\$(^Name)"
@@ -78,10 +78,17 @@ Var GUID
 !macroend
 
 !macro NOTIFY_TO_URL URL
+    Push $0
+    Push $1
+    
     NSISdl::download \
         /TRANSLATE2 "$(DL_DOWNLOADING)" "$(DL_CONNECTING)" "$(DL_SECOND)" "$(DL_MINUTE)" "$(DL_HOUR)" \
         "$(DL_SECONDS)" "$(DL_MINUTES)" "$(DL_HOURS)" "$(DL_REMAINING)" \
         ${URL}&guid=$GUID $TEMP\notify.txt
+    Pop $1
+    
+    Pop $1
+    Pop $0        
         
     Delete $TEMP\notify.txt
 !macroend
