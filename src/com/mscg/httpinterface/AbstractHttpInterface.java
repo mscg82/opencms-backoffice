@@ -3,6 +3,8 @@
  */
 package com.mscg.httpinterface;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Map;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -69,21 +71,42 @@ public class AbstractHttpInterface {
 	}
 
 	protected String prepareUrl(String method) {
+	    return prepareUrl(method, null);
+	}
+
+	protected String prepareUrl(String method, Map<String, String> parameters) {
 		StringBuilder builder = new StringBuilder();
 		builder.append( (String) config.get(ConfigLoader.DYNDNS_PROTOCOL) );
 		builder.append("://");
 		builder.append( (String) config.get(ConfigLoader.DYNDNS_SERVER) );
 		String port = (String) config.get(ConfigLoader.DYNDNS_PORT);
-		if(port != null && ! port.trim().equals("")){
+		if(port != null && port.trim().length() != 0){
 			builder.append(":" + port);
 		}
-		String context = (String) config.get(ConfigLoader.DYNDNS_CONTEXT);
 		builder.append("/");
-		if(context != null && !context.trim().equals("") ) {
-			builder.append(context);
-			builder.append("/");
+
+		String context = (String) config.get(ConfigLoader.DYNDNS_CONTEXT);
+		if(context != null && context.trim().length() != 0) {
+			builder.append(context).append("/");
 		}
+
 		builder.append(method);
+
+		if(parameters != null) {
+		    builder.append("?");
+		    boolean first = true;
+		    for(Map.Entry<String, String> entry : parameters.entrySet()) {
+		        if(!first)
+		            builder.append("&");
+		        try {
+                    builder.append(URLEncoder.encode(entry.getKey(), "UTF-8")).append("=").append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    builder.append(entry.getKey()).append("=").append(entry.getValue());
+                }
+		        first = false;
+		    }
+		}
+
 		return builder.toString();
 	}
 

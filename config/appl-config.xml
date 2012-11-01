@@ -34,6 +34,7 @@
 
             <dtdns>
                 <password>NTIQjeXyuWI=</password>
+                <password-reader>com.mscg.util.passwordreader.impl.CryptedPasswordReader</password-reader>
             </dtdns>
 
             <tester-class>com.mscg.tester.impl.NoopTesterInterface</tester-class>

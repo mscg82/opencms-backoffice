@@ -94,6 +94,9 @@ public class ConfigLoader implements Serializable {
     public static final String EATJ_VALUES_PASSWORD  = "dyndns.interface.eatj.parameters.values.password";
     public static final String EATJ_VALUES_PWDREADER = "dyndns.interface.eatj.parameters.values.password-reader";
 
+    public static final String DTDNS_PASSWORD        = "dyndns.interface.dtdns.password";
+    public static final String DTDNS_PASSWORD_READER = "dyndns.interface.dtdns.password-reader";
+
     public static final String CAPTCHA_PARAMS        = "dyndns.interface.eatj.captcha";
     public static final String CAPTCHA_TMP_FILE      = CAPTCHA_PARAMS + ".tmp-file-name";
     public static final String CAPTCHA_TRAINING_SETS = CAPTCHA_PARAMS + ".training-sets";
