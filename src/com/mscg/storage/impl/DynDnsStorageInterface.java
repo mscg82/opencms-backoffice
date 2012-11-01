@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.mscg.httpinterface.storage.impl;
+package com.mscg.storage.impl;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
 
 import com.mscg.config.ConfigLoader;
 import com.mscg.httpinterface.AbstractHttpInterface;
-import com.mscg.httpinterface.storage.StorageInterface;
+import com.mscg.storage.StorageInterface;
 import com.mscg.util.Util;
 
 /**

@@ -1,4 +1,4 @@
-package com.mscg.httpinterface.storage;
+package com.mscg.storage;
 
 import java.io.IOException;
 import java.util.List;

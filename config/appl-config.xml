@@ -7,7 +7,7 @@
         </myipaddress>
         <interface>
             <retriever>com.mscg.retrieve.impl.MyIpAddressRetriever</retriever>
-            <storage>com.mscg.httpinterface.storage.impl.DynDnsStorageInterface</storage>
+            <storage>com.mscg.storage.impl.DynDnsStorageInterface</storage>
         
             <protocol>http</protocol>
 

@@ -11,10 +11,10 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
-import com.mscg.httpinterface.storage.StorageInterface;
-import com.mscg.httpinterface.storage.impl.DynDnsStorageInterface;
 import com.mscg.retrieve.IPRetriever;
 import com.mscg.retrieve.impl.LocalIPRetriever;
+import com.mscg.storage.StorageInterface;
+import com.mscg.storage.impl.DynDnsStorageInterface;
 import com.mscg.tester.TesterInterface;
 import com.mscg.tester.impl.EatjTesterInterface;
 import com.mscg.util.Util;
