@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.mscg.httpinterface;
+package com.mscg.httpinterface.storage;
 
 import java.io.IOException;
 import java.util.List;
@@ -12,17 +12,18 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.PostMethod;
 
 import com.mscg.config.ConfigLoader;
+import com.mscg.httpinterface.AbstractHttpInterface;
 import com.mscg.util.Util;
 
 /**
  * @author Giuseppe Miscione
  *
  */
-public class IPStorageInterface extends AbstractHttpInterface {
+public class DynDnsStorageInterface extends AbstractHttpInterface implements StorageInterface {
 
-	//private static Logger log = Logger.getLogger(IPStorageInterface.class);
+	//private static Logger log = Logger.getLogger(DynDnsStorageInterface.class);
 
-	public IPStorageInterface() throws ConfigurationException {
+	public DynDnsStorageInterface() throws ConfigurationException {
 		super();
 	}
 

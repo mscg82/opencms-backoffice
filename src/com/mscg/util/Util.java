@@ -3,13 +3,11 @@
  */
 package com.mscg.util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -114,13 +112,7 @@ public class Util {
 	 */
 	public static void logStackTrace(Exception e, Logger log){
 		if(log.isDebugEnabled()){
-			ByteArrayOutputStream stream = new ByteArrayOutputStream();
-			PrintStream ps = new PrintStream(stream);
-			e.printStackTrace(ps);
-			log.debug("\n" + stream.toString());
-			try {
-				stream.close();
-			} catch (IOException e1) {}
+			log.debug("Complete stack trace: ", e);
 		}
 	}
 

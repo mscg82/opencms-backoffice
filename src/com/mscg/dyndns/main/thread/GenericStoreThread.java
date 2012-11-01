@@ -12,8 +12,9 @@ import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
 import com.mscg.httpinterface.EatjTesterInterface;
-import com.mscg.httpinterface.IPStorageInterface;
 import com.mscg.httpinterface.TesterInterface;
+import com.mscg.httpinterface.storage.DynDnsStorageInterface;
+import com.mscg.httpinterface.storage.StorageInterface;
 import com.mscg.util.Util;
 
 /**
@@ -24,7 +25,7 @@ public abstract class GenericStoreThread extends Thread {
 
 	private static Logger log = Logger.getLogger(GenericStoreThread.class);
 
-	protected IPStorageInterface storageInterface;
+	protected StorageInterface storageInterface;
 
 	protected TesterInterface testerInterface;
 
@@ -41,14 +42,25 @@ public abstract class GenericStoreThread extends Thread {
 		timeout = 300;
 		try{
 			timeout = Long.parseLong((String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_THREAD_TIMEOUT));
-		} catch(NumberFormatException e){ /* Bad numeric format, using default */}
+		} catch(NumberFormatException e){ /* Bad numeric format, using default */ }
 		timeout *= 1000;
 
 		enabled = new Boolean((String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_THREAD_ENABLED));
 
-		storageInterface = new IPStorageInterface();
+		String className = (String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_STORAGE_CLASS);
+		try {
+		    log.debug("Loading storage class " + className + "...");
 
-		String className = (String)ConfigLoader.getInstance().get(ConfigLoader.TESTER_CLASS);
+		    Class storageClass = Class.forName(className);
+		    Constructor<StorageInterface> storageConstructor = storageClass.getConstructor();
+		    storageInterface = storageConstructor.newInstance();
+		} catch(Exception e) {
+		    log.error("Error found while looking for storage class, " +
+		    		  "using default " + DynDnsStorageInterface.class.getCanonicalName(), e);
+		    storageInterface = new DynDnsStorageInterface();
+		}
+
+		className = (String)ConfigLoader.getInstance().get(ConfigLoader.TESTER_CLASS);
 		try{
 			log.debug("Loading tester class " + className + "...");
 
@@ -58,7 +70,7 @@ public abstract class GenericStoreThread extends Thread {
 		} catch(Exception e){
 			// use default tester class
 			log.error("Error found while looking for tester class, " +
-					"using default " + EatjTesterInterface.class.getCanonicalName(), e);
+					  "using default " + EatjTesterInterface.class.getCanonicalName(), e);
 			testerInterface = new EatjTesterInterface();
 		}
 
@@ -94,13 +106,13 @@ public abstract class GenericStoreThread extends Thread {
 						store = true;
 					}
 					else{
-						log.debug("Server is not running. Trying to start it");
+						log.info("Server is not running. Trying to start it");
 						if(testerInterface.startServer()){
-							log.debug("Server started successfully.");
+							log.info("Server started successfully.");
 							store = true;
 						}
 						else
-							log.debug("Cannot start server. Aborting IP storage.");
+							log.warn("Cannot start server. Aborting IP storage.");
 					}
 				}
 				else {
@@ -116,7 +128,7 @@ public abstract class GenericStoreThread extends Thread {
 					log.debug("IPs stored!");
 				}
 			} catch (Exception e) {
-				log.error("Error found in HTTP comunication: " + e.getMessage());
+				log.error("Error found in HTTP comunication (" + e.getClass().getCanonicalName() + "): " + e.getMessage());
 				Util.logStackTrace(e, log);
 			}
 

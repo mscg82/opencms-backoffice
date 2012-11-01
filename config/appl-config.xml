@@ -3,10 +3,13 @@
 <config>
     <dyndns>
         <store-thread>com.mscg.dyndns.main.thread.MyIpAddressStoreThread</store-thread>
+        
         <myipaddress>
            <url>http://www.myipaddress.com/</url>
         </myipaddress>
         <interface>
+            <storage>com.mscg.httpinterface.storage.DynDnsStorageInterface</storage>
+        
             <protocol>http</protocol>
              
             <server>free.hostingjava.it</server>
@@ -22,7 +25,7 @@
                 <ipstorage>ipstorage</ipstorage>
             </methods>
             
-            <tester-class>com.mscg.httpinterface.FreeHostingJavaTesterInterface</tester-class>
+            <tester-class>com.mscg.httpinterface.NoopTesterInterface</tester-class>
             
             <fhj>
                 <methods>

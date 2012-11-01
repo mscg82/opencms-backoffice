@@ -80,7 +80,7 @@ public class DyndnsClientMain {
 		} catch(Exception e){
 			// use default thread class
 			log.error("Error found while looking for thread class, " +
-					"using default " + LocalIPStoreThread.class.getCanonicalName(), e);
+					  "using default " + LocalIPStoreThread.class.getCanonicalName(), e);
 			thread = new LocalIPStoreThread();
 		}
 		thread.start();
@@ -124,7 +124,7 @@ public class DyndnsClientMain {
 				log.debug("Exiting from application.");
 
 			} catch (Exception e) {
-				log.error("Error found (" + e.getClass() + ") while running application.", e);
+				log.error("Error found (" + e.getClass().getCanonicalName() + ") while running application.", e);
 				Util.logStackTrace(e, log);
 				e.printStackTrace();
 			} finally{

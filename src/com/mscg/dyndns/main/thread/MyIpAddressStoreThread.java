@@ -42,7 +42,7 @@ public class MyIpAddressStoreThread extends GenericStoreThread {
 			}
 
 		} catch (Exception e) {
-			log.error("Error found while reading IP: " + e.getMessage());
+			log.error("Error found while reading IP (" + e.getClass().getCanonicalName() + "): " + e.getMessage());
 			Util.logStackTrace(e, log);
 			IPs.clear();
 		}

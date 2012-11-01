@@ -41,7 +41,7 @@ public class LocalIPStoreThread extends GenericStoreThread {
 				}
 			}
 		} catch (IOException e) {
-			log.error("Error found while reading IP: " + e.getMessage());
+			log.error("Error found while reading IP(" + e.getClass().getCanonicalName() + "): " + e.getMessage());
 			Util.logStackTrace(e, log);
 			IPs.clear();
 		}
