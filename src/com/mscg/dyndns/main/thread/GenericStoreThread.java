@@ -69,6 +69,7 @@ public class GenericStoreThread extends Thread {
             Class storageClass = Class.forName(className);
             Constructor<StorageInterface> storageConstructor = storageClass.getConstructor();
             storageInterface = storageConstructor.newInstance();
+            storageInterface.init();
         } catch(Exception e) {
             log.error("Error found while looking for storage class, " +
                       "using default " + DynDnsStorageInterface.class.getCanonicalName(), e);

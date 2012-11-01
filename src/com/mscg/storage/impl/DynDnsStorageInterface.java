@@ -28,6 +28,10 @@ public class DynDnsStorageInterface extends AbstractHttpInterface implements Sto
 		super();
 	}
 
+	public void init() throws ConfigurationException {
+
+    }
+
 	public void storeIP(String service, List<String> IPs) throws HttpException, IOException{
 		String method = (String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_STORAGE_METHOD);
 		strUrl = prepareUrl(method);

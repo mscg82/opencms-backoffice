@@ -7,8 +7,9 @@
         </myipaddress>
         <interface>
             <retriever>com.mscg.retrieve.impl.MyIpAddressRetriever</retriever>
-            <storage>com.mscg.storage.impl.DtDnsStorageInterface</storage>
-        
+            <storage>com.mscg.storage.impl.CachedStorageInterface</storage>
+            <cached-storage-inner>com.mscg.storage.impl.DtDnsStorageInterface</cached-storage-inner>
+            
             <!--
             <protocol>http</protocol> 
             <server>free.hostingjava.it</server>

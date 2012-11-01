@@ -34,6 +34,10 @@ public class DtDnsStorageInterface extends AbstractHttpInterface implements Stor
         }
     }
 
+    public void init() throws ConfigurationException {
+
+    }
+
     public void storeIP(String service, List<String> IPs) throws HttpException, IOException {
         if(!IPs.isEmpty()) {
             String password = pwdReader.readPassword((String) config.get(ConfigLoader.DTDNS_PASSWORD));
