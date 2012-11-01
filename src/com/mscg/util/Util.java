@@ -74,7 +74,8 @@ public class Util {
 	 * @return An instance of the provided class or <code>null</code> if an
 	 * error occurs during class lookup or object instance creation.
 	 */
-	public static Object loadClass(String className, ClassLoader firstClassLoader) {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+    public static Object loadClass(String className, ClassLoader firstClassLoader) {
 		Object ret = null;
 		Class clazz = null;
 
@@ -156,7 +157,8 @@ public class Util {
 	 * @param configItemName The name of the configuration item that will be read.
 	 * @return The {@link List} of values associated with the provided name.
 	 */
-	public static List<String> readConfigurationList(String configItemName) {
+	@SuppressWarnings("unchecked")
+    public static List<String> readConfigurationList(String configItemName) {
 		List<String> ret = null;
 		try {
 			ret = (List<String>) ConfigLoader.getInstance().get(configItemName);
@@ -176,7 +178,8 @@ public class Util {
 	 * @param configItemName The name of the configuration item that will be read.
 	 * @return The string value associated with the provided name.
 	 */
-	public static String readConfigurationString(String configItemName) {
+	@SuppressWarnings("unchecked")
+    public static String readConfigurationString(String configItemName) {
 		String ret = null;
 		try {
 			ret = (String) ConfigLoader.getInstance().get(configItemName);

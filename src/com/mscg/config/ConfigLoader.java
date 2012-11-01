@@ -114,6 +114,7 @@ public class ConfigLoader implements Serializable {
      * the value is a <code>List&lt;String&gt;</code>.
      * @throws ConfigurationException If some error occurs.
      */
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public static Map<String, Object> initInstance() throws ConfigurationException{
     	if(confInstance == null){
     		URL applConfig = ConfigLoader.class.getResource(configFileName);
@@ -126,7 +127,7 @@ public class ConfigLoader implements Serializable {
 
     			if(configFile.exists()){
     				try {
-						applConfig = configFile.toURL();
+						applConfig = configFile.toURI().toURL();
 					} catch (MalformedURLException e) { }
     			}
     		}

@@ -25,7 +25,8 @@ import com.mscg.util.passwordreader.CryptedPasswordReader;
 public class DyndnsClientMain {
 	private static Logger log = Logger.getLogger(DyndnsClientMain.class);
 
-	private static void launchAppAndWait() throws Exception {
+	@SuppressWarnings("unchecked")
+    private static void launchAppAndWait() throws Exception {
 		String exePath = (String)ConfigLoader.getInstance().get("dyndns.process.exe-path");
 		String folderName = (String)ConfigLoader.getInstance().get("dyndns.process.folder");
 		File folder = (folderName == null || folderName.trim().length() == 0) ? null : new File(folderName);
@@ -66,7 +67,8 @@ public class DyndnsClientMain {
 		}
 	}
 
-	public static GenericStoreThread launchStoreThread() throws ConfigurationException, ClassCastException, IOException {
+	@SuppressWarnings({"unchecked", "rawtypes"})
+    public static GenericStoreThread launchStoreThread() throws ConfigurationException, ClassCastException, IOException {
 		String className = (String)ConfigLoader.getInstance().get("dyndns.store-thread");
 		GenericStoreThread thread = null;
 		try{

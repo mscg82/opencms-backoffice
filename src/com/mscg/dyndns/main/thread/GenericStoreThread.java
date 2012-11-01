@@ -34,7 +34,8 @@ public abstract class GenericStoreThread extends Thread {
 
 	protected boolean exit;
 
-	protected GenericStoreThread() throws ConfigurationException, ClassCastException, IOException{
+	@SuppressWarnings({"rawtypes", "unchecked"})
+    protected GenericStoreThread() throws ConfigurationException, ClassCastException, IOException{
 		setExit(false);
 
 		timeout = 300;
@@ -77,7 +78,8 @@ public abstract class GenericStoreThread extends Thread {
 
 	public abstract List<String> retrieveIPs();
 
-	public void run() {
+	@Override
+    public void run() {
 		while(true){
 
 			try {
