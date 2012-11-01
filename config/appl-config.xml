@@ -88,7 +88,7 @@
                 </captcha>
             </eatj>
         </interface>
-        <service>mscg2</service>
+        <service>mscg82-emule.dtdns.net</service>
         <thread>
             <timeout>300</timeout>
             <enabled>true</enabled>
