@@ -14,13 +14,14 @@
              
             <server>free.hostingjava.it</server>
             <port></port>
+            <context>-mscgpp</context>
             
             <!--
             <server>localhost</server>
             <port>8080</port>
+            <context>dyndns</context>            
             -->
-            
-            <context>-mscgpp</context>
+                        
             <methods>
                 <ipstorage>ipstorage</ipstorage>
             </methods>
