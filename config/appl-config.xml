@@ -9,21 +9,32 @@
             <retriever>com.mscg.retrieve.impl.MyIpAddressRetriever</retriever>
             <storage>com.mscg.storage.impl.DynDnsStorageInterface</storage>
         
-            <protocol>http</protocol>
-
+            <!--
+            <protocol>http</protocol> 
             <server>free.hostingjava.it</server>
             <port></port>
             <context>-mscgpp</context>
+            -->
 
             <!--
+            <protocol>http</protocol>
             <server>localhost</server>
             <port>8080</port>
             <context>dyndns</context>            
             -->
+            
+            <protocol>http</protocol>
+            <server>www.dtdns.com</server>
+            <port></port>
+            <context>api</context>
 
             <methods>
                 <ipstorage>ipstorage</ipstorage>
             </methods>
+
+            <dtdns>
+                <password>NTIQjeXyuWI=</password>
+            </dtdns>
 
             <tester-class>com.mscg.tester.impl.NoopTesterInterface</tester-class>
 
@@ -56,7 +67,7 @@
                     <uuid-param>uuid</uuid-param>
                     <values>
                         <username>MscG3</username>
-                        <password>GXIJ11+sJoxqXpbxJTZK7A==</password>
+                        <password>NTIQjeXyuWI=</password>
                         <password-reader>com.mscg.util.passwordreader.impl.CryptedPasswordReader</password-reader>
                     </values>
                 </parameters>
