@@ -4,19 +4,15 @@
 package com.mscg.dyndns.main;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
 import com.mscg.dyndns.main.thread.GenericStoreThread;
-import com.mscg.dyndns.main.thread.LocalIPStoreThread;
 import com.mscg.util.Util;
-import com.mscg.util.passwordreader.CryptedPasswordReader;
+import com.mscg.util.passwordreader.impl.CryptedPasswordReader;
 
 /**
  * @author Giuseppe Miscione
@@ -67,27 +63,6 @@ public class DyndnsClientMain {
 		}
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
-    public static GenericStoreThread launchStoreThread() throws ConfigurationException, ClassCastException, IOException {
-		String className = (String)ConfigLoader.getInstance().get("dyndns.store-thread");
-		GenericStoreThread thread = null;
-		try{
-			log.debug("Loading class " + className + "...");
-
-			Class threadClass = Class.forName(className);
-			Constructor<GenericStoreThread> threadConstructor = threadClass.getConstructor();
-			thread = threadConstructor.newInstance();
-		} catch(Exception e){
-			// use default thread class
-			log.error("Error found while looking for thread class, " +
-					  "using default " + LocalIPStoreThread.class.getCanonicalName(), e);
-			thread = new LocalIPStoreThread();
-		}
-		thread.start();
-
-		return thread;
-	}
-
 	public static void main(String[] args) {
 
 		if(args.length >= 1){
@@ -117,7 +92,8 @@ public class DyndnsClientMain {
 			try {
 				Util.initApplication();
 
-				thread = launchStoreThread();
+				thread = new GenericStoreThread();
+				thread.start();
 
 				launchAppAndWait();
 

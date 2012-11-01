@@ -1,4 +1,4 @@
-package com.mscg.httpinterface;
+package com.mscg.tester;
 
 import java.io.IOException;
 

@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.mscg.util.passwordreader;
+package com.mscg.util.passwordreader.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,6 +27,7 @@ import javax.crypto.spec.DESedeKeySpec;
 import org.apache.commons.codec.binary.Base64;
 
 import com.mscg.util.Util;
+import com.mscg.util.passwordreader.PasswordReader;
 
 /**
  * @author Giuseppe Miscione

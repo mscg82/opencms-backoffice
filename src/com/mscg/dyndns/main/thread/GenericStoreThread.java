@@ -11,22 +11,24 @@ import org.apache.commons.configuration.ConfigurationException;
 import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
-import com.mscg.httpinterface.EatjTesterInterface;
-import com.mscg.httpinterface.TesterInterface;
-import com.mscg.httpinterface.storage.DynDnsStorageInterface;
 import com.mscg.httpinterface.storage.StorageInterface;
+import com.mscg.httpinterface.storage.impl.DynDnsStorageInterface;
+import com.mscg.retrieve.IPRetriever;
+import com.mscg.retrieve.impl.LocalIPRetriever;
+import com.mscg.tester.TesterInterface;
+import com.mscg.tester.impl.EatjTesterInterface;
 import com.mscg.util.Util;
 
 /**
  * @author Giuseppe Miscione
  *
  */
-public abstract class GenericStoreThread extends Thread {
+public class GenericStoreThread extends Thread {
 
 	private static Logger log = Logger.getLogger(GenericStoreThread.class);
 
+	protected IPRetriever ipRetriever;
 	protected StorageInterface storageInterface;
-
 	protected TesterInterface testerInterface;
 
 	protected String service;
@@ -36,7 +38,7 @@ public abstract class GenericStoreThread extends Thread {
 	protected boolean exit;
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-    protected GenericStoreThread() throws ConfigurationException, ClassCastException, IOException{
+    public GenericStoreThread() throws ConfigurationException, ClassCastException, IOException{
 		setExit(false);
 
 		timeout = 300;
@@ -47,18 +49,31 @@ public abstract class GenericStoreThread extends Thread {
 
 		enabled = new Boolean((String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_THREAD_ENABLED));
 
-		String className = (String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_STORAGE_CLASS);
+		String className = (String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_RETRIEVER_CLASS);
 		try {
-		    log.debug("Loading storage class " + className + "...");
+		    log.debug("Loading retriever class " + className + "...");
 
-		    Class storageClass = Class.forName(className);
-		    Constructor<StorageInterface> storageConstructor = storageClass.getConstructor();
-		    storageInterface = storageConstructor.newInstance();
+		    Class retrieverClass = Class.forName(className);
+		    Constructor<IPRetriever> retrieverConstructor = retrieverClass.getConstructor();
+		    ipRetriever = retrieverConstructor.newInstance();
 		} catch(Exception e) {
-		    log.error("Error found while looking for storage class, " +
-		    		  "using default " + DynDnsStorageInterface.class.getCanonicalName(), e);
-		    storageInterface = new DynDnsStorageInterface();
+		    log.error("Error found while looking for retriever class, " +
+		    		  "using default " + LocalIPRetriever.class.getCanonicalName(), e);
+		    ipRetriever = new LocalIPRetriever();
 		}
+
+		className = (String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_STORAGE_CLASS);
+        try {
+            log.debug("Loading storage class " + className + "...");
+
+            Class storageClass = Class.forName(className);
+            Constructor<StorageInterface> storageConstructor = storageClass.getConstructor();
+            storageInterface = storageConstructor.newInstance();
+        } catch(Exception e) {
+            log.error("Error found while looking for storage class, " +
+                      "using default " + DynDnsStorageInterface.class.getCanonicalName(), e);
+            storageInterface = new DynDnsStorageInterface();
+        }
 
 		className = (String)ConfigLoader.getInstance().get(ConfigLoader.TESTER_CLASS);
 		try{
@@ -87,8 +102,6 @@ public abstract class GenericStoreThread extends Thread {
 	public synchronized boolean isExit() {
 		return exit;
 	}
-
-	public abstract List<String> retrieveIPs();
 
 	@Override
     public void run() {
@@ -122,7 +135,7 @@ public abstract class GenericStoreThread extends Thread {
 
 				if(store){
 					log.debug("Storing IPs...");
-					List<String> IPs = retrieveIPs();
+					List<String> IPs = ipRetriever.retrieveIPs();
 
 					storageInterface.storeIP(service, IPs);
 					log.debug("IPs stored!");

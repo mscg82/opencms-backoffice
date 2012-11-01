@@ -59,6 +59,7 @@ public class ConfigLoader implements Serializable {
      */
     protected static Map<String, Object> propList = null;
 
+    public static final String DYNDNS_RETRIEVER_CLASS   = "dyndns.interface.retriever";
     public static final String DYNDNS_STORAGE_CLASS     = "dyndns.interface.storage";
 
     public static final String DYNDNS_PROTOCOL			= "dyndns.interface.protocol";

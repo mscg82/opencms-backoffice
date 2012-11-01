@@ -1,7 +1,9 @@
 /**
  *
  */
-package com.mscg.util.passwordreader;
+package com.mscg.util.passwordreader.impl;
+
+import com.mscg.util.passwordreader.PasswordReader;
 
 /**
  * @author Giuseppe Miscione

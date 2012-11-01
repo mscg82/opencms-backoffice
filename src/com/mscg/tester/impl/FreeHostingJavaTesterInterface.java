@@ -1,4 +1,4 @@
-package com.mscg.httpinterface;
+package com.mscg.tester.impl;
 
 import java.io.IOException;
 
@@ -9,6 +9,8 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
+import com.mscg.httpinterface.AbstractHttpInterface;
+import com.mscg.tester.TesterInterface;
 
 public class FreeHostingJavaTesterInterface extends AbstractHttpInterface implements TesterInterface {
 

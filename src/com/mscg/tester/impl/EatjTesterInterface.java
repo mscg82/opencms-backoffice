@@ -1,7 +1,7 @@
 /**
  *
  */
-package com.mscg.httpinterface;
+package com.mscg.tester.impl;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -25,9 +25,11 @@ import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
+import com.mscg.httpinterface.AbstractHttpInterface;
+import com.mscg.tester.TesterInterface;
 import com.mscg.util.Util;
 import com.mscg.util.passwordreader.PasswordReader;
-import com.mscg.util.passwordreader.PlainPasswordReader;
+import com.mscg.util.passwordreader.impl.PlainPasswordReader;
 import com.roncemer.ocr.CharacterRange;
 import com.roncemer.ocr.OCRScanner;
 

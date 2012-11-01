@@ -2,32 +2,31 @@
 
 <config>
     <dyndns>
-        <store-thread>com.mscg.dyndns.main.thread.MyIpAddressStoreThread</store-thread>
-        
         <myipaddress>
            <url>http://www.myipaddress.com/</url>
         </myipaddress>
         <interface>
-            <storage>com.mscg.httpinterface.storage.DynDnsStorageInterface</storage>
+            <retriever>com.mscg.retrieve.impl.MyIpAddressRetriever</retriever>
+            <storage>com.mscg.httpinterface.storage.impl.DynDnsStorageInterface</storage>
         
             <protocol>http</protocol>
-             
+
             <server>free.hostingjava.it</server>
             <port></port>
             <context>-mscgpp</context>
-            
+
             <!--
             <server>localhost</server>
             <port>8080</port>
             <context>dyndns</context>            
             -->
-                        
+
             <methods>
                 <ipstorage>ipstorage</ipstorage>
             </methods>
-            
-            <tester-class>com.mscg.httpinterface.NoopTesterInterface</tester-class>
-            
+
+            <tester-class>com.mscg.tester.impl.NoopTesterInterface</tester-class>
+
             <fhj>
                 <methods>
                     <test>test.jsp</test>
@@ -58,7 +57,7 @@
                     <values>
                         <username>MscG3</username>
                         <password>GXIJ11+sJoxqXpbxJTZK7A==</password>
-                        <password-reader>com.mscg.util.passwordreader.CryptedPasswordReader</password-reader>
+                        <password-reader>com.mscg.util.passwordreader.impl.CryptedPasswordReader</password-reader>
                     </values>
                 </parameters>
                 <captcha>
