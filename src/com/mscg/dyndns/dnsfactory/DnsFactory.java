@@ -10,10 +10,11 @@ import com.mscg.util.Util;
 
 public class DnsFactory {
 	private static Logger log = Logger.getLogger(DnsFactory.class);
-	
+
 	private static DnsProvider providerSingleton = null;
-	
-	public static DnsProvider getProvider(){
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+    public static DnsProvider getProvider(){
 		if(providerSingleton == null){
 			String providerClassName = (String) ConfigLoader.getInstance().get(ConfigLoader.DNS_PROVIDER_CLASS);
 			if(providerClassName != null){
@@ -22,7 +23,7 @@ public class DnsFactory {
 					// get the no argument constructor
 					Constructor constr = providerClass.getConstructor();
 					// build an instance of the class
-					providerSingleton = (DnsProvider)constr.newInstance();				
+					providerSingleton = (DnsProvider)constr.newInstance();
 				} catch (ClassNotFoundException e) {
 					log.error("Specified class \"" + providerClassName + "\" not found. Using default MemoryDnsProvider.");
 					Util.logStackTrace(e, log);

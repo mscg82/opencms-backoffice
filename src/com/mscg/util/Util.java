@@ -43,7 +43,8 @@ public class Util {
 	 * @return The <code>String</code> contained in the configuration file under the specified parameter.
 	 * @throws ConfigurationException If the configuration file cannot be read.
 	 */
-	public static String getConfigString(String paramName) throws ConfigurationException{
+	@SuppressWarnings("unchecked")
+    public static String getConfigString(String paramName) throws ConfigurationException{
 		StringBuffer message = new StringBuffer();
 		try{
 			ArrayList<String> words = (ArrayList<String>) ConfigLoader.getInstance().get(paramName);

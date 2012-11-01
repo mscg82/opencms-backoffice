@@ -76,6 +76,7 @@ public class ConfigLoader implements Serializable {
      * the value is a <code>List&lt;String&gt;</code>.
      * @throws ConfigurationException If some error occurs.
      */
+    @SuppressWarnings({"unchecked", "rawtypes"})
     public static Map<String, Object> initInstance(ServletContext context) throws ConfigurationException{
     	if(confInstance == null){
     		String fullPath = context.getRealPath(configFileName);
@@ -92,7 +93,7 @@ public class ConfigLoader implements Serializable {
 			propList = new HashMap<String, Object>();
 			for(Iterator it = confInstance.getKeys(); it.hasNext(); ){
 	    		String key = (String) it.next();
-	    		List<String> values = (List<String>) confInstance.getList(key);
+	    		List<String> values = confInstance.getList(key);
 	    		log.debug(key + ": " + values);
 	    		if(values.size() == 1)
 	    			propList.put(key, values.get(0));
@@ -112,6 +113,7 @@ public class ConfigLoader implements Serializable {
      * @param paramName The name of the parameter that will be retrieved.
      * @return a <code>List&lt;String&gt;</code> corresponding to the provided parameter name.
      */
+    @SuppressWarnings("unchecked")
     public static List<String> getParameterAsList(String paramName) {
     	List<String> ret = new LinkedList<String>();
     	Object param = getInstance().get(paramName);
@@ -134,6 +136,7 @@ public class ConfigLoader implements Serializable {
      * @param paramName The name of the parameter that will be retrieved.
      * @return a <code>String</code> corresponding to the provided parameter name.
      */
+    @SuppressWarnings("unchecked")
     public static String getParameterAsString(String paramName) {
     	String ret = null;
     	Object param = getInstance().get(paramName);
