@@ -95,6 +95,7 @@ public class ConfigLoader implements Serializable {
     public static final String EATJ_VALUES_PASSWORD  = "dyndns.interface.eatj.parameters.values.password";
     public static final String EATJ_VALUES_PWDREADER = "dyndns.interface.eatj.parameters.values.password-reader";
 
+    public static final String DTDNS_METHOD          = "dyndns.interface.dtdns.method";
     public static final String DTDNS_PASSWORD        = "dyndns.interface.dtdns.password";
     public static final String DTDNS_PASSWORD_READER = "dyndns.interface.dtdns.password-reader";
 

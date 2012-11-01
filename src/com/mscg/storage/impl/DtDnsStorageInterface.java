@@ -40,6 +40,7 @@ public class DtDnsStorageInterface extends AbstractHttpInterface implements Stor
 
     public void storeIP(String service, List<String> IPs) throws HttpException, IOException {
         if(!IPs.isEmpty()) {
+            String method = (String) config.get(ConfigLoader.DTDNS_METHOD);
             String password = pwdReader.readPassword((String) config.get(ConfigLoader.DTDNS_PASSWORD));
 
             Map<String, String> params = new LinkedHashMap<String, String>();
@@ -47,7 +48,7 @@ public class DtDnsStorageInterface extends AbstractHttpInterface implements Stor
             params.put("pw", password);
             params.put("ip", IPs.get(0));
 
-            String url = prepareUrl("autodns.cfm", params);
+            String url = prepareUrl(method, params);
 
             if(log.isDebugEnabled())
                 log.debug("Calling URL " + url + "...");

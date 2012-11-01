@@ -34,6 +34,7 @@
             </methods>
 
             <dtdns>
+                <method>autodns.cfm</method>
                 <password>NTIQjeXyuWI=</password>
                 <password-reader>com.mscg.util.passwordreader.impl.CryptedPasswordReader</password-reader>
             </dtdns>
