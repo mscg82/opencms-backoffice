@@ -24,7 +24,7 @@
             <context>dyndns</context>            
             -->
             
-            <protocol>http</protocol>
+            <protocol>https</protocol>
             <server>www.dtdns.com</server>
             <port></port>
             <context>api</context>
