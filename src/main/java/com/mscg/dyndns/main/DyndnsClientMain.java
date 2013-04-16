@@ -22,7 +22,7 @@ public class DyndnsClientMain {
 	private static Logger log = Logger.getLogger(DyndnsClientMain.class);
 
 	@SuppressWarnings("unchecked")
-    private static void launchAppAndWait() throws Exception {
+    private static void launchAppAndWait(String[] args) throws Exception {
 		String exePath = (String)ConfigLoader.getInstance().get("dyndns.process.exe-path");
 		String folderName = (String)ConfigLoader.getInstance().get("dyndns.process.folder");
 		File folder = (folderName == null || folderName.trim().length() == 0) ? null : new File(folderName);
@@ -58,6 +58,9 @@ public class DyndnsClientMain {
 		else {
 			log.debug("No application will be launched. Waiting for console input...");
 
+			if(args.length >= 1 && "-nowait".equals(args[0]))
+			    return;
+
 			System.out.println("Press return to stop IP storage...");
 			System.in.read();
 		}
@@ -75,6 +78,8 @@ public class DyndnsClientMain {
 					} catch (Exception e) {
 						System.out.println("Cannot encode string: " + e.getMessage());
 					}
+
+					return;
 				}
 				/*else if("decode".equals(args[0])){
 					String pwd = args[1];
@@ -84,30 +89,31 @@ public class DyndnsClientMain {
 					} catch (Exception e) {
 						System.out.println("Cannot decode string: " + e.getMessage());
 					}
+
+					return;
 				}*/
 			}
 		}
-		else{
-			GenericStoreThread thread = null;
-			try {
-				Util.initApplication();
 
-				thread = new GenericStoreThread();
-				thread.start();
+		GenericStoreThread thread = null;
+		try {
+			Util.initApplication();
 
-				launchAppAndWait();
+			thread = new GenericStoreThread();
+			thread.start();
 
-				log.debug("Exiting from application.");
+			launchAppAndWait(args);
 
-			} catch (Exception e) {
-				log.error("Error found (" + e.getClass().getCanonicalName() + ") while running application.", e);
-				Util.logStackTrace(e, log);
-				e.printStackTrace();
-			} finally{
-				thread.setExit(true);
-				if(thread != null)
-					thread.interrupt();
-			}
+			log.debug("Exiting from application.");
+
+		} catch (Exception e) {
+			log.error("Error found (" + e.getClass().getCanonicalName() + ") while running application.", e);
+			Util.logStackTrace(e, log);
+			e.printStackTrace();
+		} finally{
+			thread.setExit(true);
+			if(thread != null)
+				thread.interrupt();
 		}
 	}
 
