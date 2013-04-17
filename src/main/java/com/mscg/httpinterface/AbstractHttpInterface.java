@@ -23,7 +23,7 @@ import com.mscg.config.ConfigLoader;
  * @author Giuseppe Miscione
  *
  */
-public class AbstractHttpInterface {
+public abstract class AbstractHttpInterface {
 	private static Logger log = Logger.getLogger(AbstractHttpInterface.class);
 
 	private static final int CONN_TIMEOUT = 5000; // in milliseconds

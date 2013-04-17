@@ -99,6 +99,11 @@ public class ConfigLoader implements Serializable {
     public static final String DTDNS_PASSWORD        = "dyndns.interface.dtdns.password";
     public static final String DTDNS_PASSWORD_READER = "dyndns.interface.dtdns.password-reader";
 
+    public static final String NETGEAR_ROUTER_URL             = "dyndns.interface.netgear-router.url";
+    public static final String NETGEAR_ROUTER_USERNAME        = "dyndns.interface.netgear-router.username";
+    public static final String NETGEAR_ROUTER_PASSWORD        = "dyndns.interface.netgear-router.password";
+    public static final String NETGEAR_ROUTER_PASSWORD_READER = "dyndns.interface.netgear-router.password-reader";
+
     public static final String CAPTCHA_PARAMS        = "dyndns.interface.eatj.captcha";
     public static final String CAPTCHA_TMP_FILE      = CAPTCHA_PARAMS + ".tmp-file-name";
     public static final String CAPTCHA_TRAINING_SETS = CAPTCHA_PARAMS + ".training-sets";

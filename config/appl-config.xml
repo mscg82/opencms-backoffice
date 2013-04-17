@@ -6,7 +6,7 @@
            <url>http://www.myipaddress.com/</url>
         </myipaddress>
         <interface>
-            <retriever>com.mscg.retrieve.impl.MyIpAddressRetriever</retriever>
+            <retriever>com.mscg.retrieve.impl.NetgearRouterAddressRetriever</retriever>
             <storage>com.mscg.storage.impl.CachedStorageInterface</storage>
             <cached-storage-inner>com.mscg.storage.impl.DtDnsStorageInterface</cached-storage-inner>
             
@@ -38,6 +38,13 @@
                 <password>NTIQjeXyuWI=</password>
                 <password-reader>com.mscg.util.passwordreader.impl.CryptedPasswordReader</password-reader>
             </dtdns>
+
+            <netgear-router>
+                <url>http://192.168.0.1/Modem_status.htm</url>
+                <username>admin</username>
+                <password>NTIQjeXyuWI=</password>
+                <password-reader>com.mscg.util.passwordreader.impl.CryptedPasswordReader</password-reader>
+            </netgear-router>
 
             <tester-class>com.mscg.tester.impl.NoopTesterInterface</tester-class>
 

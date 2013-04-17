@@ -1,7 +1,6 @@
 package com.mscg.storage.impl;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
 import java.util.List;
 
 import org.apache.commons.configuration.ConfigurationException;
@@ -10,6 +9,7 @@ import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
 import com.mscg.storage.StorageInterface;
+import com.mscg.util.Util;
 
 public class CachedStorageInterface implements StorageInterface {
 
@@ -37,9 +37,7 @@ public class CachedStorageInterface implements StorageInterface {
         try {
             log.debug("Loading storage class " + className + "...");
 
-            Class storageClass = Class.forName(className);
-            Constructor<StorageInterface> retrieverConstructor = storageClass.getConstructor();
-            storageInterface = retrieverConstructor.newInstance();
+            storageInterface = (StorageInterface)Util.loadClass(className, getClass().getClassLoader());
             storageInterface.init();
         } catch(Exception e) {
             log.error("Error found while looking for storage class, " +
