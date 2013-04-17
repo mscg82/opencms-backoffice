@@ -7,9 +7,11 @@ import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.commons.cli.CommandLine;
 import org.apache.log4j.Logger;
 
 import com.mscg.config.ConfigLoader;
+import com.mscg.dyndns.main.cli.CommandLineOptions;
 import com.mscg.dyndns.main.thread.GenericStoreThread;
 import com.mscg.util.Util;
 import com.mscg.util.passwordreader.impl.CryptedPasswordReader;
@@ -19,10 +21,13 @@ import com.mscg.util.passwordreader.impl.CryptedPasswordReader;
  *
  */
 public class DyndnsClientMain {
-	private static Logger log = Logger.getLogger(DyndnsClientMain.class);
+	private static Logger LOG = Logger.getLogger(DyndnsClientMain.class);
+
+	private static CommandLineOptions commandLineOptions;
+	private static CommandLine commandLine;
 
 	@SuppressWarnings("unchecked")
-    private static void launchAppAndWait(String[] args) throws Exception {
+    private static void launchAppAndWait() throws Exception {
 		String exePath = (String)ConfigLoader.getInstance().get("dyndns.process.exe-path");
 		String folderName = (String)ConfigLoader.getInstance().get("dyndns.process.folder");
 		File folder = (folderName == null || folderName.trim().length() == 0) ? null : new File(folderName);
@@ -49,17 +54,20 @@ public class DyndnsClientMain {
 			ProcessBuilder pb = new ProcessBuilder(command);
 			pb.directory(folder);
 
-			log.debug("Launching application \"" + command + "\" using \""
+			LOG.debug("Launching application \"" + command + "\" using \""
 				+ pb.directory().getCanonicalPath() + "\" as working directory.");
 
 			Process p = pb.start();
 			p.waitFor();
 		}
 		else {
-			log.debug("No application will be launched. Waiting for console input...");
+		    if(commandLine.hasOption(CommandLineOptions.COMMAND_LINE_NOWAIT)) {
+		        LOG.debug("No application will be launched. Exiting main thread...");
+		        return;
+		    }
 
-			if(args.length >= 1 && "-nowait".equals(args[0]))
-			    return;
+		    LOG.debug("No application will be launched. Waiting for console input...");
+
 
 			System.out.println("Press return to stop IP storage...");
 			System.in.read();
@@ -68,53 +76,55 @@ public class DyndnsClientMain {
 
 	public static void main(String[] args) {
 
-		if(args.length >= 1){
-			if(args.length >= 2){
-				if("encode".equals(args[0])){
-					String pwd = args[1];
-					CryptedPasswordReader cpr = new CryptedPasswordReader();
-					try {
-						System.out.println(pwd + " -> " + cpr.encodeString(pwd));
-					} catch (Exception e) {
-						System.out.println("Cannot encode string: " + e.getMessage());
-					}
+	    commandLineOptions = new CommandLineOptions(args);
 
-					return;
-				}
-				/*else if("decode".equals(args[0])){
-					String pwd = args[1];
-					CryptedPasswordReader cpr = new CryptedPasswordReader();
-					try {
-						System.out.println(pwd + " -> " + cpr.decodeString(pwd));
-					} catch (Exception e) {
-						System.out.println("Cannot decode string: " + e.getMessage());
-					}
+	    if(commandLineOptions.isPrintHelp())
+	        commandLineOptions.printHelp();
+	    else {
+	        commandLine = commandLineOptions.getCommandLine();
 
-					return;
-				}*/
-			}
-		}
+	        if(commandLine.hasOption(CommandLineOptions.COMMAND_LINE_ENCODE)) {
+	            String pwd = commandLine.getOptionValue(CommandLineOptions.COMMAND_LINE_ENCODE);
 
-		GenericStoreThread thread = null;
-		try {
-			Util.initApplication();
+	            CryptedPasswordReader cpr = new CryptedPasswordReader();
+                try {
+                    System.out.println(pwd + " -> " + cpr.encodeString(pwd));
+                } catch (Exception e) {
+                    System.out.println("Cannot encode string: " + e.getMessage());
+                }
+	        }
+	        else if(commandLine.hasOption(CommandLineOptions.COMMAND_LINE_DECODE)) {
+	            String pwd = commandLine.getOptionValue(CommandLineOptions.COMMAND_LINE_DECODE);
+	            CryptedPasswordReader cpr = new CryptedPasswordReader();
+                try {
+                    System.out.println(pwd + " -> " + cpr.decodeString(pwd));
+                } catch (Exception e) {
+                    System.out.println("Cannot decode string: " + e.getMessage());
+                }
+	        }
+	        else {
+	            GenericStoreThread thread = null;
+	            try {
+	                Util.initApplication();
 
-			thread = new GenericStoreThread();
-			thread.start();
+	                thread = new GenericStoreThread();
+	                thread.start();
 
-			launchAppAndWait(args);
+	                launchAppAndWait();
 
-			log.debug("Exiting from application.");
+	                LOG.debug("Exiting from application.");
 
-		} catch (Exception e) {
-			log.error("Error found (" + e.getClass().getCanonicalName() + ") while running application.", e);
-			Util.logStackTrace(e, log);
-			e.printStackTrace();
-		} finally{
-			thread.setExit(true);
-			if(thread != null)
-				thread.interrupt();
-		}
+	            } catch (Exception e) {
+	                LOG.error("Error found (" + e.getClass().getCanonicalName() + ") while running application.", e);
+	                Util.logStackTrace(e, LOG);
+	                e.printStackTrace();
+	            } finally{
+	                thread.setExit(true);
+	                if(thread != null)
+	                    thread.interrupt();
+	            }
+	        }
+	    }
 	}
 
 }
