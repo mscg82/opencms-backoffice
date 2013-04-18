@@ -65,7 +65,7 @@ public class FileCachedStorageInterface extends CachedStorageInterface {
                     continue;
 
                 if(log.isDebugEnabled())
-                    log.debug("IP " + line + "read from file");
+                    log.debug("IP " + line + " read from file");
                 lastStoredIPs.add(line);
             }
         } catch(Exception e) {
