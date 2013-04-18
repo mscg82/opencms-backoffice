@@ -1,7 +1,9 @@
 package com.mscg.storage.impl;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.httpclient.HttpException;
@@ -16,7 +18,7 @@ public class CachedStorageInterface implements StorageInterface {
     private static Logger log = Logger.getLogger(CachedStorageInterface.class);
 
     protected StorageInterface storageInterface;
-    protected List<String> lastStoredIPs;
+    protected Set<String> lastStoredIPs;
 
     protected boolean checkIfNotStores(List<String> IPs) {
         if(lastStoredIPs == null)
@@ -31,8 +33,15 @@ public class CachedStorageInterface implements StorageInterface {
         return false;
     }
 
+    protected void saveIPsInCache(List<String> IPs) {
+        lastStoredIPs.clear();
+        lastStoredIPs.addAll(IPs);
+    }
+
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void init() throws ConfigurationException {
+        lastStoredIPs = new HashSet<String>();
+
         String className = (String)ConfigLoader.getInstance().get(ConfigLoader.DYNDNS_CACHED_STORAGE_CLASS);
         try {
             log.debug("Loading storage class " + className + "...");
@@ -51,7 +60,8 @@ public class CachedStorageInterface implements StorageInterface {
             log.info("IPs are changed, storing new values...");
 
             storageInterface.storeIP(service, IPs);
-            lastStoredIPs = IPs;
+
+            saveIPsInCache(IPs);
         }
         else
             log.debug("IPs are not changed and won't be stored.");

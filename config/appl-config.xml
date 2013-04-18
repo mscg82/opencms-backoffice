@@ -7,8 +7,9 @@
         </myipaddress>
         <interface>
             <retriever>com.mscg.retrieve.impl.NetgearRouterAddressRetriever</retriever>
-            <storage>com.mscg.storage.impl.CachedStorageInterface</storage>
+            <storage>com.mscg.storage.impl.FileCachedStorageInterface</storage>
             <cached-storage-inner>com.mscg.storage.impl.DtDnsStorageInterface</cached-storage-inner>
+            <cached-storage-file>./storedIPs.txt</cached-storage-file>
             
             <!--
             <protocol>http</protocol> 
