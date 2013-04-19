@@ -57,14 +57,14 @@ public class CachedStorageInterface implements StorageInterface {
 
     public void storeIP(String service, List<String> IPs) throws HttpException, IOException {
         if(checkIfNotStores(IPs)) {
-            log.info("IPs are changed, storing new values...");
+            log.debug("IPs are changed, storing new values...");
 
             storageInterface.storeIP(service, IPs);
 
             saveIPsInCache(IPs);
         }
         else
-            log.debug("IPs are not changed and won't be stored.");
+            log.info("IPs are not changed and won't be stored.");
     }
 
 }

@@ -41,7 +41,7 @@ public class NetgearRouterAddressInterface extends AbstractIpAddressInterface {
         String password = pwdReader.readPassword((String)params.get(ConfigLoader.NETGEAR_ROUTER_PASSWORD));
         Credentials defaultcreds = new UsernamePasswordCredentials(username, password);
         client.getState().setCredentials(new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT, AuthScope.ANY_REALM), defaultcreds);
-        client.getParams().setAuthenticationPreemptive(true);
+        //client.getParams().setAuthenticationPreemptive(true);
     }
 
     public String getRetrievedIpPageContent() throws HttpException, IOException {
@@ -49,10 +49,12 @@ public class NetgearRouterAddressInterface extends AbstractIpAddressInterface {
             return getRetrievedIpPageContent(routerPageUrl);
         } finally {
             // logout from router admin page
-            httpGet = null;
             try{
                 httpGet = new GetMethod(routerLogoutPageUrl);
                 client.executeMethod(httpGet);
+
+                if(log.isInfoEnabled())
+                    log.info("Logged out from router admin page");
             } catch(Exception e) {
                 log.warn("An error occurred while logging out from router admin page", e);
             } finally{
@@ -61,8 +63,6 @@ public class NetgearRouterAddressInterface extends AbstractIpAddressInterface {
                     httpGet = null;
                 }
             }
-            if(log.isDebugEnabled())
-                log.debug("Logged out from router admin page");
         }
     }
 }

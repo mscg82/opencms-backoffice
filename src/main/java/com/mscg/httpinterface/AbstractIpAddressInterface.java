@@ -20,14 +20,14 @@ public abstract class AbstractIpAddressInterface extends AbstractHttpInterface i
         String ret = null;
         httpGet = null;
         try{
-            if(log.isDebugEnabled())
-                log.debug("Retrieving IP page content by calling URL: " + url + "...");
+            if(log.isInfoEnabled())
+                log.info("Retrieving IP page content by calling URL: " + url + "...");
 
             httpGet = new GetMethod(url);
             client.executeMethod(httpGet);
             if (httpGet.getStatusCode() == HttpStatus.SC_OK) {
                 ret = httpGet.getResponseBodyAsString();
-                log.debug("IP page content correctly retrieved");
+                log.info("IP page content correctly retrieved");
             }
             else {
                 String failure = httpGet.getStatusLine().toString();

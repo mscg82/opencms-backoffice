@@ -135,11 +135,13 @@ public class GenericStoreThread extends Thread {
 				}
 
 				if(store){
-					log.debug("Storing IPs...");
+					log.debug("Retrieving IPs...");
 					List<String> IPs = ipRetriever.retrieveIPs();
+					log.info("IPs retrieved");
 
+					log.debug("Storing IPs...");
 					storageInterface.storeIP(service, IPs);
-					log.debug("IPs stored!");
+					log.info("IPs stored!");
 				}
 			} catch (Exception e) {
 				log.error("Error found in HTTP comunication (" + e.getClass().getCanonicalName() + "): " + e.getMessage());
