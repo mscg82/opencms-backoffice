@@ -101,6 +101,7 @@ public class ConfigLoader implements Serializable {
     public static final String DTDNS_PASSWORD_READER = "dyndns.interface.dtdns.password-reader";
 
     public static final String NETGEAR_ROUTER_URL             = "dyndns.interface.netgear-router.url";
+    public static final String NETGEAR_ROUTER_LOGOUT_URL      = "dyndns.interface.netgear-router.logout-url";
     public static final String NETGEAR_ROUTER_USERNAME        = "dyndns.interface.netgear-router.username";
     public static final String NETGEAR_ROUTER_PASSWORD        = "dyndns.interface.netgear-router.password";
     public static final String NETGEAR_ROUTER_PASSWORD_READER = "dyndns.interface.netgear-router.password-reader";

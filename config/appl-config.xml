@@ -42,6 +42,7 @@
 
             <netgear-router>
                 <url>http://192.168.0.1/Modem_status.htm</url>
+                <logout-url>http://192.168.0.1/LGO_logout.htm</logout-url>
                 <username>admin</username>
                 <password>NTIQjeXyuWI=</password>
                 <password-reader>com.mscg.util.passwordreader.impl.CryptedPasswordReader</password-reader>
