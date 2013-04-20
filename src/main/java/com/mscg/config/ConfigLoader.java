@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
  */
 public class ConfigLoader implements Serializable {
 
-	private static final long serialVersionUID = -7803708266647335688L;
+	private static final long serialVersionUID = -7872339293594289043L;
 
 	/**
      * The logger to which the configuration loader registers its actions and problems.
